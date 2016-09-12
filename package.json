@@ -1,0 +1,25 @@
+{
+  "name": "bob-validator",
+  "version": "0.5.1",
+  "description": "A library of validators",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "validate",
+    "validation",
+    "validator"
+  ],
+  "author": {
+    "name": "Alexey Bob",
+    "email": "alexey.bob@gmail.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "moment": "^2.11.2"
+  },
+  "_id": "bob-validator@0.1.0",
+  "_shasum": "877b4f9fd845b5573548b247aa6e8768fb62d33e",
+  "_from": "bob-validator@latest"
+}
