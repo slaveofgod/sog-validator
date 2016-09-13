@@ -23,7 +23,7 @@ export { default as LengthValidator } from './lib/Constraints/LengthValidator';
 export { default as UrlValidator } from './lib/Constraints/UrlValidator';
 export { default as RegexValidator } from './lib/Constraints/RegexValidator';
 export { default as IpValidator } from './lib/Constraints/IpValidator';
-//export { default as UuidValidator } from './lib/Constraints/UuidValidator';
+export { default as UuidValidator } from './lib/Constraints/UuidValidator';
 
 /**
  * Number Constraints
