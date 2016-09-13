@@ -123,6 +123,7 @@ if(!_OEC.isValid()) {
 ```
 # Documentation
 #### Basic Constraints
+
 These are the basic constraints: use them to assert very basic things about the value of properties or the return value of methods on your object.
 
 * [NotBlank](#notblank)
@@ -132,16 +133,22 @@ These are the basic constraints: use them to assert very basic things about the 
 * [IsTrue](#istrue)
 * [IsFalse](#isfalse)
 * [Type](#type)
+
 #### String Constraints
+
 * [Email](#email)
 * [Length](#length)
 * [Url](#url)
 * [Regex](#regex)
 * [Ip](#ip)
 * [Uuid](#uuid) `(not implemented)`
+
 #### Number Constraints
+
 * [Range](#range)
+
 #### Comparison Constraints
+
 * [EqualTo](#equalto)
 * [NotEqualTo](#notequalto)
 * [IdenticalTo](#identicalto)
@@ -150,11 +157,15 @@ These are the basic constraints: use them to assert very basic things about the 
 * [LessThanOrEqual](#lessthanorequal)
 * [GreaterThan](#greaterthan)
 * [GreaterThanOrEqual](#greaterthanorequal)
+
 #### Date Constraints
+
 * [Date](#date)
 * [DateTime](#datetime)
 * [Time](#time)
+
 #### Collection Constraints
+
 * [Choice](#choice)
 * [Collection](#collection) `(not implemented)`
 * [Count](#count)
@@ -162,10 +173,14 @@ These are the basic constraints: use them to assert very basic things about the 
 * [Language](#language) `(not implemented)`
 * [Locale](#locale) `(not implemented)`
 * [Country](#country) `(not implemented)`
+
 #### File Constraints
+
 * [File](#file) `(not implemented)`
 * [Image](#image) `(not implemented)`
+
 #### Financial and other Number Constraints
+
 * [Bic](#bic) `(not implemented)`
 * [CardScheme](#cardscheme) `(not implemented)`
 * [Currency](#currency) `(not implemented)`
@@ -173,7 +188,9 @@ These are the basic constraints: use them to assert very basic things about the 
 * [Iban](#iban) `(not implemented)`
 * [Isbn](#isbn) `(not implemented)`
 * [Issn](#issn) `(not implemented)`
+
 #### Other Constraints
+
 * [Callback](#callback)
 * [Expression](#expression) `(not implemented)`
 * [All](#all) `(not implemented)`
