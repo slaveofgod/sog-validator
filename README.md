@@ -1424,7 +1424,51 @@ Not implemented
 ------
 
 ## Callback
-Description
+
+The purpose of the Callback constraint is to create completely custom validation rules and to assign any validation errors to specific fields on your object. This process works by specifying one or more callback methods, each of which will be called during the validation process. Each of those methods can do anything, including creating and assigning validation errors.
+
+```javascript
+    ...
+    fieldName: {
+        isRequired: true,
+        rules: [
+            ...
+            new CallbackValidator({
+                'callback': function(value, parameters){
+                    if(value < parameters['min']){
+                        return false;
+                    }
+
+                    if(value > parameters['max']){
+                        return false;
+                    }
+
+                    return true;
+                },
+                'parameters': {'min': 100, 'max': 200},
+                'message': 'This value should be between {{ min }} and {{ max }}.'
+            })
+            ...
+        ],
+    },
+    ...
+```
+
+#### Options
+##### callback
+**type**: `function`
+
+This required option is the "`function`" that will executed.
+
+##### parameters
+**type**: `array` **default**: `null`
+
+This option is the "`parameters`" that will argument for executed function.
+
+##### message
+**type**: `string`
+
+The message that will be shown if function return false. This option is required.
 
 [Go to documentation](#documentation)
 

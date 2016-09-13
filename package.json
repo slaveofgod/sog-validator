@@ -1,8 +1,9 @@
 {
   "name": "bob-validator",
-  "version": "0.5.1",
+  "version": "0.5.5",
   "description": "A library of validators",
   "main": "index.js",
+  "homepage": "https://github.com/alexeybob/bob-validator.git",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,6 +17,10 @@
     "email": "alexey.bob@gmail.com"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexeybob/bob-validator.git"
+  },
   "dependencies": {
     "moment": "^2.11.2"
   },
