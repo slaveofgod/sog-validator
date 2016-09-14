@@ -40,6 +40,8 @@ import {
     CountValidator,
     ChoiceValidator,
     UuidValidator,
+    LanguageValidator,
+    LocaleValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -171,9 +173,9 @@ These are the basic constraints: use them to assert very basic things about the 
 * [Collection](#collection) `(not implemented)`
 * [Count](#count)
 * [UniqueEntity](#uniqueentity) `(not implemented)`
-* [Language](#language) `(not implemented)`
-* [Locale](#locale) `(not implemented)`
-* [Country](#country) `(not implemented)`
+* [Language](#language)
+* [Locale](#locale)
+* [Country](#country)
 
 #### File Constraints
 
@@ -1395,21 +1397,86 @@ Not implemented
 ------
 
 ## Language
-Not implemented
+Validates that a value is a valid language *Unicode language identifier* (e.g. `fr` or `zh-Hant`).
+
+```javascript
+    ...
+    fieldName: {
+        isRequired: true,
+        rules: [
+            ...
+            new LanguageValidator({
+                'message': 'Your error message'
+            })
+            ...
+        ],
+    },
+    ...
+```
+
+#### Options
+##### message
+**type**: `string` **default**: `This value is not a valid language.`
+
+This message is shown if the string is not a valid language code.
 
 [Go to documentation](#documentation)
 
 ------
 
 ## Locale
-Not implemented
+Validates that a value is a valid locale.
+
+The "value" for each locale is either the two letter [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) *language* code (e.g. `fr`), or the language code followed by an underscore (`_`), then the [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes) *country* code (e.g. `fr_FR` for French/France).
+
+```javascript
+    ...
+    fieldName: {
+        isRequired: true,
+        rules: [
+            ...
+            new LocaleValidator({
+                'message': 'Your error message'
+            })
+            ...
+        ],
+    },
+    ...
+```
+
+#### Options
+##### message
+**type**: `string` **default**: `This value is not a valid locale.`
+
+This message is shown if the string is not a valid locale.
 
 [Go to documentation](#documentation)
 
 ------
 
 ## Country
-Not implemented
+Validates that a value is a valid [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes) country code.
+
+```javascript
+    ...
+    fieldName: {
+        isRequired: true,
+        rules: [
+            ...
+            new CountryValidator({
+                'message': 'Your error message'
+            })
+            ...
+        ],
+    },
+    ...
+```
+
+#### Options
+##### message
+**type**: `string` **default**: `This value is not a valid country.`
+
+This message is shown if the string is not a valid country code.
 
 [Go to documentation](#documentation)
 
