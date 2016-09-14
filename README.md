@@ -45,6 +45,7 @@ import {
     CountryValidator,
     BicValidator,
     CardSchemeValidator,
+    CurrencyValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -189,7 +190,7 @@ These are the basic constraints: use them to assert very basic things about the 
 
 * [Bic](#bic)
 * [CardScheme](#cardscheme)
-* [Currency](#currency) `(not implemented)`
+* [Currency](#currency)
 * [Luhn](#luhn) `(not implemented)`
 * [Iban](#iban) `(not implemented)`
 * [Isbn](#isbn) `(not implemented)`
@@ -1563,9 +1564,6 @@ This constraint ensures that a credit card number is valid for a given credit ca
 
 The message shown when the value does not pass the `CardScheme` check.
 
-
-
-
 ##### schemes
 **type**: `array`
 
@@ -1589,7 +1587,28 @@ For more information about the used schemes, see [Wikipedia: Issuer identificati
 ------
 
 ## Currency
-Not implemented
+Validates that a value is a valid [3-letter ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency name.
+
+```javascript
+    ...
+    fieldName: {
+        isRequired: true,
+        rules: [
+            ...
+            new CurrencyValidator({
+                'message': 'Your error message'
+            })
+            ...
+        ],
+    },
+    ...
+```
+
+#### Options
+##### message
+**type**: `string` **default**: `This value is not a valid currency.`
+
+This is the message that will be shown if the value is not a valid currency.
 
 [Go to documentation](#documentation)
 
