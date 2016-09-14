@@ -69,7 +69,7 @@ export { default as CountryValidator } from './lib/Constraints/CountryValidator'
 /**
  * Financial and other Number Constraints
  */
-//export { default as BicValidator } from './lib/Constraints/BicValidator';
+export { default as BicValidator } from './lib/Constraints/BicValidator';
 //export { default as CardSchemeValidator } from './lib/Constraints/CardSchemeValidator';
 //export { default as CurrencyValidator } from './lib/Constraints/CurrencyValidator';
 //export { default as LuhnValidator } from './lib/Constraints/LuhnValidator';

@@ -42,6 +42,8 @@ import {
     UuidValidator,
     LanguageValidator,
     LocaleValidator,
+    CountryValidator,
+    BicValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -184,7 +186,7 @@ These are the basic constraints: use them to assert very basic things about the 
 
 #### Financial and other Number Constraints
 
-* [Bic](#bic) `(not implemented)`
+* [Bic](#bic)
 * [CardScheme](#cardscheme) `(not implemented)`
 * [Currency](#currency) `(not implemented)`
 * [Luhn](#luhn) `(not implemented)`
@@ -1497,7 +1499,28 @@ Not implemented
 ------
 
 ## Bic
-Not implemented
+This constraint is used to ensure that a value has the proper format of a [Business Identifier Code (BIC)](https://en.wikipedia.org/wiki/ISO_9362). BIC is an internationally agreed means to uniquely identify both financial and non-financial institutions.
+
+```javascript
+    ...
+    fieldName: {
+        isRequired: true,
+        rules: [
+            ...
+            new BicValidator({
+                'message': 'Your error message'
+            })
+            ...
+        ],
+    },
+    ...
+```
+
+#### Options
+##### message
+**type**: `string` **default**: `This is not a valid Business Identifier Code (BIC).`
+
+The default message supplied when the value does not pass the BIC check.
 
 [Go to documentation](#documentation)
 
