@@ -44,6 +44,7 @@ import {
     LocaleValidator,
     CountryValidator,
     BicValidator,
+    CardSchemeValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -187,7 +188,7 @@ These are the basic constraints: use them to assert very basic things about the 
 #### Financial and other Number Constraints
 
 * [Bic](#bic)
-* [CardScheme](#cardscheme) `(not implemented)`
+* [CardScheme](#cardscheme)
 * [Currency](#currency) `(not implemented)`
 * [Luhn](#luhn) `(not implemented)`
 * [Iban](#iban) `(not implemented)`
@@ -1527,7 +1528,61 @@ The default message supplied when the value does not pass the BIC check.
 ------
 
 ## CardScheme
-Not implemented
+This constraint ensures that a credit card number is valid for a given credit card company. It can be used to validate the number before trying to initiate a payment through a payment gateway.
+
+```javascript
+    ...
+    fieldName: {
+        isRequired: true,
+        rules: [
+            ...
+            new CardSchemeValidator({
+                'schemes': [
+                    'AMEX',
+                    'CHINA_UNIONPAY',
+                    'DINERS',
+                    'DISCOVER',
+                    'INSTAPAYMENT',
+                    'JCB',
+                    'LASER',
+                    'MAESTRO',
+                    'MASTERCARD',
+                    'VISA'
+                ],
+                'message': 'Your error message'
+            })
+            ...
+        ],
+    },
+    ...
+```
+
+#### Options
+##### message
+**type**: `string` **default**: `Unsupported card type or invalid card number.`
+
+The message shown when the value does not pass the `CardScheme` check.
+
+
+
+
+##### schemes
+**type**: `array`
+
+This option is required and represents the name of the number scheme used to validate the credit card number. Valid values are:
+
+* `AMEX`
+* `CHINA_UNIONPAY`
+* `DINERS`
+* `DISCOVER`
+* `INSTAPAYMENT`
+* `JCB`
+* `LASER`
+* `MAESTRO`
+* `MASTERCARD`
+* `VISA`
+
+For more information about the used schemes, see [Wikipedia: Issuer identification number (IIN)](https://en.wikipedia.org/wiki/Payment_card_number#Issuer_identification_number_.28IIN.29).
 
 [Go to documentation](#documentation)
 
