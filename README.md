@@ -46,6 +46,8 @@ import {
     BicValidator,
     CardSchemeValidator,
     CurrencyValidator,
+    LuhnValidator,
+    IbanValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -191,8 +193,8 @@ These are the basic constraints: use them to assert very basic things about the 
 * [Bic](#bic)
 * [CardScheme](#cardscheme)
 * [Currency](#currency)
-* [Luhn](#luhn) `(not implemented)`
-* [Iban](#iban) `(not implemented)`
+* [Luhn](#luhn)
+* [Iban](#iban)
 * [Isbn](#isbn) `(not implemented)`
 * [Issn](#issn) `(not implemented)`
 
@@ -1615,14 +1617,56 @@ This is the message that will be shown if the value is not a valid currency.
 ------
 
 ## Luhn
-Not implemented
+This constraint is used to ensure that a credit card number passes the [Luhn algorithm](https://en.wikipedia.org/wiki/Luhn_algorithm). It is useful as a first step to validating a credit card: before communicating with a payment gateway.
+
+```javascript
+    ...
+    fieldName: {
+        isRequired: true,
+        rules: [
+            ...
+            new LuhnValidator({
+                'message': 'Your error message'
+            })
+            ...
+        ],
+    },
+    ...
+```
+
+#### Options
+##### message
+**type**: `string` **default**: `Invalid card number.`
+
+The default message supplied when the value does not pass the Luhn check.
 
 [Go to documentation](#documentation)
 
 ------
 
 ## Iban
-Not implemented
+This constraint is used to ensure that a bank account number has the proper format of an [International Bank Account Number (IBAN)](https://en.wikipedia.org/wiki/International_Bank_Account_Number). IBAN is an internationally agreed means of identifying bank accounts across national borders with a reduced risk of propagating transcription errors.
+
+```javascript
+    ...
+    fieldName: {
+        isRequired: true,
+        rules: [
+            ...
+            new IbanValidator({
+                'message': 'Your error message'
+            })
+            ...
+        ],
+    },
+    ...
+```
+
+#### Options
+##### message
+**type**: `string` **default**: `This is not a valid International Bank Account Number (IBAN).`
+
+The default message supplied when the value does not pass the Iban check.
 
 [Go to documentation](#documentation)
 
