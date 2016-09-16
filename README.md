@@ -48,6 +48,8 @@ import {
     CurrencyValidator,
     LuhnValidator,
     IbanValidator,
+    IsbnValidator,
+    IssnValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -195,8 +197,8 @@ These are the basic constraints: use them to assert very basic things about the 
 * [Currency](#currency)
 * [Luhn](#luhn)
 * [Iban](#iban)
-* [Isbn](#isbn) `(not implemented)`
-* [Issn](#issn) `(not implemented)`
+* [Isbn](#isbn)
+* [Issn](#issn)
 
 #### Other Constraints
 
@@ -1673,14 +1675,90 @@ The default message supplied when the value does not pass the Iban check.
 ------
 
 ## Isbn
-Not implemented
+This constraint validates that an [International Standard Book Number (ISBN)](https://en.wikipedia.org/wiki/International_Standard_Book_Number) is either a valid ISBN-10 or a valid ISBN-13.
+
+```javascript
+    ...
+    fieldName: {
+        isRequired: true,
+        rules: [
+            ...
+            new IsbnValidator({
+                'isbn10Message': 'Your error isbn10 message', 
+                'isbn13Message': 'Your error isbn13 message',
+                'bothIsbnMessage': 'Your error both isbn message'
+            })
+            ...
+        ],
+    },
+    ...
+```
+
+#### Options
+##### type
+**type**: `string` **default**: `null`
+
+The type of ISBN to validate against. Valid values are `isbn10`, `isbn13` and `null` to accept any kind of ISBN.
+
+##### message
+**type**: `string` **default**: `null`
+
+The message that will be shown if the value is not valid. If not `null`, this message has priority over all the other messages.
+
+##### isbn10Message
+**type**: `string` **default**: `This value is not a valid ISBN-10.`
+
+The message that will be shown if the *type* option is `isbn10` and the given value does not pass the ISBN-10 check.
+
+##### isbn13Message
+**type**: `string` **default**: `This value is not a valid ISBN-13.`
+
+The message that will be shown if the *type* option is `isbn13` and the given value does not pass the ISBN-13 check.
+
+##### bothIsbnMessage
+**type**: `string` **default**: `This value is neither a valid ISBN-10 nor a valid ISBN-13.`
+
+The message that will be shown if the *type* option is `null` and the given value does not pass any of the ISBN checks.
 
 [Go to documentation](#documentation)
 
 ------
 
 ## Issn
-Not implemented
+Validates that a value is a valid [International Standard Serial Number (ISSN)](https://en.wikipedia.org/wiki/International_Standard_Serial_Number).
+
+```javascript
+    ...
+    fieldName: {
+        isRequired: true,
+        rules: [
+            ...
+            new IssnValidator({
+                'message': 'Your error message', 
+                'caseSensitive': false,
+                'requireHyphen': false
+            })
+            ...
+        ],
+    },
+    ...
+```
+
+#### Options
+##### message
+**type**: `string` **default**: `This value is not a valid ISSN.`
+
+The message shown if the given value is not a valid ISSN.
+
+##### caseSensitive
+**type**: `boolean` **default**: `false`
+
+The validator will allow ISSN values to end with a lower case 'x' by default. When switching this to `true`, the validator requires an upper case 'X'.
+
+##### requireHyphen
+**type**: `boolean` **default**: `false`
+
+The validator will allow non hyphenated ISSN values by default. When switching this to `true`, the validator requires a hyphenated ISSN value.
 
 [Go to documentation](#documentation)
 
