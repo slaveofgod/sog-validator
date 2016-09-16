@@ -214,19 +214,37 @@ These are the basic constraints: use them to assert very basic things about the 
 Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull](#notnull) constraint.
 
 ```javascript
-    ...
+import {
+    // ...
+    NotBlankValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new NotBlankValidator({
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...'
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
+
 #### Options
 ##### message
 **type**: `string` **default**: `This value should not be blank.`
@@ -241,19 +259,37 @@ This is the message that will be shown if the value is blank.
 Validates that a value is blank, defined as equal to a blank string or equal to `null`. To force that a value strictly be equal to `null`, see the [IsNull](#isnull) constraint. To force that a value is not blank, see [NotBlank](#notblank).
 
 ```javascript
-    ...
+import {
+    // ...
+    BlankValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new BlankValidator({
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...'
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
+
 #### Options
 ##### message
 **type**: `string` **default**: `This value should be blank.`
@@ -268,19 +304,37 @@ This is the message that will be shown if the value is not blank.
 Validates that a value is not strictly equal to `null`. To ensure that a value is simply not blank (not a blank string), see the [NotBlank](#notblank) constraint.
 
 ```javascript
-    ...
+import {
+    // ...
+    NotNullValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new NotNullValidator({
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...'
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
+
 #### Options
 ##### message
 **type**: `string` **default**: `This value should not be null.`
@@ -296,19 +350,37 @@ Validates that a value is exactly equal to `null`. To force that a property is s
 Also see [NotNull](#notnull).
 
 ```javascript
-    ...
+import {
+    // ...
+    IsNullValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new IsNullValidator({
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...'
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
+
 #### Options
 ##### message
 **type**: `string` **default**: `This value should be null.`
@@ -326,19 +398,37 @@ Validates that a value is `true`. Specifically, this checks to see if the value 
 Also see [IsFalse](#isfalse).
 
 ```javascript
-    ...
+import {
+    // ...
+    IsTrueValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new IsTrueValidator({
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...'
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
+
 #### Options
 ##### message
 **type**: `string` **default**: `This value should be true.`
@@ -356,19 +446,37 @@ Validates that a value is `false`. Specifically, this checks to see if the value
 Also see [IsTrue](#istrue).
 
 ```javascript
-    ...
+import {
+    // ...
+    IsFalseValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new IsFalseValidator({
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...'
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
+
 #### Options
 ##### message
 **type**: `string` **default**: `This value should be false.`
@@ -384,20 +492,38 @@ This message is shown if the underlying data is not false.
 Validates that a value is of a specific data type. For example, if a variable should be an `array`, you can use this constraint with the array type option to validate this.
 
 ```javascript
-    ...
+import {
+    // ...
+    TypeValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new TypeValidator({
                 'type': 'integer',
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...'
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
+
 #### Options
 ##### type
 **type**: `string`
@@ -441,19 +567,37 @@ The message if the underlying data is not of the given type.
 Validates that a value is a valid email address. The underlying value is cast to a string before being validated.
 
 ```javascript
-    ...
+import {
+    // ...
+    EmailValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new EmailValidator({
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...'
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
+
 #### Options
 ##### message
 **type**: `string` **default**: `This value is not a valid email address.`
@@ -477,11 +621,18 @@ This message is shown if the underlying data is not a valid email address.
 Validates that a given string length is between some minimum and maximum value.
 
 ```javascript
-    ...
+import {
+    // ...
+    LengthValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new LengthValidator({
                 'min': 1,
                 'max': 50,
@@ -489,11 +640,22 @@ Validates that a given string length is between some minimum and maximum value.
                 'maxMessage': 'Your max error message',
                 'exactMessage': 'Your exact error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...'
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
+
 #### Options
 ##### min
 **type**: `integer`
@@ -536,18 +698,35 @@ The message that will be shown if min and max values are equal and the underlyin
 Validates that a value is a valid URL string.
 
 ```javascript
-    ...
+import {
+    // ...
+    UrlValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new UrlValidator({
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...'
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -579,19 +758,36 @@ This message is shown if the URL is invalid.
 Validates that a value matches a regular expression.
 
 ```javascript
-    ...
+import {
+    // ...
+    RegexValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new RegexValidator({
                 'message': 'Your error message',
                 'pattern': /^.+\@\S+\.\S+$/
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...'
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -613,18 +809,35 @@ This required option is the regular expression pattern that the input will be ma
 Validates that a value is a valid IP address. ~~By default, this will validate the value as IPv4, but a number of different options exist to validate as IPv6 and many other combinations.~~
 
 ```javascript
-    ...
+import {
+    // ...
+    IpValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new IpValidator({
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...'
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -670,20 +883,37 @@ This message is shown if the string is not a valid IP address.
 Validates that a value is a valid [Universally unique identifier (UUID)](https://en.wikipedia.org/wiki/Universally_unique_identifier) per [RFC 4122](https://tools.ietf.org/html/rfc4122). By default, this will validate the format according to the RFC's guidelines, but this can be relaxed to accept non-standard UUIDs that other systems (like PostgreSQL) accept. UUID versions can also be restricted using a whitelist.
 
 ```javascript
-    ...
+import {
+    // ...
+    UuidValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new UuidValidator({
                 'message': 'Your error message',
                 'versions': [1,2,3,4,5],
                 'strict': true
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: 216f-ff40-98d9-11e3-a5e2-0800-200c-9a66
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -715,11 +945,18 @@ Validates that a given number is *between* some minimum and maximum number.
 
 **Basic Usage**
 ```javascript
-    ...
+import {
+    // ...
+    RangeValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new RangeValidator({
                 'min': 1,
                 'min': 100,
@@ -727,19 +964,36 @@ Validates that a given number is *between* some minimum and maximum number.
                 'maxMessage': 'Your max error message',
                 'invalidMessage': 'Your invalid message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: 10
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 **Date Ranges**
 ```javascript
-    ...
+import {
+    // ...
+    RangeValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new RangeValidator({
                 'min': new Date(2015, 0, 1, 0, 0, 0, 0),
                 'max': new Date(2017, 0, 1, 0, 0, 0, 0),
@@ -747,10 +1001,20 @@ Validates that a given number is *between* some minimum and maximum number.
                 'maxMessage': 'Your max error message',
                 'invalidMessage': 'Your invalid message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: new Date(2016, 0, 1, 0, 0, 0, 0)
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -789,19 +1053,36 @@ Validates that a value is equal to another value, defined in the options. To for
 This constraint compares using `==`, so `3` and "`3`" are considered equal. Use [IdenticalTo](#identicalto) to compare with `===`.
 
 ```javascript
-    ...
+import {
+    // ...
+    EqualToValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new EqualToValidator({
                 'value': 100,
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: 100
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -825,19 +1106,36 @@ Validates that a value is not equal to another value, defined in the options. To
 This constraint compares using `!=`, so `3` and "`3`" are considered equal. Use [NotIdenticalTo](#notidenticalto) to compare with `!==`.
 
 ```javascript
-    ...
+import {
+    // ...
+    NotEqualToValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new NotEqualToValidator({
                 'value': 100,
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: 85
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -861,19 +1159,36 @@ Validates that a value is identical to another value, defined in the options. To
 This constraint compares using `===`, so `3` and "`3`" are not considered equal. Use [EqualTo](#equalto) to compare with `==`.
 
 ```javascript
-    ...
+import {
+    // ...
+    IdenticalToValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new IdenticalToValidator({
                 'value': 100,
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: 100
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -897,19 +1212,36 @@ Validates that a value is **not** identical to another value, defined in the opt
 This constraint compares using `!==,` so `3` and "`3`" are considered not equal. Use [NotEqualTo](#notequalto) to compare with `!=`.
 
 ```javascript
-    ...
+import {
+    // ...
+    NotIdenticalToValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new NotIdenticalToValidator({
                 'value': 100,
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: 85
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -932,36 +1264,70 @@ Validates that a value is less than another value, defined in the options. To fo
 
 **Basic Usage**
 ```javascript
-    ...
+import {
+    // ...
+    LessThanValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new LessThanValidator({
                 'value': 100,
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: 85
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 **Comparing Dates**
 ```javascript
-    ...
+import {
+    // ...
+    LessThanValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new LessThanValidator({
                 'value': new Date(2016, 0, 1, 0, 0, 0, 0),
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: new Date(2015, 0, 1, 0, 0, 0, 0)
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -985,36 +1351,70 @@ Validates that a value is less than or equal to another value, defined in the op
 
 **Basic Usage**
 ```javascript
-    ...
+import {
+    // ...
+    LessThanOrEqualValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new LessThanOrEqualValidator({
                 'value': 100,
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: 100
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 **Comparing Dates**
 ```javascript
-    ...
+import {
+    // ...
+    LessThanOrEqualValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new LessThanOrEqualValidator({
                 'value': new Date(2016, 0, 1, 0, 0, 0, 0),
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: new Date(2016, 0, 1, 0, 0, 0, 0)
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -1037,36 +1437,70 @@ Validates that a value is greater than another value, defined in the options. To
 
 **Basic Usage**
 ```javascript
-    ...
+import {
+    // ...
+    GreaterThanValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new GreaterThanValidator({
                 'value': 100,
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: 185
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 **Comparing Dates**
 ```javascript
-    ...
+import {
+    // ...
+    GreaterThanValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new GreaterThanValidator({
-                'value': new Date(2016, 0, 1, 0, 0, 0, 0),
+                'value': new Date(2015, 0, 1, 0, 0, 0, 0),
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: new Date(2016, 0, 1, 0, 0, 0, 0)
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -1089,36 +1523,70 @@ Validates that a value is greater than or equal to another value, defined in the
 
 **Basic Usage**
 ```javascript
-    ...
+import {
+    // ...
+    GreaterThanOrEqualValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new GreaterThanOrEqualValidator({
                 'value': 100,
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: 100
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 **Comparing Dates**
 ```javascript
-    ...
+import {
+    // ...
+    GreaterThanOrEqualValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new GreaterThanOrEqualValidator({
                 'value': new Date(2016, 0, 1, 0, 0, 0, 0),
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: new Date(2016, 0, 1, 0, 0, 0, 0)
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -1140,19 +1608,36 @@ This is the message that will be shown if the value is not greater than or equal
 Validates that a value is a valid date, meaning either a `Date` object ~~or a string (or an object that can be cast into a string)~~ that follows a valid format.
 
 ```javascript
-    ...
+import {
+    // ...
+    DateValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new DateValidator({
                 'format': 'YYYY-MM-DD',
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: 2015-11-25
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -1174,19 +1659,36 @@ This message is shown if the underlying data is not a valid date.
 Validates that a value is a valid "datetime", meaning either a `Date` object ~~or a string (or an object that can be cast into a string)~~ that follows a specific format.
 
 ```javascript
-    ...
+import {
+    // ...
+    DateTimeValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new DateTimeValidator({
                 'format': 'YYYY-MM-DD HH:mm:ss',
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: 2015-11-25 22:16:35
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -1208,19 +1710,36 @@ This message is shown if the underlying data is not a valid datetime.
 Validates that a value is a valid time, meaning either a `Date` object ~~or a string (or an object that can be cast into a string)~~ that follows a valid format.
 
 ```javascript
-    ...
+import {
+    // ...
+    TimeValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new TimeValidator({
                 'format': 'HH:mm:ss',
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: 22:16:35
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -1243,30 +1762,54 @@ This constraint is used to ensure that the given value is one of a given set of 
 
 **Basic Usage**
 ```javascript
-    ...
+import {
+    // ...
+    ChoiceValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new ChoiceValidator({
                 'choices': [1111, 'aaaaa', 3333, '123a'],
                 'multiple': false,
                 'message': 'Your error message',
                 'strict': true
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: 'aaaaa'
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 **Multiple Usage**
 ```javascript
-    ...
+import {
+    // ...
+    ChoiceValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new ChoiceValidator({
                 'choices': [1111, 'aaaaa', 3333, '123a'],
                 'multiple': true,
@@ -1278,10 +1821,20 @@ This constraint is used to ensure that the given value is one of a given set of 
                 'maxMessage': 'Your max error message',
                 'strict': true
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: [1111, '123a']
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -1350,11 +1903,18 @@ Not implemented
 Validates that a given collection's (i.e. an array ~~or an object that implements Countable~~) element count is *between* some minimum and maximum value.
 
 ```javascript
-    ...
+import {
+    // ...
+    CountValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new CountValidator({
                 'min': 1,
                 'max': 10,
@@ -1362,10 +1922,20 @@ Validates that a given collection's (i.e. an array ~~or an object that implement
                 'maxMessage': 'Your max error message',
                 'exactMessage': 'Your  exacterror message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' Example: [1111, 2222, 'aaaa', 'bbbb']
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -1403,11 +1973,13 @@ Validates that a particular field (or fields) in entity is (are) unique. This is
 
 ```javascript
 import {
+    // ...
     UniqueEntityValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
 let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
@@ -1431,24 +2003,22 @@ let validators = {
                     {"id":13,"first_name":"Angela","last_name":"Morrison","email":"amorrisonc@cbsnews.com"},
                     {"id":14,"first_name":"Stephanie","last_name":"Mitchell","email":"smitchelld@free.fr"},
                     {"id":15,"first_name":"Henry","last_name":"Ramos","email":"hramose@ibm.com"}
-                ]
+                ],
                 'ignoreNull': true
             })
-            // ...
-        ],
-    },
-    // ...
-}
-
-let data = {
-    fieldName: {"id":16,"first_name":"Tammy","last_name":"Montgomery","email":"tmontgomeryf@tinyurl.com"},
-    // ...
+        ]
+    }
 };
 
-let _OEC = new ObjectExecutionContext({data: data, validators: validators});
-_OEC.validate();
-if(!_OEC.isValid()) {
-    let errors = _OEC.getErrors();
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: {"id":16,"first_name":"Tammy","last_name":"Montgomery","email":"tmontgomeryf@tinyurl.com"}
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
 }
 ```
 
@@ -1483,18 +2053,35 @@ This required option is data source for comparing.
 Validates that a value is a valid language *Unicode language identifier* (e.g. `fr` or `zh-Hant`).
 
 ```javascript
-    ...
+import {
+    // ...
+    LanguageValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new LanguageValidator({
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: en_gb
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -1513,18 +2100,35 @@ Validates that a value is a valid locale.
 The "value" for each locale is either the two letter [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) *language* code (e.g. `fr`), or the language code followed by an underscore (`_`), then the [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes) *country* code (e.g. `fr_FR` for French/France).
 
 ```javascript
-    ...
+import {
+    // ...
+    LocaleValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new LocaleValidator({
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: cy_GB
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -1541,18 +2145,35 @@ This message is shown if the string is not a valid locale.
 Validates that a value is a valid [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes) country code.
 
 ```javascript
-    ...
+import {
+    // ...
+    CountryValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new CountryValidator({
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: US
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -1583,18 +2204,35 @@ Not implemented
 This constraint is used to ensure that a value has the proper format of a [Business Identifier Code (BIC)](https://en.wikipedia.org/wiki/ISO_9362). BIC is an internationally agreed means to uniquely identify both financial and non-financial institutions.
 
 ```javascript
-    ...
+import {
+    // ...
+    BicValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new BicValidator({
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: DABAIE2D
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -1611,11 +2249,18 @@ The default message supplied when the value does not pass the BIC check.
 This constraint ensures that a credit card number is valid for a given credit card company. It can be used to validate the number before trying to initiate a payment through a payment gateway.
 
 ```javascript
-    ...
+import {
+    // ...
+    CardSchemeValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new CardSchemeValidator({
                 'schemes': [
                     'AMEX',
@@ -1631,10 +2276,20 @@ This constraint ensures that a credit card number is valid for a given credit ca
                 ],
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: 4111111111111111 (Visa)
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -1669,18 +2324,35 @@ For more information about the used schemes, see [Wikipedia: Issuer identificati
 Validates that a value is a valid [3-letter ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency name.
 
 ```javascript
-    ...
+import {
+    // ...
+    CurrencyValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new CurrencyValidator({
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: USD
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -1697,18 +2369,35 @@ This is the message that will be shown if the value is not a valid currency.
 This constraint is used to ensure that a credit card number passes the [Luhn algorithm](https://en.wikipedia.org/wiki/Luhn_algorithm). It is useful as a first step to validating a credit card: before communicating with a payment gateway.
 
 ```javascript
-    ...
+import {
+    // ...
+    LuhnValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new LuhnValidator({
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: 79927398714
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -1725,18 +2414,35 @@ The default message supplied when the value does not pass the Luhn check.
 This constraint is used to ensure that a bank account number has the proper format of an [International Bank Account Number (IBAN)](https://en.wikipedia.org/wiki/International_Bank_Account_Number). IBAN is an internationally agreed means of identifying bank accounts across national borders with a reduced risk of propagating transcription errors.
 
 ```javascript
-    ...
+import {
+    // ...
+    IbanValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new IbanValidator({
                 'message': 'Your error message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: 'GB29 NWBK 6016 1331 9268 19'
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -1753,20 +2459,37 @@ The default message supplied when the value does not pass the Iban check.
 This constraint validates that an [International Standard Book Number (ISBN)](https://en.wikipedia.org/wiki/International_Standard_Book_Number) is either a valid ISBN-10 or a valid ISBN-13.
 
 ```javascript
-    ...
+import {
+    // ...
+    IsbnValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new IsbnValidator({
                 'isbn10Message': 'Your error isbn10 message', 
                 'isbn13Message': 'Your error isbn13 message',
                 'bothIsbnMessage': 'Your error both isbn message'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: (ISBN-13: '978-1-56619-909-4', ISBN-10: '1-56619-909-3')
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -1803,20 +2526,37 @@ The message that will be shown if the *type* option is `null` and the given valu
 Validates that a value is a valid [International Standard Serial Number (ISSN)](https://en.wikipedia.org/wiki/International_Standard_Serial_Number).
 
 ```javascript
-    ...
+import {
+    // ...
+    IssnValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new IssnValidator({
                 'message': 'Your error message', 
                 'caseSensitive': false,
                 'requireHyphen': false
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: '0028-0836'
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
@@ -1844,11 +2584,18 @@ The validator will allow non hyphenated ISSN values by default. When switching t
 The purpose of the Callback constraint is to create completely custom validation rules and to assign any validation errors to specific fields on your object. This process works by specifying one or more callback methods, each of which will be called during the validation process. Each of those methods can do anything, including creating and assigning validation errors.
 
 ```javascript
-    ...
+import {
+    // ...
+    CallbackValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
     fieldName: {
         isRequired: true,
         rules: [
-            ...
+            // ...
             new CallbackValidator({
                 'callback': function(value, parameters){
                     if(value < parameters['min']){
@@ -1864,10 +2611,20 @@ The purpose of the Callback constraint is to create completely custom validation
                 'parameters': {'min': 100, 'max': 200},
                 'message': 'This value should be between {{ min }} and {{ max }}.'
             })
-            ...
-        ],
-    },
-    ...
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: 158
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
 ```
 
 #### Options
