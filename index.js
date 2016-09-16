@@ -55,7 +55,7 @@ export { default as TimeValidator } from './lib/Constraints/TimeValidator';
 export { default as ChoiceValidator } from './lib/Constraints/ChoiceValidator';
 //export { default as CollectionValidator } from './lib/Constraints/CollectionValidator';
 export { default as CountValidator } from './lib/Constraints/CountValidator';
-//export { default as UniqueEntityValidator } from './lib/Constraints/UniqueEntityValidator';
+export { default as UniqueEntityValidator } from './lib/Constraints/UniqueEntityValidator';
 export { default as LanguageValidator } from './lib/Constraints/LanguageValidator';
 export { default as LocaleValidator } from './lib/Constraints/LocaleValidator';
 export { default as CountryValidator } from './lib/Constraints/CountryValidator';
