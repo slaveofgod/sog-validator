@@ -64,7 +64,7 @@ The message that will be shown if the *type* option is `null` and the given valu
 [Go to documentation][documentation-url]
 
 
-[documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md
+[documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#documentation
 [notblank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/NotBlank.md
 [blank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/Blank.md
 [notnull-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/NotNull.md
