@@ -1,10 +1,10 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## Language
+Validates that a value is a valid language *Unicode language identifier* (e.g. `fr` or `zh-Hant`).
 
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    LanguageValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,7 +14,7 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
+            new LanguageValidator({
                 'message': 'Your error message'
             })
         ]
@@ -23,7 +23,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'Some data ...' // Example: en_gb
 };
 
 let _oec = new ObjectExecutionContext({data: data, validators: validators});
@@ -35,9 +35,9 @@ if(!_oec.isValid()) {
 
 #### Options
 ##### message
-**type**: `string` **default**: `This value should not be blank.`
+**type**: `string` **default**: `This value is not a valid language.`
 
-This is the message that will be shown if the value is blank.
+This message is shown if the string is not a valid language code.
 
 [Go to documentation][documentation-url]
 

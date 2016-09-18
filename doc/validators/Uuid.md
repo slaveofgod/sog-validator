@@ -1,10 +1,10 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## Uuid
+Validates that a value is a valid [Universally unique identifier (UUID)](https://en.wikipedia.org/wiki/Universally_unique_identifier) per [RFC 4122](https://tools.ietf.org/html/rfc4122). By default, this will validate the format according to the RFC's guidelines, but this can be relaxed to accept non-standard UUIDs that other systems (like PostgreSQL) accept. UUID versions can also be restricted using a whitelist.
 
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    UuidValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,8 +14,10 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
-                'message': 'Your error message'
+            new UuidValidator({
+                'message': 'Your error message',
+                'versions': [1,2,3,4,5],
+                'strict': true
             })
         ]
     }
@@ -23,7 +25,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'Some data ...' // Example: 216f-ff40-98d9-11e3-a5e2-0800-200c-9a66
 };
 
 let _oec = new ObjectExecutionContext({data: data, validators: validators});
@@ -35,9 +37,23 @@ if(!_oec.isValid()) {
 
 #### Options
 ##### message
-**type**: `string` **default**: `This value should not be blank.`
+**type**: `string` **default**: `This is not a valid UUID.`
 
-This is the message that will be shown if the value is blank.
+This message is shown if the string is not a valid UUID.
+
+##### strict
+**type**: `boolean` **default**: `true`
+
+If this option is set to `true` the constraint will check if the UUID is formatted per the RFC's input format rules: `216fff40-98d9-11e3-a5e2-0800200c9a66`. Setting this to `false` will allow alternate input formats like:
+
+* `216f-ff40-98d9-11e3-a5e2-0800-200c-9a66`
+* `{216fff40-98d9-11e3-a5e2-0800200c9a66}`
+* `216fff4098d911e3a5e20800200c9a66`
+
+##### versions
+**type**: `int[]` **default**: `[1,2,3,4,5]`
+
+This option can be used to only allow specific [UUID versions](http://en.wikipedia.org/wiki/Universally_unique_identifier#Variants_and_versions). Valid versions are 1 - 5. All five versions are allowed by default.
 
 [Go to documentation][documentation-url]
 

@@ -1,10 +1,10 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## Luhn
+This constraint is used to ensure that a credit card number passes the [Luhn algorithm](https://en.wikipedia.org/wiki/Luhn_algorithm). It is useful as a first step to validating a credit card: before communicating with a payment gateway.
 
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    LuhnValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,7 +14,7 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
+            new LuhnValidator({
                 'message': 'Your error message'
             })
         ]
@@ -23,7 +23,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'Some data ...' // Example: 79927398714
 };
 
 let _oec = new ObjectExecutionContext({data: data, validators: validators});
@@ -35,9 +35,9 @@ if(!_oec.isValid()) {
 
 #### Options
 ##### message
-**type**: `string` **default**: `This value should not be blank.`
+**type**: `string` **default**: `Invalid card number.`
 
-This is the message that will be shown if the value is blank.
+The default message supplied when the value does not pass the Luhn check.
 
 [Go to documentation][documentation-url]
 

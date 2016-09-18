@@ -1,10 +1,10 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## Count
+Validates that a given collection's (i.e. an array ~~or an object that implements Countable~~) element count is *between* some minimum and maximum value.
 
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    CountValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,8 +14,12 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
-                'message': 'Your error message'
+            new CountValidator({
+                'min': 1,
+                'max': 10,
+                'minMessage': 'Your min error message',
+                'maxMessage': 'Your max error message',
+                'exactMessage': 'Your  exacterror message'
             })
         ]
     }
@@ -23,7 +27,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'Some data ...' Example: [1111, 2222, 'aaaa', 'bbbb']
 };
 
 let _oec = new ObjectExecutionContext({data: data, validators: validators});
@@ -34,10 +38,30 @@ if(!_oec.isValid()) {
 ```
 
 #### Options
-##### message
-**type**: `string` **default**: `This value should not be blank.`
+##### min
+**type**: `integer`
 
-This is the message that will be shown if the value is blank.
+This required option is the "`min`" count value. Validation will fail if the given collection elements count is **less** than this min value.
+
+##### max
+**type**: `integer`
+
+This required option is the "`max`" count value. Validation will fail if the given collection elements count is **greater** than this max value.
+
+##### minMessage
+**type**: `string` **default**: `This collection should contain {{ limit }} elements or more.`
+
+The message that will be shown if the underlying collection elements count is less than the `min` option.
+
+##### maxMessage
+**type**: `string` **default**: `This collection should contain {{ limit }} elements or less.`
+
+The message that will be shown if the underlying collection elements count is more than the `max` option.
+
+##### exactMessage
+**type**: `string` **default**: `This collection should contain exactly {{ limit }} elements.`
+
+The message that will be shown if `min` and `max` values are **equal** and the underlying collection elements count is not exactly this value.
 
 [Go to documentation][documentation-url]
 

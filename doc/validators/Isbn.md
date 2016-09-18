@@ -1,10 +1,10 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## Isbn
+This constraint validates that an [International Standard Book Number (ISBN)](https://en.wikipedia.org/wiki/International_Standard_Book_Number) is either a valid ISBN-10 or a valid ISBN-13.
 
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    IsbnValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,8 +14,10 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
-                'message': 'Your error message'
+            new IsbnValidator({
+                'isbn10Message': 'Your error isbn10 message', 
+                'isbn13Message': 'Your error isbn13 message',
+                'bothIsbnMessage': 'Your error both isbn message'
             })
         ]
     }
@@ -23,7 +25,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'Some data ...' // Example: (ISBN-13: '978-1-56619-909-4', ISBN-10: '1-56619-909-3')
 };
 
 let _oec = new ObjectExecutionContext({data: data, validators: validators});
@@ -34,10 +36,30 @@ if(!_oec.isValid()) {
 ```
 
 #### Options
-##### message
-**type**: `string` **default**: `This value should not be blank.`
+##### type
+**type**: `string` **default**: `null`
 
-This is the message that will be shown if the value is blank.
+The type of ISBN to validate against. Valid values are `isbn10`, `isbn13` and `null` to accept any kind of ISBN.
+
+##### message
+**type**: `string` **default**: `null`
+
+The message that will be shown if the value is not valid. If not `null`, this message has priority over all the other messages.
+
+##### isbn10Message
+**type**: `string` **default**: `This value is not a valid ISBN-10.`
+
+The message that will be shown if the *type* option is `isbn10` and the given value does not pass the ISBN-10 check.
+
+##### isbn13Message
+**type**: `string` **default**: `This value is not a valid ISBN-13.`
+
+The message that will be shown if the *type* option is `isbn13` and the given value does not pass the ISBN-13 check.
+
+##### bothIsbnMessage
+**type**: `string` **default**: `This value is neither a valid ISBN-10 nor a valid ISBN-13.`
+
+The message that will be shown if the *type* option is `null` and the given value does not pass any of the ISBN checks.
 
 [Go to documentation][documentation-url]
 

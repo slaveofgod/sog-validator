@@ -1,10 +1,10 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## Length
+Validates that a given string length is between some minimum and maximum value.
 
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    LengthValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,8 +14,12 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
-                'message': 'Your error message'
+            new LengthValidator({
+                'min': 1,
+                'max': 50,
+                'minMessage': 'Your min error message',
+                'maxMessage': 'Your max error message',
+                'exactMessage': 'Your exact error message'
             })
         ]
     }
@@ -34,10 +38,38 @@ if(!_oec.isValid()) {
 ```
 
 #### Options
-##### message
-**type**: `string` **default**: `This value should not be blank.`
+##### min
+**type**: `integer`
 
-This is the message that will be shown if the value is blank.
+This required option is the "min" length value. Validation will fail if the given value's length is `less` than this min value.
+
+It is important to notice that NULL values and empty strings are considered valid no matter if the constraint required a minimum length. Validators are triggered only if the value is not blank.
+
+##### max
+**type**: `integer`
+
+This required option is the "max" length value. Validation will fail if the given value's length is `greater` than this max value.
+
+##### ~~charset~~ `(not implemented)`
+~~**type**: `string` **default**: `UTF-8`~~
+
+##### minMessage
+**type**: `string` **default**: `This value is too short. It should have {{ limit }} characters or more.`
+
+The message that will be shown if the underlying value's length is less than the min option.
+
+##### maxMessage
+**type**: `string` **default**: `This value is too long. It should have {{ limit }} characters or less.`
+
+The message that will be shown if the underlying value's length is more than the max option.
+
+##### exactMessage
+**type**: `string` **default**: `This value should have exactly {{ limit }} characters.`
+
+The message that will be shown if min and max values are equal and the underlying value's length is not exactly this value.
+
+##### ~~charsetMessage~~ `(not implemented)`
+~~**type**: `string` **default**: `This value does not match the expected {{ charset }} charset.`~~
 
 [Go to documentation][documentation-url]
 

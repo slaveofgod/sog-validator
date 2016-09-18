@@ -1,10 +1,10 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## Blank
+Validates that a value is blank, defined as equal to a blank string or equal to `null`. To force that a value strictly be equal to `null`, see the [IsNull][isnull-url] constraint. To force that a value is not blank, see [NotBlank][notblank-url].
 
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    BlankValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,7 +14,7 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
+            new BlankValidator({
                 'message': 'Your error message'
             })
         ]
@@ -35,9 +35,9 @@ if(!_oec.isValid()) {
 
 #### Options
 ##### message
-**type**: `string` **default**: `This value should not be blank.`
+**type**: `string` **default**: `This value should be blank.`
 
-This is the message that will be shown if the value is blank.
+This is the message that will be shown if the value is not blank.
 
 [Go to documentation][documentation-url]
 

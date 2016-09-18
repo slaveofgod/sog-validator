@@ -1,10 +1,10 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## Time
+Validates that a value is a valid time, meaning either a `Date` object ~~or a string (or an object that can be cast into a string)~~ that follows a valid format.
 
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    TimeValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,7 +14,8 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
+            new TimeValidator({
+                'format': 'HH:mm:ss',
                 'message': 'Your error message'
             })
         ]
@@ -23,7 +24,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'Some data ...' // Example: 22:16:35
 };
 
 let _oec = new ObjectExecutionContext({data: data, validators: validators});
@@ -34,10 +35,15 @@ if(!_oec.isValid()) {
 ```
 
 #### Options
-##### message
-**type**: `string` **default**: `This value should not be blank.`
+##### format
+**type**: `string` **default**: `HH:mm:ss`
 
-This is the message that will be shown if the value is blank.
+This option allows to validate a custom date format.
+
+##### message
+**type**: `string` **default**: `This value is not a valid time.`
+
+This message is shown if the underlying data is not a valid time.
 
 [Go to documentation][documentation-url]
 

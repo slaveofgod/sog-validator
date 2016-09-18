@@ -1,10 +1,12 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## Locale
+Validates that a value is a valid locale.
+
+The "value" for each locale is either the two letter [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) *language* code (e.g. `fr`), or the language code followed by an underscore (`_`), then the [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes) *country* code (e.g. `fr_FR` for French/France).
 
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    LocaleValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,7 +16,7 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
+            new LocaleValidator({
                 'message': 'Your error message'
             })
         ]
@@ -23,7 +25,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'Some data ...' // Example: cy_GB
 };
 
 let _oec = new ObjectExecutionContext({data: data, validators: validators});
@@ -35,9 +37,9 @@ if(!_oec.isValid()) {
 
 #### Options
 ##### message
-**type**: `string` **default**: `This value should not be blank.`
+**type**: `string` **default**: `This value is not a valid locale.`
 
-This is the message that will be shown if the value is blank.
+This message is shown if the string is not a valid locale.
 
 [Go to documentation][documentation-url]
 

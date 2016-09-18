@@ -1,10 +1,10 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## Url
+Validates that a value is a valid URL string.
 
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    UrlValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,7 +14,7 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
+            new UrlValidator({
                 'message': 'Your error message'
             })
         ]
@@ -35,9 +35,24 @@ if(!_oec.isValid()) {
 
 #### Options
 ##### message
-**type**: `string` **default**: `This value should not be blank.`
+**type**: `string` **default**: `This value is not a valid URL.`
 
-This is the message that will be shown if the value is blank.
+This message is shown if the URL is invalid.
+
+##### ~~protocols~~ `(not implemented)`
+~~**type**: `array` **default**: `['http', 'https']`~~
+
+~~The protocols considered to be valid for the URL. For example, if you also consider the ftp:// type URLs to be valid, redefine the protocols array, listing http, https, and also ftp.~~
+
+##### ~~checkDNS~~ `(not implemented)`
+~~**type**: `boolean` **default**: `false`~~
+
+~~By default, this constraint just validates the syntax of the given URL. If you also need to check whether the associated host exists, set the `checkDNS` option to `true`.~~
+
+##### ~~dnsMessage~~ `(not implemented)`
+~~**type**: `string` **default**: `The host could not be resolved.`~~
+
+~~This message is shown when the `checkDNS` option is set to `true` and the DNS check failed.~~
 
 [Go to documentation][documentation-url]
 

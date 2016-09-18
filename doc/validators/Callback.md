@@ -1,10 +1,11 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## Callback
+
+The purpose of the Callback constraint is to create completely custom validation rules and to assign any validation errors to specific fields on your object. This process works by specifying one or more callback methods, each of which will be called during the validation process. Each of those methods can do anything, including creating and assigning validation errors.
 
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    CallbackValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,8 +15,20 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
-                'message': 'Your error message'
+            new CallbackValidator({
+                'callback': function(value, parameters){
+                    if(value < parameters['min']){
+                        return false;
+                    }
+
+                    if(value > parameters['max']){
+                        return false;
+                    }
+
+                    return true;
+                },
+                'parameters': {'min': 100, 'max': 200},
+                'message': 'This value should be between {{ min }} and {{ max }}.'
             })
         ]
     }
@@ -23,7 +36,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'Some data ...' // Example: 158
 };
 
 let _oec = new ObjectExecutionContext({data: data, validators: validators});
@@ -34,10 +47,20 @@ if(!_oec.isValid()) {
 ```
 
 #### Options
-##### message
-**type**: `string` **default**: `This value should not be blank.`
+##### callback
+**type**: `function`
 
-This is the message that will be shown if the value is blank.
+This required option is the "`function`" that will executed.
+
+##### parameters
+**type**: `array` **default**: `null`
+
+This option is the "`parameters`" that will argument for executed function.
+
+##### message
+**type**: `string`
+
+The message that will be shown if function return false. This option is required.
 
 [Go to documentation][documentation-url]
 

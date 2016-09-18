@@ -1,10 +1,10 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## Issn
+Validates that a value is a valid [International Standard Serial Number (ISSN)](https://en.wikipedia.org/wiki/International_Standard_Serial_Number).
 
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    IssnValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,8 +14,10 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
-                'message': 'Your error message'
+            new IssnValidator({
+                'message': 'Your error message', 
+                'caseSensitive': false,
+                'requireHyphen': false
             })
         ]
     }
@@ -23,7 +25,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'Some data ...' // Example: '0028-0836'
 };
 
 let _oec = new ObjectExecutionContext({data: data, validators: validators});
@@ -35,9 +37,19 @@ if(!_oec.isValid()) {
 
 #### Options
 ##### message
-**type**: `string` **default**: `This value should not be blank.`
+**type**: `string` **default**: `This value is not a valid ISSN.`
 
-This is the message that will be shown if the value is blank.
+The message shown if the given value is not a valid ISSN.
+
+##### caseSensitive
+**type**: `boolean` **default**: `false`
+
+The validator will allow ISSN values to end with a lower case 'x' by default. When switching this to `true`, the validator requires an upper case 'X'.
+
+##### requireHyphen
+**type**: `boolean` **default**: `false`
+
+The validator will allow non hyphenated ISSN values by default. When switching this to `true`, the validator requires a hyphenated ISSN value.
 
 [Go to documentation][documentation-url]
 

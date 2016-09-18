@@ -1,10 +1,11 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## GreaterThanOrEqual
+Validates that a value is greater than or equal to another value, defined in the options. To force that a value is greater than another value, see [GreaterThan][greaterthan-url].
 
+**Basic Usage**
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    GreaterThanOrEqualValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,7 +15,8 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
+            new GreaterThanOrEqualValidator({
+                'value': 100,
                 'message': 'Your error message'
             })
         ]
@@ -23,7 +25,41 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'Some data ...' // Example: 100
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
+```
+
+**Comparing Dates**
+```javascript
+import {
+    // ...
+    GreaterThanOrEqualValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
+    fieldName: {
+        isRequired: true,
+        rules: [
+            // ...
+            new GreaterThanOrEqualValidator({
+                'value': new Date(2016, 0, 1, 0, 0, 0, 0),
+                'message': 'Your error message'
+            })
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: new Date(2016, 0, 1, 0, 0, 0, 0)
 };
 
 let _oec = new ObjectExecutionContext({data: data, validators: validators});
@@ -34,10 +70,15 @@ if(!_oec.isValid()) {
 ```
 
 #### Options
-##### message
-**type**: `string` **default**: `This value should not be blank.`
+##### value
+**type**: `mixed`
 
-This is the message that will be shown if the value is blank.
+This option is required. It defines the value to compare to. It can be a string, number or object.
+
+##### message
+**type**: `string` **default**: `This value should be greater than or equal to {{ compared_value }}.`
+
+This is the message that will be shown if the value is not greater than or equal to the comparison value.
 
 [Go to documentation][documentation-url]
 

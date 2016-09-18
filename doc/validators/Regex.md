@@ -1,10 +1,10 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## Regex
+Validates that a value matches a regular expression.
 
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    RegexValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,8 +14,9 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
-                'message': 'Your error message'
+            new RegexValidator({
+                'message': 'Your error message',
+                'pattern': /^.+\@\S+\.\S+$/
             })
         ]
     }
@@ -35,9 +36,14 @@ if(!_oec.isValid()) {
 
 #### Options
 ##### message
-**type**: `string` **default**: `This value should not be blank.`
+**type**: `string` **default**: `This value is not valid.`
 
-This is the message that will be shown if the value is blank.
+This is the message that will be shown if this validator fails.
+
+##### pattern
+**type**: `string`
+
+This required option is the regular expression pattern that the input will be matched against.
 
 [Go to documentation][documentation-url]
 

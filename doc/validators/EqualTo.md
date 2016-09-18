@@ -1,10 +1,12 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## EqualTo
+Validates that a value is equal to another value, defined in the options. To force that a value is *not* equal, see [NotEqualTo][notequalto-url].
+
+This constraint compares using `==`, so `3` and "`3`" are considered equal. Use [IdenticalTo][identicalto-url] to compare with `===`.
 
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    EqualToValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,7 +16,8 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
+            new EqualToValidator({
+                'value': 100,
                 'message': 'Your error message'
             })
         ]
@@ -23,7 +26,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'Some data ...' // Example: 100
 };
 
 let _oec = new ObjectExecutionContext({data: data, validators: validators});
@@ -34,10 +37,15 @@ if(!_oec.isValid()) {
 ```
 
 #### Options
-##### message
-**type**: `string` **default**: `This value should not be blank.`
+##### value
+**type**: `mixed`
 
-This is the message that will be shown if the value is blank.
+This option is required. It defines the value to compare to. It can be a string, number or object.
+
+##### message
+**type**: `string` **default**: `This value should be equal to {{ compared_value }}.`
+
+This is the message that will be shown if the value is not equal.
 
 [Go to documentation][documentation-url]
 

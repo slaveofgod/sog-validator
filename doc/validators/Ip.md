@@ -1,10 +1,10 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## Ip
+Validates that a value is a valid IP address. ~~By default, this will validate the value as IPv4, but a number of different options exist to validate as IPv6 and many other combinations.~~
 
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    IpValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,7 +14,7 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
+            new IpValidator({
                 'message': 'Your error message'
             })
         ]
@@ -35,9 +35,38 @@ if(!_oec.isValid()) {
 
 #### Options
 ##### message
-**type**: `string` **default**: `This value should not be blank.`
+**type**: `string` **default**: `This is not a valid IP address.`
 
-This is the message that will be shown if the value is blank.
+This message is shown if the string is not a valid IP address.
+
+##### ~~version~~ `(not implemented)`
+~~**type**: `string` **default**: `4`~~
+
+~~This determines exactly how the IP address is validated and can take one of a variety of different values:~~
+
+~~**All ranges**~~
+
+* `4` ~~Validates for IPv4 addresses~~
+* `6` ~~Validates for IPv6 addresses~~
+* `all` ~~Validates all IP formats~~
+
+~~**No private ranges**~~
+
+* `4_no_priv` ~~Validates for IPv4 but without private IP ranges~~
+* `6_no_priv` ~~Validates for IPv6 but without private IP ranges~~
+* `all_no_priv` ~~Validates for all IP formats but without private IP ranges~~ 
+
+~~**No reserved ranges**~~
+
+* `4_no_res` ~~Validates for IPv4 but without reserved IP ranges~~
+* `6_no_res` ~~Validates for IPv6 but without reserved IP ranges~~
+* `all_no_res` ~~Validates for all IP formats but without reserved IP ranges~~ 
+
+~~**Only public ranges**~~
+
+* `4_public` ~~Validates for IPv4 but without private and reserved ranges~~
+* `6_public` ~~Validates for IPv6 but without private and reserved ranges~~
+* `all_public` ~~Validates for all IP formats but without private and reserved ranges~~
 
 [Go to documentation][documentation-url]
 

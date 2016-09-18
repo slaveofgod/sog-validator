@@ -1,10 +1,11 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## Type
+
+Validates that a value is of a specific data type. For example, if a variable should be an `array`, you can use this constraint with the array type option to validate this.
 
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    TypeValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,7 +15,8 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
+            new TypeValidator({
+                'type': 'integer',
                 'message': 'Your error message'
             })
         ]
@@ -34,10 +36,39 @@ if(!_oec.isValid()) {
 ```
 
 #### Options
-##### message
-**type**: `string` **default**: `This value should not be blank.`
+##### type
+**type**: `string`
+* `array`
+* `bool`
+* ~~`callable`~~ `(not implemented)`
+* `float`
+* `double`
+* `int`
+* `integer`
+* ~~`long`~~ `(not implemented)`
+* `null`
+* `numeric`
+* `object`
+* ~~`real`~~ `(not implemented)`
+* ~~`resource`~~ `(not implemented)`
+* `scalar`
+* `string`
+* ~~`alnum`~~ `(not implemented)`
+* ~~`alpha`~~ `(not implemented)`
+* ~~`cntrl`~~ `(not implemented)`
+* ~~`digit`~~ `(not implemented)`
+* ~~`graph`~~ `(not implemented)`
+* ~~`lower`~~ `(not implemented)`
+* ~~`print`~~ `(not implemented)`
+* ~~`punct`~~ `(not implemented)`
+* ~~`space`~~ `(not implemented)`
+* ~~`upper`~~ `(not implemented)`
+* ~~`xdigit`~~ `(not implemented)`
 
-This is the message that will be shown if the value is blank.
+##### message
+**type**: `string` **default**: `This value should be of type {{ type }}.`
+
+The message if the underlying data is not of the given type.
 
 [Go to documentation][documentation-url]
 

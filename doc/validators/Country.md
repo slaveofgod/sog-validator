@@ -1,10 +1,10 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## Country
+Validates that a value is a valid [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes) country code.
 
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    CountryValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,7 +14,7 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
+            new CountryValidator({
                 'message': 'Your error message'
             })
         ]
@@ -23,7 +23,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'Some data ...' // Example: US
 };
 
 let _oec = new ObjectExecutionContext({data: data, validators: validators});
@@ -35,9 +35,9 @@ if(!_oec.isValid()) {
 
 #### Options
 ##### message
-**type**: `string` **default**: `This value should not be blank.`
+**type**: `string` **default**: `This value is not a valid country.`
 
-This is the message that will be shown if the value is blank.
+This message is shown if the string is not a valid country code.
 
 [Go to documentation][documentation-url]
 

@@ -1,10 +1,10 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## Bic
+This constraint is used to ensure that a value has the proper format of a [Business Identifier Code (BIC)](https://en.wikipedia.org/wiki/ISO_9362). BIC is an internationally agreed means to uniquely identify both financial and non-financial institutions.
 
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    BicValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,7 +14,7 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
+            new BicValidator({
                 'message': 'Your error message'
             })
         ]
@@ -23,7 +23,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'Some data ...' // Example: DABAIE2D
 };
 
 let _oec = new ObjectExecutionContext({data: data, validators: validators});
@@ -35,9 +35,9 @@ if(!_oec.isValid()) {
 
 #### Options
 ##### message
-**type**: `string` **default**: `This value should not be blank.`
+**type**: `string` **default**: `This is not a valid Business Identifier Code (BIC).`
 
-This is the message that will be shown if the value is blank.
+The default message supplied when the value does not pass the BIC check.
 
 [Go to documentation][documentation-url]
 

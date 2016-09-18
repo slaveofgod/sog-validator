@@ -1,10 +1,10 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## Iban
+This constraint is used to ensure that a bank account number has the proper format of an [International Bank Account Number (IBAN)](https://en.wikipedia.org/wiki/International_Bank_Account_Number). IBAN is an internationally agreed means of identifying bank accounts across national borders with a reduced risk of propagating transcription errors.
 
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    IbanValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,7 +14,7 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
+            new IbanValidator({
                 'message': 'Your error message'
             })
         ]
@@ -23,7 +23,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'Some data ...' // Example: 'GB29 NWBK 6016 1331 9268 19'
 };
 
 let _oec = new ObjectExecutionContext({data: data, validators: validators});
@@ -35,9 +35,9 @@ if(!_oec.isValid()) {
 
 #### Options
 ##### message
-**type**: `string` **default**: `This value should not be blank.`
+**type**: `string` **default**: `This is not a valid International Bank Account Number (IBAN).`
 
-This is the message that will be shown if the value is blank.
+The default message supplied when the value does not pass the Iban check.
 
 [Go to documentation][documentation-url]
 

@@ -1,10 +1,11 @@
-## NotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
+## Range
+Validates that a given number is *between* some minimum and maximum number.
 
+**Basic Usage**
 ```javascript
 import {
     // ...
-    NotBlankValidator,
+    RangeValidator,
     ObjectExecutionContext
 } from 'bob-validator';
 
@@ -14,8 +15,12 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new NotBlankValidator({
-                'message': 'Your error message'
+            new RangeValidator({
+                'min': 1,
+                'min': 100,
+                'minMessage': 'Your min error message',
+                'maxMessage': 'Your max error message',
+                'invalidMessage': 'Your invalid message'
             })
         ]
     }
@@ -23,7 +28,44 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'Some data ...' // Example: 10
+};
+
+let _oec = new ObjectExecutionContext({data: data, validators: validators});
+_oec.validate();
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
+```
+
+**Date Ranges**
+```javascript
+import {
+    // ...
+    RangeValidator,
+    ObjectExecutionContext
+} from 'bob-validator';
+
+let validators = {
+    // ...
+    fieldName: {
+        isRequired: true,
+        rules: [
+            // ...
+            new RangeValidator({
+                'min': new Date(2015, 0, 1, 0, 0, 0, 0),
+                'max': new Date(2017, 0, 1, 0, 0, 0, 0),
+                'minMessage': 'Your min error message',
+                'maxMessage': 'Your max error message',
+                'invalidMessage': 'Your invalid message'
+            })
+        ]
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: new Date(2016, 0, 1, 0, 0, 0, 0)
 };
 
 let _oec = new ObjectExecutionContext({data: data, validators: validators});
@@ -34,10 +76,30 @@ if(!_oec.isValid()) {
 ```
 
 #### Options
-##### message
-**type**: `string` **default**: `This value should not be blank.`
+##### min
+**type**: `integer` or `Date`
 
-This is the message that will be shown if the value is blank.
+This required option is the "min" value. Validation will fail if the given value is **less** than this min value.
+
+##### max
+**type**: `integer` or `Date`
+
+This required option is the "max" value. Validation will fail if the given value is **greater** than this max value.
+
+##### minMessage
+**type**: `string` **default**: `This value should be {{ limit }} or more.`
+
+The message that will be shown if the underlying value is less than the `min` option.
+
+##### maxMessage
+**type**: `string` **default**: `This value should be {{ limit }} or less.`
+
+The message that will be shown if the underlying value is more than the max option.
+
+##### invalidMessage
+**type**: `string` **default**: `This value should be a valid number.`
+
+The message that will be shown if the underlying value is not a number.
 
 [Go to documentation][documentation-url]
 
