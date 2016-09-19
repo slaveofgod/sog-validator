@@ -83,7 +83,7 @@ export { default as IssnValidator } from './lib/Constraints/IssnValidator';
  */
 export { default as CallbackValidator } from './lib/Constraints/CallbackValidator';
 //export { default as ExpressionValidator } from './lib/Constraints/ExpressionValidator';
-//export { default as AllValidator } from './lib/Constraints/AllValidator';
+export { default as AllValidator } from './lib/Constraints/AllValidator';
 //export { default as UserPasswordValidator } from './lib/Constraints/UserPasswordValidator';
 //export { default as ValidValidator } from './lib/Constraints/ValidValidator';
 

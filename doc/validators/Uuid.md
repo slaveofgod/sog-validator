@@ -5,7 +5,7 @@ Validates that a value is a valid [Universally unique identifier (UUID)](https:/
 import {
     // ...
     UuidValidator,
-    ObjectExecutionContext
+    AllValidator
 } from 'bob-validator';
 
 let validators = {
@@ -28,8 +28,12 @@ let data = {
     fieldName: 'Some data ...' // Example: 216f-ff40-98d9-11e3-a5e2-0800-200c-9a66
 };
 
-let _oec = new ObjectExecutionContext({data: data, validators: validators});
-_oec.validate();
+let _oec = new AllValidator({
+    validators: validators,
+    validationType: 'object',
+    errorType: 'array'
+});
+_oec.validate(data);
 if(!_oec.isValid()) {
     let errors = _oec.getErrors();
 }

@@ -5,7 +5,7 @@ Validates that a particular field (or fields) in entity is (are) unique. This is
 import {
     // ...
     UniqueEntityValidator,
-    ObjectExecutionContext
+    AllValidator
 } from 'bob-validator';
 
 let validators = {
@@ -45,8 +45,12 @@ let data = {
     fieldName: 'Some data ...' // Example: {"id":16,"first_name":"Tammy","last_name":"Montgomery","email":"tmontgomeryf@tinyurl.com"}
 };
 
-let _oec = new ObjectExecutionContext({data: data, validators: validators});
-_oec.validate();
+let _oec = new AllValidator({
+    validators: validators,
+    validationType: 'object',
+    errorType: 'array'
+});
+_oec.validate(data);
 if(!_oec.isValid()) {
     let errors = _oec.getErrors();
 }

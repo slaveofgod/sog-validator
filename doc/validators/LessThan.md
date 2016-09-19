@@ -6,7 +6,7 @@ Validates that a value is less than another value, defined in the options. To fo
 import {
     // ...
     LessThanValidator,
-    ObjectExecutionContext
+    AllValidator
 } from 'bob-validator';
 
 let validators = {
@@ -28,8 +28,12 @@ let data = {
     fieldName: 'Some data ...' // Example: 85
 };
 
-let _oec = new ObjectExecutionContext({data: data, validators: validators});
-_oec.validate();
+let _oec = new AllValidator({
+    validators: validators,
+    validationType: 'object',
+    errorType: 'array'
+});
+_oec.validate(data);
 if(!_oec.isValid()) {
     let errors = _oec.getErrors();
 }
@@ -40,7 +44,7 @@ if(!_oec.isValid()) {
 import {
     // ...
     LessThanValidator,
-    ObjectExecutionContext
+    AllValidator
 } from 'bob-validator';
 
 let validators = {
@@ -62,8 +66,12 @@ let data = {
     fieldName: 'Some data ...' // Example: new Date(2015, 0, 1, 0, 0, 0, 0)
 };
 
-let _oec = new ObjectExecutionContext({data: data, validators: validators});
-_oec.validate();
+let _oec = new AllValidator({
+    validators: validators,
+    validationType: 'object',
+    errorType: 'array'
+});
+_oec.validate(data);
 if(!_oec.isValid()) {
     let errors = _oec.getErrors();
 }

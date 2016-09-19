@@ -5,7 +5,7 @@ Validates that a value is a valid [3-letter ISO 4217](https://en.wikipedia.org/w
 import {
     // ...
     CurrencyValidator,
-    ObjectExecutionContext
+    AllValidator
 } from 'bob-validator';
 
 let validators = {
@@ -26,10 +26,15 @@ let data = {
     fieldName: 'Some data ...' // Example: USD
 };
 
-let _oec = new ObjectExecutionContext({data: data, validators: validators});
-_oec.validate();
+let _oec = new AllValidator({
+    validators: validators,
+    validationType: 'object',
+    errorType: 'array'
+});
+_oec.validate(data);
 if(!_oec.isValid()) {
     let errors = _oec.getErrors();
+    console.log(errors);
 }
 ```
 

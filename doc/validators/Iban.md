@@ -5,7 +5,7 @@ This constraint is used to ensure that a bank account number has the proper form
 import {
     // ...
     IbanValidator,
-    ObjectExecutionContext
+    AllValidator
 } from 'bob-validator';
 
 let validators = {
@@ -26,8 +26,12 @@ let data = {
     fieldName: 'Some data ...' // Example: 'GB29 NWBK 6016 1331 9268 19'
 };
 
-let _oec = new ObjectExecutionContext({data: data, validators: validators});
-_oec.validate();
+let _oec = new AllValidator({
+    validators: validators,
+    validationType: 'object',
+    errorType: 'array'
+});
+_oec.validate(data);
 if(!_oec.isValid()) {
     let errors = _oec.getErrors();
 }

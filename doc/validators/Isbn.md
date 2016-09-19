@@ -5,7 +5,7 @@ This constraint validates that an [International Standard Book Number (ISBN)](ht
 import {
     // ...
     IsbnValidator,
-    ObjectExecutionContext
+    AllValidator
 } from 'bob-validator';
 
 let validators = {
@@ -28,8 +28,12 @@ let data = {
     fieldName: 'Some data ...' // Example: (ISBN-13: '978-1-56619-909-4', ISBN-10: '1-56619-909-3')
 };
 
-let _oec = new ObjectExecutionContext({data: data, validators: validators});
-_oec.validate();
+let _oec = new AllValidator({
+    validators: validators,
+    validationType: 'object',
+    errorType: 'array'
+});
+_oec.validate(data);
 if(!_oec.isValid()) {
     let errors = _oec.getErrors();
 }

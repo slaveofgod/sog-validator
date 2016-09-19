@@ -6,7 +6,7 @@ This constraint is used to ensure that the given value is one of a given set of 
 import {
     // ...
     ChoiceValidator,
-    ObjectExecutionContext
+    AllValidator
 } from 'bob-validator';
 
 let validators = {
@@ -30,7 +30,7 @@ let data = {
     fieldName: 'Some data ...' // Example: 'aaaaa'
 };
 
-let _oec = new ObjectExecutionContext({data: data, validators: validators});
+let _oec = new AllValidator({data: data, validators: validators});
 _oec.validate();
 if(!_oec.isValid()) {
     let errors = _oec.getErrors();
@@ -42,7 +42,7 @@ if(!_oec.isValid()) {
 import {
     // ...
     ChoiceValidator,
-    ObjectExecutionContext
+    AllValidator
 } from 'bob-validator';
 
 let validators = {
@@ -71,10 +71,15 @@ let data = {
     fieldName: 'Some data ...' // Example: [1111, '123a']
 };
 
-let _oec = new ObjectExecutionContext({data: data, validators: validators});
-_oec.validate();
+let _oec = new AllValidator({
+    validators: validators,
+    validationType: 'object',
+    errorType: 'array'
+});
+_oec.validate(data);
 if(!_oec.isValid()) {
     let errors = _oec.getErrors();
+    console.log(errors);
 }
 ```
 

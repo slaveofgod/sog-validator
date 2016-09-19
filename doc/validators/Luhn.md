@@ -5,7 +5,7 @@ This constraint is used to ensure that a credit card number passes the [Luhn alg
 import {
     // ...
     LuhnValidator,
-    ObjectExecutionContext
+    AllValidator
 } from 'bob-validator';
 
 let validators = {
@@ -26,8 +26,12 @@ let data = {
     fieldName: 'Some data ...' // Example: 79927398714
 };
 
-let _oec = new ObjectExecutionContext({data: data, validators: validators});
-_oec.validate();
+let _oec = new AllValidator({
+    validators: validators,
+    validationType: 'object',
+    errorType: 'array'
+});
+_oec.validate(data);
 if(!_oec.isValid()) {
     let errors = _oec.getErrors();
 }

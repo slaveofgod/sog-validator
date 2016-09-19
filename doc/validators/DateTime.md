@@ -5,7 +5,7 @@ Validates that a value is a valid "datetime", meaning either a `Date` object ~~o
 import {
     // ...
     DateTimeValidator,
-    ObjectExecutionContext
+    AllValidator
 } from 'bob-validator';
 
 let validators = {
@@ -27,10 +27,15 @@ let data = {
     fieldName: 'Some data ...' // Example: 2015-11-25 22:16:35
 };
 
-let _oec = new ObjectExecutionContext({data: data, validators: validators});
-_oec.validate();
+let _oec = new AllValidator({
+    validators: validators,
+    validationType: 'object',
+    errorType: 'array'
+});
+_oec.validate(data);
 if(!_oec.isValid()) {
     let errors = _oec.getErrors();
+    console.log(errors);
 }
 ```
 

@@ -7,7 +7,7 @@ This constraint compares using `===`, so `3` and "`3`" are not considered equal.
 import {
     // ...
     IdenticalToValidator,
-    ObjectExecutionContext
+    AllValidator
 } from 'bob-validator';
 
 let validators = {
@@ -29,8 +29,12 @@ let data = {
     fieldName: 'Some data ...' // Example: 100
 };
 
-let _oec = new ObjectExecutionContext({data: data, validators: validators});
-_oec.validate();
+let _oec = new AllValidator({
+    validators: validators,
+    validationType: 'object',
+    errorType: 'array'
+});
+_oec.validate(data);
 if(!_oec.isValid()) {
     let errors = _oec.getErrors();
 }
