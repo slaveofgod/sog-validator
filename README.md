@@ -208,7 +208,7 @@ These are the basic constraints: use them to assert very basic things about the 
 * [All][all-url]
 * [UserPassword][userpassword-url] `(not implemented)`
 * [Valid][valid-url] `(not implemented)`
-* [Custom][custom-url] `(not implemented)`
+* [Custom][custom-url]
 
 
 [documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md
