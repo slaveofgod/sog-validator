@@ -12,71 +12,34 @@ $ npm install bob-validator
 # Example
 ```javascript
 import {
-    LengthValidator,
-    EmailValidator,
-    TypeValidator,
-    EqualToValidator,
-    NotEqualToValidator,
-    IdenticalToValidator,
-    NotIdenticalToValidator,
-    UrlValidator,
-    RegexValidator,
-    RangeValidator,
-    NotBlankValidator,
-    BlankValidator,
-    NotNullValidator,
-    IsNullValidator,
-    IsFalseValidator,
-    IsTrueValidator,
-    DateTimeValidator,
-    DateValidator,
-    TimeValidator,
-    LessThanValidator,
-    LessThanOrEqualValidator,
-    IpValidator,
-    CallbackValidator,
-    GreaterThanValidator,
-    GreaterThanOrEqualValidator,
-    CountValidator,
-    ChoiceValidator,
-    UuidValidator,
-    LanguageValidator,
-    LocaleValidator,
-    CountryValidator,
-    BicValidator,
-    CardSchemeValidator,
-    CurrencyValidator,
-    LuhnValidator,
-    IbanValidator,
-    IsbnValidator,
-    IssnValidator,
-    UniqueEntityValidator,
-    ObjectExecutionContext
+    NotBlankValidator, BlankValidator, NotNullValidator, IsNullValidator, IsTrueValidator, IsFalseValidator, TypeValidator, EmailValidator, LengthValidator, UrlValidator, RegexValidator, IpValidator,
+    UuidValidator, RangeValidator, EqualToValidator, NotEqualToValidator, IdenticalToValidator, NotIdenticalToValidator, LessThanValidator, LessThanOrEqualValidator, GreaterThanValidator,
+    GreaterThanOrEqualValidator, DateValidator, DateTimeValidator, TimeValidator, ChoiceValidator, CountValidator, UniqueEntityValidator, LanguageValidator, LocaleValidator, CountryValidator,
+    BicValidator, CardSchemeValidator, CurrencyValidator, LuhnValidator, IbanValidator, IsbnValidator, IssnValidator, CallbackValidator, CustomValidator, AllValidator
 } from 'bob-validator';
 
+let CreditCardValidator = new CustomValidator({
+    validators: [
+        new NotBlankValidator({}),
+        new LengthValidator({'min': 11, 'max': 19}),
+        new CardSchemeValidator({'schemes': ['AMEX', 'CHINA_UNIONPAY', 'DINERS', 'DISCOVER', 'INSTAPAYMENT', 'JCB', 'LASER', 'MAESTRO', 'MASTERCARD', 'VISA']})
+    ]
+});
+
 let validators = {
-    firstName: {
+    name: {
         isRequired: true,
         rules: [
             new NotBlankValidator({}),
-            new LengthValidator({'min': 1, 'max': 10}),
-            new TypeValidator({'type': 'integer'})
-        ],
-    },
-    lastName: {
-        isRequired: true,
-        rules: [
-            new NotBlankValidator({}),
-            new LengthValidator({'min': 1, 'max': 10}),
-            new TypeValidator({'type': 'integer'})
-        ],
+            new LengthValidator({'min': 2, 'max': 255})
+        ]
     },
     email: {
         isRequired: true,
         rules: [
             new NotBlankValidator({}),
             new EmailValidator({})
-        ],
+        ]
     },
     birthday: {
         isRequired: true,
@@ -85,54 +48,74 @@ let validators = {
             new DateValidator({'format': 'DD.MM.YYYY'})
         ],
     },
-    address1: {
+    creditCard: {
         isRequired: true,
         rules: [
             new NotBlankValidator({}),
-            new LengthValidator({'min': 10, 'max': 255}),
-        ],
+            CreditCardValidator
+        ]
     },
-    city: {
+    ip: {
         isRequired: true,
         rules: [
             new NotBlankValidator({}),
-            new LengthValidator({'min': 2, 'max': 255}),
-        ],
+            new IpValidator({})
+        ]
     },
-    state: {
+    locale: {
         isRequired: true,
         rules: [
             new NotBlankValidator({}),
-            new LengthValidator({'min': 2, 'max': 255}),
-        ],
+            new LocaleValidator({})
+        ]
     },
-    postCode: {
+    country: {
         isRequired: true,
         rules: [
             new NotBlankValidator({}),
-            new LengthValidator({'min': 1, 'max': 5}),
-        ],
+            new CountryValidator({})
+        ]
     },
-    // ...
+    language: {
+        isRequired: true,
+        rules: [
+            new NotBlankValidator({}),
+            new LanguageValidator({})
+        ]
+    },
+    homepage: {
+        isRequired: true,
+        rules: [
+            new NotBlankValidator({}),
+            new UrlValidator({})
+        ]
+    }
 };
 
 let data = {
-    firstName: 'Leo',
-    lastName: 'Lane',
+    name: 'Leo Lane',
     email: 'leo.lane38@example.com',
     birthday: '03.07.1977',
-    address1: '2177 wyndham ln',
-    city: 'Boca Raton',
-    state: 'Florida',
-    postCode: '25486',
+    creditCard: '4111111111111111',
+    ip: '8.8.8.8',
+    locale: 'cy_GB',
+    country: 'US',
+    language: 'en_gb',
+    homepage: 'https://github.com/alexeybob/bob-validator'
 };
 
-let _OEC = new ObjectExecutionContext({data: data, validators: validators});
-_OEC.validate();
-if(!_OEC.isValid()) {
-    let error = _OEC.getErrors();
+let _oec = new AllValidator({
+    validators: validators,
+    validationType: 'object',
+    errorType: 'array'
+});
+_oec.validate(data);
+
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
 }
 ```
+
 # Documentation
 #### Basic Constraints
 

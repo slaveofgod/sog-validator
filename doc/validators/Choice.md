@@ -79,7 +79,6 @@ let _oec = new AllValidator({
 _oec.validate(data);
 if(!_oec.isValid()) {
     let errors = _oec.getErrors();
-    console.log(errors);
 }
 ```
 
