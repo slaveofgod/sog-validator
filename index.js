@@ -86,8 +86,10 @@ export { default as CallbackValidator } from './lib/Constraints/CallbackValidato
 export { default as AllValidator } from './lib/Constraints/AllValidator';
 //export { default as UserPasswordValidator } from './lib/Constraints/UserPasswordValidator';
 //export { default as ValidValidator } from './lib/Constraints/ValidValidator';
+export { default as CustomValidator } from './lib/Constraints/CustomValidator';
 
 
 /**
+ *
  */
 export { default as ObjectExecutionContext } from './lib/Context/ObjectExecutionContext';

@@ -1,12 +1,24 @@
-## Count
-Validates that a given collection's (i.e. an array ~~or an object that implements Countable~~) element count is *between* some minimum and maximum value.
+## Custom
+This constraint is used to ensure that the given value valid with many conditions. You can configure your own constraint using any count existing constraints.
 
 ```javascript
 import {
     // ...
-    CountValidator,
+    CustomValidator,
+    NotBlankValidator,
+    LengthValidator,
+    CardSchemeValidator,
     AllValidator
 } from 'bob-validator';
+
+let CreditCardValidator = new CustomValidator({
+    validators: [
+        new NotBlankValidator({}),
+        new LengthValidator({'min': 11, 'max': 19}),
+        new CardSchemeValidator({'schemes': ['AMEX', 'CHINA_UNIONPAY', 'DINERS', 'DISCOVER', 'INSTAPAYMENT', 'JCB', 'LASER', 'MAESTRO', 'MASTERCARD', 'VISA']})
+    ],
+    'message': 'Your error message'
+});
 
 let validators = {
     // ...
@@ -14,20 +26,14 @@ let validators = {
         isRequired: true,
         rules: [
             // ...
-            new CountValidator({
-                'min': 1,
-                'max': 10,
-                'minMessage': 'Your min error message',
-                'maxMessage': 'Your max error message',
-                'exactMessage': 'Your  exacterror message'
-            })
+            CreditCardValidator
         ]
     }
 };
 
 let data = {
     // ...
-    fieldName: 'Some data ...' Example: [1111, 2222, 'aaaa', 'bbbb']
+    fieldName: 'Some data ...' // Example: 4111111111111111 (Visa)
 };
 
 let _oec = new AllValidator({
@@ -38,35 +44,21 @@ let _oec = new AllValidator({
 _oec.validate(data);
 if(!_oec.isValid()) {
     let errors = _oec.getErrors();
+
     console.log(errors);
 }
 ```
 
 #### Options
-##### min
-**type**: `integer`
+##### validators
+**type**: `array`
 
-This required option is the "`min`" count value. Validation will fail if the given collection elements count is **less** than this min value.
+This required option is the array of validation constraints that you want to apply.
 
-##### max
-**type**: `integer`
+##### message
+**type**: `string` **default**: `null`
 
-This required option is the "`max`" count value. Validation will fail if the given collection elements count is **greater** than this max value.
-
-##### minMessage
-**type**: `string` **default**: `This collection should contain {{ limit }} elements or more.`
-
-The message that will be shown if the underlying collection elements count is less than the `min` option.
-
-##### maxMessage
-**type**: `string` **default**: `This collection should contain {{ limit }} elements or less.`
-
-The message that will be shown if the underlying collection elements count is more than the `max` option.
-
-##### exactMessage
-**type**: `string` **default**: `This collection should contain exactly {{ limit }} elements.`
-
-The message that will be shown if `min` and `max` values are **equal** and the underlying collection elements count is not exactly this value.
+The message shown if the given value is not a valid. If `message` is `null`, will be used `validators` `message`
 
 [Go to documentation][documentation-url]
 

@@ -96,3 +96,4 @@ This message is shown if the underlying data is not true.
 [all-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/All.md
 [userpassword-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/UserPassword.md
 [valid-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/Valid.md
+[custom-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/Custom.md

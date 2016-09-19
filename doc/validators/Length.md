@@ -125,3 +125,4 @@ The message that will be shown if min and max values are equal and the underlyin
 [all-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/All.md
 [userpassword-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/UserPassword.md
 [valid-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/Valid.md
+[custom-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/Custom.md

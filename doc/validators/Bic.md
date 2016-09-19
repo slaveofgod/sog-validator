@@ -94,3 +94,4 @@ The default message supplied when the value does not pass the BIC check.
 [all-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/All.md
 [userpassword-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/UserPassword.md
 [valid-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/Valid.md
+[custom-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/Custom.md

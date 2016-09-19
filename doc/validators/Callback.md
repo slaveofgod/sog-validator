@@ -117,3 +117,4 @@ The message that will be shown if function return false. This option is required
 [all-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/All.md
 [userpassword-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/UserPassword.md
 [valid-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/Valid.md
+[custom-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/Custom.md
