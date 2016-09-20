@@ -7,9 +7,12 @@ Install the library with:
 $ npm install bob-validator
 ```
 
-[Read Documentation](#documentation)
+* [Documentation](#documentation)
+* [Basic Usage Example](#basic-usage-example)
+* [Schema Usage Example](#schema-usage-example)
 
-# Example
+### Basic Usage Example
+
 ```javascript
 import {
     NotBlankValidator, BlankValidator, NotNullValidator, IsNullValidator, IsTrueValidator, IsFalseValidator, TypeValidator, EmailValidator, LengthValidator, UrlValidator, RegexValidator, IpValidator,
@@ -23,7 +26,8 @@ let CreditCardValidator = new CustomValidator({
         new NotBlankValidator({}),
         new LengthValidator({'min': 11, 'max': 19}),
         new CardSchemeValidator({'schemes': ['AMEX', 'CHINA_UNIONPAY', 'DINERS', 'DISCOVER', 'INSTAPAYMENT', 'JCB', 'LASER', 'MAESTRO', 'MASTERCARD', 'VISA']})
-    ]
+    ],
+    message: 'Your error message'
 });
 
 let validators = {
@@ -116,8 +120,125 @@ if(!_oec.isValid()) {
 }
 ```
 
-# Documentation
-#### Basic Constraints
+### Schema Usage Example
+
+```javascript
+import {
+    AllValidator
+} from 'bob-validator';
+
+let CreditCard = {
+    rules: {
+        NotBlank: {},
+        Length: {
+            'min': 11,
+            'max': 19
+        },
+        CardScheme: {
+            'schemes': ['AMEX', 'CHINA_UNIONPAY', 'DINERS', 'DISCOVER', 'INSTAPAYMENT', 'JCB', 'LASER', 'MAESTRO', 'MASTERCARD', 'VISA']
+        }
+    },
+    message: 'Your error message'
+};
+
+let schema = {
+    name: {
+        isRequired: true,
+        rules: {
+            NotBlank: {},
+            Length: {
+                'min': 2,
+                'max': 255
+            }
+        }
+    },
+    email: {
+        isRequired: true,
+        rules: {
+            NotBlank: {},
+            Email: {}
+        }
+    },
+    birthday: {
+        isRequired: true,
+        rules: {
+            NotBlank: {},
+            Date: {
+                'format': 'DD.MM.YYYY'
+            }
+        }
+    },
+    creditCard: {
+        isRequired: true,
+        rules: {
+            NotBlank: {},
+            Custom: CreditCard
+        }
+    },
+    ip: {
+        isRequired: true,
+        rules: {
+            NotBlank: {},
+            Ip: {}
+        }
+    },
+    locale: {
+        isRequired: true,
+        rules: {
+            NotBlank: {},
+            Locale: {}
+        }
+    },
+    country: {
+        isRequired: true,
+        rules: {
+            NotBlank: {},
+            Country: {}
+        }
+    },
+    language: {
+        isRequired: true,
+        rules: {
+            NotBlank: {},
+            Language: {}
+        }
+    },
+    homepage: {
+        isRequired: true,
+        rules: {
+            NotBlank: {},
+            Url: {}
+        }
+    }
+};
+
+let data = {
+    name: 'Leo Lane',
+    email: 'leo.lane38@example.com',
+    birthday: '03.07.1977',
+    creditCard: '4111111111111111',
+    ip: '8.8.8.8',
+    locale: 'cy_GB',
+    country: 'US',
+    language: 'en_gb',
+    homepage: 'https://github.com/alexeybob/bob-validator'
+};
+
+let _oec = new AllValidator({
+    validators: schema,
+    validationType: 'schema',
+    errorType: 'array'
+});
+_oec.validate(data);
+
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
+```
+
+## Documentation
+
+### Basic Constraints
 
 These are the basic constraints: use them to assert very basic things about the value of properties or the return value of methods on your object.
 
@@ -129,7 +250,7 @@ These are the basic constraints: use them to assert very basic things about the 
 * [IsFalse][isfalse-url]
 * [Type][type-url]
 
-#### String Constraints
+### String Constraints
 
 * [Email][email-url]
 * [Length][length-url]
@@ -138,11 +259,11 @@ These are the basic constraints: use them to assert very basic things about the 
 * [Ip][ip-url]
 * [Uuid][uuid-url]
 
-#### Number Constraints
+### Number Constraints
 
 * [Range][range-url]
 
-#### Comparison Constraints
+### Comparison Constraints
 
 * [EqualTo][equalto-url]
 * [NotEqualTo][notequalto-url]
@@ -153,13 +274,13 @@ These are the basic constraints: use them to assert very basic things about the 
 * [GreaterThan][greaterthan-url]
 * [GreaterThanOrEqual][greaterthanorequal-url]
 
-#### Date Constraints
+### Date Constraints
 
 * [Date][date-url]
 * [DateTime][datetime-url]
 * [Time][time-url]
 
-#### Collection Constraints
+### Collection Constraints
 
 * [Choice][choice-url]
 * [Collection][collection-url] `(not implemented)`
@@ -169,12 +290,12 @@ These are the basic constraints: use them to assert very basic things about the 
 * [Locale][locale-url]
 * [Country][country-url]
 
-#### File Constraints
+### File Constraints
 
 * [File][file-url] `(not implemented)`
 * [Image][image-url] `(not implemented)`
 
-#### Financial and other Number Constraints
+### Financial and other Number Constraints
 
 * [Bic][bic-url]
 * [CardScheme][cardscheme-url]
@@ -184,7 +305,7 @@ These are the basic constraints: use them to assert very basic things about the 
 * [Isbn][isbn-url]
 * [Issn][issn-url]
 
-#### Other Constraints
+### Other Constraints
 
 * [Callback][callback-url]
 * [Expression][expression-url] `(not implemented)`

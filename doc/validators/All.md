@@ -67,12 +67,12 @@ This required option is the array of validation constraints that you want to app
 ##### validationType
 **type**: `string` **default**: `object`
 
-This parameter define validation rules format. Available: [object, ~~schema~~]
+This parameter define validation rules format. Available: ['object', 'schema']
 
 ##### errorType
 **type**: `string` **default**: `array`
 
-This parameter define errors format. Available: [array, ~~object~~]
+This parameter define errors format. Available: ['array', 'object']
 
 
 [Go to documentation][documentation-url]
