@@ -1,6 +1,8 @@
 # NotBlank
 Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [NotNull][notnull-url] constraint.
 
+### Navigation
+
 * [Single Usage](#single-usage)
 * [Multi Usage](#multi-usage)
 * [Schema Usage](#schema-usage)
@@ -29,6 +31,8 @@ if(!_validator.isValid()) {
     let errors = _validator.getErrors();
 }
 ```
+
+[⬆ back to top](#navigation)
 
 ---------------
 
@@ -70,6 +74,8 @@ if(!_oec.isValid()) {
 }
 ```
 
+[⬆ back to top](#navigation)
+
 ---------------
 
 #### Schema Usage
@@ -109,6 +115,8 @@ if(!_oec.isValid()) {
 }
 ```
 
+[⬆ back to top](#navigation)
+
 ---------------
 
 #### Options
@@ -116,6 +124,8 @@ if(!_oec.isValid()) {
 **type**: `string` **default**: `This value should not be blank.`
 
 This is the message that will be shown if the value is blank.
+
+[⬆ back to top](#navigation)
 
 ---------------
 
@@ -196,7 +206,7 @@ These are the basic constraints: use them to assert very basic things about the 
 * [Valid][valid-url] `(not implemented)`
 * [Custom][custom-url]
 
-
+[⬆ back to top](#navigation)
 
 [documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#documentation
 [notblank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/NotBlank.md

@@ -7,11 +7,15 @@ Install the library with:
 $ npm install bob-validator
 ```
 
+### Navigation
+
 * [Documentation](#documentation)
 * [Basic Usage Example](#basic-usage-example)
 * [Schema Usage Example](#schema-usage-example)
 
-### Basic Usage Example
+---------------
+
+#### Basic Usage Example
 
 ```javascript
 import {
@@ -120,7 +124,11 @@ if(!_oec.isValid()) {
 }
 ```
 
-### Schema Usage Example
+[⬆ back to top](#navigation)
+
+---------------
+
+#### Schema Usage Example
 
 ```javascript
 import {
@@ -236,9 +244,13 @@ if(!_oec.isValid()) {
 }
 ```
 
-## Documentation
+[⬆ back to top](#navigation)
 
-### Basic Constraints
+---------------
+
+#### Documentation
+
+##### Basic Constraints
 
 These are the basic constraints: use them to assert very basic things about the value of properties or the return value of methods on your object.
 
@@ -250,7 +262,7 @@ These are the basic constraints: use them to assert very basic things about the 
 * [IsFalse][isfalse-url]
 * [Type][type-url]
 
-### String Constraints
+##### String Constraints
 
 * [Email][email-url]
 * [Length][length-url]
@@ -259,11 +271,11 @@ These are the basic constraints: use them to assert very basic things about the 
 * [Ip][ip-url]
 * [Uuid][uuid-url]
 
-### Number Constraints
+##### Number Constraints
 
 * [Range][range-url]
 
-### Comparison Constraints
+##### Comparison Constraints
 
 * [EqualTo][equalto-url]
 * [NotEqualTo][notequalto-url]
@@ -274,13 +286,13 @@ These are the basic constraints: use them to assert very basic things about the 
 * [GreaterThan][greaterthan-url]
 * [GreaterThanOrEqual][greaterthanorequal-url]
 
-### Date Constraints
+##### Date Constraints
 
 * [Date][date-url]
 * [DateTime][datetime-url]
 * [Time][time-url]
 
-### Collection Constraints
+##### Collection Constraints
 
 * [Choice][choice-url]
 * [Collection][collection-url] `(not implemented)`
@@ -290,12 +302,12 @@ These are the basic constraints: use them to assert very basic things about the 
 * [Locale][locale-url]
 * [Country][country-url]
 
-### File Constraints
+##### File Constraints
 
 * [File][file-url] `(not implemented)`
 * [Image][image-url] `(not implemented)`
 
-### Financial and other Number Constraints
+##### Financial and other Number Constraints
 
 * [Bic][bic-url]
 * [CardScheme][cardscheme-url]
@@ -305,7 +317,7 @@ These are the basic constraints: use them to assert very basic things about the 
 * [Isbn][isbn-url]
 * [Issn][issn-url]
 
-### Other Constraints
+##### Other Constraints
 
 * [Callback][callback-url]
 * [Expression][expression-url] `(not implemented)`
@@ -314,6 +326,7 @@ These are the basic constraints: use them to assert very basic things about the 
 * [Valid][valid-url] `(not implemented)`
 * [Custom][custom-url]
 
+[⬆ back to top](#navigation)
 
 [documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md
 [notblank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/NotBlank.md
