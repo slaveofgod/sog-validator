@@ -19,7 +19,7 @@ import {
 } from 'bob-validator';
 
 let CreditCardValidator = new CustomValidator({
-    validators: [
+    rules: [
         new NotBlankValidator({}),
         new LengthValidator({'min': 11, 'max': 19}),
         new CardSchemeValidator({'schemes': ['AMEX', 'CHINA_UNIONPAY', 'DINERS', 'DISCOVER', 'INSTAPAYMENT', 'JCB', 'LASER', 'MAESTRO', 'MASTERCARD', 'VISA']})
@@ -46,7 +46,7 @@ let validators = {
         rules: [
             new NotBlankValidator({}),
             new DateValidator({'format': 'DD.MM.YYYY'})
-        ],
+        ]
     },
     creditCard: {
         isRequired: true,
