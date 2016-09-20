@@ -1,7 +1,31 @@
-## EqualTo
+# EqualTo
 Validates that a value is equal to another value, defined in the options. To force that a value is *not* equal, see [NotEqualTo][notequalto-url].
 
 This constraint compares using `==`, so `3` and "`3`" are considered equal. Use [IdenticalTo][identicalto-url] to compare with `===`.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    EqualToValidator
+} from 'bob-validator';
+
+let _validator = new EqualToValidator({
+    'value': 100,
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...'; // Example: 100
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

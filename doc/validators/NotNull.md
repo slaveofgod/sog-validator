@@ -1,5 +1,28 @@
-## NotNull
+# NotNull
 Validates that a value is not strictly equal to `null`. To ensure that a value is simply not blank (not a blank string), see the [NotBlank][notblank-url] constraint.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    NotNullValidator
+} from 'bob-validator';
+
+let _validator = new NotNullValidator({
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...';
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

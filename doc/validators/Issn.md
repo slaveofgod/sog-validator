@@ -1,5 +1,30 @@
-## Issn
+# Issn
 Validates that a value is a valid [International Standard Serial Number (ISSN)](https://en.wikipedia.org/wiki/International_Standard_Serial_Number).
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    IssnValidator
+} from 'bob-validator';
+
+let _validator = new IssnValidator({
+    'message': 'Your error message', 
+    'caseSensitive': false,
+    'requireHyphen': false
+});
+
+let data = 'Some data ...'; // Example: '0028-0836'
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

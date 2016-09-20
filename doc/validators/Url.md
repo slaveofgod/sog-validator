@@ -1,5 +1,28 @@
-## Url
+# Url
 Validates that a value is a valid URL string.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    UrlValidator
+} from 'bob-validator';
+
+let _validator = new UrlValidator({
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...';
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

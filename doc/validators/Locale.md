@@ -1,7 +1,30 @@
-## Locale
+# Locale
 Validates that a value is a valid locale.
 
 The "value" for each locale is either the two letter [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) *language* code (e.g. `fr`), or the language code followed by an underscore (`_`), then the [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes) *country* code (e.g. `fr_FR` for French/France).
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    LocaleValidator
+} from 'bob-validator';
+
+let _validator = new LocaleValidator({
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...'; // Example: cy_GB
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

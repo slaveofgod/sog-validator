@@ -1,5 +1,29 @@
-## Time
+# Time
 Validates that a value is a valid time, meaning either a `Date` object ~~or a string (or an object that can be cast into a string)~~ that follows a valid format.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    TimeValidator
+} from 'bob-validator';
+
+let _validator = new TimeValidator({
+    'format': 'HH:mm:ss',
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...'; // Example: 22:16:35
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

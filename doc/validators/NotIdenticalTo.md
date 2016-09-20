@@ -1,7 +1,31 @@
-## NotIdenticalTo
+# NotIdenticalTo
 Validates that a value is **not** identical to another value, defined in the options. To force that a value is identical, see [IdenticalTo][identicalto-url].
 
 This constraint compares using `!==,` so `3` and "`3`" are considered not equal. Use [NotEqualTo][notequalto-url] to compare with `!=`.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    NotIdenticalToValidator
+} from 'bob-validator';
+
+let _validator = new NotIdenticalToValidator({
+    'value': 100,
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...'; // Example: 85
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

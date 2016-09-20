@@ -1,7 +1,34 @@
-## Choice
+# Choice
 This constraint is used to ensure that the given value is one of a given set of *valid* choices. It can also be used to validate that each item in an array of items is one of those valid choices.
 
-**Basic Usage**
+## Basic Usage
+
+**Single Usage**
+
+```javascript
+import {
+    // ...
+    ChoiceValidator
+} from 'bob-validator';
+
+let _validator = new ChoiceValidator({
+    'choices': [1111, 'aaaaa', 3333, '123a'],
+    'multiple': false,
+    'message': 'Your error message',
+    'strict': true
+});
+
+let data = 'Some data ...'; // Example: 'aaaaa'
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+**Multi Usage**
+
 ```javascript
 import {
     // ...
@@ -37,7 +64,39 @@ if(!_oec.isValid()) {
 }
 ```
 
-**Multiple Usage**
+## Multiple Usage
+
+**Single Usage**
+
+```javascript
+import {
+    // ...
+    ChoiceValidator
+} from 'bob-validator';
+
+let _validator = new ChoiceValidator({
+    'choices': [1111, 'aaaaa', 3333, '123a'],
+    'multiple': true,
+    'min': 1,
+    'max': 10,
+    'message': 'Your error message',
+    'multipleMessage': 'Your multiple error message',
+    'minMessage': 'Your min error message',
+    'maxMessage': 'Your max error message',
+    'strict': true
+});
+
+let data = 'Some data ...'; // Example: [1111, '123a']
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+**Multi Usage**
+
 ```javascript
 import {
     // ...

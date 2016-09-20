@@ -1,5 +1,29 @@
-## Regex
+# Regex
 Validates that a value matches a regular expression.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    RegexValidator
+} from 'bob-validator';
+
+let _validator = new RegexValidator({
+    'message': 'Your error message',
+    'pattern': /^.+\@\S+\.\S+$/
+});
+
+let data = 'Some data ...';
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

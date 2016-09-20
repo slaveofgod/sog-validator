@@ -1,5 +1,32 @@
-## Count
+# Count
 Validates that a given collection's (i.e. an array ~~or an object that implements Countable~~) element count is *between* some minimum and maximum value.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    CountValidator
+} from 'bob-validator';
+
+let _validator = new CountValidator({
+    'min': 1,
+    'max': 10,
+    'minMessage': 'Your min error message',
+    'maxMessage': 'Your max error message',
+    'exactMessage': 'Your  exacterror message'
+});
+
+let data = 'Some data ...'; // Example: [1111, 2222, 'aaaa', 'bbbb']
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {
@@ -27,7 +54,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' Example: [1111, 2222, 'aaaa', 'bbbb']
+    fieldName: 'Some data ...' // Example: [1111, 2222, 'aaaa', 'bbbb']
 };
 
 let _oec = new AllValidator({

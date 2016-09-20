@@ -1,5 +1,28 @@
-## Iban
+# Iban
 This constraint is used to ensure that a bank account number has the proper format of an [International Bank Account Number (IBAN)](https://en.wikipedia.org/wiki/International_Bank_Account_Number). IBAN is an internationally agreed means of identifying bank accounts across national borders with a reduced risk of propagating transcription errors.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    IbanValidator
+} from 'bob-validator';
+
+let _validator = new IbanValidator({
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...'; // Example: 'GB29 NWBK 6016 1331 9268 19'
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

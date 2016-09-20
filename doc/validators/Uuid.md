@@ -1,5 +1,30 @@
-## Uuid
+# Uuid
 Validates that a value is a valid [Universally unique identifier (UUID)](https://en.wikipedia.org/wiki/Universally_unique_identifier) per [RFC 4122](https://tools.ietf.org/html/rfc4122). By default, this will validate the format according to the RFC's guidelines, but this can be relaxed to accept non-standard UUIDs that other systems (like PostgreSQL) accept. UUID versions can also be restricted using a whitelist.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    UuidValidator
+} from 'bob-validator';
+
+let _validator = new UuidValidator({
+    'message': 'Your error message',
+    'versions': [1,2,3,4,5],
+    'strict': false
+});
+
+let data = 'Some data ...';
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {
@@ -17,7 +42,7 @@ let validators = {
             new UuidValidator({
                 'message': 'Your error message',
                 'versions': [1,2,3,4,5],
-                'strict': true
+                'strict': false
             })
         ]
     }

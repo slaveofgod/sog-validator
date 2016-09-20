@@ -1,7 +1,31 @@
-## IdenticalTo
+# IdenticalTo
 Validates that a value is identical to another value, defined in the options. To force that a value is *not* identical, see [NotIdenticalTo][notidenticalto-url].
 
 This constraint compares using `===`, so `3` and "`3`" are not considered equal. Use [EqualTo][equalto-url] to compare with `==`.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    IdenticalToValidator
+} from 'bob-validator';
+
+let _validator = new IdenticalToValidator({
+    'value': 100,
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...'; // Example: 100
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

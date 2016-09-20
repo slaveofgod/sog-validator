@@ -1,5 +1,28 @@
-## Language
+# Language
 Validates that a value is a valid language *Unicode language identifier* (e.g. `fr` or `zh-Hant`).
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    LanguageValidator
+} from 'bob-validator';
+
+let _validator = new LanguageValidator({
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...'; // Example: en_gb
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

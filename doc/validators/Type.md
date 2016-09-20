@@ -1,6 +1,30 @@
-## Type
+# Type
 
 Validates that a value is of a specific data type. For example, if a variable should be an `array`, you can use this constraint with the array type option to validate this.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    TypeValidator
+} from 'bob-validator';
+
+let _validator = new TypeValidator({
+    'type': 'integer',
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...';
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

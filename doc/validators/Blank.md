@@ -1,5 +1,28 @@
-## Blank
+# Blank
 Validates that a value is blank, defined as equal to a blank string or equal to `null`. To force that a value strictly be equal to `null`, see the [IsNull][isnull-url] constraint. To force that a value is not blank, see [NotBlank][notblank-url].
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    BlankValidator
+} from 'bob-validator';
+
+let validator = new BlankValidator({
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...';
+
+validator.validate(data);
+
+if(!validator.isValid()) {
+    let errors = validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

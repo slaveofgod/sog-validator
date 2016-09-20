@@ -1,5 +1,28 @@
-## Currency
+# Currency
 Validates that a value is a valid [3-letter ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency name.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    CurrencyValidator
+} from 'bob-validator';
+
+let _validator = new CurrencyValidator({
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...'; // Example: USD
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

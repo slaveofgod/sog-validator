@@ -1,6 +1,44 @@
-## Callback
-
+# Callback
 The purpose of the Callback constraint is to create completely custom validation rules and to assign any validation errors to specific fields on your object. This process works by specifying one or more callback methods, each of which will be called during the validation process. Each of those methods can do anything, including creating and assigning validation errors.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    CallbackValidator
+} from 'bob-validator';
+
+let _validator = new CallbackValidator({
+    'callback': function(value, parameters){
+        if((value *1) != value){
+            throw new Error(`Invalid "value" type. Expected type \"number\", \"${typeof value}\" given`);
+        }
+    
+        if(value < parameters['min']){
+            return false;
+        }
+
+        if(value > parameters['max']){
+            return false;
+        }
+
+        return true;
+    },
+    'parameters': {'min': 100, 'max': 200},
+    'message': 'This value should be between {{ min }} and {{ max }}.'
+});
+
+let data = 'Some data ...'; // Example: 158
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {
@@ -17,6 +55,10 @@ let validators = {
             // ...
             new CallbackValidator({
                 'callback': function(value, parameters){
+                    if((value *1) != value){
+                        throw new Error(`Invalid "value" type. Expected type \"number\", \"${typeof value}\" given`);
+                    }
+                    
                     if(value < parameters['min']){
                         return false;
                     }

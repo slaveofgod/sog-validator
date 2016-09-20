@@ -1,5 +1,29 @@
-## DateTime
+# DateTime
 Validates that a value is a valid "datetime", meaning either a `Date` object ~~or a string (or an object that can be cast into a string)~~ that follows a specific format.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    DateTimeValidator
+} from 'bob-validator';
+
+let _validator = new DateTimeValidator({
+    'format': 'YYYY-MM-DD HH:mm:ss',
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...'; // Example: 2015-11-25 22:16:35
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

@@ -1,8 +1,31 @@
-## IsFalse
+# IsFalse
 
 Validates that a value is `false`. Specifically, this checks to see if the value is exactly `false`, exactly the integer `0`, or exactly the string "`0`".
 
 Also see [IsTrue][istrue-url].
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    IsFalseValidator
+} from 'bob-validator';
+
+let _validator = new IsFalseValidator({
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...';
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

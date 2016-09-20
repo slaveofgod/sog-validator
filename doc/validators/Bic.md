@@ -1,5 +1,28 @@
-## Bic
+# Bic
 This constraint is used to ensure that a value has the proper format of a [Business Identifier Code (BIC)](https://en.wikipedia.org/wiki/ISO_9362). BIC is an internationally agreed means to uniquely identify both financial and non-financial institutions.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    BicValidator
+} from 'bob-validator';
+
+let _validator = new BicValidator({
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...'; // Example: DABAIE2D
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

@@ -1,5 +1,28 @@
-## Country
+# Country
 Validates that a value is a valid [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes) country code.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    CountryValidator
+} from 'bob-validator';
+
+let _validator = new CountryValidator({
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...'; // Example: US
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

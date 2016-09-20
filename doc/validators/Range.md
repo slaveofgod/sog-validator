@@ -1,7 +1,35 @@
-## Range
+# Range
 Validates that a given number is *between* some minimum and maximum number.
 
-**Basic Usage**
+## Basic Usage
+
+**Single Usage**
+
+```javascript
+import {
+    // ...
+    RangeValidator
+} from 'bob-validator';
+
+let _validator = new RangeValidator({
+    'min': 1,
+    'max': 100,
+    'minMessage': 'Your min error message',
+    'maxMessage': 'Your max error message',
+    'invalidMessage': 'Your invalid message'
+});
+
+let data = 'Some data ...'; // Example: 10
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+**Multi Usage**
+
 ```javascript
 import {
     // ...
@@ -17,7 +45,7 @@ let validators = {
             // ...
             new RangeValidator({
                 'min': 1,
-                'min': 100,
+                'max': 100,
                 'minMessage': 'Your min error message',
                 'maxMessage': 'Your max error message',
                 'invalidMessage': 'Your invalid message'
@@ -42,7 +70,35 @@ if(!_oec.isValid()) {
 }
 ```
 
-**Date Ranges**
+## Date Ranges
+
+**Single Usage**
+
+```javascript
+import {
+    // ...
+    RangeValidator
+} from 'bob-validator';
+
+let _validator = new RangeValidator({
+    'min': new Date(2015, 0, 1, 0, 0, 0, 0),
+    'max': new Date(2017, 0, 1, 0, 0, 0, 0),
+    'minMessage': 'Your min error message',
+    'maxMessage': 'Your max error message',
+    'invalidMessage': 'Your invalid message'
+});
+
+let data = 'Some data ...'; // Example: new Date(2016, 0, 1, 0, 0, 0, 0)
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+**Multi Usage**
+
 ```javascript
 import {
     // ...

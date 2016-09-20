@@ -1,5 +1,36 @@
-## Custom
+# Custom
 This constraint is used to ensure that the given value valid with many conditions. You can configure your own constraint using any count existing constraints.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    CustomValidator,
+    NotBlankValidator,
+    LengthValidator,
+    CardSchemeValidator
+} from 'bob-validator';
+
+let _validator = new CustomValidator({
+    validators: [
+        new NotBlankValidator({}),
+        new LengthValidator({'min': 11, 'max': 19}),
+        new CardSchemeValidator({'schemes': ['AMEX', 'CHINA_UNIONPAY', 'DINERS', 'DISCOVER', 'INSTAPAYMENT', 'JCB', 'LASER', 'MAESTRO', 'MASTERCARD', 'VISA']})
+    ],
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...'; // Example: 4111111111111111 (Visa)
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

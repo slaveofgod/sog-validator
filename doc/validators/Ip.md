@@ -1,5 +1,28 @@
-## Ip
+# Ip
 Validates that a value is a valid IP address. ~~By default, this will validate the value as IPv4, but a number of different options exist to validate as IPv6 and many other combinations.~~
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    IpValidator
+} from 'bob-validator';
+
+let _validator = new IpValidator({
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...';
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

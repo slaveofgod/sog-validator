@@ -1,5 +1,32 @@
-## Length
+# Length
 Validates that a given string length is between some minimum and maximum value.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    LengthValidator
+} from 'bob-validator';
+
+let _validator = new LengthValidator({
+    'min': 1,
+    'max': 50,
+    'minMessage': 'Your min error message',
+    'maxMessage': 'Your max error message',
+    'exactMessage': 'Your exact error message'
+});
+
+let data = 'Some data ...';
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

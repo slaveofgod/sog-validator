@@ -1,7 +1,30 @@
-## IsNull
+# IsNull
 Validates that a value is exactly equal to `null`. To force that a property is simply blank (blank string or `null`), see the [Blank][blank-url] constraint. To ensure that a property is not null, see [NotNull][notnull-url].
 
 Also see [NotNull][notnull-url].
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    IsNullValidator
+} from 'bob-validator';
+
+let _validator = new IsNullValidator({
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...';
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

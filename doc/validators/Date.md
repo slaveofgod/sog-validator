@@ -1,5 +1,29 @@
-## Date
+# Date
 Validates that a value is a valid date, meaning either a `Date` object ~~or a string (or an object that can be cast into a string)~~ that follows a valid format.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    DateValidator
+} from 'bob-validator';
+
+let _validator = new DateValidator({
+    'format': 'YYYY-MM-DD',
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...'; // Example: 2015-11-25
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

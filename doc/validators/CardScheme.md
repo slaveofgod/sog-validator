@@ -1,5 +1,40 @@
-## CardScheme
+# CardScheme
 This constraint ensures that a credit card number is valid for a given credit card company. It can be used to validate the number before trying to initiate a payment through a payment gateway.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    CardSchemeValidator
+} from 'bob-validator';
+
+let _validator = new CardSchemeValidator({
+    'schemes': [
+        'AMEX',
+        'CHINA_UNIONPAY',
+        'DINERS',
+        'DISCOVER',
+        'INSTAPAYMENT',
+        'JCB',
+        'LASER',
+        'MAESTRO',
+        'MASTERCARD',
+        'VISA'
+    ],
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...'; // Example: 4111111111111111 (Visa)
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {

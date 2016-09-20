@@ -1,7 +1,32 @@
-## LessThan
+# LessThan
 Validates that a value is less than another value, defined in the options. To force that a value is less than or equal to another value, see [LessThanOrEqual][lessthanorequal-url]. To force a value is greater than another value, see [GreaterThan][greaterthan-url].
 
-**Basic Usage**
+## Basic Usage
+
+**Single Usage**
+
+```javascript
+import {
+    // ...
+    LessThanValidator
+} from 'bob-validator';
+
+let _validator = new LessThanValidator({
+    'value': 100,
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...'; // Example: 85
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+**Multi Usage**
+
 ```javascript
 import {
     // ...
@@ -39,7 +64,32 @@ if(!_oec.isValid()) {
 }
 ```
 
-**Comparing Dates**
+## Comparing Dates
+
+**Single Usage**
+
+```javascript
+import {
+    // ...
+    LessThanValidator
+} from 'bob-validator';
+
+let _validator = new LessThanValidator({
+    'value': new Date(2016, 0, 1, 0, 0, 0, 0),
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...'; // Example: new Date(2015, 0, 1, 0, 0, 0, 0)
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+**Multi Usage**
+
 ```javascript
 import {
     // ...

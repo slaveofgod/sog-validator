@@ -1,5 +1,31 @@
-## Isbn
+# Isbn
 This constraint validates that an [International Standard Book Number (ISBN)](https://en.wikipedia.org/wiki/International_Standard_Book_Number) is either a valid ISBN-10 or a valid ISBN-13.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    IsbnValidator
+} from 'bob-validator';
+
+let _validator = new IsbnValidator({
+    'type': null,
+    'isbn10Message': 'Your error isbn10 message', 
+    'isbn13Message': 'Your error isbn13 message',
+    'bothIsbnMessage': 'Your error both isbn message'
+});
+
+let data = 'Some data ...'; // Example: (ISBN-13: '978-1-56619-909-4', ISBN-10: '1-56619-909-3')
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {
@@ -15,6 +41,7 @@ let validators = {
         rules: [
             // ...
             new IsbnValidator({
+                'type': null,
                 'isbn10Message': 'Your error isbn10 message', 
                 'isbn13Message': 'Your error isbn13 message',
                 'bothIsbnMessage': 'Your error both isbn message'

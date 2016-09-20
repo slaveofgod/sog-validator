@@ -1,5 +1,28 @@
-## Email
+# Email
 Validates that a value is a valid email address. The underlying value is cast to a string before being validated.
+
+## Single Usage
+
+```javascript
+import {
+    // ...
+    EmailValidator
+} from 'bob-validator';
+
+let _validator = new EmailValidator({
+    'message': 'Your error message'
+});
+
+let data = 'Some data ...';
+
+_validator.validate(data);
+
+if(!_validator.isValid()) {
+    let errors = _validator.getErrors();
+}
+```
+
+## Multi Usage
 
 ```javascript
 import {
