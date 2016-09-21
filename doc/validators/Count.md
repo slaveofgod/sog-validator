@@ -1,7 +1,19 @@
 # Count
 Validates that a given collection's (i.e. an array ~~or an object that implements Countable~~) element count is *between* some minimum and maximum value.
 
-## Single Usage
+[**Homepage**][documentation-url]
+
+### Navigation
+
+* [Single Usage](#single-usage)
+* [Multi Usage](#multi-usage)
+* [Schema Usage](#schema-usage)
+* [Options](#options)
+* [Documentation](#documentation)
+
+---------------
+
+#### Single Usage
 
 ```javascript
 import {
@@ -26,7 +38,11 @@ if(!_validator.isValid()) {
 }
 ```
 
-## Multi Usage
+[⬆ back to top](#navigation)
+
+---------------
+
+#### Multi Usage
 
 ```javascript
 import {
@@ -68,6 +84,55 @@ if(!_oec.isValid()) {
 }
 ```
 
+[⬆ back to top](#navigation)
+
+---------------
+
+#### Schema Usage
+
+```javascript
+import {
+    // ...
+    AllValidator
+} from 'bob-validator';
+
+let schema = {
+    // ...
+    fieldName: {
+        isRequired: true,
+        rules: {
+            // ...
+            Count: {
+                'min': 1,
+                'max': 10,
+                'minMessage': 'Your min error message',
+                'maxMessage': 'Your max error message',
+                'exactMessage': 'Your  exacterror message'
+            }
+        }
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: [1111, 2222, 'aaaa', 'bbbb']
+};
+
+let _oec = new AllValidator({
+    validators: schema,
+    validationType: 'schema',
+    errorType: 'array'
+});
+_oec.validate(data);
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
+```
+
+[⬆ back to top](#navigation)
+
+---------------
+
 #### Options
 ##### min
 **type**: `integer`
@@ -94,7 +159,88 @@ The message that will be shown if the underlying collection elements count is mo
 
 The message that will be shown if `min` and `max` values are **equal** and the underlying collection elements count is not exactly this value.
 
-[Go to documentation][documentation-url]
+[⬆ back to top](#navigation)
+
+---------------
+
+## Documentation
+##### Basic Constraints
+
+These are the basic constraints: use them to assert very basic things about the value of properties or the return value of methods on your object.
+
+* [NotBlank][notblank-url]
+* [Blank][blank-url]
+* [NotNull][notnull-url]
+* [IsNull][isnull-url]
+* [IsTrue][istrue-url]
+* [IsFalse][isfalse-url]
+* [Type][type-url]
+
+##### String Constraints
+
+* [Email][email-url]
+* [Length][length-url]
+* [Url][url-url]
+* [Regex][regex-url]
+* [Ip][ip-url]
+* [Uuid][uuid-url]
+
+##### Number Constraints
+
+* [Range][range-url]
+
+##### Comparison Constraints
+
+* [EqualTo][equalto-url]
+* [NotEqualTo][notequalto-url]
+* [IdenticalTo][identicalto-url]
+* [NotIdenticalTo][notidenticalto-url]
+* [LessThan][lessthan-url]
+* [LessThanOrEqual][lessthanorequal-url]
+* [GreaterThan][greaterthan-url]
+* [GreaterThanOrEqual][greaterthanorequal-url]
+
+##### Date Constraints
+
+* [Date][date-url]
+* [DateTime][datetime-url]
+* [Time][time-url]
+
+##### Collection Constraints
+
+* [Choice][choice-url]
+* [Collection][collection-url] `(not implemented)`
+* [Count][count-url]
+* [UniqueEntity][uniqueentity-url]
+* [Language][language-url]
+* [Locale][locale-url]
+* [Country][country-url]
+
+##### File Constraints
+
+* [File][file-url] `(not implemented)`
+* [Image][image-url] `(not implemented)`
+
+##### Financial and other Number Constraints
+
+* [Bic][bic-url]
+* [CardScheme][cardscheme-url]
+* [Currency][currency-url]
+* [Luhn][luhn-url]
+* [Iban][iban-url]
+* [Isbn][isbn-url]
+* [Issn][issn-url]
+
+##### Other Constraints
+
+* [Callback][callback-url]
+* [Expression][expression-url] `(not implemented)`
+* [All][all-url]
+* [UserPassword][userpassword-url] `(not implemented)`
+* [Valid][valid-url] `(not implemented)`
+* [Custom][custom-url]
+
+[⬆ back to top](#navigation)
 
 
 [documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#documentation

@@ -1,7 +1,19 @@
 # UniqueEntity
 Validates that a particular field (or fields) in entity is (are) unique. This is commonly used, for example, to prevent a new user to register using an email address that already exists in the system.
 
-## Single Usage
+[**Homepage**][documentation-url]
+
+### Navigation
+
+* [Single Usage](#single-usage)
+* [Multi Usage](#multi-usage)
+* [Schema Usage](#schema-usage)
+* [Options](#options)
+* [Documentation](#documentation)
+
+---------------
+
+#### Single Usage
 
 ```javascript
 import {
@@ -41,7 +53,11 @@ if(!_validator.isValid()) {
 }
 ```
 
-## Multi Usage
+[⬆ back to top](#navigation)
+
+---------------
+
+#### Multi Usage
 
 ```javascript
 import {
@@ -98,6 +114,70 @@ if(!_oec.isValid()) {
 }
 ```
 
+[⬆ back to top](#navigation)
+
+---------------
+
+#### Schema Usage
+
+```javascript
+import {
+    // ...
+    AllValidator
+} from 'bob-validator';
+
+let schema = {
+    // ...
+    fieldName: {
+        isRequired: true,
+        rules: {
+            // ...
+            UniqueEntity: {
+                'message': 'Your error message',
+                'fields': ['first_name', 'email'],
+                'repositoryData':[
+                    {"id":1,"first_name":"Diana","last_name":"Simmons","email":"dsimmons0@google.com"},
+                    {"id":2,"first_name":"Earl","last_name":"Hunt","email":"ehunt1@wp.com"},
+                    {"id":3,"first_name":"Kathy","last_name":"Day","email":"kday2@dagondesign.com"},
+                    {"id":4,"first_name":"Andrew","last_name":"Gilbert","email":"agilbert3@ft.com"},
+                    {"id":5,"first_name":"Matthew","last_name":"Watkins","email":"mwatkins4@freewebs.com"},
+                    {"id":6,"first_name":"Phillip","last_name":"Burke","email":"pburke5@unc.edu"},
+                    {"id":7,"first_name":"Ashley","last_name":"James","email":"ajames6@oaic.gov.au"},
+                    {"id":8,"first_name":"Roger","last_name":"Franklin","email":"rfranklin7@phpbb.com"},
+                    {"id":9,"first_name":"Randy","last_name":"Shaw","email":"rshaw8@google.fr"},
+                    {"id":10,"first_name":"Marie","last_name":"Perez","email":"mperez9@mozilla.org"},
+                    {"id":11,"first_name":"Jennifer","last_name":"Kennedy","email":"jkennedya@sciencedaily.com"},
+                    {"id":12,"first_name":"Carol","last_name":"Butler","email":"cbutlerb@mac.com"},
+                    {"id":13,"first_name":"Angela","last_name":"Morrison","email":"amorrisonc@cbsnews.com"},
+                    {"id":14,"first_name":"Stephanie","last_name":"Mitchell","email":"smitchelld@free.fr"},
+                    {"id":15,"first_name":"Henry","last_name":"Ramos","email":"hramose@ibm.com"}
+                ],
+                'ignoreNull': true
+            }
+        }
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: {"id":16,"first_name":"Tammy","last_name":"Montgomery","email":"tmontgomeryf@tinyurl.com"}
+};
+
+let _oec = new AllValidator({
+    validators: schema,
+    validationType: 'schema',
+    errorType: 'array'
+});
+_oec.validate(data);
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
+```
+
+[⬆ back to top](#navigation)
+
+---------------
+
 #### Options
 ##### message
 **type**: `string` **default**: `This value is already used.`
@@ -121,7 +201,88 @@ If you need to require two fields to be individually unique (e.g. a unique `emai
 
 This required option is data source for comparing.
 
-[Go to documentation][documentation-url]
+[⬆ back to top](#navigation)
+
+---------------
+
+## Documentation
+##### Basic Constraints
+
+These are the basic constraints: use them to assert very basic things about the value of properties or the return value of methods on your object.
+
+* [NotBlank][notblank-url]
+* [Blank][blank-url]
+* [NotNull][notnull-url]
+* [IsNull][isnull-url]
+* [IsTrue][istrue-url]
+* [IsFalse][isfalse-url]
+* [Type][type-url]
+
+##### String Constraints
+
+* [Email][email-url]
+* [Length][length-url]
+* [Url][url-url]
+* [Regex][regex-url]
+* [Ip][ip-url]
+* [Uuid][uuid-url]
+
+##### Number Constraints
+
+* [Range][range-url]
+
+##### Comparison Constraints
+
+* [EqualTo][equalto-url]
+* [NotEqualTo][notequalto-url]
+* [IdenticalTo][identicalto-url]
+* [NotIdenticalTo][notidenticalto-url]
+* [LessThan][lessthan-url]
+* [LessThanOrEqual][lessthanorequal-url]
+* [GreaterThan][greaterthan-url]
+* [GreaterThanOrEqual][greaterthanorequal-url]
+
+##### Date Constraints
+
+* [Date][date-url]
+* [DateTime][datetime-url]
+* [Time][time-url]
+
+##### Collection Constraints
+
+* [Choice][choice-url]
+* [Collection][collection-url] `(not implemented)`
+* [Count][count-url]
+* [UniqueEntity][uniqueentity-url]
+* [Language][language-url]
+* [Locale][locale-url]
+* [Country][country-url]
+
+##### File Constraints
+
+* [File][file-url] `(not implemented)`
+* [Image][image-url] `(not implemented)`
+
+##### Financial and other Number Constraints
+
+* [Bic][bic-url]
+* [CardScheme][cardscheme-url]
+* [Currency][currency-url]
+* [Luhn][luhn-url]
+* [Iban][iban-url]
+* [Isbn][isbn-url]
+* [Issn][issn-url]
+
+##### Other Constraints
+
+* [Callback][callback-url]
+* [Expression][expression-url] `(not implemented)`
+* [All][all-url]
+* [UserPassword][userpassword-url] `(not implemented)`
+* [Valid][valid-url] `(not implemented)`
+* [Custom][custom-url]
+
+[⬆ back to top](#navigation)
 
 
 [documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#documentation

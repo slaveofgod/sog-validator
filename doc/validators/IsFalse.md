@@ -4,7 +4,19 @@ Validates that a value is `false`. Specifically, this checks to see if the value
 
 Also see [IsTrue][istrue-url].
 
-## Single Usage
+[**Homepage**][documentation-url]
+
+### Navigation
+
+* [Single Usage](#single-usage)
+* [Multi Usage](#multi-usage)
+* [Schema Usage](#schema-usage)
+* [Options](#options)
+* [Documentation](#documentation)
+
+---------------
+
+#### Single Usage
 
 ```javascript
 import {
@@ -25,7 +37,11 @@ if(!_validator.isValid()) {
 }
 ```
 
-## Multi Usage
+[⬆ back to top](#navigation)
+
+---------------
+
+#### Multi Usage
 
 ```javascript
 import {
@@ -63,13 +79,139 @@ if(!_oec.isValid()) {
 }
 ```
 
+[⬆ back to top](#navigation)
+
+---------------
+
+#### Schema Usage
+
+```javascript
+import {
+    // ...
+    AllValidator
+} from 'bob-validator';
+
+let schema = {
+    // ...
+    fieldName: {
+        isRequired: true,
+        rules: {
+            // ...
+            IsFalse: {
+                'message': 'Your error message'
+            }
+        }
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...'
+};
+
+let _oec = new AllValidator({
+    validators: schema,
+    validationType: 'schema',
+    errorType: 'array'
+});
+_oec.validate(data);
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
+```
+
+[⬆ back to top](#navigation)
+
+---------------
+
 #### Options
 ##### message
 **type**: `string` **default**: `This value should be false.`
 
 This message is shown if the underlying data is not false.
 
-[Go to documentation][documentation-url]
+[⬆ back to top](#navigation)
+
+---------------
+
+## Documentation
+##### Basic Constraints
+
+These are the basic constraints: use them to assert very basic things about the value of properties or the return value of methods on your object.
+
+* [NotBlank][notblank-url]
+* [Blank][blank-url]
+* [NotNull][notnull-url]
+* [IsNull][isnull-url]
+* [IsTrue][istrue-url]
+* [IsFalse][isfalse-url]
+* [Type][type-url]
+
+##### String Constraints
+
+* [Email][email-url]
+* [Length][length-url]
+* [Url][url-url]
+* [Regex][regex-url]
+* [Ip][ip-url]
+* [Uuid][uuid-url]
+
+##### Number Constraints
+
+* [Range][range-url]
+
+##### Comparison Constraints
+
+* [EqualTo][equalto-url]
+* [NotEqualTo][notequalto-url]
+* [IdenticalTo][identicalto-url]
+* [NotIdenticalTo][notidenticalto-url]
+* [LessThan][lessthan-url]
+* [LessThanOrEqual][lessthanorequal-url]
+* [GreaterThan][greaterthan-url]
+* [GreaterThanOrEqual][greaterthanorequal-url]
+
+##### Date Constraints
+
+* [Date][date-url]
+* [DateTime][datetime-url]
+* [Time][time-url]
+
+##### Collection Constraints
+
+* [Choice][choice-url]
+* [Collection][collection-url] `(not implemented)`
+* [Count][count-url]
+* [UniqueEntity][uniqueentity-url]
+* [Language][language-url]
+* [Locale][locale-url]
+* [Country][country-url]
+
+##### File Constraints
+
+* [File][file-url] `(not implemented)`
+* [Image][image-url] `(not implemented)`
+
+##### Financial and other Number Constraints
+
+* [Bic][bic-url]
+* [CardScheme][cardscheme-url]
+* [Currency][currency-url]
+* [Luhn][luhn-url]
+* [Iban][iban-url]
+* [Isbn][isbn-url]
+* [Issn][issn-url]
+
+##### Other Constraints
+
+* [Callback][callback-url]
+* [Expression][expression-url] `(not implemented)`
+* [All][all-url]
+* [UserPassword][userpassword-url] `(not implemented)`
+* [Valid][valid-url] `(not implemented)`
+* [Custom][custom-url]
+
+[⬆ back to top](#navigation)
 
 
 

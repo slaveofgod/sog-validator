@@ -1,7 +1,18 @@
 # LessThan
 Validates that a value is less than another value, defined in the options. To force that a value is less than or equal to another value, see [LessThanOrEqual][lessthanorequal-url]. To force a value is greater than another value, see [GreaterThan][greaterthan-url].
 
-## Basic Usage
+[**Homepage**][documentation-url]
+
+### Navigation
+
+* [Basic Usage](#basic-usage)
+* [Comparing Dates](#comparing-dates)
+* [Options](#options)
+* [Documentation](#documentation)
+
+---------------
+
+#### Basic Usage
 
 **Single Usage**
 
@@ -64,7 +75,49 @@ if(!_oec.isValid()) {
 }
 ```
 
-## Comparing Dates
+**Schema Usage**
+
+```javascript
+import {
+    // ...
+    AllValidator
+} from 'bob-validator';
+
+let schema = {
+    // ...
+    fieldName: {
+        isRequired: true,
+        rules: {
+            // ...
+            LessThan: {
+                'value': 100,
+                'message': 'Your error message'
+            }
+        }
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: 85
+};
+
+let _oec = new AllValidator({
+    validators: schema,
+    validationType: 'schema',
+    errorType: 'array'
+});
+_oec.validate(data);
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
+```
+
+[⬆ back to top](#navigation)
+
+---------------
+
+#### Comparing Dates
 
 **Single Usage**
 
@@ -127,6 +180,48 @@ if(!_oec.isValid()) {
 }
 ```
 
+**Schema Usage**
+
+```javascript
+import {
+    // ...
+    AllValidator
+} from 'bob-validator';
+
+let schema = {
+    // ...
+    fieldName: {
+        isRequired: true,
+        rules: {
+            // ...
+            LessThan: {
+                'value': new Date(2016, 0, 1, 0, 0, 0, 0),
+                'message': 'Your error message'
+            }
+        }
+    }
+};
+
+let data = {
+    // ...
+    fieldName: 'Some data ...' // Example: new Date(2015, 0, 1, 0, 0, 0, 0)
+};
+
+let _oec = new AllValidator({
+    validators: schema,
+    validationType: 'schema',
+    errorType: 'array'
+});
+_oec.validate(data);
+if(!_oec.isValid()) {
+    let errors = _oec.getErrors();
+}
+```
+
+[⬆ back to top](#navigation)
+
+---------------
+
 #### Options
 ##### value
 **type**: `mixed`
@@ -138,8 +233,88 @@ This option is required. It defines the value to compare to. It can be a string,
 
 This is the message that will be shown if the value is not less than the comparison value.
 
+[⬆ back to top](#navigation)
 
-[Go to documentation][documentation-url]
+---------------
+
+## Documentation
+##### Basic Constraints
+
+These are the basic constraints: use them to assert very basic things about the value of properties or the return value of methods on your object.
+
+* [NotBlank][notblank-url]
+* [Blank][blank-url]
+* [NotNull][notnull-url]
+* [IsNull][isnull-url]
+* [IsTrue][istrue-url]
+* [IsFalse][isfalse-url]
+* [Type][type-url]
+
+##### String Constraints
+
+* [Email][email-url]
+* [Length][length-url]
+* [Url][url-url]
+* [Regex][regex-url]
+* [Ip][ip-url]
+* [Uuid][uuid-url]
+
+##### Number Constraints
+
+* [Range][range-url]
+
+##### Comparison Constraints
+
+* [EqualTo][equalto-url]
+* [NotEqualTo][notequalto-url]
+* [IdenticalTo][identicalto-url]
+* [NotIdenticalTo][notidenticalto-url]
+* [LessThan][lessthan-url]
+* [LessThanOrEqual][lessthanorequal-url]
+* [GreaterThan][greaterthan-url]
+* [GreaterThanOrEqual][greaterthanorequal-url]
+
+##### Date Constraints
+
+* [Date][date-url]
+* [DateTime][datetime-url]
+* [Time][time-url]
+
+##### Collection Constraints
+
+* [Choice][choice-url]
+* [Collection][collection-url] `(not implemented)`
+* [Count][count-url]
+* [UniqueEntity][uniqueentity-url]
+* [Language][language-url]
+* [Locale][locale-url]
+* [Country][country-url]
+
+##### File Constraints
+
+* [File][file-url] `(not implemented)`
+* [Image][image-url] `(not implemented)`
+
+##### Financial and other Number Constraints
+
+* [Bic][bic-url]
+* [CardScheme][cardscheme-url]
+* [Currency][currency-url]
+* [Luhn][luhn-url]
+* [Iban][iban-url]
+* [Isbn][isbn-url]
+* [Issn][issn-url]
+
+##### Other Constraints
+
+* [Callback][callback-url]
+* [Expression][expression-url] `(not implemented)`
+* [All][all-url]
+* [UserPassword][userpassword-url] `(not implemented)`
+* [Valid][valid-url] `(not implemented)`
+* [Custom][custom-url]
+
+[⬆ back to top](#navigation)
 
 
 [documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#documentation
