@@ -22,10 +22,10 @@ import {
 } from 'bob-validator';
 
 let _validator = new EmailValidator({
-    'message': 'Your error message'
+    'message': 'This value is not a valid email address.'
 });
 
-let data = 'Some data ...';
+let data = 'kday2@dagondesign.com';
 
 _validator.validate(data);
 
@@ -54,7 +54,7 @@ let validators = {
         rules: [
             // ...
             new EmailValidator({
-                'message': 'Your error message'
+                'message': 'This value is not a valid email address.'
             })
         ]
     }
@@ -62,7 +62,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'kday2@dagondesign.com'
 };
 
 let _oec = new AllValidator({
@@ -95,7 +95,7 @@ let schema = {
         rules: {
             // ...
             Email: {
-                'message': 'Your error message'
+                'message': 'This value is not a valid email address.'
             }
         }
     }
@@ -103,7 +103,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'kday2@dagondesign.com'
 };
 
 let _oec = new AllValidator({

@@ -25,10 +25,10 @@ import {
 
 let _validator = new EqualToValidator({
     'value': 100,
-    'message': 'Your error message'
+    'message': 'This value should be equal to {{ compared_value }}.'
 });
 
-let data = 'Some data ...'; // Example: 100
+let data = 100;
 
 _validator.validate(data);
 
@@ -58,7 +58,7 @@ let validators = {
             // ...
             new EqualToValidator({
                 'value': 100,
-                'message': 'Your error message'
+                'message': 'This value should be equal to {{ compared_value }}.'
             })
         ]
     }
@@ -66,7 +66,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 100
+    fieldName: 100
 };
 
 let _oec = new AllValidator({
@@ -100,7 +100,7 @@ let schema = {
             // ...
             EqualTo: {
                 'value': 100,
-                'message': 'Your error message'
+                'message': 'This value should be equal to {{ compared_value }}.'
             }
         }
     }
@@ -108,7 +108,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 100
+    fieldName: 100
 };
 
 let _oec = new AllValidator({

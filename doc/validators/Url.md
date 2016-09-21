@@ -22,10 +22,10 @@ import {
 } from 'bob-validator';
 
 let _validator = new UrlValidator({
-    'message': 'Your error message'
+    'message': 'This value is not a valid URL.'
 });
 
-let data = 'Some data ...';
+let data = 'https://www.npmjs.com/package/bob-validator';
 
 _validator.validate(data);
 
@@ -54,7 +54,7 @@ let validators = {
         rules: [
             // ...
             new UrlValidator({
-                'message': 'Your error message'
+                'message': 'This value is not a valid URL.'
             })
         ]
     }
@@ -62,7 +62,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'https://www.npmjs.com/package/bob-validator'
 };
 
 let _oec = new AllValidator({
@@ -95,7 +95,7 @@ let schema = {
         rules: {
             // ...
             Url: {
-                'message': 'Your error message'
+                'message': 'This value is not a valid URL.'
             }
         }
     }
@@ -103,7 +103,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'https://www.npmjs.com/package/bob-validator'
 };
 
 let _oec = new AllValidator({

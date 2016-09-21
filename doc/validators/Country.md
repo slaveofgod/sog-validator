@@ -22,10 +22,10 @@ import {
 } from 'bob-validator';
 
 let _validator = new CountryValidator({
-    'message': 'Your error message'
+    'message': 'This value is not a valid country.'
 });
 
-let data = 'Some data ...'; // Example: US
+let data = 'US';
 
 _validator.validate(data);
 
@@ -54,7 +54,7 @@ let validators = {
         rules: [
             // ...
             new CountryValidator({
-                'message': 'Your error message'
+                'message': 'This value is not a valid country.'
             })
         ]
     }
@@ -62,7 +62,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: US
+    fieldName: 'US'
 };
 
 let _oec = new AllValidator({
@@ -95,7 +95,7 @@ let schema = {
         rules: {
             // ...
             Country: {
-                'message': 'Your error message'
+                'message': 'This value is not a valid country.'
             }
         }
     }
@@ -103,7 +103,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: US
+    fieldName: 'US'
 };
 
 let _oec = new AllValidator({

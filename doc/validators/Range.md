@@ -25,12 +25,12 @@ import {
 let _validator = new RangeValidator({
     'min': 1,
     'max': 100,
-    'minMessage': 'Your min error message',
-    'maxMessage': 'Your max error message',
-    'invalidMessage': 'Your invalid message'
+    'minMessage': 'This value should be {{ limit }} or more.',
+    'maxMessage': 'This value should be {{ limit }} or less.',
+    'invalidMessage': 'This value should be a valid number.'
 });
 
-let data = 'Some data ...'; // Example: 10
+let data = 10;
 
 _validator.validate(data);
 
@@ -57,9 +57,9 @@ let validators = {
             new RangeValidator({
                 'min': 1,
                 'max': 100,
-                'minMessage': 'Your min error message',
-                'maxMessage': 'Your max error message',
-                'invalidMessage': 'Your invalid message'
+                'minMessage': 'This value should be {{ limit }} or more.',
+                'maxMessage': 'This value should be {{ limit }} or less.',
+                'invalidMessage': 'This value should be a valid number.'
             })
         ]
     }
@@ -67,7 +67,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 10
+    fieldName: 10
 };
 
 let _oec = new AllValidator({
@@ -98,9 +98,9 @@ let schema = {
             Range: {
                 'min': 1,
                 'max': 100,
-                'minMessage': 'Your min error message',
-                'maxMessage': 'Your max error message',
-                'invalidMessage': 'Your invalid message'
+                'minMessage': 'This value should be {{ limit }} or more.',
+                'maxMessage': 'This value should be {{ limit }} or less.',
+                'invalidMessage': 'This value should be a valid number.'
             }
         }
     }
@@ -108,7 +108,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 10
+    fieldName: 10
 };
 
 let _oec = new AllValidator({
@@ -139,12 +139,12 @@ import {
 let _validator = new RangeValidator({
     'min': new Date(2015, 0, 1, 0, 0, 0, 0),
     'max': new Date(2017, 0, 1, 0, 0, 0, 0),
-    'minMessage': 'Your min error message',
-    'maxMessage': 'Your max error message',
-    'invalidMessage': 'Your invalid message'
+    'minMessage': 'This value should be {{ limit }} or more.',
+    'maxMessage': 'This value should be {{ limit }} or less.',
+    'invalidMessage': 'This value should be a valid number.'
 });
 
-let data = 'Some data ...'; // Example: new Date(2016, 0, 1, 0, 0, 0, 0)
+let data = new Date(2016, 0, 1, 0, 0, 0, 0); 
 
 _validator.validate(data);
 
@@ -171,9 +171,9 @@ let validators = {
             new RangeValidator({
                 'min': new Date(2015, 0, 1, 0, 0, 0, 0),
                 'max': new Date(2017, 0, 1, 0, 0, 0, 0),
-                'minMessage': 'Your min error message',
-                'maxMessage': 'Your max error message',
-                'invalidMessage': 'Your invalid message'
+                'minMessage': 'This value should be {{ limit }} or more.',
+                'maxMessage': 'This value should be {{ limit }} or less.',
+                'invalidMessage': 'This value should be a valid number.'
             })
         ]
     }
@@ -181,7 +181,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: new Date(2016, 0, 1, 0, 0, 0, 0)
+    fieldName: new Date(2016, 0, 1, 0, 0, 0, 0)
 };
 
 let _oec = new AllValidator({
@@ -212,9 +212,9 @@ let schema = {
             Range: {
                 'min': new Date(2015, 0, 1, 0, 0, 0, 0),
                 'max': new Date(2017, 0, 1, 0, 0, 0, 0),
-                'minMessage': 'Your min error message',
-                'maxMessage': 'Your max error message',
-                'invalidMessage': 'Your invalid message'
+                'minMessage': 'This value should be {{ limit }} or more.',
+                'maxMessage': 'This value should be {{ limit }} or less.',
+                'invalidMessage': 'This value should be a valid number.'
             }
         }
     }
@@ -222,7 +222,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: new Date(2016, 0, 1, 0, 0, 0, 0)
+    fieldName: new Date(2016, 0, 1, 0, 0, 0, 0)
 };
 
 let _oec = new AllValidator({

@@ -22,12 +22,12 @@ import {
 } from 'bob-validator';
 
 let _validator = new IssnValidator({
-    'message': 'Your error message', 
+    'message': 'This value is not a valid ISSN.', 
     'caseSensitive': false,
     'requireHyphen': false
 });
 
-let data = 'Some data ...'; // Example: '0028-0836'
+let data = '0028-0836'; 
 
 _validator.validate(data);
 
@@ -56,7 +56,7 @@ let validators = {
         rules: [
             // ...
             new IssnValidator({
-                'message': 'Your error message', 
+                'message': 'This value is not a valid ISSN.', 
                 'caseSensitive': false,
                 'requireHyphen': false
             })
@@ -66,7 +66,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: '0028-0836'
+    fieldName: '0028-0836'
 };
 
 let _oec = new AllValidator({
@@ -99,7 +99,7 @@ let schema = {
         rules: {
             // ...
             Issn: {
-                'message': 'Your error message', 
+                'message': 'This value is not a valid ISSN.', 
                 'caseSensitive': false,
                 'requireHyphen': false
             }
@@ -109,7 +109,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: '0028-0836'
+    fieldName: '0028-0836'
 };
 
 let _oec = new AllValidator({

@@ -24,12 +24,12 @@ import {
 let _validator = new LengthValidator({
     'min': 1,
     'max': 50,
-    'minMessage': 'Your min error message',
-    'maxMessage': 'Your max error message',
-    'exactMessage': 'Your exact error message'
+    'minMessage': 'This value is too short. It should have {{ limit }} characters or more.',
+    'maxMessage': 'This value is too long. It should have {{ limit }} characters or less.',
+    'exactMessage': 'This value should have exactly {{ limit }} characters.'
 });
 
-let data = 'Some data ...';
+let data = 'abcdef';
 
 _validator.validate(data);
 
@@ -60,9 +60,9 @@ let validators = {
             new LengthValidator({
                 'min': 1,
                 'max': 50,
-                'minMessage': 'Your min error message',
-                'maxMessage': 'Your max error message',
-                'exactMessage': 'Your exact error message'
+                'minMessage': 'This value is too short. It should have {{ limit }} characters or more.',
+                'maxMessage': 'This value is too long. It should have {{ limit }} characters or less.',
+                'exactMessage': 'This value should have exactly {{ limit }} characters.'
             })
         ]
     }
@@ -70,7 +70,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'abcdef'
 };
 
 let _oec = new AllValidator({
@@ -105,9 +105,9 @@ let schema = {
             Length: {
                 'min': 1,
                 'max': 50,
-                'minMessage': 'Your min error message',
-                'maxMessage': 'Your max error message',
-                'exactMessage': 'Your exact error message'
+                'minMessage': 'This value is too short. It should have {{ limit }} characters or more.',
+                'maxMessage': 'This value is too long. It should have {{ limit }} characters or less.',
+                'exactMessage': 'This value should have exactly {{ limit }} characters.'
             }
         }
     }
@@ -115,7 +115,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'abcdef'
 };
 
 let _oec = new AllValidator({

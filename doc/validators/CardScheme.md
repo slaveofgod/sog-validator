@@ -34,10 +34,10 @@ let _validator = new CardSchemeValidator({
         'MASTERCARD',
         'VISA'
     ],
-    'message': 'Your error message'
+    'message': 'Unsupported card type or invalid card number.'
 });
 
-let data = 'Some data ...'; // Example: 4111111111111111 (Visa)
+let data = '4111111111111111';
 
 _validator.validate(data);
 
@@ -78,7 +78,7 @@ let validators = {
                     'MASTERCARD',
                     'VISA'
                 ],
-                'message': 'Your error message'
+                'message': 'Unsupported card type or invalid card number.'
             })
         ]
     }
@@ -86,7 +86,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 4111111111111111 (Visa)
+    fieldName: '4111111111111111'
 };
 
 let _oec = new AllValidator({
@@ -131,7 +131,7 @@ let schema = {
                     'MASTERCARD',
                     'VISA'
                 ],
-                'message': 'Your error message'
+                'message': 'Unsupported card type or invalid card number.'
             }
         }
     }
@@ -139,7 +139,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 4111111111111111 (Visa)
+    fieldName: '4111111111111111'
 };
 
 let _oec = new AllValidator({

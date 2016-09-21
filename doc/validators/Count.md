@@ -24,12 +24,12 @@ import {
 let _validator = new CountValidator({
     'min': 1,
     'max': 10,
-    'minMessage': 'Your min error message',
-    'maxMessage': 'Your max error message',
-    'exactMessage': 'Your  exacterror message'
+    'minMessage': 'This collection should contain {{ limit }} elements or more.',
+    'maxMessage': 'This collection should contain {{ limit }} elements or less.',
+    'exactMessage': 'This collection should contain exactly {{ limit }} elements.'
 });
 
-let data = 'Some data ...'; // Example: [1111, 2222, 'aaaa', 'bbbb']
+let data = [1111, 2222, 'aaaa', 'bbbb'];
 
 _validator.validate(data);
 
@@ -60,9 +60,9 @@ let validators = {
             new CountValidator({
                 'min': 1,
                 'max': 10,
-                'minMessage': 'Your min error message',
-                'maxMessage': 'Your max error message',
-                'exactMessage': 'Your  exacterror message'
+                'minMessage': 'This collection should contain {{ limit }} elements or more.',
+                'maxMessage': 'This collection should contain {{ limit }} elements or less.',
+                'exactMessage': 'This collection should contain exactly {{ limit }} elements.'
             })
         ]
     }
@@ -70,7 +70,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: [1111, 2222, 'aaaa', 'bbbb']
+    fieldName: [1111, 2222, 'aaaa', 'bbbb']
 };
 
 let _oec = new AllValidator({
@@ -105,9 +105,9 @@ let schema = {
             Count: {
                 'min': 1,
                 'max': 10,
-                'minMessage': 'Your min error message',
-                'maxMessage': 'Your max error message',
-                'exactMessage': 'Your  exacterror message'
+                'minMessage': 'This collection should contain {{ limit }} elements or more.',
+                'maxMessage': 'This collection should contain {{ limit }} elements or less.',
+                'exactMessage': 'This collection should contain exactly {{ limit }} elements.'
             }
         }
     }
@@ -115,7 +115,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: [1111, 2222, 'aaaa', 'bbbb']
+    fieldName: [1111, 2222, 'aaaa', 'bbbb']
 };
 
 let _oec = new AllValidator({

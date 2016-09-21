@@ -22,10 +22,10 @@ import {
 } from 'bob-validator';
 
 let _validator = new IbanValidator({
-    'message': 'Your error message'
+    'message': 'This is not a valid International Bank Account Number (IBAN).'
 });
 
-let data = 'Some data ...'; // Example: 'GB29 NWBK 6016 1331 9268 19'
+let data = 'GB29 NWBK 6016 1331 9268 19'; 
 
 _validator.validate(data);
 
@@ -54,7 +54,7 @@ let validators = {
         rules: [
             // ...
             new IbanValidator({
-                'message': 'Your error message'
+                'message': 'This is not a valid International Bank Account Number (IBAN).'
             })
         ]
     }
@@ -62,7 +62,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 'GB29 NWBK 6016 1331 9268 19'
+    fieldName: 'GB29 NWBK 6016 1331 9268 19'
 };
 
 let _oec = new AllValidator({
@@ -95,7 +95,7 @@ let schema = {
         rules: {
             // ...
             Iban: {
-                'message': 'Your error message'
+                'message': 'This is not a valid International Bank Account Number (IBAN).'
             }
         }
     }
@@ -103,7 +103,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 'GB29 NWBK 6016 1331 9268 19'
+    fieldName: 'GB29 NWBK 6016 1331 9268 19'
 };
 
 let _oec = new AllValidator({

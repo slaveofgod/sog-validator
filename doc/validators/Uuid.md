@@ -22,12 +22,12 @@ import {
 } from 'bob-validator';
 
 let _validator = new UuidValidator({
-    'message': 'Your error message',
+    'message': 'This is not a valid UUID.',
     'versions': [1,2,3,4,5],
     'strict': false
 });
 
-let data = 'Some data ...';
+let data = '216f-ff40-98d9-11e3-a5e2-0800-200c-9a66';
 
 _validator.validate(data);
 
@@ -56,7 +56,7 @@ let validators = {
         rules: [
             // ...
             new UuidValidator({
-                'message': 'Your error message',
+                'message': 'This is not a valid UUID.',
                 'versions': [1,2,3,4,5],
                 'strict': false
             })
@@ -66,7 +66,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 216f-ff40-98d9-11e3-a5e2-0800-200c-9a66
+    fieldName: '216f-ff40-98d9-11e3-a5e2-0800-200c-9a66' 
 };
 
 let _oec = new AllValidator({
@@ -99,7 +99,7 @@ let schema = {
         rules: {
             // ...
             Uuid: {
-                'message': 'Your error message',
+                'message': 'This is not a valid UUID.',
                 'versions': [1,2,3,4,5],
                 'strict': false
             }
@@ -109,7 +109,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 216f-ff40-98d9-11e3-a5e2-0800-200c-9a66
+    fieldName: '216f-ff40-98d9-11e3-a5e2-0800-200c-9a66'
 };
 
 let _oec = new AllValidator({

@@ -25,11 +25,11 @@ import {
 let _validator = new ChoiceValidator({
     'choices': [1111, 'aaaaa', 3333, '123a'],
     'multiple': false,
-    'message': 'Your error message',
+    'message': 'The value you selected is not a valid choice.',
     'strict': true
 });
 
-let data = 'Some data ...'; // Example: 'aaaaa'
+let data = 'aaaaa';
 
 _validator.validate(data);
 
@@ -56,7 +56,7 @@ let validators = {
             new ChoiceValidator({
                 'choices': [1111, 'aaaaa', 3333, '123a'],
                 'multiple': false,
-                'message': 'Your error message',
+                'message': 'The value you selected is not a valid choice.',
                 'strict': true
             })
         ]
@@ -65,7 +65,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 'aaaaa'
+    fieldName: 'aaaaa'
 };
 
 let _oec = new AllValidator({data: data, validators: validators});
@@ -92,7 +92,7 @@ let schema = {
             Choice: {
                 'choices': [1111, 'aaaaa', 3333, '123a'],
                 'multiple': false,
-                'message': 'Your error message',
+                'message': 'The value you selected is not a valid choice.',
                 'strict': true
             }
         }
@@ -101,7 +101,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 'aaaaa'
+    fieldName: 'aaaaa'
 };
 
 let _oec = new AllValidator({
@@ -134,14 +134,14 @@ let _validator = new ChoiceValidator({
     'multiple': true,
     'min': 1,
     'max': 10,
-    'message': 'Your error message',
-    'multipleMessage': 'Your multiple error message',
-    'minMessage': 'Your min error message',
-    'maxMessage': 'Your max error message',
+    'message': 'The value you selected is not a valid choice.',
+    'multipleMessage': 'One or more of the given values is invalid.',
+    'minMessage': 'You must select at least {{ limit }} choices.',
+    'maxMessage': 'You must select at most {{ limit }} choices.',
     'strict': true
 });
 
-let data = 'Some data ...'; // Example: [1111, '123a']
+let data = [1111, '123a'];
 
 _validator.validate(data);
 
@@ -170,10 +170,10 @@ let validators = {
                 'multiple': true,
                 'min': 1,
                 'max': 10,
-                'message': 'Your error message',
-                'multipleMessage': 'Your multiple error message',
-                'minMessage': 'Your min error message',
-                'maxMessage': 'Your max error message',
+                'message': 'The value you selected is not a valid choice.',
+                'multipleMessage': 'One or more of the given values is invalid.',
+                'minMessage': 'You must select at least {{ limit }} choices.',
+                'maxMessage': 'You must select at most {{ limit }} choices.',
                 'strict': true
             })
         ]
@@ -182,7 +182,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: [1111, '123a']
+    fieldName: [1111, '123a']
 };
 
 let _oec = new AllValidator({
@@ -215,10 +215,10 @@ let schema = {
                 'multiple': true,
                 'min': 1,
                 'max': 10,
-                'message': 'Your error message',
-                'multipleMessage': 'Your multiple error message',
-                'minMessage': 'Your min error message',
-                'maxMessage': 'Your max error message',
+                'message': 'The value you selected is not a valid choice.',
+                'multipleMessage': 'One or more of the given values is invalid.',
+                'minMessage': 'You must select at least {{ limit }} choices.',
+                'maxMessage': 'You must select at most {{ limit }} choices.',
                 'strict': true
             }
         }
@@ -227,7 +227,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: [1111, '123a']
+    fieldName: [1111, '123a']
 };
 
 let _oec = new AllValidator({

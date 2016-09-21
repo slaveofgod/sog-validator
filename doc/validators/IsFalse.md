@@ -25,10 +25,10 @@ import {
 } from 'bob-validator';
 
 let _validator = new IsFalseValidator({
-    'message': 'Your error message'
+    'message': 'This value should be false.'
 });
 
-let data = 'Some data ...';
+let data = false;
 
 _validator.validate(data);
 
@@ -57,7 +57,7 @@ let validators = {
         rules: [
             // ...
             new IsFalseValidator({
-                'message': 'Your error message'
+                'message': 'This value should be false.'
             })
         ]
     }
@@ -65,7 +65,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: false
 };
 
 let _oec = new AllValidator({
@@ -98,7 +98,7 @@ let schema = {
         rules: {
             // ...
             IsFalse: {
-                'message': 'Your error message'
+                'message': 'This value should be false.'
             }
         }
     }
@@ -106,7 +106,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: false
 };
 
 let _oec = new AllValidator({

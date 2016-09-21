@@ -22,10 +22,10 @@ import {
 } from 'bob-validator';
 
 let _validator = new NotNullValidator({
-    'message': 'Your error message'
+    'message': 'This value should not be null.'
 });
 
-let data = 'Some data ...';
+let data = 'abcdef';
 
 _validator.validate(data);
 
@@ -54,7 +54,7 @@ let validators = {
         rules: [
             // ...
             new NotNullValidator({
-                'message': 'Your error message'
+                'message': 'This value should not be null.'
             })
         ]
     }
@@ -62,7 +62,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'abcdef'
 };
 
 let _oec = new AllValidator({
@@ -95,7 +95,7 @@ let schema = {
         rules: {
             // ...
             NotNull: {
-                'message': 'Your error message'
+                'message': 'This value should not be null.'
             }
         }
     }
@@ -103,7 +103,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'abcdef'
 };
 
 let _oec = new AllValidator({

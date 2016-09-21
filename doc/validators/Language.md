@@ -22,10 +22,10 @@ import {
 } from 'bob-validator';
 
 let _validator = new LanguageValidator({
-    'message': 'Your error message'
+    'message': 'This value is not a valid language.'
 });
 
-let data = 'Some data ...'; // Example: en_gb
+let data = 'en_gb'; 
 
 _validator.validate(data);
 
@@ -54,7 +54,7 @@ let validators = {
         rules: [
             // ...
             new LanguageValidator({
-                'message': 'Your error message'
+                'message': 'This value is not a valid language.'
             })
         ]
     }
@@ -62,7 +62,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: en_gb
+    fieldName: 'en_gb'
 };
 
 let _oec = new AllValidator({
@@ -95,7 +95,7 @@ let schema = {
         rules: {
             // ...
             Language: {
-                'message': 'Your error message'
+                'message': 'This value is not a valid language.'
             }
         }
     }
@@ -103,7 +103,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: en_gb
+    fieldName: 'en_gb'
 };
 
 let _oec = new AllValidator({

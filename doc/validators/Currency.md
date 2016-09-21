@@ -22,10 +22,10 @@ import {
 } from 'bob-validator';
 
 let _validator = new CurrencyValidator({
-    'message': 'Your error message'
+    'message': 'This value is not a valid currency.'
 });
 
-let data = 'Some data ...'; // Example: USD
+let data = 'USD';
 
 _validator.validate(data);
 
@@ -54,7 +54,7 @@ let validators = {
         rules: [
             // ...
             new CurrencyValidator({
-                'message': 'Your error message'
+                'message': 'This value is not a valid currency.'
             })
         ]
     }
@@ -62,7 +62,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: USD
+    fieldName: 'USD'
 };
 
 let _oec = new AllValidator({
@@ -95,7 +95,7 @@ let schema = {
         rules: {
             // ...
             Currency: {
-                'message': 'Your error message'
+                'message': 'This value is not a valid currency.'
             }
         }
     }
@@ -103,7 +103,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: USD
+    fieldName: 'USD'
 };
 
 let _oec = new AllValidator({

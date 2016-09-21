@@ -23,10 +23,10 @@ import {
 
 let _validator = new DateTimeValidator({
     'format': 'YYYY-MM-DD HH:mm:ss',
-    'message': 'Your error message'
+    'message': 'This value is not a valid datetime.'
 });
 
-let data = 'Some data ...'; // Example: 2015-11-25 22:16:35
+let data = '2015-11-25 22:16:35'; 
 
 _validator.validate(data);
 
@@ -56,7 +56,7 @@ let validators = {
             // ...
             new DateTimeValidator({
                 'format': 'YYYY-MM-DD HH:mm:ss',
-                'message': 'Your error message'
+                'message': 'This value is not a valid datetime.'
             })
         ]
     }
@@ -64,7 +64,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 2015-11-25 22:16:35
+    fieldName: '2015-11-25 22:16:35'
 };
 
 let _oec = new AllValidator({
@@ -98,7 +98,7 @@ let schema = {
             // ...
             DateTime: {
                 'format': 'YYYY-MM-DD HH:mm:ss',
-                'message': 'Your error message'
+                'message': 'This value is not a valid datetime.'
             }
         }
     }
@@ -106,7 +106,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 2015-11-25 22:16:35
+    fieldName: '2015-11-25 22:16:35'
 };
 
 let _oec = new AllValidator({

@@ -24,10 +24,10 @@ import {
 
 let _validator = new TypeValidator({
     'type': 'integer',
-    'message': 'Your error message'
+    'message': 'This value should be of type {{ type }}.'
 });
 
-let data = 'Some data ...';
+let data = 123456;
 
 _validator.validate(data);
 
@@ -57,7 +57,7 @@ let validators = {
             // ...
             new TypeValidator({
                 'type': 'integer',
-                'message': 'Your error message'
+                'message': 'This value should be of type {{ type }}.'
             })
         ]
     }
@@ -65,7 +65,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 123456
 };
 
 let _oec = new AllValidator({
@@ -99,7 +99,7 @@ let schema = {
             // ...
             Type: {
                 'type': 'integer',
-                'message': 'Your error message'
+                'message': 'This value should be of type {{ type }}.'
             }
         }
     }
@@ -107,7 +107,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 123456
 };
 
 let _oec = new AllValidator({

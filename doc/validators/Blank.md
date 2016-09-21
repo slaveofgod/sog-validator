@@ -22,10 +22,10 @@ import {
 } from 'bob-validator';
 
 let validator = new BlankValidator({
-    'message': 'Your error message'
+    'message': 'This value should be blank.'
 });
 
-let data = 'Some data ...';
+let data = '';
 
 validator.validate(data);
 
@@ -54,7 +54,7 @@ let validators = {
         rules: [
             // ...
             new BlankValidator({
-                'message': 'Your error message'
+                'message': 'This value should be blank.'
             })
         ]
     }
@@ -62,7 +62,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: ''
 };
 
 let _oec = new AllValidator({
@@ -95,7 +95,7 @@ let schema = {
         rules: {
             // ...
             Blank: {
-                'message': 'Your error message'
+                'message': 'This value should be blank.'
             }
         }
     }
@@ -103,7 +103,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: ''
 };
 
 let _oec = new AllValidator({

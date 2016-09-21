@@ -22,10 +22,10 @@ import {
 } from 'bob-validator';
 
 let _validator = new IpValidator({
-    'message': 'Your error message'
+    'message': 'This is not a valid IP address.'
 });
 
-let data = 'Some data ...';
+let data = '8.8.8.8';
 
 _validator.validate(data);
 
@@ -54,7 +54,7 @@ let validators = {
         rules: [
             // ...
             new IpValidator({
-                'message': 'Your error message'
+                'message': 'This is not a valid IP address.'
             })
         ]
     }
@@ -62,7 +62,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: '8.8.8.8'
 };
 
 let _oec = new AllValidator({
@@ -95,7 +95,7 @@ let schema = {
         rules: {
             // ...
             Ip: {
-                'message': 'Your error message'
+                'message': 'This is not a valid IP address.'
             }
         }
     }
@@ -103,7 +103,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: '8.8.8.8'
 };
 
 let _oec = new AllValidator({

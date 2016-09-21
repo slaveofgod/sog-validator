@@ -30,10 +30,10 @@ let _validator = new CustomValidator({
         new LengthValidator({'min': 11, 'max': 19}),
         new CardSchemeValidator({'schemes': ['AMEX', 'CHINA_UNIONPAY', 'DINERS', 'DISCOVER', 'INSTAPAYMENT', 'JCB', 'LASER', 'MAESTRO', 'MASTERCARD', 'VISA']})
     ],
-    'message': 'Your error message'
+    'message': 'Invalid credit card'
 });
 
-let data = 'Some data ...'; // Example: 4111111111111111 (Visa)
+let data = '4111111111111111';
 
 _validator.validate(data);
 
@@ -64,7 +64,7 @@ let CreditCardValidator = new CustomValidator({
         new LengthValidator({'min': 11, 'max': 19}),
         new CardSchemeValidator({'schemes': ['AMEX', 'CHINA_UNIONPAY', 'DINERS', 'DISCOVER', 'INSTAPAYMENT', 'JCB', 'LASER', 'MAESTRO', 'MASTERCARD', 'VISA']})
     ],
-    'message': 'Your error message'
+    'message': 'Invalid credit card'
 });
 
 let validators = {
@@ -80,7 +80,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 4111111111111111 (Visa)
+    fieldName: '4111111111111111'
 };
 
 let _oec = new AllValidator({
@@ -116,7 +116,7 @@ let CreditCard = {
             'schemes': ['AMEX', 'CHINA_UNIONPAY', 'DINERS', 'DISCOVER', 'INSTAPAYMENT', 'JCB', 'LASER', 'MAESTRO', 'MASTERCARD', 'VISA']
         }
     },
-    message: 'Your error message'
+    message: 'Invalid credit card'
 };
 
 let schema = {
@@ -132,7 +132,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'  // Example: 4111111111111111 (Visa)
+    fieldName: '4111111111111111'
 };
 
 let _oec = new AllValidator({

@@ -22,11 +22,11 @@ import {
 } from 'bob-validator';
 
 let _validator = new RegexValidator({
-    'message': 'Your error message',
+    'message': 'This value is not valid.',
     'pattern': /^.+\@\S+\.\S+$/
 });
 
-let data = 'Some data ...';
+let data = 'kday2@dagondesign.com';
 
 _validator.validate(data);
 
@@ -55,7 +55,7 @@ let validators = {
         rules: [
             // ...
             new RegexValidator({
-                'message': 'Your error message',
+                'message': 'This value is not valid.',
                 'pattern': /^.+\@\S+\.\S+$/
             })
         ]
@@ -64,7 +64,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'kday2@dagondesign.com'
 };
 
 let _oec = new AllValidator({
@@ -97,7 +97,7 @@ let schema = {
         rules: {
             // ...
             Regex: {
-                'message': 'Your error message',
+                'message': 'This value is not valid.',
                 'pattern': /^.+\@\S+\.\S+$/
             }
         }
@@ -106,7 +106,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: 'kday2@dagondesign.com'
 };
 
 let _oec = new AllValidator({

@@ -25,10 +25,10 @@ import {
 
 let _validator = new NotIdenticalToValidator({
     'value': 100,
-    'message': 'Your error message'
+    'message': 'This value should not be identical to {{ compared_value_type }} {{ compared_value }}.'
 });
 
-let data = 'Some data ...'; // Example: 85
+let data = 85; 
 
 _validator.validate(data);
 
@@ -58,7 +58,7 @@ let validators = {
             // ...
             new NotIdenticalToValidator({
                 'value': 100,
-                'message': 'Your error message'
+                'message': 'This value should not be identical to {{ compared_value_type }} {{ compared_value }}.'
             })
         ]
     }
@@ -66,7 +66,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 85
+    fieldName: 85
 };
 
 let _oec = new AllValidator({
@@ -100,7 +100,7 @@ let schema = {
             // ...
             NotIdenticalTo: {
                 'value': 100,
-                'message': 'Your error message'
+                'message': 'This value should not be identical to {{ compared_value_type }} {{ compared_value }}.'
             }
         }
     }
@@ -108,7 +108,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 85
+    fieldName: 85
 };
 
 let _oec = new AllValidator({

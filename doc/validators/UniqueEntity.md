@@ -22,7 +22,7 @@ import {
 } from 'bob-validator';
 
 let _validator = new UniqueEntityValidator({
-    'message': 'Your error message',
+    'message': 'This value is already used.',
     'fields': ['first_name', 'email'],
     'repositoryData':[
         {"id":1,"first_name":"Diana","last_name":"Simmons","email":"dsimmons0@google.com"},
@@ -44,7 +44,7 @@ let _validator = new UniqueEntityValidator({
     'ignoreNull': true
 });
 
-let data = 'Some data ...'; // Example: {"id":16,"first_name":"Tammy","last_name":"Montgomery","email":"tmontgomeryf@tinyurl.com"}
+let data = {"id":16,"first_name":"Tammy","last_name":"Montgomery","email":"tmontgomeryf@tinyurl.com"};
 
 _validator.validate(data);
 
@@ -73,7 +73,7 @@ let validators = {
         rules: [
             // ...
             new UniqueEntityValidator({
-                'message': 'Your error message',
+                'message': 'This value is already used.',
                 'fields': ['first_name', 'email'],
                 'repositoryData':[
                     {"id":1,"first_name":"Diana","last_name":"Simmons","email":"dsimmons0@google.com"},
@@ -100,7 +100,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: {"id":16,"first_name":"Tammy","last_name":"Montgomery","email":"tmontgomeryf@tinyurl.com"}
+    fieldName: {"id":16,"first_name":"Tammy","last_name":"Montgomery","email":"tmontgomeryf@tinyurl.com"}
 };
 
 let _oec = new AllValidator({
@@ -133,7 +133,7 @@ let schema = {
         rules: {
             // ...
             UniqueEntity: {
-                'message': 'Your error message',
+                'message': 'This value is already used.',
                 'fields': ['first_name', 'email'],
                 'repositoryData':[
                     {"id":1,"first_name":"Diana","last_name":"Simmons","email":"dsimmons0@google.com"},
@@ -160,7 +160,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: {"id":16,"first_name":"Tammy","last_name":"Montgomery","email":"tmontgomeryf@tinyurl.com"}
+    fieldName: {"id":16,"first_name":"Tammy","last_name":"Montgomery","email":"tmontgomeryf@tinyurl.com"}
 };
 
 let _oec = new AllValidator({

@@ -24,10 +24,10 @@ import {
 } from 'bob-validator';
 
 let _validator = new IsNullValidator({
-    'message': 'Your error message'
+    'message': 'This value should be null.'
 });
 
-let data = 'Some data ...';
+let data = null;
 
 _validator.validate(data);
 
@@ -56,7 +56,7 @@ let validators = {
         rules: [
             // ...
             new IsNullValidator({
-                'message': 'Your error message'
+                'message': 'This value should be null.'
             })
         ]
     }
@@ -64,7 +64,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: null
 };
 
 let _oec = new AllValidator({
@@ -97,7 +97,7 @@ let schema = {
         rules: {
             // ...
             IsNull: {
-                'message': 'Your error message'
+                'message': 'This value should be null.'
             }
         }
     }
@@ -105,7 +105,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...'
+    fieldName: null
 };
 
 let _oec = new AllValidator({

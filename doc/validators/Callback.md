@@ -41,7 +41,7 @@ let _validator = new CallbackValidator({
     'message': 'This value should be between {{ min }} and {{ max }}.'
 });
 
-let data = 'Some data ...'; // Example: 158
+let data = 158; 
 
 _validator.validate(data);
 
@@ -94,7 +94,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 158
+    fieldName: 158
 };
 
 let _oec = new AllValidator({
@@ -151,7 +151,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 158
+    fieldName: 158
 };
 
 let _oec = new AllValidator({

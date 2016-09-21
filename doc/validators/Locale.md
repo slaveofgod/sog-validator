@@ -24,10 +24,10 @@ import {
 } from 'bob-validator';
 
 let _validator = new LocaleValidator({
-    'message': 'Your error message'
+    'message': 'This value is not a valid locale.'
 });
 
-let data = 'Some data ...'; // Example: cy_GB
+let data = 'cy_GB';
 
 _validator.validate(data);
 
@@ -56,7 +56,7 @@ let validators = {
         rules: [
             // ...
             new LocaleValidator({
-                'message': 'Your error message'
+                'message': 'This value is not a valid locale.'
             })
         ]
     }
@@ -64,7 +64,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: cy_GB
+    fieldName: 'cy_GB'
 };
 
 let _oec = new AllValidator({
@@ -97,7 +97,7 @@ let schema = {
         rules: {
             // ...
             Locale: {
-                'message': 'Your error message'
+                'message': 'This value is not a valid locale.'
             }
         }
     }
@@ -105,7 +105,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: cy_GB
+    fieldName: 'cy_GB'
 };
 
 let _oec = new AllValidator({

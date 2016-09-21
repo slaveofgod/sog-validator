@@ -22,10 +22,10 @@ import {
 } from 'bob-validator';
 
 let _validator = new LuhnValidator({
-    'message': 'Your error message'
+    'message': 'Invalid card number.'
 });
 
-let data = 'Some data ...'; // Example: 79927398713
+let data = '79927398713';
 
 _validator.validate(data);
 
@@ -54,7 +54,7 @@ let validators = {
         rules: [
             // ...
             new LuhnValidator({
-                'message': 'Your error message'
+                'message': 'Invalid card number.'
             })
         ]
     }
@@ -62,7 +62,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 79927398713
+    fieldName: '79927398713'
 };
 
 let _oec = new AllValidator({
@@ -95,7 +95,7 @@ let schema = {
         rules: {
             // ...
             Luhn: {
-                'message': 'Your error message'
+                'message': 'Invalid card number.'
             }
         }
     }
@@ -103,7 +103,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 79927398713
+    fieldName: '79927398713'
 };
 
 let _oec = new AllValidator({

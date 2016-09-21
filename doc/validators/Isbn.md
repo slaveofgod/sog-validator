@@ -23,12 +23,12 @@ import {
 
 let _validator = new IsbnValidator({
     'type': null,
-    'isbn10Message': 'Your error isbn10 message', 
-    'isbn13Message': 'Your error isbn13 message',
-    'bothIsbnMessage': 'Your error both isbn message'
+    'isbn10Message': 'This value is not a valid ISBN-10.', 
+    'isbn13Message': 'This value is not a valid ISBN-13.',
+    'bothIsbnMessage': 'This value is neither a valid ISBN-10 nor a valid ISBN-13.'
 });
 
-let data = 'Some data ...'; // Example: (ISBN-13: '978-1-56619-909-4', ISBN-10: '1-56619-909-3')
+let data = 'S978-1-56619-909-4'; // Example: (ISBN-13: '978-1-56619-909-4', ISBN-10: '1-56619-909-3')
 
 _validator.validate(data);
 
@@ -58,9 +58,9 @@ let validators = {
             // ...
             new IsbnValidator({
                 'type': null,
-                'isbn10Message': 'Your error isbn10 message', 
-                'isbn13Message': 'Your error isbn13 message',
-                'bothIsbnMessage': 'Your error both isbn message'
+                'isbn10Message': 'This value is not a valid ISBN-10.', 
+                'isbn13Message': 'This value is not a valid ISBN-13.',
+                'bothIsbnMessage': 'This value is neither a valid ISBN-10 nor a valid ISBN-13.'
             })
         ]
     }
@@ -68,7 +68,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: (ISBN-13: '978-1-56619-909-4', ISBN-10: '1-56619-909-3')
+    fieldName: '978-1-56619-909-4' // Example: (ISBN-13: '978-1-56619-909-4', ISBN-10: '1-56619-909-3')
 };
 
 let _oec = new AllValidator({
@@ -102,9 +102,9 @@ let schema = {
             // ...
             Isbn: {
                 'type': null,
-                'isbn10Message': 'Your error isbn10 message', 
-                'isbn13Message': 'Your error isbn13 message',
-                'bothIsbnMessage': 'Your error both isbn message'
+                'isbn10Message': 'This value is not a valid ISBN-10.', 
+                'isbn13Message': 'This value is not a valid ISBN-13.',
+                'bothIsbnMessage': 'This value is neither a valid ISBN-10 nor a valid ISBN-13.'
             }
         }
     }
@@ -112,7 +112,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: (ISBN-13: '978-1-56619-909-4', ISBN-10: '1-56619-909-3')
+    fieldName: '978-1-56619-909-4' // Example: (ISBN-13: '978-1-56619-909-4', ISBN-10: '1-56619-909-3')
 };
 
 let _oec = new AllValidator({

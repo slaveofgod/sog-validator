@@ -24,10 +24,10 @@ import {
 
 let _validator = new LessThanValidator({
     'value': 100,
-    'message': 'Your error message'
+    'message': 'This value should be less than {{ compared_value }}.'
 });
 
-let data = 'Some data ...'; // Example: 85
+let data = 85; 
 
 _validator.validate(data);
 
@@ -53,7 +53,7 @@ let validators = {
             // ...
             new LessThanValidator({
                 'value': 100,
-                'message': 'Your error message'
+                'message': 'This value should be less than {{ compared_value }}.'
             })
         ]
     }
@@ -61,7 +61,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 85
+    fieldName: 85
 };
 
 let _oec = new AllValidator({
@@ -91,7 +91,7 @@ let schema = {
             // ...
             LessThan: {
                 'value': 100,
-                'message': 'Your error message'
+                'message': 'This value should be less than {{ compared_value }}.'
             }
         }
     }
@@ -99,7 +99,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 85
+    fieldName: 85
 };
 
 let _oec = new AllValidator({
@@ -129,10 +129,10 @@ import {
 
 let _validator = new LessThanValidator({
     'value': new Date(2016, 0, 1, 0, 0, 0, 0),
-    'message': 'Your error message'
+    'message': 'This value should be less than {{ compared_value }}.'
 });
 
-let data = 'Some data ...'; // Example: new Date(2015, 0, 1, 0, 0, 0, 0)
+let data = new Date(2015, 0, 1, 0, 0, 0, 0);
 
 _validator.validate(data);
 
@@ -158,7 +158,7 @@ let validators = {
             // ...
             new LessThanValidator({
                 'value': new Date(2016, 0, 1, 0, 0, 0, 0),
-                'message': 'Your error message'
+                'message': 'This value should be less than {{ compared_value }}.'
             })
         ]
     }
@@ -166,7 +166,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: new Date(2015, 0, 1, 0, 0, 0, 0)
+    fieldName: new Date(2015, 0, 1, 0, 0, 0, 0)
 };
 
 let _oec = new AllValidator({
@@ -196,7 +196,7 @@ let schema = {
             // ...
             LessThan: {
                 'value': new Date(2016, 0, 1, 0, 0, 0, 0),
-                'message': 'Your error message'
+                'message': 'This value should be less than {{ compared_value }}.'
             }
         }
     }
@@ -204,7 +204,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: new Date(2015, 0, 1, 0, 0, 0, 0)
+    fieldName: new Date(2015, 0, 1, 0, 0, 0, 0) 
 };
 
 let _oec = new AllValidator({

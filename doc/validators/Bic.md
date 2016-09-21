@@ -22,10 +22,10 @@ import {
 } from 'bob-validator';
 
 let _validator = new BicValidator({
-    'message': 'Your error message'
+    'message': 'This is not a valid Business Identifier Code (BIC).'
 });
 
-let data = 'Some data ...'; // Example: DABAIE2D
+let data = 'DABAIE2D'; 
 
 _validator.validate(data);
 
@@ -54,7 +54,7 @@ let validators = {
         rules: [
             // ...
             new BicValidator({
-                'message': 'Your error message'
+                'message': 'This is not a valid Business Identifier Code (BIC).'
             })
         ]
     }
@@ -62,7 +62,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: DABAIE2D
+    fieldName: 'DABAIE2D'
 };
 
 let _oec = new AllValidator({
@@ -95,7 +95,7 @@ let schema = {
         rules: {
             // ...
             Bic: {
-                'message': 'Your error message'
+                'message': 'This is not a valid Business Identifier Code (BIC).'
             }
         }
     }
@@ -103,7 +103,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: DABAIE2D
+    fieldName: 'DABAIE2D'
 };
 
 let _oec = new AllValidator({

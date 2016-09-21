@@ -23,10 +23,10 @@ import {
 
 let _validator = new DateValidator({
     'format': 'YYYY-MM-DD',
-    'message': 'Your error message'
+    'message': 'This value is not a valid date.'
 });
 
-let data = 'Some data ...'; // Example: 2015-11-25
+let data = '2015-11-25';
 
 _validator.validate(data);
 
@@ -56,7 +56,7 @@ let validators = {
             // ...
             new DateValidator({
                 'format': 'YYYY-MM-DD',
-                'message': 'Your error message'
+                'message': 'This value is not a valid date.'
             })
         ]
     }
@@ -64,7 +64,7 @@ let validators = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 2015-11-25
+    fieldName: '2015-11-25'
 };
 
 let _oec = new AllValidator({
@@ -98,7 +98,7 @@ let schema = {
             // ...
             Date: {
                 'format': 'YYYY-MM-DD',
-                'message': 'Your error message'
+                'message': 'This value is not a valid date.'
             }
         }
     }
@@ -106,7 +106,7 @@ let schema = {
 
 let data = {
     // ...
-    fieldName: 'Some data ...' // Example: 2015-11-25
+    fieldName: '2015-11-25'
 };
 
 let _oec = new AllValidator({
