@@ -16,10 +16,21 @@ This constraint is used to ensure that a credit card number passes the [Luhn alg
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let LuhnValidator = _v.LuhnValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     LuhnValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new LuhnValidator({
     'message': 'Invalid card number.'
@@ -41,11 +52,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let LuhnValidator = _v.LuhnValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     LuhnValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -83,10 +106,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

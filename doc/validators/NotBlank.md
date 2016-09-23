@@ -16,10 +16,21 @@ Validates that a value is not blank, defined as not strictly `false`, not equal 
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let NotBlankValidator = _v.NotBlankValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     NotBlankValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new NotBlankValidator({
     'message': 'This value should not be blank.'
@@ -41,11 +52,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let NotBlankValidator = _v.NotBlankValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     NotBlankValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -83,10 +106,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

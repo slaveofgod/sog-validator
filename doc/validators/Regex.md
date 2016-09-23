@@ -16,10 +16,21 @@ Validates that a value matches a regular expression.
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let RegexValidator = _v.RegexValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     RegexValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new RegexValidator({
     'message': 'This value is not valid.',
@@ -42,11 +53,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let RegexValidator = _v.RegexValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     RegexValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -85,10 +108,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

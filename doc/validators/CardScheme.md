@@ -16,10 +16,21 @@ This constraint ensures that a credit card number is valid for a given credit ca
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let CardSchemeValidator = _v.CardSchemeValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     CardSchemeValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new CardSchemeValidator({
     'schemes': [
@@ -53,11 +64,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let CardSchemeValidator = _v.CardSchemeValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     CardSchemeValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -107,10 +130,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

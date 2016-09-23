@@ -16,10 +16,21 @@ Validates that a value is blank, defined as equal to a blank string or equal to 
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let BlankValidator = _v.BlankValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     BlankValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validator = new BlankValidator({
     'message': 'This value should be blank.'
@@ -41,11 +52,23 @@ if(!validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let BlankValidator = _v.BlankValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     BlankValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -83,10 +106,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

@@ -16,6 +16,16 @@ This constraint is used to ensure that the given value valid with many condition
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let CustomValidator = _v.CustomValidator;
+let NotBlankValidator = _v.NotBlankValidator;
+let LengthValidator = _v.LengthValidator;
+let CardSchemeValidator = _v.CardSchemeValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     CustomValidator,
@@ -23,6 +33,11 @@ import {
     LengthValidator,
     CardSchemeValidator
 } from 'bob-validator';
+
+```
+
+```javascript
+// Import ...
 
 let _validator = new CustomValidator({
     rules: [
@@ -49,6 +64,17 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let CustomValidator = _v.CustomValidator;
+let NotBlankValidator = _v.NotBlankValidator;
+let LengthValidator = _v.LengthValidator;
+let CardSchemeValidator = _v.CardSchemeValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     CustomValidator,
@@ -57,6 +83,11 @@ import {
     CardSchemeValidator,
     AllValidator
 } from 'bob-validator';
+
+```
+
+```javascript
+// Import ...
 
 let CreditCardValidator = new CustomValidator({
     rules: [
@@ -101,9 +132,22 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
+    // ...
     AllValidator
 } from 'bob-validator';
+
+```
+
+```javascript
+// Import ...
 
 let CreditCard = {
     rules: {

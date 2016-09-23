@@ -16,10 +16,21 @@ The purpose of the Callback constraint is to create completely custom validation
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let CallbackValidator = _v.CallbackValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     CallbackValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new CallbackValidator({
     'callback': function(value, parameters){
@@ -57,11 +68,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let CallbackValidator = _v.CallbackValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     CallbackValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -115,10 +138,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

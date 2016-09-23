@@ -16,10 +16,21 @@ Validates that a value is a valid [3-letter ISO 4217](https://en.wikipedia.org/w
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let CurrencyValidator = _v.CurrencyValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     CurrencyValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new CurrencyValidator({
     'message': 'This value is not a valid currency.'
@@ -41,11 +52,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let CurrencyValidator = _v.CurrencyValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     CurrencyValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -83,10 +106,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

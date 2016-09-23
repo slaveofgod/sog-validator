@@ -16,10 +16,21 @@ Validates that a value is not strictly equal to `null`. To ensure that a value i
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let NotNullValidator = _v.NotNullValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     NotNullValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new NotNullValidator({
     'message': 'This value should not be null.'
@@ -41,11 +52,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let NotNullValidator = _v.NotNullValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     NotNullValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -83,10 +106,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

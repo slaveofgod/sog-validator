@@ -16,10 +16,21 @@ Validates that a value is a valid time, meaning either a `Date` object ~~or a st
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let TimeValidator = _v.TimeValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     TimeValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new TimeValidator({
     'format': 'HH:mm:ss',
@@ -42,11 +53,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let TimeValidator = _v.TimeValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     TimeValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -85,10 +108,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

@@ -2,28 +2,132 @@
 
 A library of validators
 
+### Server-side usage
+
 Install the library with:
 ```sh
 $ npm install bob-validator
 ```
 
+#### Using:
+
+```javascript
+var _v = require('bob-validator');
+```
+
+##### ES6
+```javascript
+import {
+    // ...
+    NotBlankValidator
+} from 'bob-validator';
+```
+
 ### Navigation
 
-* [Documentation](#documentation)
 * [Basic Usage Example](#basic-usage-example)
 * [Schema Usage Example](#schema-usage-example)
+* [Documentation](#documentation)
 
 ---------------
 
 #### Basic Usage Example
 
 ```javascript
+var _v = require('bob-validator');
+
+let NotBlankValidator = _v.NotBlankValidator;
+let BlankValidator = _v.BlankValidator;
+let NotNullValidator = _v.NotNullValidator;
+let IsNullValidator = _v.IsNullValidator;
+let IsTrueValidator = _v.IsTrueValidator;
+let IsFalseValidator = _v.IsFalseValidator;
+let TypeValidator = _v.TypeValidator;
+let EmailValidator = _v.EmailValidator;
+let LengthValidator = _v.LengthValidator;
+let UrlValidator = _v.UrlValidator;
+let RegexValidator = _v.RegexValidator;
+let IpValidator = _v.IpValidator;
+let UuidValidator = _v.UuidValidator;
+let RangeValidator = _v.RangeValidator;
+let EqualToValidator = _v.EqualToValidator;
+let NotEqualToValidator = _v.NotEqualToValidator;
+let IdenticalToValidator = _v.IdenticalToValidator;
+let NotIdenticalToValidator = _v.NotIdenticalToValidator;
+let LessThanValidator = _v.LessThanValidator;
+let LessThanOrEqualValidator = _v.LessThanOrEqualValidator;
+let GreaterThanValidator = _v.GreaterThanValidator;
+let GreaterThanOrEqualValidator = _v.GreaterThanOrEqualValidator;
+let DateValidator = _v.DateValidator;
+let DateTimeValidator = _v.DateTimeValidator;
+let TimeValidator = _v.TimeValidator;
+let ChoiceValidator = _v.ChoiceValidator;
+let CountValidator = _v.CountValidator;
+let UniqueEntityValidator = _v.UniqueEntityValidator;
+let LanguageValidator = _v.LanguageValidator;
+let LocaleValidator = _v.LocaleValidator;
+let CountryValidator = _v.CountryValidator;
+let BicValidator = _v.BicValidator;
+let CardSchemeValidator = _v.CardSchemeValidator;
+let CurrencyValidator = _v.CurrencyValidator;
+let LuhnValidator = _v.LuhnValidator;
+let IbanValidator = _v.IbanValidator;
+let IsbnValidator = _v.IsbnValidator;
+let IssnValidator = _v.IssnValidator;
+let CallbackValidator = _v.CallbackValidator;
+let AllValidator = _v.AllValidator;
+let CustomValidator = _v.CustomValidator;
+```
+
+##### ES6
+```javascript
 import {
-    NotBlankValidator, BlankValidator, NotNullValidator, IsNullValidator, IsTrueValidator, IsFalseValidator, TypeValidator, EmailValidator, LengthValidator, UrlValidator, RegexValidator, IpValidator,
-    UuidValidator, RangeValidator, EqualToValidator, NotEqualToValidator, IdenticalToValidator, NotIdenticalToValidator, LessThanValidator, LessThanOrEqualValidator, GreaterThanValidator,
-    GreaterThanOrEqualValidator, DateValidator, DateTimeValidator, TimeValidator, ChoiceValidator, CountValidator, UniqueEntityValidator, LanguageValidator, LocaleValidator, CountryValidator,
-    BicValidator, CardSchemeValidator, CurrencyValidator, LuhnValidator, IbanValidator, IsbnValidator, IssnValidator, CallbackValidator, CustomValidator, AllValidator
+    NotBlankValidator,
+    BlankValidator,
+    NotNullValidator,
+    IsNullValidator,
+    IsTrueValidator,
+    IsFalseValidator,
+    TypeValidator,
+    EmailValidator,
+    LengthValidator,
+    UrlValidator,
+    RegexValidator,
+    IpValidator,
+    UuidValidator,
+    RangeValidator,
+    EqualToValidator,
+    NotEqualToValidator,
+    IdenticalToValidator,
+    NotIdenticalToValidator,
+    essThanValidator,
+    LessThanOrEqualValidator,
+    GreaterThanValidator,
+    GreaterThanOrEqualValidator,
+    DateValidator,
+    DateTimeValidator,
+    TimeValidator,
+    ChoiceValidator,
+    CountValidator,
+    UniqueEntityValidator,
+    LanguageValidator,
+    LocaleValidator,
+    CountryValidator,
+    BicValidator,
+    CardSchemeValidator,
+    CurrencyValidator,
+    LuhnValidator,
+    IbanValidator,
+    IsbnValidator,
+    IssnValidator,
+    CallbackValidator,
+    CustomValidator,
+    AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let CreditCardValidator = new CustomValidator({
     rules: [
@@ -131,9 +235,20 @@ if(!_oec.isValid()) {
 #### Schema Usage Example
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let CreditCard = {
     rules: {

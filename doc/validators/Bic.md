@@ -16,10 +16,21 @@ This constraint is used to ensure that a value has the proper format of a [Busin
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let BicValidator = _v.BicValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     BicValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new BicValidator({
     'message': 'This is not a valid Business Identifier Code (BIC).'
@@ -41,11 +52,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let BicValidator = _v.BicValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     BicValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -83,10 +106,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

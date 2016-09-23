@@ -16,10 +16,21 @@ Validates that a value is a valid [ISO 3166-1 alpha-2](https://en.wikipedia.org/
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let CountryValidator = _v.CountryValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     CountryValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new CountryValidator({
     'message': 'This value is not a valid country.'
@@ -41,11 +52,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let CountryValidator = _v.CountryValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     CountryValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -83,10 +106,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

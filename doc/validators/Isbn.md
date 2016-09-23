@@ -16,10 +16,21 @@ This constraint validates that an [International Standard Book Number (ISBN)](ht
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let IsbnValidator = _v.IsbnValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     IsbnValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new IsbnValidator({
     'type': null,
@@ -44,11 +55,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let IsbnValidator = _v.IsbnValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     IsbnValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -89,10 +112,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

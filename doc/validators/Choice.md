@@ -17,10 +17,21 @@ This constraint is used to ensure that the given value is one of a given set of 
 **Single Usage**
 
 ```javascript
+var _v = require('bob-validator');
+
+let ChoiceValidator = _v.ChoiceValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     ChoiceValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new ChoiceValidator({
     'choices': [1111, 'aaaaa', 3333, '123a'],
@@ -41,11 +52,23 @@ if(!_validator.isValid()) {
 **Multi Usage**
 
 ```javascript
+var _v = require('bob-validator');
+
+let ChoiceValidator = _v.ChoiceValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     ChoiceValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -78,10 +101,21 @@ if(!_oec.isValid()) {
 **Schema Usage**
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...
@@ -124,10 +158,21 @@ if(!_oec.isValid()) {
 **Single Usage**
 
 ```javascript
+var _v = require('bob-validator');
+
+let ChoiceValidator = _v.ChoiceValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     ChoiceValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new ChoiceValidator({
     'choices': [1111, 'aaaaa', 3333, '123a'],
@@ -153,11 +198,23 @@ if(!_validator.isValid()) {
 **Multi Usage**
 
 ```javascript
+var _v = require('bob-validator');
+
+let ChoiceValidator = _v.ChoiceValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     ChoiceValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -199,10 +256,21 @@ if(!_oec.isValid()) {
 **Schema Usage**
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

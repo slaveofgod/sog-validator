@@ -16,10 +16,21 @@ Validates that a value is a valid IP address. ~~By default, this will validate t
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let IpValidator = _v.IpValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     IpValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new IpValidator({
     'message': 'This is not a valid IP address.'
@@ -41,11 +52,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let IpValidator = _v.IpValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     IpValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -83,10 +106,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

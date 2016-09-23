@@ -16,10 +16,21 @@ Validates that a value is a valid [International Standard Serial Number (ISSN)](
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let IssnValidator = _v.IssnValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     IssnValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new IssnValidator({
     'message': 'This value is not a valid ISSN.', 
@@ -43,11 +54,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let IssnValidator = _v.IssnValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     IssnValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -87,10 +110,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

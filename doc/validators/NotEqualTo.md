@@ -18,10 +18,21 @@ This constraint compares using `!=`, so `3` and "`3`" are considered equal. Use 
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let NotEqualToValidator = _v.NotEqualToValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     NotEqualToValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new NotEqualToValidator({
     'value': 100,
@@ -44,11 +55,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let NotEqualToValidator = _v.NotEqualToValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     NotEqualToValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -87,10 +110,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

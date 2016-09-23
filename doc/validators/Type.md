@@ -17,10 +17,21 @@ Validates that a value is of a specific data type. For example, if a variable sh
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let TypeValidator = _v.TypeValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     TypeValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new TypeValidator({
     'type': 'integer',
@@ -43,11 +54,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let TypeValidator = _v.TypeValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     TypeValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -86,10 +109,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

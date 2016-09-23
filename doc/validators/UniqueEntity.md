@@ -16,10 +16,21 @@ Validates that a particular field (or fields) in entity is (are) unique. This is
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let UniqueEntityValidator = _v.UniqueEntityValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     UniqueEntityValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new UniqueEntityValidator({
     'message': 'This value is already used.',
@@ -60,11 +71,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let UniqueEntityValidator = _v.UniqueEntityValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     UniqueEntityValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -121,10 +144,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

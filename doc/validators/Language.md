@@ -16,10 +16,21 @@ Validates that a value is a valid language *Unicode language identifier* (e.g. `
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let LanguageValidator = _v.LanguageValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     LanguageValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new LanguageValidator({
     'message': 'This value is not a valid language.'
@@ -41,11 +52,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let LanguageValidator = _v.LanguageValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     LanguageValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -83,10 +106,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

@@ -18,10 +18,21 @@ The "value" for each locale is either the two letter [ISO 639-1](https://en.wiki
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let LocaleValidator = _v.LocaleValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     LocaleValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new LocaleValidator({
     'message': 'This value is not a valid locale.'
@@ -43,11 +54,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let LocaleValidator = _v.LocaleValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     LocaleValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -85,10 +108,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

@@ -16,10 +16,21 @@ Validates that a value is a valid URL string.
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let UrlValidator = _v.UrlValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     UrlValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new UrlValidator({
     'message': 'This value is not a valid URL.'
@@ -41,11 +52,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let UrlValidator = _v.UrlValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     UrlValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -83,10 +106,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

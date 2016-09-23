@@ -17,10 +17,21 @@ Validates that a given number is *between* some minimum and maximum number.
 **Single Usage**
 
 ```javascript
+var _v = require('bob-validator');
+
+let RangeValidator = _v.RangeValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     RangeValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new RangeValidator({
     'min': 1,
@@ -42,11 +53,23 @@ if(!_validator.isValid()) {
 **Multi Usage**
 
 ```javascript
+var _v = require('bob-validator');
+
+let RangeValidator = _v.RangeValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     RangeValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -84,10 +107,21 @@ if(!_oec.isValid()) {
 **Schema Usage**
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...
@@ -131,10 +165,21 @@ if(!_oec.isValid()) {
 **Single Usage**
 
 ```javascript
+var _v = require('bob-validator');
+
+let RangeValidator = _v.RangeValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     RangeValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new RangeValidator({
     'min': new Date(2015, 0, 1, 0, 0, 0, 0),
@@ -156,11 +201,23 @@ if(!_validator.isValid()) {
 **Multi Usage**
 
 ```javascript
+var _v = require('bob-validator');
+
+let RangeValidator = _v.RangeValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     RangeValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -198,10 +255,21 @@ if(!_oec.isValid()) {
 **Schema Usage**
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

@@ -16,10 +16,21 @@ This constraint is used to ensure that a bank account number has the proper form
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let IbanValidator = _v.IbanValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     IbanValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new IbanValidator({
     'message': 'This is not a valid International Bank Account Number (IBAN).'
@@ -41,11 +52,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let IbanValidator = _v.IbanValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     IbanValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -83,10 +106,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

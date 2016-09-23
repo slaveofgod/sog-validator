@@ -16,10 +16,21 @@ Validates that a given string length is between some minimum and maximum value.
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let LengthValidator = _v.LengthValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     LengthValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new LengthValidator({
     'min': 1,
@@ -45,11 +56,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let LengthValidator = _v.LengthValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     LengthValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -91,10 +114,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

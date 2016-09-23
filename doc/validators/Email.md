@@ -16,10 +16,22 @@ Validates that a value is a valid email address. The underlying value is cast to
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let EmailValidator = _v.EmailValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     EmailValidator
 } from 'bob-validator';
+
+```
+
+```javascript
+// Import ...
 
 let _validator = new EmailValidator({
     'message': 'This value is not a valid email address.'
@@ -41,11 +53,24 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let EmailValidator = _v.EmailValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     EmailValidator,
     AllValidator
 } from 'bob-validator';
+
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -83,10 +108,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

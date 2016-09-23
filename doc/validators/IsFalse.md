@@ -19,10 +19,21 @@ Also see [IsTrue][istrue-url].
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let IsFalseValidator = _v.IsFalseValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     IsFalseValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new IsFalseValidator({
     'message': 'This value should be false.'
@@ -44,11 +55,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let IsFalseValidator = _v.IsFalseValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     IsFalseValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -86,10 +109,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

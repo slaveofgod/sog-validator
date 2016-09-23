@@ -15,11 +15,23 @@ When applied to an array, this constraint allows you to apply a collection of co
 #### Basic Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let UniqueEntityValidator = _v.UniqueEntityValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     UniqueEntityValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...

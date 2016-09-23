@@ -16,10 +16,21 @@ Validates that a given collection's (i.e. an array ~~or an object that implement
 #### Single Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let CountValidator = _v.CountValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     CountValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new CountValidator({
     'min': 1,
@@ -45,11 +56,23 @@ if(!_validator.isValid()) {
 #### Multi Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let CountValidator = _v.CountValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     CountValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -91,10 +114,21 @@ if(!_oec.isValid()) {
 #### Schema Usage
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...

@@ -17,10 +17,21 @@ Validates that a value is less than another value, defined in the options. To fo
 **Single Usage**
 
 ```javascript
+var _v = require('bob-validator');
+
+let LessThanValidator = _v.LessThanValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     LessThanValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new LessThanValidator({
     'value': 100,
@@ -39,11 +50,23 @@ if(!_validator.isValid()) {
 **Multi Usage**
 
 ```javascript
+var _v = require('bob-validator');
+
+let LessThanValidator = _v.LessThanValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     LessThanValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -78,10 +101,21 @@ if(!_oec.isValid()) {
 **Schema Usage**
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...
@@ -122,10 +156,21 @@ if(!_oec.isValid()) {
 **Single Usage**
 
 ```javascript
+var _v = require('bob-validator');
+
+let LessThanValidator = _v.LessThanValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     LessThanValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let _validator = new LessThanValidator({
     'value': new Date(2016, 0, 1, 0, 0, 0, 0),
@@ -144,11 +189,23 @@ if(!_validator.isValid()) {
 **Multi Usage**
 
 ```javascript
+var _v = require('bob-validator');
+
+let LessThanValidator = _v.LessThanValidator;
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     LessThanValidator,
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let validators = {
     // ...
@@ -183,10 +240,21 @@ if(!_oec.isValid()) {
 **Schema Usage**
 
 ```javascript
+var _v = require('bob-validator');
+
+let AllValidator = _v.AllValidator;
+```
+
+##### ES6
+```javascript
 import {
     // ...
     AllValidator
 } from 'bob-validator';
+```
+
+```javascript
+// Import ...
 
 let schema = {
     // ...
