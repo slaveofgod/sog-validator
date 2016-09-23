@@ -61,7 +61,8 @@ let data = {
 let _oec = new AllValidator({
     validators: validators,
     validationType: 'object',
-    errorType: 'array'
+    errorType: 'array',
+    environment: 'prod'
 });
 _oec.validate(data);
 if(!_oec.isValid()) {
@@ -88,6 +89,11 @@ This parameter define validation rules format. Available: ['object', 'schema']
 **type**: `string` **default**: `array`
 
 This parameter define errors format. Available: ['array', 'object']
+
+##### environment
+**type**: `string` **default**: `prod`
+
+This parameter define environment (useful for developers). Available: ['prod', 'dev']
 
 [⬆ back to top](#navigation)
 

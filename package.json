@@ -1,6 +1,6 @@
 {
   "name": "bob-validator",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "A library of validators",
   "main": "index.js",
   "homepage": "https://github.com/alexeybob/bob-validator.git",
@@ -8,10 +8,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
+    "schema",
     "validate",
     "validation",
-    "validator",
-    "schema"
+    "validator"
   ],
   "author": {
     "name": "Alexey Bob",
