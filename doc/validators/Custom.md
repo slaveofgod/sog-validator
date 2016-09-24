@@ -10,6 +10,7 @@ This constraint is used to ensure that the given value valid with many condition
 * [Schema Usage](#schema-usage)
 * [Options](#options)
 * [Documentation](#documentation)
+* [Installation][installation-url]
 
 ---------------
 
@@ -24,7 +25,7 @@ let LengthValidator = _v.LengthValidator;
 let CardSchemeValidator = _v.CardSchemeValidator;
 ```
 
-##### ES6
+**ES6:**
 ```javascript
 import {
     // ...
@@ -73,7 +74,7 @@ let CardSchemeValidator = _v.CardSchemeValidator;
 let AllValidator = _v.AllValidator;
 ```
 
-##### ES6
+**ES6:**
 ```javascript
 import {
     // ...
@@ -137,7 +138,7 @@ var _v = require('bob-validator');
 let AllValidator = _v.AllValidator;
 ```
 
-##### ES6
+**ES6:**
 ```javascript
 import {
     // ...
@@ -290,6 +291,7 @@ These are the basic constraints: use them to assert very basic things about the 
 
 
 [documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#documentation
+[installation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#installation-and-using
 [notblank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/NotBlank.md
 [blank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/Blank.md
 [notnull-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/NotNull.md
