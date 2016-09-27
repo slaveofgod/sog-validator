@@ -29,8 +29,63 @@ var isString = require('./lib/Constraints/Functions/isString');
 var isEmail = require('./lib/Constraints/Functions/isEmail');
 var isLength = require('./lib/Constraints/Functions/isLength');
 var isUrl = require('./lib/Constraints/Functions/isUrl');
-//@todo: Regex
+//@todo: RegexValidator
 var isIp = require('./lib/Constraints/Functions/isIp');
+//@todo: UuidValidator
+
+/**
+ * Number Constraints
+ */
+//@todo: RangeValidator
+var isEqualTo = require('./lib/Constraints/Functions/isEqualTo');
+var isNotEqualTo = require('./lib/Constraints/Functions/isNotEqualTo');
+var isIdenticalTo = require('./lib/Constraints/Functions/isIdenticalTo');
+var isNotIdenticalTo = require('./lib/Constraints/Functions/isNotIdenticalTo');
+var isLessThan = require('./lib/Constraints/Functions/isLessThan');
+var isLessThanOrEqual = require('./lib/Constraints/Functions/isLessThanOrEqual');
+var isGreaterThan = require('./lib/Constraints/Functions/isGreaterThan');
+var isGreaterThanOrEqual = require('./lib/Constraints/Functions/isGreaterThanOrEqual');
+
+/**
+ * Date Constraints
+ */
+//@todo: DateValidator
+//@todo: DateTimeValidator
+//@todo: TimeValidator
+
+/**
+ * Collection Constraints
+ */
+//@todo: ChoiceValidator
+//@todo: CountValidator
+//@todo: UniqueEntityValidator
+var isLanguage = require('./lib/Constraints/Functions/isLanguage');
+var isLocale = require('./lib/Constraints/Functions/isLocale');
+var isCountry = require('./lib/Constraints/Functions/isCountry');
+
+/**
+ * File Constraints
+ */
+//@todo: FileValidator
+//@todo: ImageValidator
+
+/**
+ * Financial and other Number Constraints
+ */
+//@todo: BicValidator
+//@todo: CardSchemeValidator
+//@todo: CurrencyValidator
+//@todo: LuhnValidator
+//@todo: IbanValidator
+//@todo: IsbnValidator
+//@todo: IssnValidator
+
+/**
+ * Other Constraints
+ */
+//@todo: CallbackValidator
+//@todo: CustomValidator
+//@todo: AllValidator
 
 
 
@@ -50,9 +105,19 @@ module.exports = {
     'isObject': isObject,
     'isScalar': isScalar,
     'isString': isString,
-
     'isEmail': isEmail,
     'isLength': isLength,
     'isUrl': isUrl,
-    'isIp': isIp
+    'isIp': isIp,
+    'isEqualTo': isEqualTo,
+    'isNotEqualTo': isNotEqualTo,
+    'isIdenticalTo': isIdenticalTo,
+    'isNotIdenticalTo': isNotIdenticalTo,
+    'isLessThan': isLessThan,
+    'isLessThanOrEqual': isLessThanOrEqual,
+    'isGreaterThan': isGreaterThan,
+    'isGreaterThanOrEqual': isGreaterThanOrEqual,
+    'isLanguage': isLanguage,
+    'isLocale': isLocale,
+    'isCountry': isCountry
 };

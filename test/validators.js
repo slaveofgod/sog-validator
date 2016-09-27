@@ -556,9 +556,9 @@ exports['test isLength'] = function(assert, done) {
         _function(12345678901, {'min': 5, 'max': 10}),
         _function([1,2,3,4], {'min': 5, 'max': 10}),
         _function([1,2,3,4,5,6,7,8,9,10,11], {'min': 5, 'max': 10}),
-        _function(true),
-        _function(false),
-        _function(new Object())
+        _function(true, {'min': 5, 'max': 10}),
+        _function(false, {'min': 5, 'max': 10}),
+        _function(new Object(), {'min': 5, 'max': 10})
     ];
 
     positive.forEach(function (value) {
@@ -688,6 +688,305 @@ exports['test isIp'] = function(assert, done) {
     done();
 }
 
+exports['test isEqualTo'] = function(assert, done) {
+    var _function = _v.func.isEqualTo;
+    var positive, negative;
+
+    positive = [
+        _function(10, {'value': 10}),
+        _function('10', {'value': 10})
+    ];
+
+    negative = [
+        _function(11, {'value': 10}),
+        _function('11', {'value': 10})
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+exports['test isNotEqualTo'] = function(assert, done) {
+    var _function = _v.func.isNotEqualTo;
+    var positive, negative;
+
+    positive = [
+        _function(11, {'value': 10}),
+        _function('11', {'value': 10})
+    ];
+
+    negative = [
+        _function(10, {'value': 10}),
+        _function('10', {'value': 10})
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+exports['test isIdenticalTo'] = function(assert, done) {
+    var _function = _v.func.isIdenticalTo;
+    var positive, negative;
+
+    positive = [
+        _function(10, {'value': 10})
+    ];
+
+    negative = [
+        _function('10', {'value': 10})
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+exports['test isNotIdenticalTo'] = function(assert, done) {
+    var _function = _v.func.isNotIdenticalTo;
+    var positive, negative;
+
+    positive = [
+        _function('10', {'value': 10})
+    ];
+
+    negative = [
+        _function(10, {'value': 10})
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+exports['test isLessThan'] = function(assert, done) {
+    var _function = _v.func.isLessThan;
+    var positive, negative;
+
+    positive = [
+        _function('9', {'value': 10}),
+        _function(9, {'value': 10}),
+        _function(new Date(2015, 0, 1, 0, 0, 0, 0), {'value': new Date(2016, 0, 1, 0, 0, 0, 0)})
+    ];
+
+    negative = [
+        _function('10', {'value': 10}),
+        _function(10, {'value': 10}),
+        _function(new Date(2016, 0, 1, 0, 0, 0, 0), {'value': new Date(2016, 0, 1, 0, 0, 0, 0)}),
+        _function(new Date(2017, 0, 1, 0, 0, 0, 0), {'value': new Date(2016, 0, 1, 0, 0, 0, 0)})
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+exports['test isLessThanOrEqual'] = function(assert, done) {
+    var _function = _v.func.isLessThanOrEqual;
+    var positive, negative;
+
+    positive = [
+        _function('9', {'value': 10}),
+        _function(9, {'value': 10}),
+        _function('10', {'value': 10}),
+        _function(10, {'value': 10}),
+        _function(new Date(2015, 0, 1, 0, 0, 0, 0), {'value': new Date(2016, 0, 1, 0, 0, 0, 0)}),
+        _function(new Date(2016, 0, 1, 0, 0, 0, 0), {'value': new Date(2016, 0, 1, 0, 0, 0, 0)})
+    ];
+
+    negative = [
+        _function('11', {'value': 10}),
+        _function(11, {'value': 10}),
+        _function(new Date(2017, 0, 1, 0, 0, 0, 0), {'value': new Date(2016, 0, 1, 0, 0, 0, 0)})
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+exports['test isGreaterThan'] = function(assert, done) {
+    var _function = _v.func.isGreaterThan;
+    var positive, negative;
+
+    positive = [
+        _function('11', {'value': 10}),
+        _function(11, {'value': 10}),
+        _function(new Date(2017, 0, 1, 0, 0, 0, 0), {'value': new Date(2016, 0, 1, 0, 0, 0, 0)})
+    ];
+
+    negative = [
+        _function('9', {'value': 10}),
+        _function(9, {'value': 10}),
+        _function(new Date(2015, 0, 1, 0, 0, 0, 0), {'value': new Date(2016, 0, 1, 0, 0, 0, 0)}),
+        _function(new Date(2016, 0, 1, 0, 0, 0, 0), {'value': new Date(2016, 0, 1, 0, 0, 0, 0)})
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+exports['test isGreaterThanOrEqual'] = function(assert, done) {
+    var _function = _v.func.isGreaterThanOrEqual;
+    var positive, negative;
+
+    positive = [
+        _function('10', {'value': 10}),
+        _function(10, {'value': 10}),
+        _function('11', {'value': 10}),
+        _function(11, {'value': 10}),
+        _function(new Date(2016, 0, 1, 0, 0, 0, 0), {'value': new Date(2016, 0, 1, 0, 0, 0, 0)}),
+        _function(new Date(2017, 0, 1, 0, 0, 0, 0), {'value': new Date(2016, 0, 1, 0, 0, 0, 0)})
+    ];
+
+    negative = [
+        _function('9', {'value': 10}),
+        _function(9, {'value': 10}),
+        _function(new Date(2015, 0, 1, 0, 0, 0, 0), {'value': new Date(2016, 0, 1, 0, 0, 0, 0)})
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+exports['test isLanguage'] = function(assert, done) {
+    var _function = _v.func.isLanguage;
+    var positive, negative;
+
+    positive = [
+        _function('njo'),
+        _function('de_at'),
+        _function('bar'),
+        _function('ksh')
+    ];
+
+    negative = [
+        _function('fgt'),
+        _function('egh'),
+        _function('oth')
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+exports['test isLocale'] = function(assert, done) {
+    var _function = _v.func.isLocale;
+    var positive, negative;
+
+    positive = [
+        _function('af_ZA'),
+        _function('sq'),
+        _function('ar_SD'),
+        _function('bs_Latn_BA'),
+        _function('ms_BN'),
+        _function('sr_Cyrl_RS')
+    ];
+
+    negative = [
+        _function('fgt_US'),
+        _function('egh_GB'),
+        _function('oth_CA')
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+exports['test isCountry'] = function(assert, done) {
+    var _function = _v.func.isCountry;
+    var positive, negative;
+
+    positive = [
+        _function('AD'),
+        _function('BD'),
+        _function('BO'),
+        _function('IC'),
+        _function('CR'),
+        _function('FR')
+    ];
+
+    negative = [
+        _function('fgt_US'),
+        _function('egh_GB'),
+        _function('oth_CA')
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
 
 
 
@@ -719,4 +1018,9 @@ exports['test isIp'] = function(assert, done) {
 
 
 
-if (module == require.main) require('test').run(exports)
+
+
+
+
+
+if (module == require.main) require('test').run(exports);
