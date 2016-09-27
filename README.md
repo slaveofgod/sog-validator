@@ -1,5 +1,7 @@
 # bob-validator
 
+[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url]
+
 A library of validators
 
 ### Installation and Using
@@ -438,3 +440,7 @@ These are the basic constraints: use them to assert very basic things about the 
 [valid-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/Valid.md
 [custom-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/Custom.md
 
+[npm-url]: https://npmjs.org/package/bob-validator
+[npm-image]: http://img.shields.io/npm/v/bob-validator.svg
+
+[downloads-image]: http://img.shields.io/npm/dm/bob-validator.svg

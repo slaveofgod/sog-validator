@@ -1,11 +1,11 @@
 {
   "name": "bob-validator",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "A library of validators",
   "main": "index.js",
   "homepage": "https://github.com/alexeybob/bob-validator.git",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test/validators.js"
   },
   "keywords": [
     "schema",
@@ -27,6 +27,12 @@
   },
   "dependencies": {
     "moment": "^2.11.2"
+  },
+  "devDependencies": {
+    "test": ">=0.0.5"
+  },
+  "engines": {
+    "node": ">=4.3.2"
   },
   "_id": "bob-validator@0.1.0",
   "_shasum": "877b4f9fd845b5573548b247aa6e8768fb62d33e",
