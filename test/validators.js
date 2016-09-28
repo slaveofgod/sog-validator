@@ -988,6 +988,100 @@ exports['test isCountry'] = function(assert, done) {
     done();
 }
 
+exports['test isPregMatch'] = function(assert, done) {
+    var _function = _v.func.isPregMatch;
+    var positive, negative;
+
+    positive = [
+        _function('email@domain.com', {'pattern': /^.+\@\S+\.\S+$/})
+    ];
+
+    negative = [
+        _function('Lorem Ipsum', {'pattern': /^.+\@\S+\.\S+$/})
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+exports['test isUuid'] = function(assert, done) {
+    var _function = _v.func.isUuid;
+    var positive, negative;
+
+    positive = [
+        _function('216f-ff40-98d9-11e3-a5e2-0800-200c-9a66', {'versions': [1,2,3,4,5], 'strict': false}),
+        _function('644e1dd7-2a7f-18fb-b8ed-ed78c3f92c2b', {'versions': [1], 'strict': true}),
+        _function('6ba7b810-9dad-11d1-80b4-00c04fd430c8', {'versions': [1], 'strict': true}),
+        _function('f47ac10b-58cc-4372-a567-0e02b2c3d479', {'versions': [4], 'strict': true})
+    ];
+
+    negative = [
+        _function('216f-ff40-98d9-11e3-a5e2-0800-200c-9a66', {'versions': [1,2,3,4,5], 'strict': true}),
+        _function('644e1dd7-2a7f-18fb-b8ed-ed78c3f92c2b', {'versions': [2], 'strict': true}),
+        _function('6ba7b810-9dad-11d1-80b4-00c04fd430c8', {'versions': [2], 'strict': true}),
+        _function('f47ac10b-58cc-4372-a567-0e02b2c3d479', {'versions': [5], 'strict': true})
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+exports['test isRange'] = function(assert, done) {
+    var _function = _v.func.isRange;
+    var positive, negative;
+
+    positive = [
+        _function('1', {'min': 1, 'max': 100}),
+        _function(1, {'min': 1, 'max': 100}),
+        _function(10.25, {'min': 10.25, 'max': 86.69}),
+        _function(86.69, {'min': 10.25, 'max': 86.69}),
+        _function('10.25', {'min': 10.25, 'max': 86.69}),
+        _function('86.69', {'min': 10.25, 'max': 86.69}),
+        _function(new Date(2015, 0, 1, 0, 0, 0, 0), {'min': new Date(2015, 0, 1, 0, 0, 0, 0), 'max': new Date(2017, 0, 1, 0, 0, 0, 0)}),
+        _function(new Date(2017, 0, 1, 0, 0, 0, 0), {'min': new Date(2015, 0, 1, 0, 0, 0, 0), 'max': new Date(2017, 0, 1, 0, 0, 0, 0)}),
+        _function(new Date(2016, 0, 1, 0, 0, 0, 0), {'min': new Date(2015, 0, 1, 0, 0, 0, 0), 'max': new Date(2017, 0, 1, 0, 0, 0, 0)})
+    ];
+
+    negative = [
+        _function('9', {'min': 10, 'max': 100}),
+        _function('101', {'min': 10, 'max': 100}),
+        _function(10.24, {'min': 10.25, 'max': 86.69}),
+        _function(86.70, {'min': 10.25, 'max': 86.69}),
+        _function('10.24', {'min': 10.25, 'max': 86.69}),
+        _function('86.70', {'min': 10.25, 'max': 86.69}),
+        _function(new Date(2014, 0, 1, 0, 0, 0, 0), {'min': new Date(2015, 0, 1, 0, 0, 0, 0), 'max': new Date(2017, 0, 1, 0, 0, 0, 0)}),
+        _function(new Date(2018, 0, 1, 0, 0, 0, 0), {'min': new Date(2015, 0, 1, 0, 0, 0, 0), 'max': new Date(2017, 0, 1, 0, 0, 0, 0)}),
+        _function(86.69, {'min': new Date(2015, 0, 1, 0, 0, 0, 0), 'max': new Date(2017, 0, 1, 0, 0, 0, 0)}),
+        _function('86.69', {'min': new Date(2015, 0, 1, 0, 0, 0, 0), 'max': new Date(2017, 0, 1, 0, 0, 0, 0)})
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+
+
 
 
 

@@ -29,14 +29,14 @@ var isString = require('./lib/Constraints/Functions/isString');
 var isEmail = require('./lib/Constraints/Functions/isEmail');
 var isLength = require('./lib/Constraints/Functions/isLength');
 var isUrl = require('./lib/Constraints/Functions/isUrl');
-//@todo: RegexValidator
+var isPregMatch = require('./lib/Constraints/Functions/isPregMatch');
 var isIp = require('./lib/Constraints/Functions/isIp');
-//@todo: UuidValidator
+var isUuid = require('./lib/Constraints/Functions/isUuid');
 
 /**
  * Number Constraints
  */
-//@todo: RangeValidator
+var isRange = require('./lib/Constraints/Functions/isRange');
 var isEqualTo = require('./lib/Constraints/Functions/isEqualTo');
 var isNotEqualTo = require('./lib/Constraints/Functions/isNotEqualTo');
 var isIdenticalTo = require('./lib/Constraints/Functions/isIdenticalTo');
@@ -119,5 +119,8 @@ module.exports = {
     'isGreaterThanOrEqual': isGreaterThanOrEqual,
     'isLanguage': isLanguage,
     'isLocale': isLocale,
-    'isCountry': isCountry
+    'isCountry': isCountry,
+    'isPregMatch': isPregMatch,
+    'isUuid': isUuid,
+    'isRange': isRange
 };

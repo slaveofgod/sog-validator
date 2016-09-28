@@ -33,6 +33,7 @@ import {
 * [Basic Usage Example](#basic-usage-example)
 * [Schema Usage Example](#schema-usage-example)
 * [Documentation](#documentation)
+* [Tests](#tests)
 
 ---------------
 
@@ -304,6 +305,16 @@ _oec.validate(data);
 if(!_oec.isValid()) {
     let errors = _oec.getErrors();
 }
+```
+
+[⬆ back to top](#navigation)
+
+---------------
+
+### Tests
+
+```sh
+$ npm test
 ```
 
 [⬆ back to top](#navigation)
