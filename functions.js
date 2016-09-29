@@ -49,9 +49,9 @@ var isGreaterThanOrEqual = require('./lib/Constraints/Functions/isGreaterThanOrE
 /**
  * Date Constraints
  */
-//@todo: DateValidator
-//@todo: DateTimeValidator
-//@todo: TimeValidator
+var isDateFormat = require('./lib/Constraints/Functions/isDateFormat');
+var isDateTimeFormat = require('./lib/Constraints/Functions/isDateTimeFormat');
+var isTimeFormat = require('./lib/Constraints/Functions/isTimeFormat');
 
 /**
  * Collection Constraints
@@ -122,5 +122,8 @@ module.exports = {
     'isCountry': isCountry,
     'isPregMatch': isPregMatch,
     'isUuid': isUuid,
-    'isRange': isRange
+    'isRange': isRange,
+    'isDateFormat': isDateFormat,
+    'isDateTimeFormat': isDateTimeFormat,
+    'isTimeFormat': isTimeFormat
 };

@@ -1080,20 +1080,91 @@ exports['test isRange'] = function(assert, done) {
     done();
 }
 
+exports['test isDateFormat'] = function(assert, done) {
+    var _function = _v.func.isDateFormat;
+    var positive, negative;
 
+    positive = [
+        _function('2015-11-25', {'format': 'YYYY-MM-DD'}),
+        _function('25-11-2015', {'format': 'DD-MM-YYYY'})
+    ];
 
+    negative = [
+        _function('25-11-2015', {'format': 'YYYY-MM-DD'}),
+        _function(123456789, {'format': 'YYYY-MM-DD'}),
+        _function('123456789', {'format': 'YYYY-MM-DD'}),
+        _function(new Date(2015, 0, 1, 0, 0, 0, 0), {'format': 'YYYY-MM-DD'})
+    ];
 
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
 
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
 
+    done();
+}
 
+exports['test isDateTimeFormat'] = function(assert, done) {
+    var _function = _v.func.isDateTimeFormat;
+    var positive, negative;
 
+    positive = [
+        _function('2015-11-25 22:45:35', {'format': 'YYYY-MM-DD HH:mm:ss'}),
+        _function('2015-11-25 22:45', {'format': 'YYYY-MM-DD HH:mm'}),
+        _function('11-2015-25 45:22:59', {'format': 'MM-YYYY-DD mm:HH:ss'})
+    ];
 
+    negative = [
+        _function('2015-11-25', {'format': 'YYYY-MM-DD HH:mm:ss'}),
+        _function('22:45:35', {'format': 'YYYY-MM-DD HH:mm:ss'}),
+        _function(123456789, {'format': 'YYYY-MM-DD HH:mm:ss'}),
+        _function('123456789', {'format': 'YYYY-MM-DD HH:mm:ss'}),
+        _function('2015-11-25 22:45:35', {'format': 'MM-YYYY-DD mm:HH:ss'}),
+        _function(new Date(2015, 0, 1, 0, 0, 0, 0), {'format': 'YYYY-MM-DD HH:mm:ss'})
+    ];
 
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
 
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
 
+    done();
+}
 
+exports['test isTimeFormat'] = function(assert, done) {
+    var _function = _v.func.isTimeFormat;
+    var positive, negative;
 
+    positive = [
+        _function('22:45:35', {'format': 'HH:mm:ss'}),
+        _function('22:45', {'format': 'HH:mm'}),
+        _function('45:22:59', {'format': 'mm:HH:ss'})
+    ];
 
+    negative = [
+        _function('2015-11-25', {'format': 'HH:mm:ss'}),
+        _function(123456789, {'format': 'HH:mm:ss'}),
+        _function('123456789', {'format': 'HH:mm:ss'}),
+        _function('2015-11-25 22:45:35', {'format': 'mm:HH:ss'}),
+        _function(new Date(2015, 0, 1, 0, 0, 0, 0), {'format': 'HH:mm:ss'})
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
 
 
 

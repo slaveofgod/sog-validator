@@ -32,8 +32,8 @@ import {
 
 * [Basic Usage Example](#basic-usage-example)
 * [Schema Usage Example](#schema-usage-example)
-* [Documentation](#documentation)
 * [Tests](#tests)
+* [Documentation](#documentation)
 
 ---------------
 
