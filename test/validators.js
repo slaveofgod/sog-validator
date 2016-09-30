@@ -1200,6 +1200,37 @@ exports['test isCount'] = function(assert, done) {
 }
 
 
+exports['test isIn'] = function(assert, done) {
+    var _function = _v.func.isIn;
+    var positive, negative;
+
+    positive = [
+        _function(3333, {'choices': [1111, 'aaaaa', '3333', '123a']}),
+        _function(3333, {'choices': [1111, 'aaaaa', 3333, '123a']}),
+        _function('3333', {'choices': [1111, 'aaaaa', 3333, '123a']}),
+        _function(3333, {'choices': [1111, 'aaaaa', 3333, '123a'], 'strict': true})
+    ];
+
+    negative = [
+        _function(3333, {'choices': [1111, 'aaaaa', '3333', '123a'], 'strict': true}),
+        _function('3333', {'choices': [1111, 'aaaaa', 3333, '123a'], 'strict': true}),
+        _function('abcd', {'choices': [1111, 'aaaaa', 3333, '123a']}),
+        _function(1234, {'choices': [1111, 'aaaaa', 3333, '123a']}),
+        _function(new Object(), {'choices': [1111, 'aaaaa', 3333, '123a']})
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+
 
 
 
