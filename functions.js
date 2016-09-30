@@ -57,7 +57,7 @@ var isTimeFormat = require('./lib/Constraints/Functions/isTimeFormat');
  * Collection Constraints
  */
 //@todo: ChoiceValidator
-//@todo: CountValidator
+var isCount = require('./lib/Constraints/Functions/isCount');
 //@todo: UniqueEntityValidator
 var isLanguage = require('./lib/Constraints/Functions/isLanguage');
 var isLocale = require('./lib/Constraints/Functions/isLocale');
@@ -125,5 +125,6 @@ module.exports = {
     'isRange': isRange,
     'isDateFormat': isDateFormat,
     'isDateTimeFormat': isDateTimeFormat,
-    'isTimeFormat': isTimeFormat
+    'isTimeFormat': isTimeFormat,
+    'isCount': isCount
 };

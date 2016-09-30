@@ -1166,6 +1166,41 @@ exports['test isTimeFormat'] = function(assert, done) {
     done();
 }
 
+exports['test isCount'] = function(assert, done) {
+    var _function = _v.func.isCount;
+    var positive, negative;
+
+    positive = [
+        _function([1,2,3,4,5], {'min': 5, 'max': 10}),
+        _function([1,2,3,4,5,6], {'min': 5, 'max': 10}),
+        _function([1,2,3,4,5,6,7,8,9], {'min': 5, 'max': 10}),
+        _function([1,2,3,4,5,6,7,8,9,10], {'min': 5, 'max': 10}),
+        _function([1,2,3,4,5], {'min': 5, 'max': 5})
+    ];
+
+    negative = [
+        _function('abcdef', {'min': 5, 'max': 10}),
+        _function(1234567890, {'min': 5, 'max': 10}),
+        _function(new Object(), {'min': 5, 'max': 10}),
+        _function([1,2,3,4], {'min': 5, 'max': 10}),
+        _function([1,2,3,4,5,6,7,8,9,10, 11], {'min': 5, 'max': 10}),
+        _function([1,2,3,4,5,6], {'min': 5, 'max': 5}),
+        _function([1,2,3,4], {'min': 5, 'max': 5})
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+
+
 
 
 
