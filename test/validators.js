@@ -1323,6 +1323,38 @@ exports['test isCardScheme'] = function(assert, done) {
     done();
 }
 
+exports['test isCurrency'] = function(assert, done) {
+    var _function = _v.func.isCurrency;
+    var positive, negative;
+
+    positive = [
+        _function('AFN'),
+        _function('COP'),
+        _function('RUB'),
+        _function('USD')
+    ];
+
+    negative = [
+        _function('AAA'),
+        _function('BBB'),
+        _function('CCC'),
+        _function('DDD')
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+
+
+
 
 
 
