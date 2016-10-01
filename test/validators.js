@@ -1257,6 +1257,73 @@ exports['test isInMultiple'] = function(assert, done) {
     done();
 }
 
+exports['test isBic'] = function(assert, done) {
+    var _function = _v.func.isBic;
+    var positive, negative;
+
+    positive = [
+        _function('DABAIE2D'),
+        _function('MIDLGB22'),
+        _function('MIDLGB2103J')
+    ];
+
+    negative = [
+        _function('123456789'),
+        _function('abcdef'),
+        _function(123456789)
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+exports['test isCardScheme'] = function(assert, done) {
+    var _function = _v.func.isCardScheme;
+    var positive, negative;
+
+    positive = [
+        _function('4111111111111111', {'schemes': ['AMEX', 'CHINA_UNIONPAY', 'DINERS', 'DISCOVER', 'INSTAPAYMENT', 'JCB', 'LASER', 'MAESTRO', 'MASTERCARD', 'VISA']}),
+        _function('378282246310005', {'schemes': ['AMEX']}),
+        _function('371449635398431', {'schemes': ['AMEX']}),
+        _function('378734493671000', {'schemes': ['AMEX']}),
+        _function('30569309025904', {'schemes': ['DINERS']}),
+        _function('38520000023237', {'schemes': ['DINERS']}),
+        _function('6011111111111117', {'schemes': ['DISCOVER']}),
+        _function('6011000990139424', {'schemes': ['DISCOVER']}),
+        _function('3530111333300000', {'schemes': ['JCB']}),
+        _function('3566002020360505', {'schemes': ['JCB']}),
+        _function('5555555555554444', {'schemes': ['MASTERCARD']}),
+        _function('5105105105105100', {'schemes': ['MASTERCARD']}),
+        _function('4111111111111111', {'schemes': ['VISA']}),
+        _function('4012888888881881', {'schemes': ['VISA']})
+    ];
+
+    negative = [
+        _function('5555555555554444', {'schemes': ['VISA']}),
+        _function('5105105105105100', {'schemes': ['VISA']}),
+        _function('4111111111111111', {'schemes': ['MASTERCARD']}),
+        _function('4012888888881881', {'schemes': ['MASTERCARD']})
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+
 
 
 

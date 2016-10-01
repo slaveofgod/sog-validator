@@ -73,8 +73,8 @@ var isCountry = require('./lib/Constraints/Functions/isCountry');
 /**
  * Financial and other Number Constraints
  */
-//@todo: BicValidator
-//@todo: CardSchemeValidator
+var isBic = require('./lib/Constraints/Functions/isBic');
+var isCardScheme = require('./lib/Constraints/Functions/isCardScheme');
 //@todo: CurrencyValidator
 //@todo: LuhnValidator
 //@todo: IbanValidator
@@ -129,5 +129,7 @@ module.exports = {
     'isTimeFormat': isTimeFormat,
     'isCount': isCount,
     'isIn': isIn,
-    'isInMultiple': isInMultiple
+    'isInMultiple': isInMultiple,
+    'isBic': isBic,
+    'isCardScheme': isCardScheme
 };
