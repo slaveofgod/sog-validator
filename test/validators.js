@@ -1199,7 +1199,6 @@ exports['test isCount'] = function(assert, done) {
     done();
 }
 
-
 exports['test isIn'] = function(assert, done) {
     var _function = _v.func.isIn;
     var positive, negative;
@@ -1229,6 +1228,36 @@ exports['test isIn'] = function(assert, done) {
 
     done();
 }
+
+exports['test isInMultiple'] = function(assert, done) {
+    var _function = _v.func.isInMultiple;
+    var positive, negative;
+
+    positive = [
+        _function([3333, 5678], {'choices': [1111, 'aaaaa', '3333', '123a', 'bbbb', '12ab', 1234, '5678'], 'min': 2, 'max': 4}),
+        _function([3333, 'aaaaa', 5678, '12ab'], {'choices': [1111, 'aaaaa', '3333', '123a', 'bbbb', '12ab', 1234, '5678'], 'min': 2, 'max': 4}),
+        _function(['3333', '5678'], {'choices': [1111, 'aaaaa', '3333', '123a', 'bbbb', '12ab', 1234, '5678'], 'min': 2, 'max': 4, 'strict': true})
+    ];
+
+    negative = [
+        _function([3333, 'aaaaa', 5678], {'choices': [1111, 'aaaaa', '3333', '123a', 'bbbb', '12ab', 1234, '5678'], 'min': 2, 'max': 4, 'strict': true}),
+        _function([1111, 'aaaaa', '3333', '123a', 'bbbb', '12ab', 1234, '5678'], {'choices': [1111, 'aaaaa', '3333', '123a', 'bbbb', '12ab', 1234, '5678'], 'min': 2, 'max': 4, 'strict': true}),
+        _function([3333], {'choices': [1111, 'aaaaa', '3333', '123a', 'bbbb', '12ab', 1234, '5678'], 'min': 2, 'max': 4, 'strict': true}),
+        _function(1234, {'choices': [1111, 'aaaaa', '3333', '123a', 'bbbb', '12ab', 1234, '5678'], 'min': 2, 'max': 4, 'strict': true})
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+
 
 
 

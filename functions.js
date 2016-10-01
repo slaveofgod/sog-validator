@@ -57,7 +57,7 @@ var isTimeFormat = require('./lib/Constraints/Functions/isTimeFormat');
  * Collection Constraints
  */
 var isIn = require('./lib/Constraints/Functions/isIn');
-//var isInMultiple = require('./lib/Constraints/Functions/isInMultiple');
+var isInMultiple = require('./lib/Constraints/Functions/isInMultiple');
 var isCount = require('./lib/Constraints/Functions/isCount');
 //@todo: UniqueEntityValidator
 var isLanguage = require('./lib/Constraints/Functions/isLanguage');
@@ -128,5 +128,6 @@ module.exports = {
     'isDateTimeFormat': isDateTimeFormat,
     'isTimeFormat': isTimeFormat,
     'isCount': isCount,
-    'isIn': isIn
+    'isIn': isIn,
+    'isInMultiple': isInMultiple
 };
