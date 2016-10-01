@@ -1377,6 +1377,42 @@ exports['test isLuhn'] = function(assert, done) {
     done();
 }
 
+exports['test isIban'] = function(assert, done) {
+    var _function = _v.func.isIban;
+    var positive, negative;
+
+    positive = [
+        _function('DE44 5001 0517 5407 3249 31'),
+        _function('GR16 0110 1250 0000 0001 2300 695'),
+        _function('GB29 NWBK 6016 1331 9268 19'),
+        _function('SA03 8000 0000 6080 1016 7519'),
+        _function('CH93 0076 2011 6238 5295 7'),
+        _function('TR33 0006 1005 1978 6457 8413 26')
+    ];
+
+    negative = [
+        _function('TR44 5001 0517 5407 3249 31'),
+        _function('DE16 0110 1250 0000 0001 2300 695'),
+        _function('GR29 NWBK 6016 1331 9268 19'),
+        _function('GB03 8000 0000 6080 1016 7519'),
+        _function('SA93 0076 2011 6238 5295 7'),
+        _function('CH33 0006 1005 1978 6457 8413 26'),
+        _function(new Object()),
+        _function(1234567890),
+        _function('Mauris fermentum arcu rhoncus eros convallis vulputate.')
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
 
 
 
