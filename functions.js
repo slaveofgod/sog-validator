@@ -76,7 +76,7 @@ var isCountry = require('./lib/Constraints/Functions/isCountry');
 var isBic = require('./lib/Constraints/Functions/isBic');
 var isCardScheme = require('./lib/Constraints/Functions/isCardScheme');
 var isCurrency = require('./lib/Constraints/Functions/isCurrency');
-//@todo: LuhnValidator
+var isLuhn = require('./lib/Constraints/Functions/isLuhn');
 //@todo: IbanValidator
 //@todo: IsbnValidator
 //@todo: IssnValidator
@@ -132,5 +132,6 @@ module.exports = {
     'isInMultiple': isInMultiple,
     'isBic': isBic,
     'isCardScheme': isCardScheme,
-    'isCurrency': isCurrency
+    'isCurrency': isCurrency,
+    'isLuhn': isLuhn
 };

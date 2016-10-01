@@ -1352,6 +1352,33 @@ exports['test isCurrency'] = function(assert, done) {
     done();
 }
 
+exports['test isLuhn'] = function(assert, done) {
+    var _function = _v.func.isLuhn;
+    var positive, negative;
+
+    positive = [
+        _function('79927398713')
+    ];
+
+    negative = [
+        _function('12345678985'),
+        _function(new Object()),
+        _function([1111,2222])
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+
+
 
 
 
