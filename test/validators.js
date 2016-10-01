@@ -1413,6 +1413,36 @@ exports['test isIban'] = function(assert, done) {
     done();
 }
 
+exports['test isIsbn'] = function(assert, done) {
+    var _function = _v.func.isIsbn;
+    var positive, negative;
+
+    positive = [
+        _function('978-1-56619-909-4'),
+        _function('1-56619-909-3'),
+        _function('978-1-56619-909-4', {'type': 'isbn13'}),
+        _function('1-56619-909-3', {'type': 'isbn10'})
+    ];
+
+    negative = [
+        _function('978-1-56619-909-4', {'type': 'isbn10'}),
+        _function('1-56619-909-3', {'type': 'isbn13'}),
+        _function('Mauris fermentum arcu rhoncus eros convallis vulputate.'),
+        _function(new Object()),
+        _function(1234567890),
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
 
 
 
