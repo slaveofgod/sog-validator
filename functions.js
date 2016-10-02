@@ -79,7 +79,7 @@ var isCurrency = require('./lib/Constraints/Functions/isCurrency');
 var isLuhn = require('./lib/Constraints/Functions/isLuhn');
 var isIban = require('./lib/Constraints/Functions/isIban');
 var isIsbn = require('./lib/Constraints/Functions/isIsbn');
-//@todo: IssnValidator
+var isIssn = require('./lib/Constraints/Functions/isIssn');
 
 /**
  * Other Constraints
@@ -135,5 +135,6 @@ module.exports = {
     'isCurrency': isCurrency,
     'isLuhn': isLuhn,
     'isIban': isIban,
-    'isIsbn': isIsbn
+    'isIsbn': isIsbn,
+    'isIssn': isIssn
 };

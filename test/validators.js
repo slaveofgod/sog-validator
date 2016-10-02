@@ -1429,7 +1429,7 @@ exports['test isIsbn'] = function(assert, done) {
         _function('1-56619-909-3', {'type': 'isbn13'}),
         _function('Mauris fermentum arcu rhoncus eros convallis vulputate.'),
         _function(new Object()),
-        _function(1234567890),
+        _function(1234567890)
     ];
 
     positive.forEach(function (value) {
@@ -1442,6 +1442,40 @@ exports['test isIsbn'] = function(assert, done) {
 
     done();
 }
+
+exports['test isIssn'] = function(assert, done) {
+    var _function = _v.func.isIssn;
+    var positive, negative;
+
+    positive = [
+        _function('0028-0836'),
+        _function('0028-0836', {'caseSensitive': false, 'requireHyphen': false}),
+        _function('0028-0836', {'caseSensitive': true, 'requireHyphen': true}),
+        _function('0317-8471'),
+        _function('2434-561X'),
+        _function('2434561X'),
+        _function('2434561X', {'requireHyphen': false})
+    ];
+
+    negative = [
+        _function('2434561X', {'requireHyphen': true}),
+        _function('Mauris fermentum arcu rhoncus eros convallis vulputate.'),
+        _function(new Object()),
+        _function(1234567890)
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+
 
 
 
