@@ -4,6 +4,16 @@
 
 A library of validators
 
+### Navigation
+
+* [Installation and Using](#installation-and-using)
+* [Basic Usage Example](#basic-usage-example)
+* [Schema Usage Example](#schema-usage-example)
+* [Tests](#tests)
+* [Documentation](#documentation)
+
+---------------
+
 ### Installation and Using
 
 **Server-side usage**
@@ -27,13 +37,6 @@ import {
     AllValidator
 } from 'bob-validator';
 ```
-
-### Navigation
-
-* [Basic Usage Example](#basic-usage-example)
-* [Schema Usage Example](#schema-usage-example)
-* [Tests](#tests)
-* [Documentation](#documentation)
 
 ---------------
 
