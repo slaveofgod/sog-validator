@@ -1,7 +1,7 @@
-var _v = require('../functions');
+var _v = require('../index');
 
 exports['test isNotBlank'] = function(assert, done) {
-    var _function = _v.isNotBlank;
+    var _function = _v.func.isNotBlank;
     var positive, negative;
 
     positive = [
@@ -26,7 +26,7 @@ exports['test isNotBlank'] = function(assert, done) {
 }
 
 exports['test isBlank'] = function(assert, done) {
-    var _function = _v.isBlank;
+    var _function = _v.func.isBlank;
     var positive, negative;
 
     positive = [
@@ -51,7 +51,7 @@ exports['test isBlank'] = function(assert, done) {
 }
 
 exports['test isNotNull'] = function(assert, done) {
-    var _function = _v.isNotNull;
+    var _function = _v.func.isNotNull;
     var positive, negative;
 
     positive = [
@@ -77,7 +77,7 @@ exports['test isNotNull'] = function(assert, done) {
 }
 
 exports['test isNull'] = function(assert, done) {
-    var _function = _v.isNull;
+    var _function = _v.func.isNull;
     var positive, negative;
 
     positive = [
@@ -103,7 +103,7 @@ exports['test isNull'] = function(assert, done) {
 }
 
 exports['test isTrue'] = function(assert, done) {
-    var _function = _v.isTrue;
+    var _function = _v.func.isTrue;
     var positive, negative;
 
     positive = [
@@ -133,7 +133,7 @@ exports['test isTrue'] = function(assert, done) {
 }
 
 exports['test isFalse'] = function(assert, done) {
-    var _function = _v.isFalse;
+    var _function = _v.func.isFalse;
     var positive, negative;
 
     positive = [
@@ -163,7 +163,7 @@ exports['test isFalse'] = function(assert, done) {
 }
 
 exports['test isArray'] = function(assert, done) {
-    var _function = _v.isArray;
+    var _function = _v.func.isArray;
     var positive, negative;
 
     positive = [
@@ -193,7 +193,7 @@ exports['test isArray'] = function(assert, done) {
 }
 
 exports['test isBool'] = function(assert, done) {
-    var _function = _v.isBool;
+    var _function = _v.func.isBool;
     var positive, negative;
 
     positive = [
@@ -228,7 +228,7 @@ exports['test isBool'] = function(assert, done) {
 }
 
 exports['test isFloat'] = function(assert, done) {
-    var _function = _v.isFloat;
+    var _function = _v.func.isFloat;
     var positive, negative;
 
     positive = [
@@ -263,7 +263,7 @@ exports['test isFloat'] = function(assert, done) {
 }
 
 exports['test isDouble'] = function(assert, done) {
-    var _function = _v.isDouble;
+    var _function = _v.func.isDouble;
     var positive, negative;
 
     positive = [
@@ -298,7 +298,7 @@ exports['test isDouble'] = function(assert, done) {
 }
 
 exports['test isInt'] = function(assert, done) {
-    var _function = _v.isInt;
+    var _function = _v.func.isInt;
     var positive, negative;
 
     positive = [
@@ -334,7 +334,7 @@ exports['test isInt'] = function(assert, done) {
 }
 
 exports['test isNumeric'] = function(assert, done) {
-    var _function = _v.isNumeric;
+    var _function = _v.func.isNumeric;
     var positive, negative;
 
     positive = [
@@ -370,7 +370,7 @@ exports['test isNumeric'] = function(assert, done) {
 }
 
 exports['test isObject'] = function(assert, done) {
-    var _function = _v.isObject;
+    var _function = _v.func.isObject;
     var positive, negative;
 
     positive = [
@@ -408,7 +408,7 @@ exports['test isObject'] = function(assert, done) {
 }
 
 exports['test isScalar'] = function(assert, done) {
-    var _function = _v.isScalar;
+    var _function = _v.func.isScalar;
     var positive, negative;
 
     positive = [
@@ -446,7 +446,7 @@ exports['test isScalar'] = function(assert, done) {
 }
 
 exports['test isString'] = function(assert, done) {
-    var _function = _v.isString;
+    var _function = _v.func.isString;
     var positive, negative;
 
     positive = [
@@ -484,7 +484,7 @@ exports['test isString'] = function(assert, done) {
 }
 
 exports['test isEmail'] = function(assert, done) {
-    var _function = _v.isEmail;
+    var _function = _v.func.isEmail;
     var positive, negative;
 
     positive = [
@@ -533,7 +533,7 @@ exports['test isEmail'] = function(assert, done) {
 }
 
 exports['test isLength'] = function(assert, done) {
-    var _function = _v.isLength;
+    var _function = _v.func.isLength;
     var positive, negative;
 
     positive = [
@@ -573,7 +573,7 @@ exports['test isLength'] = function(assert, done) {
 }
 
 exports['test isUrl'] = function(assert, done) {
-    var _function = _v.isUrl;
+    var _function = _v.func.isUrl;
     var positive, negative;
 
     positive = [
@@ -637,7 +637,7 @@ exports['test isUrl'] = function(assert, done) {
 }
 
 exports['test isIp'] = function(assert, done) {
-    var _function = _v.isIp;
+    var _function = _v.func.isIp;
     var positive, negative;
 
     positive = [
@@ -689,7 +689,7 @@ exports['test isIp'] = function(assert, done) {
 }
 
 exports['test isEqualTo'] = function(assert, done) {
-    var _function = _v.isEqualTo;
+    var _function = _v.func.isEqualTo;
     var positive, negative;
 
     positive = [
@@ -714,7 +714,7 @@ exports['test isEqualTo'] = function(assert, done) {
 }
 
 exports['test isNotEqualTo'] = function(assert, done) {
-    var _function = _v.isNotEqualTo;
+    var _function = _v.func.isNotEqualTo;
     var positive, negative;
 
     positive = [
@@ -739,7 +739,7 @@ exports['test isNotEqualTo'] = function(assert, done) {
 }
 
 exports['test isIdenticalTo'] = function(assert, done) {
-    var _function = _v.isIdenticalTo;
+    var _function = _v.func.isIdenticalTo;
     var positive, negative;
 
     positive = [
@@ -762,7 +762,7 @@ exports['test isIdenticalTo'] = function(assert, done) {
 }
 
 exports['test isNotIdenticalTo'] = function(assert, done) {
-    var _function = _v.isNotIdenticalTo;
+    var _function = _v.func.isNotIdenticalTo;
     var positive, negative;
 
     positive = [
@@ -785,7 +785,7 @@ exports['test isNotIdenticalTo'] = function(assert, done) {
 }
 
 exports['test isLessThan'] = function(assert, done) {
-    var _function = _v.isLessThan;
+    var _function = _v.func.isLessThan;
     var positive, negative;
 
     positive = [
@@ -813,7 +813,7 @@ exports['test isLessThan'] = function(assert, done) {
 }
 
 exports['test isLessThanOrEqual'] = function(assert, done) {
-    var _function = _v.isLessThanOrEqual;
+    var _function = _v.func.isLessThanOrEqual;
     var positive, negative;
 
     positive = [
@@ -843,7 +843,7 @@ exports['test isLessThanOrEqual'] = function(assert, done) {
 }
 
 exports['test isGreaterThan'] = function(assert, done) {
-    var _function = _v.isGreaterThan;
+    var _function = _v.func.isGreaterThan;
     var positive, negative;
 
     positive = [
@@ -871,7 +871,7 @@ exports['test isGreaterThan'] = function(assert, done) {
 }
 
 exports['test isGreaterThanOrEqual'] = function(assert, done) {
-    var _function = _v.isGreaterThanOrEqual;
+    var _function = _v.func.isGreaterThanOrEqual;
     var positive, negative;
 
     positive = [
@@ -901,7 +901,7 @@ exports['test isGreaterThanOrEqual'] = function(assert, done) {
 }
 
 exports['test isLanguage'] = function(assert, done) {
-    var _function = _v.isLanguage;
+    var _function = _v.func.isLanguage;
     var positive, negative;
 
     positive = [
@@ -929,7 +929,7 @@ exports['test isLanguage'] = function(assert, done) {
 }
 
 exports['test isLocale'] = function(assert, done) {
-    var _function = _v.isLocale;
+    var _function = _v.func.isLocale;
     var positive, negative;
 
     positive = [
@@ -959,7 +959,7 @@ exports['test isLocale'] = function(assert, done) {
 }
 
 exports['test isCountry'] = function(assert, done) {
-    var _function = _v.isCountry;
+    var _function = _v.func.isCountry;
     var positive, negative;
 
     positive = [
@@ -989,7 +989,7 @@ exports['test isCountry'] = function(assert, done) {
 }
 
 exports['test isPregMatch'] = function(assert, done) {
-    var _function = _v.isPregMatch;
+    var _function = _v.func.isPregMatch;
     var positive, negative;
 
     positive = [
@@ -1012,7 +1012,7 @@ exports['test isPregMatch'] = function(assert, done) {
 }
 
 exports['test isUuid'] = function(assert, done) {
-    var _function = _v.isUuid;
+    var _function = _v.func.isUuid;
     var positive, negative;
 
     positive = [
@@ -1041,7 +1041,7 @@ exports['test isUuid'] = function(assert, done) {
 }
 
 exports['test isRange'] = function(assert, done) {
-    var _function = _v.isRange;
+    var _function = _v.func.isRange;
     var positive, negative;
 
     positive = [
@@ -1081,7 +1081,7 @@ exports['test isRange'] = function(assert, done) {
 }
 
 exports['test isDateFormat'] = function(assert, done) {
-    var _function = _v.isDateFormat;
+    var _function = _v.func.isDateFormat;
     var positive, negative;
 
     positive = [
@@ -1108,7 +1108,7 @@ exports['test isDateFormat'] = function(assert, done) {
 }
 
 exports['test isDateTimeFormat'] = function(assert, done) {
-    var _function = _v.isDateTimeFormat;
+    var _function = _v.func.isDateTimeFormat;
     var positive, negative;
 
     positive = [
@@ -1138,7 +1138,7 @@ exports['test isDateTimeFormat'] = function(assert, done) {
 }
 
 exports['test isTimeFormat'] = function(assert, done) {
-    var _function = _v.isTimeFormat;
+    var _function = _v.func.isTimeFormat;
     var positive, negative;
 
     positive = [
@@ -1167,7 +1167,7 @@ exports['test isTimeFormat'] = function(assert, done) {
 }
 
 exports['test isCount'] = function(assert, done) {
-    var _function = _v.isCount;
+    var _function = _v.func.isCount;
     var positive, negative;
 
     positive = [
@@ -1200,7 +1200,7 @@ exports['test isCount'] = function(assert, done) {
 }
 
 exports['test isIn'] = function(assert, done) {
-    var _function = _v.isIn;
+    var _function = _v.func.isIn;
     var positive, negative;
 
     positive = [
@@ -1230,7 +1230,7 @@ exports['test isIn'] = function(assert, done) {
 }
 
 exports['test isInMultiple'] = function(assert, done) {
-    var _function = _v.isInMultiple;
+    var _function = _v.func.isInMultiple;
     var positive, negative;
 
     positive = [
@@ -1258,7 +1258,7 @@ exports['test isInMultiple'] = function(assert, done) {
 }
 
 exports['test isBic'] = function(assert, done) {
-    var _function = _v.isBic;
+    var _function = _v.func.isBic;
     var positive, negative;
 
     positive = [
@@ -1285,7 +1285,7 @@ exports['test isBic'] = function(assert, done) {
 }
 
 exports['test isCardScheme'] = function(assert, done) {
-    var _function = _v.isCardScheme;
+    var _function = _v.func.isCardScheme;
     var positive, negative;
 
     positive = [
@@ -1324,7 +1324,7 @@ exports['test isCardScheme'] = function(assert, done) {
 }
 
 exports['test isCurrency'] = function(assert, done) {
-    var _function = _v.isCurrency;
+    var _function = _v.func.isCurrency;
     var positive, negative;
 
     positive = [
@@ -1353,7 +1353,7 @@ exports['test isCurrency'] = function(assert, done) {
 }
 
 exports['test isLuhn'] = function(assert, done) {
-    var _function = _v.isLuhn;
+    var _function = _v.func.isLuhn;
     var positive, negative;
 
     positive = [
@@ -1378,7 +1378,7 @@ exports['test isLuhn'] = function(assert, done) {
 }
 
 exports['test isIban'] = function(assert, done) {
-    var _function = _v.isIban;
+    var _function = _v.func.isIban;
     var positive, negative;
 
     positive = [
@@ -1414,7 +1414,7 @@ exports['test isIban'] = function(assert, done) {
 }
 
 exports['test isIsbn'] = function(assert, done) {
-    var _function = _v.isIsbn;
+    var _function = _v.func.isIsbn;
     var positive, negative;
 
     positive = [
@@ -1444,7 +1444,7 @@ exports['test isIsbn'] = function(assert, done) {
 }
 
 exports['test isIssn'] = function(assert, done) {
-    var _function = _v.isIssn;
+    var _function = _v.func.isIssn;
     var positive, negative;
 
     positive = [
@@ -1476,7 +1476,7 @@ exports['test isIssn'] = function(assert, done) {
 }
 
 exports['test isUniqueEntity'] = function(assert, done) {
-    var _function = _v.isUniqueEntity;
+    var _function = _v.func.isUniqueEntity;
     var positive, negative;
 
     positive = [
