@@ -1,6 +1,6 @@
 # bob-validator
 
-[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url]
+[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status][travis-image]][travis-url]
 
 A library of validators
 
@@ -456,5 +456,8 @@ These are the basic constraints: use them to assert very basic things about the 
 
 [npm-url]: https://npmjs.org/package/bob-validator
 [npm-image]: http://img.shields.io/npm/v/bob-validator.svg
+
+[travis-url]: https://travis-ci.org/alexeybob/bob-validator
+[travis-image]: http://img.shields.io/travis/alexeybob/bob-validator.svg
 
 [downloads-image]: http://img.shields.io/npm/dm/bob-validator.svg
