@@ -59,7 +59,7 @@ var isTimeFormat = require('./lib/Constraints/Functions/isTimeFormat');
 var isIn = require('./lib/Constraints/Functions/isIn');
 var isInMultiple = require('./lib/Constraints/Functions/isInMultiple');
 var isCount = require('./lib/Constraints/Functions/isCount');
-//@todo: UniqueEntityValidator
+var isUniqueEntity = require('./lib/Constraints/Functions/isUniqueEntity');
 var isLanguage = require('./lib/Constraints/Functions/isLanguage');
 var isLocale = require('./lib/Constraints/Functions/isLocale');
 var isCountry = require('./lib/Constraints/Functions/isCountry');
@@ -136,5 +136,6 @@ module.exports = {
     'isLuhn': isLuhn,
     'isIban': isIban,
     'isIsbn': isIsbn,
-    'isIssn': isIssn
+    'isIssn': isIssn,
+    'isUniqueEntity': isUniqueEntity
 };
