@@ -1,5 +1,5 @@
 # Range
-Validates that a given number is *between* some minimum and maximum number.
+Validates that a given number is *between* some minimum and maximum number or date.
 
 [**Homepage**][documentation-url]
 

@@ -1019,7 +1019,8 @@ exports['test isUuid'] = function(assert, done) {
         _function('216f-ff40-98d9-11e3-a5e2-0800-200c-9a66', {'versions': [1,2,3,4,5], 'strict': false}),
         _function('644e1dd7-2a7f-18fb-b8ed-ed78c3f92c2b', {'versions': [1], 'strict': true}),
         _function('6ba7b810-9dad-11d1-80b4-00c04fd430c8', {'versions': [1], 'strict': true}),
-        _function('f47ac10b-58cc-4372-a567-0e02b2c3d479', {'versions': [4], 'strict': true})
+        _function('f47ac10b-58cc-4372-a567-0e02b2c3d479', {'versions': [4], 'strict': true}),
+        _function('f47ac10b-58cc-4372-a567-0e02b2c3d479')
     ];
 
     negative = [
