@@ -1,5 +1,7 @@
-# isNotBlank
-Validates that a value is not blank, defined as not strictly `false`, not equal to a blank string and also not equal to `null`. To force that a value is simply not equal to `null`, see the [isNotNull][is-notnull-url] constraint.
+# isNull
+Validates that a value is exactly equal to `null`. To force that a property is simply blank (blank string or `null`), see the [isBlank][is-blank-url] constraint. To ensure that a property is not null, see [isNotNull][is-notnull-url].
+
+Also see [isNotNull][is-notnull-url].
 
 [**Homepage**][documentation-url]
 
@@ -16,9 +18,9 @@ Validates that a value is not blank, defined as not strictly `false`, not equal 
 ```javascript
 var _v = require('bob-validator');
 
-var data = 'Some data ...';
+var data = null;
 
-if(_v.func.isNotBlank(data)){
+if(_v.func.isNull(data)){
     // Some code ...
 }
 ```
