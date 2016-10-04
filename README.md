@@ -541,7 +541,7 @@ These are the basic constraints: use them to assert very basic things about the 
 [is-notblank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isNotBlank.md
 [is-blank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isBlank.md
 [is-notnull-url]: #
-[is-null-url]: # https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isNull.md
+[is-null-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isNull.md
 [is-true-url]: #
 [is-false-url]: #
 [is-array-url]: #
