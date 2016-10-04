@@ -1,6 +1,6 @@
 {
   "name": "bob-validator",
-  "version": "0.9.5",
+  "version": "0.9.6",
   "description": "A library of validators",
   "main": "index.js",
   "homepage": "https://github.com/alexeybob/bob-validator.git",
