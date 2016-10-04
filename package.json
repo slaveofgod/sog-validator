@@ -32,7 +32,7 @@
     "test": ">=0.0.5"
   },
   "engines": {
-    "node": ">=4.3.2"
+    "node": ">=4.0.0"
   },
   "_id": "bob-validator@0.1.0",
   "_shasum": "877b4f9fd845b5573548b247aa6e8768fb62d33e",
