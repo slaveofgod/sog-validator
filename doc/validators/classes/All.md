@@ -1,7 +1,6 @@
 # All
 When applied to an array, this constraint allows you to apply a collection of constraints to each element of the array.
 
-
 [**Homepage**][homepage-url]
 
 ### Navigation
