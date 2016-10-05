@@ -1,7 +1,7 @@
 # Issn
 Validates that a value is a valid [International Standard Serial Number (ISSN)](https://en.wikipedia.org/wiki/International_Standard_Serial_Number).
 
-[**Homepage**][documentation-schema-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 

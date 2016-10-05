@@ -1,7 +1,7 @@
 # LessThan
 Validates that a value is less than another value, defined in the options. To force that a value is less than or equal to another value, see [LessThanOrEqual][lessthanorequal-schema-url]. To force a value is greater than another value, see [GreaterThan][greaterthan-schema-url].
 
-[**Homepage**][documentation-schema-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 

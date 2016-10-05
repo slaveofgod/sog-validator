@@ -1,7 +1,7 @@
 # UniqueEntity
 Validates that a particular field (or fields) in entity is (are) unique. This is commonly used, for example, to prevent a new user to register using an email address that already exists in the system.
 
-[**Homepage**][documentation-schema-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 

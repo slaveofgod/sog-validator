@@ -1,7 +1,7 @@
 # Range
 Validates that a given number is *between* some minimum and maximum number or date.
 
-[**Homepage**][documentation-schema-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 

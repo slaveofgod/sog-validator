@@ -1,7 +1,7 @@
 # Choice
 This constraint is used to ensure that the given value is one of a given set of *valid* choices. It can also be used to validate that each item in an array of items is one of those valid choices.
 
-[**Homepage**][documentation-schema-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 

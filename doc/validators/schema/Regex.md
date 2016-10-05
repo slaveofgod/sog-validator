@@ -1,7 +1,7 @@
 # Regex
 Validates that a value matches a regular expression.
 
-[**Homepage**][documentation-schema-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 

@@ -1,7 +1,7 @@
 # Custom
 This constraint is used to ensure that the given value valid with many conditions. You can configure your own constraint using any count existing constraints.
 
-[**Homepage**][documentation-schema-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 

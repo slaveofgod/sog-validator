@@ -3,7 +3,7 @@ Validates that a value is exactly equal to `null`. To force that a property is s
 
 Also see [NotNull][notnull-schema-url].
 
-[**Homepage**][documentation-schema-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 

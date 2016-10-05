@@ -1,7 +1,7 @@
 # Language
 Validates that a value is a valid language *Unicode language identifier* (e.g. `fr` or `zh-Hant`).
 
-[**Homepage**][documentation-schema-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 

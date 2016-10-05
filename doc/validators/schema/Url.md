@@ -1,7 +1,7 @@
 # Url
 Validates that a value is a valid URL string.
 
-[**Homepage**][documentation-schema-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 

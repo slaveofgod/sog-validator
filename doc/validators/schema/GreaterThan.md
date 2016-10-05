@@ -1,7 +1,7 @@
 # GreaterThan
 Validates that a value is greater than another value, defined in the options. To force that a value is greater than or equal to another value, see [GreaterThanOrEqual][greaterthanorequal-schema-url]. To force a value is less than another value, see [LessThan][lessthan-schema-url].
 
-[**Homepage**][documentation-schema-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 

@@ -1,7 +1,7 @@
 # Email
 Validates that a value is a valid email address. The underlying value is cast to a string before being validated.
 
-[**Homepage**][documentation-schema-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 

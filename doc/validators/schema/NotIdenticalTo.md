@@ -3,7 +3,7 @@ Validates that a value is **not** identical to another value, defined in the opt
 
 This constraint compares using `!==,` so `3` and "`3`" are considered not equal. Use [NotEqualTo][notequalto-schema-url] to compare with `!=`.
 
-[**Homepage**][documentation-schema-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 

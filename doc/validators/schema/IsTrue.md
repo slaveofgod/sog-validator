@@ -4,7 +4,7 @@ Validates that a value is `true`. Specifically, this checks to see if the value 
 
 Also see [IsFalse][isfalse-schema-url].
 
-[**Homepage**][documentation-schema-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 

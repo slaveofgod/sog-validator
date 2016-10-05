@@ -1,7 +1,7 @@
 # Ip
 Validates that a value is a valid IP address. ~~By default, this will validate the value as IPv4, but a number of different options exist to validate as IPv6 and many other combinations.~~
 
-[**Homepage**][documentation-schema-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 

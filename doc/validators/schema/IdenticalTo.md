@@ -3,7 +3,7 @@ Validates that a value is identical to another value, defined in the options. To
 
 This constraint compares using `===`, so `3` and "`3`" are not considered equal. Use [EqualTo][equalto-schema-url] to compare with `==`.
 
-[**Homepage**][documentation-schema-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 

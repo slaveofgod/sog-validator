@@ -1,7 +1,7 @@
 # NotNull
 Validates that a value is not strictly equal to `null`. To ensure that a value is simply not blank (not a blank string), see the [NotBlank][notblank-schema-url] constraint.
 
-[**Homepage**][documentation-schema-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 

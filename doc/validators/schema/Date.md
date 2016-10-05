@@ -1,7 +1,7 @@
 # Date
 Validates that a value is a valid date, meaning either a `Date` object ~~or a string (or an object that can be cast into a string)~~ that follows a valid format.
 
-[**Homepage**][documentation-schema-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 

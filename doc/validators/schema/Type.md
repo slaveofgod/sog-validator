@@ -2,7 +2,7 @@
 
 Validates that a value is of a specific data type. For example, if a variable should be an `array`, you can use this constraint with the array type option to validate this.
 
-[**Homepage**][documentation-schema-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 

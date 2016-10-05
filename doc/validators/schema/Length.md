@@ -1,7 +1,7 @@
 # Length
 Validates that a given string length is between some minimum and maximum value.
 
-[**Homepage**][documentation-schema-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 
