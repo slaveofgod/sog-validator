@@ -2,16 +2,24 @@
 
 Validates that a value is of a specific data type. For example, if a variable should be an `array`, you can use this constraint with the array type option to validate this.
 
-[**Homepage**][documentation-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 
+* [Installation](#installation)
 * [Single Usage](#single-usage)
 * [Multi Usage](#multi-usage)
-* [Schema Usage](#schema-usage)
 * [Options](#options)
-* [Documentation](#documentation)
-* [Installation][installation-url]
+* [Supported Constraints](#supported-constraints)
+
+---------------
+
+#### Installation
+
+Install the library with:
+```sh
+$ npm install bob-validator
+```
 
 ---------------
 
@@ -107,59 +115,6 @@ if(!_oec.isValid()) {
 
 ---------------
 
-#### Schema Usage
-
-```javascript
-var _v = require('bob-validator');
-
-let AllValidator = _v.AllValidator;
-```
-
-**ES6:**
-```javascript
-import {
-    // ...
-    AllValidator
-} from 'bob-validator';
-```
-
-```javascript
-// Import ...
-
-let schema = {
-    // ...
-    fieldName: {
-        isRequired: true,
-        rules: {
-            // ...
-            Type: {
-                'type': 'integer',
-                'message': 'This value should be of type {{ type }}.'
-            }
-        }
-    }
-};
-
-let data = {
-    // ...
-    fieldName: 123456
-};
-
-let _oec = new AllValidator({
-    validators: schema,
-    validationType: 'schema',
-    errorType: 'array'
-});
-_oec.validate(data);
-if(!_oec.isValid()) {
-    let errors = _oec.getErrors();
-}
-```
-
-[⬆ back to top](#navigation)
-
----------------
-
 #### Options
 ##### type
 **type**: `string`
@@ -199,7 +154,7 @@ The message if the underlying data is not of the given type.
 
 ---------------
 
-## Documentation
+## Supported Constraints
 ##### Basic Constraints
 
 These are the basic constraints: use them to assert very basic things about the value of properties or the return value of methods on your object.
@@ -280,7 +235,7 @@ These are the basic constraints: use them to assert very basic things about the 
 
 
 [documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#documentation
-[installation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#installation-and-using
+[homepage-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md
 [notblank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/NotBlank.md
 [blank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/Blank.md
 [notnull-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/NotNull.md

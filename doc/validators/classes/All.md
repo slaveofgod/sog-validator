@@ -2,14 +2,23 @@
 When applied to an array, this constraint allows you to apply a collection of constraints to each element of the array.
 
 
-[**Homepage**][documentation-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 
+* [Installation](#installation)
 * [Basic Usage](#basic-usage)
 * [Options](#options)
-* [Documentation](#documentation)
-* [Installation][installation-url]
+* [Supported Constraints](#supported-constraints)
+
+---------------
+
+#### Installation
+
+Install the library with:
+```sh
+$ npm install bob-validator
+```
 
 ---------------
 
@@ -112,7 +121,7 @@ This parameter define environment (useful for developers). Available: ['prod', '
 
 ---------------
 
-## Documentation
+## Supported Constraints
 ##### Basic Constraints
 
 These are the basic constraints: use them to assert very basic things about the value of properties or the return value of methods on your object.
@@ -193,7 +202,7 @@ These are the basic constraints: use them to assert very basic things about the 
 
 
 [documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#documentation
-[installation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#installation-and-using
+[homepage-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md
 [notblank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/NotBlank.md
 [blank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/Blank.md
 [notnull-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/NotNull.md

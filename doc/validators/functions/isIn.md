@@ -1,7 +1,7 @@
 # isIn
 This constraint is used to ensure that the given value is one of a given set of *valid* choices.
 
-[**Homepage**][documentation-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 
@@ -125,6 +125,7 @@ These are the basic constraints: use them to assert very basic things about the 
 [⬆ back to top](#navigation)
 
 [documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#documentation
+[homepage-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md
 [is-notblank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isNotBlank.md
 [is-blank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isBlank.md
 [is-notnull-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isNotNull.md

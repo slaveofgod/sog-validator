@@ -1,7 +1,7 @@
 # isLanguage
 Validates that a value is a valid language *Unicode language identifier* (e.g. `fr` or `zh-Hant`).
 
-[**Homepage**][documentation-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 
@@ -109,6 +109,7 @@ These are the basic constraints: use them to assert very basic things about the 
 [⬆ back to top](#navigation)
 
 [documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#documentation
+[homepage-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md
 [is-notblank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isNotBlank.md
 [is-blank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isBlank.md
 [is-notnull-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isNotNull.md

@@ -1,16 +1,24 @@
 # Uuid
 Validates that a value is a valid [Universally unique identifier (UUID)](https://en.wikipedia.org/wiki/Universally_unique_identifier) per [RFC 4122](https://tools.ietf.org/html/rfc4122). By default, this will validate the format according to the RFC's guidelines, but this can be relaxed to accept non-standard UUIDs that other systems (like PostgreSQL) accept. UUID versions can also be restricted using a whitelist.
 
-[**Homepage**][documentation-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 
+* [Installation](#installation)
 * [Single Usage](#single-usage)
 * [Multi Usage](#multi-usage)
-* [Schema Usage](#schema-usage)
 * [Options](#options)
-* [Documentation](#documentation)
-* [Installation][installation-url]
+* [Supported Constraints](#supported-constraints)
+
+---------------
+
+#### Installation
+
+Install the library with:
+```sh
+$ npm install bob-validator
+```
 
 ---------------
 
@@ -108,60 +116,6 @@ if(!_oec.isValid()) {
 
 ---------------
 
-#### Schema Usage
-
-```javascript
-var _v = require('bob-validator');
-
-let AllValidator = _v.AllValidator;
-```
-
-**ES6:**
-```javascript
-import {
-    // ...
-    AllValidator
-} from 'bob-validator';
-```
-
-```javascript
-// Import ...
-
-let schema = {
-    // ...
-    fieldName: {
-        isRequired: true,
-        rules: {
-            // ...
-            Uuid: {
-                'message': 'This is not a valid UUID.',
-                'versions': [1,2,3,4,5],
-                'strict': false
-            }
-        }
-    }
-};
-
-let data = {
-    // ...
-    fieldName: '216f-ff40-98d9-11e3-a5e2-0800-200c-9a66'
-};
-
-let _oec = new AllValidator({
-    validators: schema,
-    validationType: 'schema',
-    errorType: 'array'
-});
-_oec.validate(data);
-if(!_oec.isValid()) {
-    let errors = _oec.getErrors();
-}
-```
-
-[⬆ back to top](#navigation)
-
----------------
-
 #### Options
 ##### message
 **type**: `string` **default**: `This is not a valid UUID.`
@@ -186,7 +140,7 @@ This option can be used to only allow specific [UUID versions](http://en.wikiped
 
 ---------------
 
-## Documentation
+## Supported Constraints
 ##### Basic Constraints
 
 These are the basic constraints: use them to assert very basic things about the value of properties or the return value of methods on your object.
@@ -267,7 +221,7 @@ These are the basic constraints: use them to assert very basic things about the 
 
 
 [documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#documentation
-[installation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#installation-and-using
+[homepage-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md
 [notblank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/NotBlank.md
 [blank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/Blank.md
 [notnull-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/NotNull.md

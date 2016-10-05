@@ -1,16 +1,24 @@
 # UniqueEntity
 Validates that a particular field (or fields) in entity is (are) unique. This is commonly used, for example, to prevent a new user to register using an email address that already exists in the system.
 
-[**Homepage**][documentation-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 
+* [Installation](#installation)
 * [Single Usage](#single-usage)
 * [Multi Usage](#multi-usage)
-* [Schema Usage](#schema-usage)
 * [Options](#options)
-* [Documentation](#documentation)
-* [Installation][installation-url]
+* [Supported Constraints](#supported-constraints)
+
+---------------
+
+#### Installation
+
+Install the library with:
+```sh
+$ npm install bob-validator
+```
 
 ---------------
 
@@ -142,77 +150,6 @@ if(!_oec.isValid()) {
 
 ---------------
 
-#### Schema Usage
-
-```javascript
-var _v = require('bob-validator');
-
-let AllValidator = _v.AllValidator;
-```
-
-**ES6:**
-```javascript
-import {
-    // ...
-    AllValidator
-} from 'bob-validator';
-```
-
-```javascript
-// Import ...
-
-let schema = {
-    // ...
-    fieldName: {
-        isRequired: true,
-        rules: {
-            // ...
-            UniqueEntity: {
-                'message': 'This value is already used.',
-                'fields': ['first_name', 'email'],
-                'repositoryData':[
-                    {"id":1,"first_name":"Diana","last_name":"Simmons","email":"dsimmons0@google.com"},
-                    {"id":2,"first_name":"Earl","last_name":"Hunt","email":"ehunt1@wp.com"},
-                    {"id":3,"first_name":"Kathy","last_name":"Day","email":"kday2@dagondesign.com"},
-                    {"id":4,"first_name":"Andrew","last_name":"Gilbert","email":"agilbert3@ft.com"},
-                    {"id":5,"first_name":"Matthew","last_name":"Watkins","email":"mwatkins4@freewebs.com"},
-                    {"id":6,"first_name":"Phillip","last_name":"Burke","email":"pburke5@unc.edu"},
-                    {"id":7,"first_name":"Ashley","last_name":"James","email":"ajames6@oaic.gov.au"},
-                    {"id":8,"first_name":"Roger","last_name":"Franklin","email":"rfranklin7@phpbb.com"},
-                    {"id":9,"first_name":"Randy","last_name":"Shaw","email":"rshaw8@google.fr"},
-                    {"id":10,"first_name":"Marie","last_name":"Perez","email":"mperez9@mozilla.org"},
-                    {"id":11,"first_name":"Jennifer","last_name":"Kennedy","email":"jkennedya@sciencedaily.com"},
-                    {"id":12,"first_name":"Carol","last_name":"Butler","email":"cbutlerb@mac.com"},
-                    {"id":13,"first_name":"Angela","last_name":"Morrison","email":"amorrisonc@cbsnews.com"},
-                    {"id":14,"first_name":"Stephanie","last_name":"Mitchell","email":"smitchelld@free.fr"},
-                    {"id":15,"first_name":"Henry","last_name":"Ramos","email":"hramose@ibm.com"}
-                ],
-                'ignoreNull': true
-            }
-        }
-    }
-};
-
-let data = {
-    // ...
-    fieldName: {"id":16,"first_name":"Tammy","last_name":"Montgomery","email":"tmontgomeryf@tinyurl.com"}
-};
-
-let _oec = new AllValidator({
-    validators: schema,
-    validationType: 'schema',
-    errorType: 'array'
-});
-_oec.validate(data);
-if(!_oec.isValid()) {
-    let errors = _oec.getErrors();
-}
-```
-
-[⬆ back to top](#navigation)
-
----------------
-
 #### Options
 ##### message
 **type**: `string` **default**: `This value is already used.`
@@ -240,7 +177,7 @@ This required option is data source for comparing.
 
 ---------------
 
-## Documentation
+## Supported Constraints
 ##### Basic Constraints
 
 These are the basic constraints: use them to assert very basic things about the value of properties or the return value of methods on your object.
@@ -321,7 +258,7 @@ These are the basic constraints: use them to assert very basic things about the 
 
 
 [documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#documentation
-[installation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#installation-and-using
+[homepage-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md
 [notblank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/NotBlank.md
 [blank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/Blank.md
 [notnull-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/NotNull.md

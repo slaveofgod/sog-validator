@@ -1,16 +1,24 @@
 # Ip
 Validates that a value is a valid IP address. ~~By default, this will validate the value as IPv4, but a number of different options exist to validate as IPv6 and many other combinations.~~
 
-[**Homepage**][documentation-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 
+* [Installation](#installation)
 * [Single Usage](#single-usage)
 * [Multi Usage](#multi-usage)
-* [Schema Usage](#schema-usage)
 * [Options](#options)
-* [Documentation](#documentation)
-* [Installation][installation-url]
+* [Supported Constraints](#supported-constraints)
+
+---------------
+
+#### Installation
+
+Install the library with:
+```sh
+$ npm install bob-validator
+```
 
 ---------------
 
@@ -104,58 +112,6 @@ if(!_oec.isValid()) {
 
 ---------------
 
-#### Schema Usage
-
-```javascript
-var _v = require('bob-validator');
-
-let AllValidator = _v.AllValidator;
-```
-
-**ES6:**
-```javascript
-import {
-    // ...
-    AllValidator
-} from 'bob-validator';
-```
-
-```javascript
-// Import ...
-
-let schema = {
-    // ...
-    fieldName: {
-        isRequired: true,
-        rules: {
-            // ...
-            Ip: {
-                'message': 'This is not a valid IP address.'
-            }
-        }
-    }
-};
-
-let data = {
-    // ...
-    fieldName: '8.8.8.8'
-};
-
-let _oec = new AllValidator({
-    validators: schema,
-    validationType: 'schema',
-    errorType: 'array'
-});
-_oec.validate(data);
-if(!_oec.isValid()) {
-    let errors = _oec.getErrors();
-}
-```
-
-[⬆ back to top](#navigation)
-
----------------
-
 #### Options
 ##### message
 **type**: `string` **default**: `This is not a valid IP address.`
@@ -195,7 +151,7 @@ This message is shown if the string is not a valid IP address.
 
 ---------------
 
-## Documentation
+## Supported Constraints
 ##### Basic Constraints
 
 These are the basic constraints: use them to assert very basic things about the value of properties or the return value of methods on your object.
@@ -276,7 +232,7 @@ These are the basic constraints: use them to assert very basic things about the 
 
 
 [documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#documentation
-[installation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#installation-and-using
+[homepage-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md
 [notblank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/NotBlank.md
 [blank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/Blank.md
 [notnull-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/NotNull.md

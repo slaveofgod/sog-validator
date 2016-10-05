@@ -1,15 +1,24 @@
 # GreaterThan
 Validates that a value is greater than another value, defined in the options. To force that a value is greater than or equal to another value, see [GreaterThanOrEqual][greaterthanorequal-url]. To force a value is less than another value, see [LessThan][lessthan-url].
 
-[**Homepage**][documentation-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 
+* [Installation](#installation)
 * [Basic Usage](#basic-usage)
 * [Comparing Dates](#comparing-dates)
 * [Options](#options)
-* [Documentation](#documentation)
-* [Installation][installation-url]
+* [Supported Constraints](#supported-constraints)
+
+---------------
+
+#### Installation
+
+Install the library with:
+```sh
+$ npm install bob-validator
+```
 
 ---------------
 
@@ -91,55 +100,6 @@ let data = {
 let _oec = new AllValidator({
     validators: validators,
     validationType: 'object',
-    errorType: 'array'
-});
-_oec.validate(data);
-if(!_oec.isValid()) {
-    let errors = _oec.getErrors();
-}
-```
-
-**Schema Usage**
-
-```javascript
-var _v = require('bob-validator');
-
-let AllValidator = _v.AllValidator;
-```
-
-**ES6:**
-```javascript
-import {
-    // ...
-    AllValidator
-} from 'bob-validator';
-```
-
-```javascript
-// Import ...
-
-let schema = {
-    // ...
-    fieldName: {
-        isRequired: true,
-        rules: {
-            // ...
-            GreaterThan: {
-                'value': 100,
-                'message': 'This value should be greater than {{ compared_value }}.'
-            }
-        }
-    }
-};
-
-let data = {
-    // ...
-    fieldName: 185 
-};
-
-let _oec = new AllValidator({
-    validators: schema,
-    validationType: 'schema',
     errorType: 'array'
 });
 _oec.validate(data);
@@ -238,55 +198,6 @@ if(!_oec.isValid()) {
 }
 ```
 
-**Schema Usage**
-
-```javascript
-var _v = require('bob-validator');
-
-let AllValidator = _v.AllValidator;
-```
-
-**ES6:**
-```javascript
-import {
-    // ...
-    AllValidator
-} from 'bob-validator';
-```
-
-```javascript
-// Import ...
-
-let schema = {
-    // ...
-    fieldName: {
-        isRequired: true,
-        rules: {
-            // ...
-            GreaterThan: {
-                'value': new Date(2015, 0, 1, 0, 0, 0, 0),
-                'message': 'This value should be greater than {{ compared_value }}.'
-            }
-        }
-    }
-};
-
-let data = {
-    // ...
-    fieldName: new Date(2016, 0, 1, 0, 0, 0, 0)
-};
-
-let _oec = new AllValidator({
-    validators: schema,
-    validationType: 'schema',
-    errorType: 'array'
-});
-_oec.validate(data);
-if(!_oec.isValid()) {
-    let errors = _oec.getErrors();
-}
-```
-
 [⬆ back to top](#navigation)
 
 ---------------
@@ -306,7 +217,7 @@ This is the message that will be shown if the value is not greater than the comp
 
 ---------------
 
-## Documentation
+## Supported Constraints
 ##### Basic Constraints
 
 These are the basic constraints: use them to assert very basic things about the value of properties or the return value of methods on your object.
@@ -387,7 +298,7 @@ These are the basic constraints: use them to assert very basic things about the 
 
 
 [documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#documentation
-[installation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#installation-and-using
+[homepage-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md
 [notblank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/NotBlank.md
 [blank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/Blank.md
 [notnull-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/NotNull.md

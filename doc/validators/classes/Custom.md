@@ -1,16 +1,24 @@
 # Custom
 This constraint is used to ensure that the given value valid with many conditions. You can configure your own constraint using any count existing constraints.
 
-[**Homepage**][documentation-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 
+* [Installation](#installation)
 * [Single Usage](#single-usage)
 * [Multi Usage](#multi-usage)
-* [Schema Usage](#schema-usage)
 * [Options](#options)
-* [Documentation](#documentation)
-* [Installation][installation-url]
+* [Supported Constraints](#supported-constraints)
+
+---------------
+
+#### Installation
+
+Install the library with:
+```sh
+$ npm install bob-validator
+```
 
 ---------------
 
@@ -130,71 +138,6 @@ if(!_oec.isValid()) {
 
 ---------------
 
-#### Schema Usage
-
-```javascript
-var _v = require('bob-validator');
-
-let AllValidator = _v.AllValidator;
-```
-
-**ES6:**
-```javascript
-import {
-    // ...
-    AllValidator
-} from 'bob-validator';
-
-```
-
-```javascript
-// Import ...
-
-let CreditCard = {
-    rules: {
-        NotBlank: {},
-        Length: {
-            'min': 11,
-            'max': 19
-        },
-        CardScheme: {
-            'schemes': ['AMEX', 'CHINA_UNIONPAY', 'DINERS', 'DISCOVER', 'INSTAPAYMENT', 'JCB', 'LASER', 'MAESTRO', 'MASTERCARD', 'VISA']
-        }
-    },
-    message: 'Invalid credit card'
-};
-
-let schema = {
-    // ...
-    fieldName: {
-        isRequired: true,
-        rules: {
-            // ...
-            Custom: CreditCard
-        }
-    }
-};
-
-let data = {
-    // ...
-    fieldName: '4111111111111111'
-};
-
-let _oec = new AllValidator({
-    validators: schema,
-    validationType: 'schema',
-    errorType: 'array'
-});
-_oec.validate(data);
-if(!_oec.isValid()) {
-    let errors = _oec.getErrors();
-}
-```
-
-[⬆ back to top](#navigation)
-
----------------
-
 #### Options
 ##### validators
 **type**: `array`
@@ -210,7 +153,7 @@ The message shown if the given value is not a valid. If `message` is `null`, wil
 
 ---------------
 
-## Documentation
+## Supported Constraints
 ##### Basic Constraints
 
 These are the basic constraints: use them to assert very basic things about the value of properties or the return value of methods on your object.
@@ -291,7 +234,7 @@ These are the basic constraints: use them to assert very basic things about the 
 
 
 [documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#documentation
-[installation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#installation-and-using
+[homepage-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md
 [notblank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/NotBlank.md
 [blank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/Blank.md
 [notnull-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/NotNull.md

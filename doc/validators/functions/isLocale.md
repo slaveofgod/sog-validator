@@ -1,7 +1,7 @@
 # isLocale
 Validates that a value is a valid locale. The "value" for each locale is either the two letter [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) *language* code (e.g. `fr`), or the language code followed by an underscore (`_`), then the [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes) *country* code (e.g. `fr_FR` for French/France).
 
-[**Homepage**][documentation-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 
@@ -109,6 +109,7 @@ These are the basic constraints: use them to assert very basic things about the 
 [⬆ back to top](#navigation)
 
 [documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#documentation
+[homepage-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md
 [is-notblank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isNotBlank.md
 [is-blank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isBlank.md
 [is-notnull-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isNotNull.md

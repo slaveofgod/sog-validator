@@ -1,15 +1,24 @@
 # Choice
 This constraint is used to ensure that the given value is one of a given set of *valid* choices. It can also be used to validate that each item in an array of items is one of those valid choices.
 
-[**Homepage**][documentation-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 
+* [Installation](#installation)
 * [Basic Usage](#basic-usage)
 * [Multiple Usage](#multiple-usage)
 * [Options](#options)
-* [Documentation](#documentation)
-* [Installation][installation-url]
+* [Supported Constraints](#supported-constraints)
+
+---------------
+
+#### Installation
+
+Install the library with:
+```sh
+$ npm install bob-validator
+```
 
 ---------------
 
@@ -94,57 +103,6 @@ let data = {
 
 let _oec = new AllValidator({data: data, validators: validators});
 _oec.validate();
-if(!_oec.isValid()) {
-    let errors = _oec.getErrors();
-}
-```
-
-**Schema Usage**
-
-```javascript
-var _v = require('bob-validator');
-
-let AllValidator = _v.AllValidator;
-```
-
-**ES6:**
-```javascript
-import {
-    // ...
-    AllValidator
-} from 'bob-validator';
-```
-
-```javascript
-// Import ...
-
-let schema = {
-    // ...
-    fieldName: {
-        isRequired: true,
-        rules: {
-            // ...
-            Choice: {
-                'choices': [1111, 'aaaaa', 3333, '123a'],
-                'multiple': false,
-                'message': 'The value you selected is not a valid choice.',
-                'strict': true
-            }
-        }
-    }
-};
-
-let data = {
-    // ...
-    fieldName: 'aaaaa'
-};
-
-let _oec = new AllValidator({
-    validators: schema,
-    validationType: 'schema',
-    errorType: 'array'
-});
-_oec.validate(data);
 if(!_oec.isValid()) {
     let errors = _oec.getErrors();
 }
@@ -254,62 +212,6 @@ if(!_oec.isValid()) {
 }
 ```
 
-**Schema Usage**
-
-```javascript
-var _v = require('bob-validator');
-
-let AllValidator = _v.AllValidator;
-```
-
-**ES6:**
-```javascript
-import {
-    // ...
-    AllValidator
-} from 'bob-validator';
-```
-
-```javascript
-// Import ...
-
-let schema = {
-    // ...
-    fieldName: {
-        isRequired: true,
-        rules: {
-            // ...
-            Choice: {
-                'choices': [1111, 'aaaaa', 3333, '123a'],
-                'multiple': true,
-                'min': 1,
-                'max': 10,
-                'message': 'The value you selected is not a valid choice.',
-                'multipleMessage': 'One or more of the given values is invalid.',
-                'minMessage': 'You must select at least {{ limit }} choices.',
-                'maxMessage': 'You must select at most {{ limit }} choices.',
-                'strict': true
-            }
-        }
-    }
-};
-
-let data = {
-    // ...
-    fieldName: [1111, '123a']
-};
-
-let _oec = new AllValidator({
-    validators: schema,
-    validationType: 'schema',
-    errorType: 'array'
-});
-_oec.validate(data);
-if(!_oec.isValid()) {
-    let errors = _oec.getErrors();
-}
-```
-
 [⬆ back to top](#navigation)
 
 ---------------
@@ -369,7 +271,7 @@ If true, the validator will also check the type of the input value.
 
 ---------------
 
-## Documentation
+## Supported Constraints
 ##### Basic Constraints
 
 These are the basic constraints: use them to assert very basic things about the value of properties or the return value of methods on your object.
@@ -450,7 +352,7 @@ These are the basic constraints: use them to assert very basic things about the 
 
 
 [documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#documentation
-[installation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#installation-and-using
+[homepage-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md
 [notblank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/NotBlank.md
 [blank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/Blank.md
 [notnull-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/classes/NotNull.md

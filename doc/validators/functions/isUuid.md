@@ -1,7 +1,7 @@
 # isUuid
 Validates that a value is a valid [Universally unique identifier (UUID)](https://en.wikipedia.org/wiki/Universally_unique_identifier) per [RFC 4122](https://tools.ietf.org/html/rfc4122). By default, this will validate the format according to the RFC's guidelines, but this can be relaxed to accept non-standard UUIDs that other systems (like PostgreSQL) accept. UUID versions can also be restricted using a whitelist.
 
-[**Homepage**][documentation-url]
+[**Homepage**][homepage-url]
 
 ### Navigation
 
@@ -129,6 +129,7 @@ These are the basic constraints: use them to assert very basic things about the 
 [⬆ back to top](#navigation)
 
 [documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#documentation
+[homepage-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md
 [is-notblank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isNotBlank.md
 [is-blank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isBlank.md
 [is-notnull-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isNotNull.md
