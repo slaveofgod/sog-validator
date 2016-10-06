@@ -1,12 +1,11 @@
-# isUniqueEntity
-Validates that a particular field (or fields) in entity is (are) unique. This is commonly used, for example, to prevent a new user to register using an email address that already exists in the system.
+# isCallable
+Validates that a value is `callable` data type. Verify that the contents of a variable can be called as a function.
 
 [**Homepage**][homepage-url]
 
 ### Navigation
 
 * [Installation and Using](#installation-and-using)
-* [Options](#options)
 * [Supported Constraints](#supported-constraints)
 
 ---------------
@@ -23,53 +22,26 @@ $ npm install bob-validator
 ```javascript
 var _v = require('bob-validator');
 
-var data = {"id":16,"first_name":"Tammy","last_name":"Montgomery","email":"tmontgomeryf@tinyurl.com"};
+var data = function(value, parameters){
+   if((value *1) != value){
+       throw new Error(`Invalid "value" type. Expected type \"number\", \"${typeof value}\" given`);
+   }
 
-if(_v.func.isUniqueEntity(data, {
-    'fields': ['first_name', 'email'],
-    'repositoryData':[
-        {"id":1,"first_name":"Diana","last_name":"Simmons","email":"dsimmons0@google.com"},
-        {"id":2,"first_name":"Earl","last_name":"Hunt","email":"ehunt1@wp.com"},
-        {"id":3,"first_name":"Kathy","last_name":"Day","email":"kday2@dagondesign.com"},
-        {"id":4,"first_name":"Andrew","last_name":"Gilbert","email":"agilbert3@ft.com"},
-        {"id":5,"first_name":"Matthew","last_name":"Watkins","email":"mwatkins4@freewebs.com"},
-        {"id":6,"first_name":"Phillip","last_name":"Burke","email":"pburke5@unc.edu"},
-        {"id":7,"first_name":"Ashley","last_name":"James","email":"ajames6@oaic.gov.au"},
-        {"id":8,"first_name":"Roger","last_name":"Franklin","email":"rfranklin7@phpbb.com"},
-        {"id":9,"first_name":"Randy","last_name":"Shaw","email":"rshaw8@google.fr"},
-        {"id":10,"first_name":"Marie","last_name":"Perez","email":"mperez9@mozilla.org"},
-        {"id":11,"first_name":"Jennifer","last_name":"Kennedy","email":"jkennedya@sciencedaily.com"},
-        {"id":12,"first_name":"Carol","last_name":"Butler","email":"cbutlerb@mac.com"},
-        {"id":13,"first_name":"Angela","last_name":"Morrison","email":"amorrisonc@cbsnews.com"},
-        {"id":14,"first_name":"Stephanie","last_name":"Mitchell","email":"smitchelld@free.fr"},
-        {"id":15,"first_name":"Henry","last_name":"Ramos","email":"hramose@ibm.com"}
-    ]
-})){
+   if(value < parameters['min']){
+       return false;
+   }
+
+   if(value > parameters['max']){
+       return false;
+   }
+
+   return true;
+};
+
+if(_v.func.isCallable(data)){
     // Some code ...
 }
 ```
-
-[⬆ back to top](#navigation)
-
----------------
-
-#### Options
-##### fields
-**type**: `array`
-
-This required option is the field (or list of fields) on which this entity should be unique. For example, if you specified both the `email` and `name` field in a single `UniqueEntity` constraint, then it would enforce that the combination value is unique (e.g. two users could have the same email, as long as they don't have the same name also).
-
-If you need to require two fields to be individually unique (e.g. a unique `email` and a unique `username`), you use two `UniqueEntity` entries, each with a single field.
-
-##### ~~ignoreNull~~ `(not implemented)`
-~~**type**: `boolean` **default**: `true`~~
-
-~~If this option is set to `true`, then the constraint will allow multiple entities to have a `null` value for a field without failing validation. If set to `false`, only one `null` value is allowed - if a second entity also has a `null` value, validation would fail.~~
-
-##### repositoryData
-**type**: `array`
-
-This required option is data source for comparing.
 
 [⬆ back to top](#navigation)
 

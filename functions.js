@@ -22,6 +22,7 @@ var isNumeric = require('./lib/Constraints/Functions/isNumeric');
 var isObject = require('./lib/Constraints/Functions/isObject');
 var isScalar = require('./lib/Constraints/Functions/isScalar');
 var isString = require('./lib/Constraints/Functions/isString');
+var isCallable = require('./lib/Constraints/Functions/isCallable');
 
 /**
  * String Constraints
@@ -137,5 +138,6 @@ module.exports = {
     'isIban': isIban,
     'isIsbn': isIsbn,
     'isIssn': isIssn,
-    'isUniqueEntity': isUniqueEntity
+    'isUniqueEntity': isUniqueEntity,
+    'isCallable': isCallable
 };

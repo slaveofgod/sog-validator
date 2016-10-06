@@ -532,46 +532,6 @@ exports['test isEmail'] = function(assert, done) {
     done();
 }
 
-exports['test isLength'] = function(assert, done) {
-    var _function = _v.func.isLength;
-    var positive, negative;
-
-    positive = [
-        _function(12345, {'min': 5, 'max': 10}),
-        _function(1234567, {'min': 5, 'max': 10}),
-        _function(1234567890, {'min': 5, 'max': 10}),
-        _function('12345', {'min': 5, 'max': 10}),
-        _function('1234567', {'min': 5, 'max': 10}),
-        _function('1234567890', {'min': 5, 'max': 10}),
-        _function([1,2,3,4,5], {'min': 5, 'max': 10}),
-        _function([1,2,3,4,5,6,7], {'min': 5, 'max': 10}),
-        _function([1,2,3,4,5,6,7,8,9,10], {'min': 5, 'max': 10}),
-        _function(new Array(1,2,3,4,5), {'min': 5, 'max': 10}),
-        _function(new Array(1,2,3,4,5,6,7), {'min': 5, 'max': 10}),
-        _function(new Array(1,2,3,4,5,6,7,8,9,10), {'min': 5, 'max': 10})
-    ];
-
-    negative = [
-        _function(1234, {'min': 5, 'max': 10}),
-        _function(12345678901, {'min': 5, 'max': 10}),
-        _function([1,2,3,4], {'min': 5, 'max': 10}),
-        _function([1,2,3,4,5,6,7,8,9,10,11], {'min': 5, 'max': 10}),
-        _function(true, {'min': 5, 'max': 10}),
-        _function(false, {'min': 5, 'max': 10}),
-        _function(new Object(), {'min': 5, 'max': 10})
-    ];
-
-    positive.forEach(function (value) {
-        assert.equal(value, true, 'Positive conditions')
-    })
-
-    negative.forEach(function (value) {
-        assert.notEqual(value, true, 'Negative conditions')
-    })
-
-    done();
-}
-
 exports['test isUrl'] = function(assert, done) {
     var _function = _v.func.isUrl;
     var positive, negative;
@@ -1617,6 +1577,119 @@ exports['test isUniqueEntity'] = function(assert, done) {
     done();
 }
 
+exports['test isLength'] = function(assert, done) {
+    var _function = _v.func.isLength;
+    var positive, negative;
+
+    positive = [
+        _function(12345, {'min': 5, 'max': 10}),
+        _function(1234567, {'min': 5, 'max': 10}),
+        _function(1234567890, {'min': 5, 'max': 10}),
+        _function('12345', {'min': 5, 'max': 10}),
+        _function('1234567', {'min': 5, 'max': 10}),
+        _function('1234567890', {'min': 5, 'max': 10}),
+        _function('Mauris fermentum arcu rhoncus eros convallis vulputate.', {'min': 1, 'max': 255}),
+        _function('汉字/漢字', {'min': 1, 'max': 255})
+    ];
+
+    negative = [
+        _function(1234, {'min': 5, 'max': 10}),
+        _function(12345678901, {'min': 5, 'max': 10}),
+        _function([1,2,3,4,5], {'min': 5, 'max': 10}),
+        _function([1,2,3,4,5,6,7], {'min': 5, 'max': 10}),
+        _function([1,2,3,4,5,6,7,8,9,10], {'min': 5, 'max': 10}),
+        _function(new Array(1,2,3,4,5), {'min': 5, 'max': 10}),
+        _function(new Array(1,2,3,4,5,6,7), {'min': 5, 'max': 10}),
+        _function(new Array(1,2,3,4,5,6,7,8,9,10), {'min': 5, 'max': 10}),
+        _function([1,2,3,4], {'min': 5, 'max': 10}),
+        _function([1,2,3,4,5,6,7,8,9,10,11], {'min': 5, 'max': 10}),
+        _function(true, {'min': 5, 'max': 10}),
+        _function(false, {'min': 5, 'max': 10}),
+        _function(new Object(), {'min': 5, 'max': 10})
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+exports['test isCallable'] = function(assert, done) {
+    var _function = _v.func.isCallable;
+    var positive, negative;
+
+    var rangeFunction = function(value, parameters){
+        if((value *1) != value){
+            throw new Error(`Invalid "value" type. Expected type \"number\", \"${typeof value}\" given`);
+        }
+
+        if(value < parameters['min']){
+            return false;
+        }
+
+        if(value > parameters['max']){
+            return false;
+        }
+
+        return true;
+    };
+
+    positive = [
+        _function(function(value, parameters){
+            if((value *1) != value){
+                throw new Error(`Invalid "value" type. Expected type \"number\", \"${typeof value}\" given`);
+            }
+
+            if(value < parameters['min']){
+                return false;
+            }
+
+            if(value > parameters['max']){
+                return false;
+            }
+
+            return true;
+        }),
+        _function(Math.round),
+        _function(rangeFunction)
+    ];
+
+    negative = [
+        _function("function(value, parameters){if((value *1) != value){throw new Error(`Invalid 'value' type. Expected type \'number\', \'${typeof value}\' given`);} if(value < parameters['min']){ return false;}if(value > parameters['max']){return false;}return true;}"),
+        _function('12345'),
+        _function('123.45'),
+        _function('abcde'),
+        _function("Lorem Ipsum"),
+        _function(123.45),
+        _function(12345),
+        _function(1),
+        _function(0),
+        _function(true),
+        _function(false),
+        _function(new Array()),
+        _function([]),
+        _function([1111, 'aaaa']),
+        _function(null),
+        _function({}),
+        _function(new Object()),
+        _function({'aaa': 111, 'bbb': 222})
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
 
 
 

@@ -120,7 +120,7 @@ if(!_oec.isValid()) {
 **type**: `string`
 * `array`
 * `bool`
-* ~~`callable`~~ `(not implemented)`
+* `callable`
 * `float`
 * `double`
 * `int`
