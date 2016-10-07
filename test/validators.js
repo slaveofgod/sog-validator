@@ -1691,6 +1691,42 @@ exports['test isCallable'] = function(assert, done) {
     done();
 }
 
+exports['test isLong'] = function(assert, done) {
+    var _function = _v.func.isLong;
+    var positive, negative;
+
+    positive = [
+        _function(12345),
+        _function(1),
+        _function(0),
+        _function('12345')
+    ];
+
+    negative = [
+        _function('123.45'),
+        _function(123.45),
+        _function('abcde'),
+        _function("Lorem Ipsum"),
+        _function({}),
+        _function(new Array()),
+        _function([]),
+        _function([1111, 'aaaa']),
+        _function(null),
+        _function(true),
+        _function(false)
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
 
 
 

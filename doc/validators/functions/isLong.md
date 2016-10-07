@@ -1,57 +1,39 @@
-# bob-validator
+# isLong
+Validates that a value is `long` data type.
 
-[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status][travis-image]][travis-url]
-
-A library of validators
+[**Homepage**][homepage-url]
 
 ### Navigation
 
 * [Installation and Using](#installation-and-using)
-* [Supported **Function** Constraints][supported-function-constraints-url]
-* [Supported **Class** Constraints][supported-class-constraints-url]
-* [Supported **Schema** Constraints][supported-schema-constraints-url]
-* [**Functions** Usage Example](#functions-usage-example)
-* [**Classes** Usage Example](#classes-usage-example)
-* [**Schema** Usage Example](#schema-usage-example)
-* [Tests](#tests)
+* [Supported Constraints](#supported-constraints)
 
 ---------------
 
-### Installation and Using
-
-**Server-side usage**
+#### Installation and Using
 
 Install the library with:
 ```sh
 $ npm install bob-validator
 ```
 
-```javascript
-var _v = require('bob-validator');
-
-// ...
-let AllValidator = _v.AllValidator;
-```
-
-**ES6:**
-```javascript
-import {
-    // ...
-    AllValidator
-} from 'bob-validator';
-```
-
----------------
-
-#### Supported Function Constraints
+##### Example
 
 ```javascript
 var _v = require('bob-validator');
 
-if(_v.func.isEmail('email@domain.com')){
+var data = 123;
+
+if(_v.func.isLong(data)){
     // Some code ...
 }
 ```
+
+[⬆ back to top](#navigation)
+
+---------------
+
+## Supported Constraints
 
 ##### Basic Constraints
 
@@ -125,306 +107,11 @@ These are the basic constraints: use them to assert very basic things about the 
 * **[isIsbn][is-isbn-url](data, options)** - This constraint validates that an [International Standard Book Number (ISBN)](https://en.wikipedia.org/wiki/International_Standard_Book_Number) is either a valid ISBN-10 or a valid ISBN-13. Optional options: {'`type`': 'isbn10'}.
 * **[isIssn][is-issn-url](data, options)** - Validates that a value is a valid [International Standard Serial Number (ISSN)](https://en.wikipedia.org/wiki/International_Standard_Serial_Number). Optional options: {'`caseSensitive`': false, '`requireHyphen`': false}.
 
-[⬆ back to top](#navigation)
-
----------------
-
-#### Functions Usage Example
-
-```javascript
-var _v = require('bob-validator');
-
-if(_v.func.isEmail('email@domain.com')){
-    // Some code ...
-}
-```
 
 [⬆ back to top](#navigation)
 
----------------
-
-#### Classes Usage Example
-
-```javascript
-var _v = require('bob-validator');
-
-let NotBlankValidator = _v.NotBlankValidator;
-let LengthValidator = _v.LengthValidator;
-let CardSchemeValidator = _v.CardSchemeValidator;
-let EmailValidator = _v.EmailValidator;
-let DateValidator = _v.DateValidator;
-let IpValidator = _v.IpValidator;
-let LocaleValidator = _v.LocaleValidator;
-let CountryValidator = _v.CountryValidator;
-let LanguageValidator = _v.LanguageValidator;
-let UrlValidator = _v.UrlValidator;
-let CustomValidator = _v.CustomValidator;
-let AllValidator = _v.AllValidator;
-```
-
-**ES6:**
-```javascript
-import {
-    NotBlankValidator,
-    LengthValidator,
-    CardSchemeValidator,
-    EmailValidator,
-    DateValidator,
-    IpValidator,
-    LocaleValidator,
-    CountryValidator,
-    LanguageValidator,
-    UrlValidator,
-    CustomValidator,
-    AllValidator
-} from 'bob-validator';
-```
-
-```javascript
-// Import ...
-
-let CreditCardValidator = new CustomValidator({
-    rules: [
-        new NotBlankValidator({}),
-        new LengthValidator({'min': 11, 'max': 19}),
-        new CardSchemeValidator({'schemes': ['AMEX', 'CHINA_UNIONPAY', 'DINERS', 'DISCOVER', 'INSTAPAYMENT', 'JCB', 'LASER', 'MAESTRO', 'MASTERCARD', 'VISA']})
-    ],
-    message: 'Your error message'
-});
-
-let validators = {
-    name: {
-        isRequired: true,
-        rules: [
-            new NotBlankValidator({}),
-            new LengthValidator({'min': 2, 'max': 255})
-        ]
-    },
-    email: {
-        isRequired: true,
-        rules: [
-            new NotBlankValidator({}),
-            new EmailValidator({})
-        ]
-    },
-    birthday: {
-        isRequired: true,
-        rules: [
-            new NotBlankValidator({}),
-            new DateValidator({'format': 'DD.MM.YYYY'})
-        ]
-    },
-    creditCard: {
-        isRequired: true,
-        rules: [
-            new NotBlankValidator({}),
-            CreditCardValidator
-        ]
-    },
-    ip: {
-        isRequired: true,
-        rules: [
-            new NotBlankValidator({}),
-            new IpValidator({})
-        ]
-    },
-    locale: {
-        isRequired: true,
-        rules: [
-            new NotBlankValidator({}),
-            new LocaleValidator({})
-        ]
-    },
-    country: {
-        isRequired: true,
-        rules: [
-            new NotBlankValidator({}),
-            new CountryValidator({})
-        ]
-    },
-    language: {
-        isRequired: true,
-        rules: [
-            new NotBlankValidator({}),
-            new LanguageValidator({})
-        ]
-    },
-    homepage: {
-        isRequired: true,
-        rules: [
-            new NotBlankValidator({}),
-            new UrlValidator({})
-        ]
-    }
-};
-
-let data = {
-    name: 'Leo Lane',
-    email: 'leo.lane38@example.com',
-    birthday: '03.07.1977',
-    creditCard: '4111111111111111',
-    ip: '8.8.8.8',
-    locale: 'cy_GB',
-    country: 'US',
-    language: 'en_gb',
-    homepage: 'https://github.com/alexeybob/bob-validator'
-};
-
-let _oec = new AllValidator({
-    validators: validators,
-    validationType: 'object',
-    errorType: 'array'
-});
-_oec.validate(data);
-
-if(!_oec.isValid()) {
-    let errors = _oec.getErrors();
-}
-```
-
-[⬆ back to top](#navigation)
-
----------------
-
-#### Schema Usage Example
-
-```javascript
-var _v = require('bob-validator');
-
-let AllValidator = _v.AllValidator;
-```
-
-**ES6:**
-```javascript
-import {
-    AllValidator
-} from 'bob-validator';
-```
-
-```javascript
-// Import ...
-
-let CreditCard = {
-    rules: {
-        NotBlank: {},
-        Length: {
-            'min': 11,
-            'max': 19
-        },
-        CardScheme: {
-            'schemes': ['AMEX', 'CHINA_UNIONPAY', 'DINERS', 'DISCOVER', 'INSTAPAYMENT', 'JCB', 'LASER', 'MAESTRO', 'MASTERCARD', 'VISA']
-        }
-    },
-    message: 'Your error message'
-};
-
-let schema = {
-    name: {
-        isRequired: true,
-        rules: {
-            NotBlank: {},
-            Length: {
-                'min': 2,
-                'max': 255
-            }
-        }
-    },
-    email: {
-        isRequired: true,
-        rules: {
-            NotBlank: {},
-            Email: {}
-        }
-    },
-    birthday: {
-        isRequired: true,
-        rules: {
-            NotBlank: {},
-            Date: {
-                'format': 'DD.MM.YYYY'
-            }
-        }
-    },
-    creditCard: {
-        isRequired: true,
-        rules: {
-            NotBlank: {},
-            Custom: CreditCard
-        }
-    },
-    ip: {
-        isRequired: true,
-        rules: {
-            NotBlank: {},
-            Ip: {}
-        }
-    },
-    locale: {
-        isRequired: true,
-        rules: {
-            NotBlank: {},
-            Locale: {}
-        }
-    },
-    country: {
-        isRequired: true,
-        rules: {
-            NotBlank: {},
-            Country: {}
-        }
-    },
-    language: {
-        isRequired: true,
-        rules: {
-            NotBlank: {},
-            Language: {}
-        }
-    },
-    homepage: {
-        isRequired: true,
-        rules: {
-            NotBlank: {},
-            Url: {}
-        }
-    }
-};
-
-let data = {
-    name: 'Leo Lane',
-    email: 'leo.lane38@example.com',
-    birthday: '03.07.1977',
-    creditCard: '4111111111111111',
-    ip: '8.8.8.8',
-    locale: 'cy_GB',
-    country: 'US',
-    language: 'en_gb',
-    homepage: 'https://github.com/alexeybob/bob-validator'
-};
-
-let _oec = new AllValidator({
-    validators: schema,
-    validationType: 'schema',
-    errorType: 'array'
-});
-_oec.validate(data);
-
-if(!_oec.isValid()) {
-    let errors = _oec.getErrors();
-}
-```
-
-[⬆ back to top](#navigation)
-
----------------
-
-### Tests
-
-```sh
-$ npm test
-```
-
-[⬆ back to top](#navigation)
-
+[documentation-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md#documentation
+[homepage-url]: https://github.com/alexeybob/bob-validator/blob/master/README.md
 [is-notblank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isNotBlank.md
 [is-blank-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isBlank.md
 [is-notnull-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isNotNull.md
@@ -474,19 +161,3 @@ $ npm test
 [is-iban-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isIban.md
 [is-isbn-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isIsbn.md
 [is-issn-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isIssn.md
-
-[supported-function-constraints-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/navigation.md#supported-function-constraints
-[supported-class-constraints-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/navigation.md#supported-class-constraints
-[supported-schema-constraints-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/navigation.md#supported-schema-constraints
-
-
-[npm-url]: https://npmjs.org/package/bob-validator
-[npm-image]: http://img.shields.io/npm/v/bob-validator.svg
-
-[travis-url]: https://travis-ci.org/alexeybob/bob-validator
-[travis-image]: http://img.shields.io/travis/alexeybob/bob-validator.svg
-
-[coveralls-url]: https://coveralls.io/r/alexeybob/bob-validator
-[coveralls-image]: http://img.shields.io/coveralls/alexeybob/bob-validator/master.svg
-
-[downloads-image]: http://img.shields.io/npm/dm/bob-validator.svg

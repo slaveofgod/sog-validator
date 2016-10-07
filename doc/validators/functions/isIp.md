@@ -90,6 +90,7 @@ These are the basic constraints: use them to assert very basic things about the 
 * **[isScalar][is-scalar-url](data)** - Validates that a value is `scalar` data type.
 * **[isString][is-string-url](data)** - Validates that a value is `string` data type.
 * **[isCallable][is-callable-url](data)** - isCallable Validates that a value is `callable` data type. Verify that the contents of a variable can be called as a function.
+* **[isLong][is-long-url](data)** - Validates that a value is `long` data type. Alias of [isInt][is-int-url].
 
 ##### String Constraints
 
@@ -162,6 +163,7 @@ These are the basic constraints: use them to assert very basic things about the 
 [is-scalar-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isScalar.md
 [is-string-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isString.md
 [is-callable-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isCallable.md
+[is-long-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isLong.md
 [is-email-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isEmail.md
 [is-length-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isLength.md
 [is-url-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isUrl.md

@@ -125,7 +125,7 @@ if(!_oec.isValid()) {
 * `double`
 * `int`
 * `integer`
-* ~~`long`~~ `(not implemented)`
+* `long`
 * `null`
 * `numeric`
 * `object`
