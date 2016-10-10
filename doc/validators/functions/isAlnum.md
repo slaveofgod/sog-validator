@@ -1,12 +1,11 @@
-# isDateFormat
-Validates that a value is a valid date.
+# isAlnum
+Validates that a value is `alnum` data type. Check for alphanumeric character(s).
 
 [**Homepage**][homepage-url]
 
 ### Navigation
 
 * [Installation and Using](#installation-and-using)
-* [Options](#options)
 * [Supported Constraints](#supported-constraints)
 
 ---------------
@@ -23,22 +22,12 @@ $ npm install bob-validator
 ```javascript
 var _v = require('bob-validator');
 
-var data = '2015-11-25';
+var data = 'AbCd123456';
 
-if(_v.func.isDateFormat(data, {'format': 'YYYY-MM-DD'})){
+if(_v.func.isAlnum(data)){
     // Some code ...
 }
 ```
-
-[⬆ back to top](#navigation)
-
----------------
-
-#### Options
-##### format
-**type**: `string` **default**: `YYYY-MM-DD`
-
-This option allows to validate a custom date format.
 
 [⬆ back to top](#navigation)
 

@@ -24,6 +24,9 @@ var isScalar = require('./lib/Constraints/Functions/isScalar');
 var isString = require('./lib/Constraints/Functions/isString');
 var isCallable = require('./lib/Constraints/Functions/isCallable');
 var isLong = require('./lib/Constraints/Functions/isLong');
+var isReal = require('./lib/Constraints/Functions/isReal');
+var isAlnum = require('./lib/Constraints/Functions/isAlnum');
+var isAlpha = require('./lib/Constraints/Functions/isAlpha');
 
 /**
  * String Constraints
@@ -141,5 +144,8 @@ module.exports = {
     'isIssn': isIssn,
     'isUniqueEntity': isUniqueEntity,
     'isCallable': isCallable,
-    'isLong': isLong
+    'isLong': isLong,
+    'isReal': isReal,
+    'isAlnum': isAlnum,
+    'isAlpha': isAlpha
 };

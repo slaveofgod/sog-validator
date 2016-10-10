@@ -1727,6 +1727,105 @@ exports['test isLong'] = function(assert, done) {
     done();
 }
 
+exports['test isReal'] = function(assert, done) {
+    var _function = _v.func.isReal;
+    var positive, negative;
+
+    positive = [
+        _function(123.45)
+    ];
+
+    negative = [
+        _function('123.45'),
+        _function(12345),
+        _function('abcde'),
+        _function("Lorem Ipsum"),
+        _function({}),
+        _function(new Array()),
+        _function([]),
+        _function([1111, 'aaaa']),
+        _function(1),
+        _function(0),
+        _function(null),
+        _function(true),
+        _function(false)
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+exports['test isAlnum'] = function(assert, done) {
+    var _function = _v.func.isAlnum;
+    var positive, negative;
+
+    positive = [
+        _function(123456789),
+        _function('AbCd123456'),
+        _function('AbCdEf'),
+        _function('123456789')
+    ];
+
+    negative = [
+        _function(123.45),
+        _function({}),
+        _function(new Array()),
+        _function([]),
+        _function([1111, 'aaaa']),
+        _function('AbCd 123456'),
+        _function(new Object()),
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
+exports['test isAlpha'] = function(assert, done) {
+    var _function = _v.func.isAlpha;
+    var positive, negative;
+
+    positive = [
+        _function('AbCdEf')
+    ];
+
+    negative = [
+        _function('123456789'),
+        _function(123456789),
+        _function('AbCd123456'),
+        _function(123.45),
+        _function({}),
+        _function(new Array()),
+        _function([]),
+        _function([1111, 'aaaa']),
+        _function('AbCd 123456'),
+        _function(new Object()),
+    ];
+
+    positive.forEach(function (value) {
+        assert.equal(value, true, 'Positive conditions')
+    })
+
+    negative.forEach(function (value) {
+        assert.notEqual(value, true, 'Negative conditions')
+    })
+
+    done();
+}
+
 
 
 

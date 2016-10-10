@@ -129,12 +129,12 @@ if(!_oec.isValid()) {
 * `null`
 * `numeric`
 * `object`
-* ~~`real`~~ `(not implemented)`
+* `real`
 * ~~`resource`~~ `(not implemented)`
 * `scalar`
 * `string`
-* ~~`alnum`~~ `(not implemented)`
-* ~~`alpha`~~ `(not implemented)`
+* `alnum`
+* `alpha`
 * ~~`cntrl`~~ `(not implemented)`
 * ~~`digit`~~ `(not implemented)`
 * ~~`graph`~~ `(not implemented)`
