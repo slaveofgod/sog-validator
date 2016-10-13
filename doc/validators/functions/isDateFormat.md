@@ -38,6 +38,22 @@ if(_v.func.isDateFormat(data, {'format': 'YYYY-MM-DD'})){
 ##### format
 **type**: `string` **default**: `YYYY-MM-DD`
 
+**_Available Tokens:_**
+
+ |Token|Output
+---|---|---
+**_Year_**|YY| 	70 71 ... 29 30
+ |YYYY|1970 1971 ... 2029 2030
+ |Y|1970 1971 ... 9999 +10000 +10001
+**_Month_**|M|1 2 ... 11 12
+ |Mo|1st 2nd ... 11th 12th
+ |MM|01 02 ... 11 12
+ |MMM|Jan Feb ... Nov Dec
+ |MMMM|January February ... November December
+**_Day of Month_**|D|1 2 ... 30 31
+ |Do|1st 2nd ... 30th 31st
+ |DD|01 02 ... 30 31
+
 This option allows to validate a custom date format.
 
 [⬆ back to top](#navigation)

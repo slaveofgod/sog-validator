@@ -78,7 +78,22 @@ if(!_oec.isValid()) {
 ##### format
 **type**: `string` **default**: `HH:mm:ss`
 
-This option allows to validate a custom date format.
+**_Available Tokens:_**
+
+ |Token|Output
+---|---|---
+**_Hour_**|H|0 1 ... 22 23
+ |HH|00 01 ... 22 23
+ |h|1 2 ... 11 12
+ |hh|01 02 ... 11 12
+ |k|1 2 ... 23 24
+ |kk|01 02 ... 23 24
+**_Minute_**|m|0 1 ... 58 59
+ |mm|00 01 ... 58 59
+**_Second_**|s|0 1 ... 58 59
+ |ss|00 01 ... 58 59
+
+This option allows to validate a custom time format.
 
 ##### message
 **type**: `string` **default**: `This value is not a valid time.`

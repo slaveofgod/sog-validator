@@ -120,7 +120,33 @@ if(!_oec.isValid()) {
 ##### format
 **type**: `string` **default**: `YYYY-MM-DD HH:mm:ss`
 
-This option allows to validate a custom date format.
+**_Available Tokens:_**
+
+ |Token|Output
+---|---|---
+**_Year_**|YY| 	70 71 ... 29 30
+ |YYYY|1970 1971 ... 2029 2030
+ |Y|1970 1971 ... 9999 +10000 +10001
+**_Month_**|M|1 2 ... 11 12
+ |Mo|1st 2nd ... 11th 12th
+ |MM|01 02 ... 11 12
+ |MMM|Jan Feb ... Nov Dec
+ |MMMM|January February ... November December
+**_Day of Month_**|D|1 2 ... 30 31
+ |Do|1st 2nd ... 30th 31st
+ |DD|01 02 ... 30 31
+**_Hour_**|H|0 1 ... 22 23
+ |HH|00 01 ... 22 23
+ |h|1 2 ... 11 12
+ |hh|01 02 ... 11 12
+ |k|1 2 ... 23 24
+ |kk|01 02 ... 23 24
+**_Minute_**|m|0 1 ... 58 59
+ |mm|00 01 ... 58 59
+**_Second_**|s|0 1 ... 58 59
+ |ss|00 01 ... 58 59
+
+This option allows to validate a custom datetime format.
 
 ##### message
 **type**: `string` **default**: `This value is not a valid datetime.`
