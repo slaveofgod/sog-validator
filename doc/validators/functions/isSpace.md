@@ -1,12 +1,11 @@
-# isEqualTo
-Validates that a value is equal to another value, defined in the options. To force that a value is *not* equal, see [isNotEqualTo][is-notequalto-url]. This constraint compares using `==`, so `3` and "`3`" are considered equal. Use [isIdenticalTo][is-identicalto-url] to compare with `===`.
+# isSpace
+Validates that a value is `space` data type. Check for whitespace character(s). Checks if all of the characters in the provided string creates whitespace.
 
 [**Homepage**][homepage-url]
 
 ### Navigation
 
 * [Installation and Using](#installation-and-using)
-* [Options](#options)
 * [Supported Constraints](#supported-constraints)
 
 ---------------
@@ -23,22 +22,12 @@ $ npm install bob-validator
 ```javascript
 var _v = require('bob-validator');
 
-var data = '10';
+var data = ' \f   \t   \n  \r \v  ';
 
-if(_v.func.isEqualTo(data, {'value': 10})){
+if(_v.func.isSpace(data)){
     // Some code ...
 }
 ```
-
-[⬆ back to top](#navigation)
-
----------------
-
-#### Options
-##### value
-**type**: `mixed`
-
-This option is required. It defines the value to compare to. It can be a string, number or object.
 
 [⬆ back to top](#navigation)
 

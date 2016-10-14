@@ -136,14 +136,14 @@ if(!_oec.isValid()) {
 * `alnum`
 * `alpha`
 * ~~`cntrl`~~ `(not implemented)`
-* ~~`digit`~~ `(not implemented)`
+* `digit`
 * ~~`graph`~~ `(not implemented)`
-* ~~`lower`~~ `(not implemented)`
+* `lower`
 * ~~`print`~~ `(not implemented)`
 * ~~`punct`~~ `(not implemented)`
-* ~~`space`~~ `(not implemented)`
-* ~~`upper`~~ `(not implemented)`
-* ~~`xdigit`~~ `(not implemented)`
+* `space`
+* `upper`
+* `xdigit`
 
 ##### message
 **type**: `string` **default**: `This value should be of type {{ type }}.`

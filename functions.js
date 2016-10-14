@@ -27,6 +27,11 @@ var isLong = require('./lib/Constraints/Functions/isLong');
 var isReal = require('./lib/Constraints/Functions/isReal');
 var isAlnum = require('./lib/Constraints/Functions/isAlnum');
 var isAlpha = require('./lib/Constraints/Functions/isAlpha');
+var isDigit = require('./lib/Constraints/Functions/isDigit');
+var isLower = require('./lib/Constraints/Functions/isLower');
+var isSpace = require('./lib/Constraints/Functions/isSpace');
+var isUpper = require('./lib/Constraints/Functions/isUpper');
+var isXdigit = require('./lib/Constraints/Functions/isXdigit');
 
 /**
  * String Constraints
@@ -147,5 +152,10 @@ module.exports = {
     'isLong': isLong,
     'isReal': isReal,
     'isAlnum': isAlnum,
-    'isAlpha': isAlpha
+    'isAlpha': isAlpha,
+    'isDigit': isDigit,
+    'isLower': isLower,
+    'isSpace': isSpace,
+    'isUpper': isUpper,
+    'isXdigit': isXdigit
 };

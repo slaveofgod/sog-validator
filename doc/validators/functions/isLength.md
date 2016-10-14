@@ -81,6 +81,11 @@ These are the basic constraints: use them to assert very basic things about the 
 * **[isReal][is-real-url](data)** - Validates that a value is `real` data type. Alias of [isFloat][is-float-url].
 * **[isAlnum][is-alnum-url](data)** - Validates that a value is `alnum` data type. Check for alphanumeric character(s).
 * **[isAlpha][is-alpha-url](data)** - Validates that a value is `alpha` data type. Check for alphabetic character(s).
+* **[isDigit][is-digit-url](data)** - Validates that a value is `digit` data type. Check for numeric character(s). Checks if all of the characters in the provided string are numerical.
+* **[isLower][is-lower-url](data)** - Validates that a value is `lower` data type. Check for lowercase character(s). Checks if all of the characters in the provided string are lowercase letters.
+* **[isSpace][is-space-url](data)** - Validates that a value is `space` data type. Check for whitespace character(s). Checks if all of the characters in the provided string creates whitespace.
+* **[isUpper][is-upper-url](data)** - Validates that a value is `upper` data type. Check for uppercase character(s). Checks if all of the characters in the provided string are uppercase characters.
+* **[isXdigit][is-xdigit-url](data)** - Validates that a value is `xdigit` data type. Check for character(s) representing a hexadecimal *digit*. Checks if all of the characters in the provided string are hexadecimal *digits*.
 
 ##### String Constraints
 
@@ -157,6 +162,11 @@ These are the basic constraints: use them to assert very basic things about the 
 [is-real-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isReal.md
 [is-alnum-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isAlnum.md
 [is-alpha-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isAlpha.md
+[is-digit-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isDigit.md
+[is-lower-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isLower.md
+[is-space-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isSpace.md
+[is-upper-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isUpper.md
+[is-xdigit-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isXdigit.md
 [is-email-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isEmail.md
 [is-length-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isLength.md
 [is-url-url]: https://github.com/alexeybob/bob-validator/blob/master/doc/validators/functions/isUrl.md
