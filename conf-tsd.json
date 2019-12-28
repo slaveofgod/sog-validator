@@ -1,0 +1,11 @@
+{
+    "source": {
+        "include": ["src"]
+    },
+    "opts": {
+        "destination": "build/output",
+        "outFile": "bob-validator.d.ts",
+        "recurse": true,
+        "template": "node_modules/tsd-jsdoc/dist"
+    }
+}

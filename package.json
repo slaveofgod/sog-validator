@@ -1,12 +1,12 @@
 {
   "name": "bob-validator",
-  "version": "1.4.4",
-  "description": "A library of validators",
-  "main": "index.js",
-  "homepage": "https://github.com/alexeybob/bob-validator.git",
-  "scripts": {
-    "test": "node test/validators.js"
+  "version": "2.0.0",
+  "author": {
+    "name": "Alexey Bob",
+    "email": "alexey.bob@gmail.com"
   },
+  "homepage": "https://github.com/alexeybob/bob-validator.git",
+  "description": "A library of validators",
   "keywords": [
     "assert",
     "scheme",
@@ -17,28 +17,70 @@
     "validation",
     "validator"
   ],
-  "author": {
-    "name": "Alexey Bob",
-    "email": "alexey.bob@gmail.com"
-  },
   "license": "MIT",
+  "main": "build/output/bob-validator.js",
+  "types": "index.d.ts",
+  "bugs": {
+    "url": "https://github.com/alexeybob/bob-validator/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/alexeybob/bob-validator.git"
   },
-  "bugs": {
-    "url": "https://github.com/alexeybob/bob-validator/issues"
+  "eslintConfig": {
+    "extends": "@playcanvas/eslint-config"
   },
-  "dependencies": {
-    "moment": ">=2.11.2"
+  "eslintIgnore": [
+    "src/polyfill/*"
+  ],
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}"
+    ],
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.js?(x)",
+      "<rootDir>/src/**/?(*.)(spec|test).js?(x)"
+    ],
+    "testEnvironment": "node"
   },
   "devDependencies": {
-    "test": ">=0.0.5"
+    "@playcanvas/eslint-config": "^1.0.0",
+    "@playcanvas/jsdoc-template": "^1.0.7",
+    "chai": "^4.2.0",
+    "eslint": "^6.3.0",
+    "fs-extra": "^8.1.0",
+    "google-closure-compiler": "^20190513.0.0",
+    "http-server": "^0.11.1",
+    "jasmine": "^3.5.0",
+    "jest": "^24.9.0",
+    "jsdoc": "^3.6.3",
+    "mocha": "^5.2.0",
+    "preprocessor": "^1.4.0",
+    "sinon": "^5.1.1",
+    "tsd-jsdoc": "^2.4.0",
+    "typescript": "^3.5.3",
+    "uglify-js": "^3.7.3",
+    "watch": "^1.0.2"
+  },
+  "scripts": {
+    "dev": "watch 'npm run build' src",
+    "build": "cd build && node build.js -o output/bob-validator.js",
+    "build:debug": "cd build && node build.js -d -o output/bob-validator.dbg.js",
+    "build:profiler": "cd build && node build.js -p -o output/bob-validator.prf.js",
+    "build:min": "cd build && node build.js -l 1 -o output/bob-validator.min.js",
+    "build:all": "npm run build && npm run build:debug && npm run build:profiler && npm run build:min",
+    "docs": "jsdoc -c conf-api.json",
+    "serve": "npm run build; ./node_modules/.bin/http-server build/output -a localhost -p 51000",
+    "closure": "java -jar node_modules/google-closure-compiler/compiler.jar --compilation_level=SIMPLE --warning_level=VERBOSE --jscomp_off=checkTypes --externs build/externs.js --language_in=ECMASCRIPT5_STRICT --js build/output/bob-validator-latest.js --js_output_file build/output/bob-validator.min.js",
+    "uglify": "uglifyjs build/output/bob-validator.js --compress --mangle --output build/output/bob-validator.min.js",
+    "test": "npm run test:conf && npm run test:jest",
+    "test:conf": "cd tests && node abv.conf.js",
+    "test:jest": "jest",
+    "tsd": "jsdoc -c conf-tsd.json",
+    "lint": "eslint src examples/assets/scripts"
   },
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">= 0.6.12"
   },
-  "_id": "bob-validator@0.1.0",
-  "_shasum": "877b4f9fd845b5573548b247aa6e8768fb62d33e",
-  "_from": "bob-validator@latest"
+  "dependencies": {}
 }
