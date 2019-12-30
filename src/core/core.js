@@ -79,7 +79,7 @@ var abv = {
                 return ("boolean" === typeof data);
                 break;
             case'callable':
-                return ("function" === typeof data);
+                return (null !== data && "function" === typeof data);
                 break;
             case'float':
             case'double':
@@ -94,13 +94,12 @@ var abv = {
                 break;
             case'iterable':
                 // checks for null and undefined
-                if (data == null) {
-                    return false;
-                }
+                if (data == null) return false;
                 return ('function' === typeof data[Symbol.iterator]) ? true : false;
                 break;
             case'numeric':
-                return /^[0-9]+\.?[0-9]+$/.test(data);
+                if (false === this.isType('scalar', data)) return false;
+                return /^[0-9]{0,}\.?[0-9]+$/.test(data);
                 break;
             case'object':
                 return ('object' === typeof data) ? true : false;
@@ -119,18 +118,26 @@ var abv = {
                 return ('string' === typeof data) ? true : false;
                 break;
             case'alnum':
+                if (false === this.isType('scalar', data)) return false;
+                if (null === data) return false;
                 return /^[a-zA-Z0-9]+$/.test(data);
                 break;
             case'alpha':
+                if (false === this.isType('scalar', data)) return false;
+                if (null === data) return false;
                 return /^[a-zA-Z]+$/.test(data);
                 break;
             case'digit':
+                if (false === this.isType('scalar', data)) return false;
+                if (null === data) return false;
                 return /^[0-9]+$/.test(data);
                 break;
             case'graph':
-                return /\s/.test(data) ? false : true;
+                if (false === this.isType('scalar', data)) return false;
+                return (data.toString() === data.toString().replace(/[\r\n\t]/, '')) ? true : false;
                 break;
             case'lower':
+                if (false === this.isType('scalar', data)) return false;
                 var matches;
                 if ((matches = /[a-z]+/m.exec(data)) !== null) {
                     if (
@@ -144,6 +151,7 @@ var abv = {
                 return false;
                 break;
             case'print':
+                if (false === this.isType('scalar', data)) return false;
                 var regex = /[\r|\n|\t]+/mg;
                 var m;
                 var counter = 0;
@@ -159,10 +167,13 @@ var abv = {
                 return (counter > 0) ? false : true;
                 break;
             case'punct':
-                return /^[^0-9a-zA-Z ]+$/.test(data);
+                if (false === this.isType('scalar', data)) return false;
+                return (data.toString() === data.toString().replace(/[0-9a-zA-Z \r\n\t]/, '')) ? true : false;
             case'space':
+                if (false === this.isType('scalar', data)) return false;
                 return /^[\r\n\t]+$/.test(data);
             case'upper':
+                if (false === this.isType('scalar', data)) return false;
                 var matches;
                 if ((matches = /[A-Z]+/m.exec(data)) !== null) {
                     if (
@@ -176,6 +187,7 @@ var abv = {
                 return false;
                 break;
             case'xdigit':
+                if (false === this.isType('scalar', data)) return false;
                 return /^[A-Fa-f0-9]+$/.test(data);
                 break;
         }
@@ -209,7 +221,7 @@ var abv = {
                 break;
             case 'is-null':
             case 'null':
-                validatorObject = new abv.NotNullValidator(data, options, lang);
+                validatorObject = new abv.IsNullValidator(data, options, lang);
                 break;
             case 'is-true':
             case 'true':

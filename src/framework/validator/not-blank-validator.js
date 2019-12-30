@@ -95,14 +95,39 @@ Object.assign(abv, function () {
                 this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
             }
 
-            // Check when not allow null or empty
+            // Check if null and allowNull = false
             if (
                 true === this.__isValid
+                && null === this.data
                 && false === this.allowNull
-                && (
-                    '' === this.data
-                    || null === this.data
-                )
+            ) {
+                this.__isValid = false;
+                this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
+            }
+
+            // Check if false
+            if (
+                true === this.__isValid
+                && false === this.data
+            ) {
+                this.__isValid = false;
+                this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
+            }
+
+            // Check if empty string
+            if (
+                true === this.__isValid
+                && '' === this.data
+            ) {
+                this.__isValid = false;
+                this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
+            }
+
+            // Check if empty string
+            if (
+                true === this.__isValid
+                && true === Array.isArray(this.data)
+                && 0 === this.data.length
             ) {
                 this.__isValid = false;
                 this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());

@@ -71,10 +71,7 @@ Object.assign(abv, function () {
          * @description Validate data
          */
         validate: function () {
-            if (
-                'undefined' !== typeof this.data
-                || null !== this.data
-            ) {
+            if (null !== this.data) {
                 this.__isValid = false;
                 this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
             }
