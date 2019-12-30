@@ -234,6 +234,9 @@ var abv = {
             case 'type':
                 validatorObject = new abv.TypeValidator(data, options, lang);
                 break;
+            case 'email':
+                validatorObject = new abv.EmailValidator(data, options, lang);
+                break;
         }
 
         return validatorObject;

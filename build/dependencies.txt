@@ -9,3 +9,4 @@
 ../src/framework/validator/is-true-validator.js
 ../src/framework/validator/is-false-validator.js
 ../src/framework/validator/type-validator.js
+../src/framework/validator/email-validator.js
