@@ -10,8 +10,9 @@ Object.assign(abv, function () {
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @example
-     * if ('undefined' !== typeof data) {
-     *   // validation will fail
+     * var validator = new abv.IsNullValidator(data);
+     * if (false === validator.isValid()) {
+     *      validator.getErrorMessage();
      * }
      */
 

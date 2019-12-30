@@ -9,6 +9,11 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
+     * @example
+     * var validator = new abv.TypeValidator(data, {type: 'array'});
+     * if (false === validator.isValid()) {
+     *      validator.getErrorMessage();
+     * }
      */
 
     // PROPERTIES

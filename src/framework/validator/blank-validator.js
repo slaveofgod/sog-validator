@@ -10,11 +10,9 @@ Object.assign(abv, function () {
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @example
-     * if (
-     *     '' !== this.data
-     *     && null !== this.data
-     * ) {
-     *   // validation will fail
+     * var validator = new abv.BlankValidator(data);
+     * if (false === validator.isValid()) {
+     *      validator.getErrorMessage();
      * }
      */
 
