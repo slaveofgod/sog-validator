@@ -4,7 +4,7 @@ Object.assign(abv, function () {
     /**
      * @constructor
      * @name abv.AllValidator
-     * @extends abv.ValidatorExtension
+     * @extends abv.ValidatorAbstract
      * @classdesc Validates that a value is valid according to list of validation rules.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
@@ -33,7 +33,7 @@ Object.assign(abv, function () {
      */
 
     var AllValidator = function (data, rules, options) {
-        abv.ValidatorExtension.call(this);
+        abv.ValidatorAbstract.call(this);
 
         options = options || {};
 
@@ -48,7 +48,7 @@ Object.assign(abv, function () {
 
         this.configure();
     };
-    AllValidator.prototype = Object.create(abv.ValidatorExtension.prototype);
+    AllValidator.prototype = Object.create(abv.ValidatorAbstract.prototype);
     AllValidator.prototype.constructor = AllValidator;
 
     Object.assign(AllValidator.prototype, {

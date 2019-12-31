@@ -1,22 +1,22 @@
 Object.assign(abv, (function () {
-    'use strict';
+    'use strict';ValidatorAbstract
 
     /**
      * @private
      * @constructor
-     * @name abv.ValidatorExtension
+     * @name abv.ValidatorAbstract
      * @classdesc Abstract base class that implements functionality for validation.
      * @description Create a new validation extension.
      */
-    var ValidatorExtension = function () {
+    var ValidatorAbstract = function () {
 
     };
 
-    Object.assign(ValidatorExtension.prototype, {
+    Object.assign(ValidatorAbstract.prototype, {
         /**
          * @private
          * @function
-         * @name abv.ValidatorExtension#prepareMessage
+         * @name abv.ValidatorAbstract#prepareMessage
          * @description Prepare error message
          * @param {String} message Error message text
          * @param {Object} parameters Error message parameters
@@ -36,11 +36,13 @@ Object.assign(abv, (function () {
 
         /**
          * @function
-         * @name abv.ValidatorExtension#isValid
+         * @name abv.ValidatorAbstract#isValid
          * @description Check if data valid
          * @returns {Boolean} Validation status
          */
         isValid: function () {
+            this.checkRequirements();
+
             this.validate();
 
             return this.__isValid;
@@ -48,16 +50,24 @@ Object.assign(abv, (function () {
 
         /**
          * @function
-         * @name abv.ValidatorExtension#getErrorMessage
+         * @name abv.ValidatorAbstract#getErrorMessage
          * @description Return error message
          * @returns {String} Error message
          */
         getErrorMessage: function () {
             return this.__errorMessage;
-        }
+        },
+
+        /**
+         * @private
+         * @function
+         * @name abv.ValidatorAbstract#checkRequirements
+         * @description Checking if all required parameters is passed
+         */
+        checkRequirements: function () {}
     });
 
     return {
-        ValidatorExtension: ValidatorExtension
+        ValidatorAbstract: ValidatorAbstract
     };
 }()));

@@ -4,7 +4,7 @@ Object.assign(abv, function () {
     /**
      * @constructor
      * @name abv.NotBlankValidator
-     * @extends abv.ValidatorExtension
+     * @extends abv.ValidatorAbstract
      * @classdesc Validates that a value is not blank - meaning not equal to a blank string, a blank array, <code class="notranslate">false</code> or <code class="notranslate">null</code> (null behavior is configurable).
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
@@ -60,7 +60,7 @@ Object.assign(abv, function () {
      */
 
     var NotBlankValidator = function (data, options, lang) {
-        abv.ValidatorExtension.call(this);
+        abv.ValidatorAbstract.call(this);
 
         options = options || {};
 
@@ -75,7 +75,7 @@ Object.assign(abv, function () {
         this.__isValid = true;
         this.__errorMessage = null;
     };
-    NotBlankValidator.prototype = Object.create(abv.ValidatorExtension.prototype);
+    NotBlankValidator.prototype = Object.create(abv.ValidatorAbstract.prototype);
     NotBlankValidator.prototype.constructor = NotBlankValidator;
 
     Object.assign(NotBlankValidator.prototype, {
@@ -98,44 +98,46 @@ Object.assign(abv, function () {
             if ('undefined' === typeof this.data) {
                 this.__isValid = false;
                 this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
+
+                return ;
             }
 
             // Check if null and allowNull = false
             if (
-                true === this.__isValid
-                && null === this.data
+                null === this.data
                 && false === this.allowNull
             ) {
                 this.__isValid = false;
                 this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
+
+                return ;
             }
 
             // Check if false
-            if (
-                true === this.__isValid
-                && false === this.data
-            ) {
+            if (false === this.data) {
                 this.__isValid = false;
                 this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
+
+                return;
+            }
+
+            // Check if empty string
+            if ('' === this.data) {
+                this.__isValid = false;
+                this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
+
+                return ;
             }
 
             // Check if empty string
             if (
-                true === this.__isValid
-                && '' === this.data
-            ) {
-                this.__isValid = false;
-                this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
-            }
-
-            // Check if empty string
-            if (
-                true === this.__isValid
-                && true === Array.isArray(this.data)
+                true === Array.isArray(this.data)
                 && 0 === this.data.length
             ) {
                 this.__isValid = false;
                 this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
+
+                return ;
             }
         },
 

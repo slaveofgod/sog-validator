@@ -4,7 +4,7 @@ Object.assign(abv, function () {
     /**
      * @constructor
      * @name abv.IsFalseValidator
-     * @extends abv.ValidatorExtension
+     * @extends abv.ValidatorAbstract
      * @classdesc Validates that a value is false. Specifically, this checks to see if the value is exactly <code class="notranslate">false</code>, exactly the integer <code class="notranslate">0</code>, or exactly the string <code class="notranslate">"0"</code>.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
@@ -48,7 +48,7 @@ Object.assign(abv, function () {
      */
 
     var IsFalseValidator = function (data, options, lang) {
-        abv.ValidatorExtension.call(this);
+        abv.ValidatorAbstract.call(this);
 
         options = options || {};
 
@@ -61,7 +61,7 @@ Object.assign(abv, function () {
         this.__isValid = true;
         this.__errorMessage = null;
     };
-    IsFalseValidator.prototype = Object.create(abv.ValidatorExtension.prototype);
+    IsFalseValidator.prototype = Object.create(abv.ValidatorAbstract.prototype);
     IsFalseValidator.prototype.constructor = IsFalseValidator;
 
     Object.assign(IsFalseValidator.prototype, {

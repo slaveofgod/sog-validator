@@ -4,7 +4,7 @@ Object.assign(abv, function () {
     /**
      * @constructor
      * @name abv.EmailValidator
-     * @extends abv.ValidatorExtension
+     * @extends abv.ValidatorAbstract
      * @classdesc Validates that a value is a valid email address. The underlying value is cast to a string before being validated.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
@@ -66,7 +66,7 @@ Object.assign(abv, function () {
      */
 
     var EmailValidator = function (data, options, lang) {
-        abv.ValidatorExtension.call(this);
+        abv.ValidatorAbstract.call(this);
 
         options = options || {};
 
@@ -82,7 +82,7 @@ Object.assign(abv, function () {
         this.__isValid = true;
         this.__errorMessage = null;
     };
-    EmailValidator.prototype = Object.create(abv.ValidatorExtension.prototype);
+    EmailValidator.prototype = Object.create(abv.ValidatorAbstract.prototype);
     EmailValidator.prototype.constructor = EmailValidator;
 
     Object.assign(EmailValidator.prototype, {
@@ -109,26 +109,24 @@ Object.assign(abv, function () {
                         ) {
                             this.__isValid = false;
                             this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
+
+                            return;
                         }
                         break;
                     /**
                      * @todo Implement [mode:strict]
                      */
                     case 'strict':
-                        if (
-                            true === this.__isValid
-                        ) {
-                            this.__isValid = false;
-                            this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
-                        }
+                        this.__isValid = false;
+                        this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
+                        return;
                         break;
                     case 'html5':
-                        if (
-                            true === this.__isValid
-                            && false === /^[a-zA-Z0-9.!#$%&\'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/.test(this.data)
-                        ) {
+                        if (false === /^[a-zA-Z0-9.!#$%&\'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/.test(this.data)) {
                             this.__isValid = false;
                             this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
+
+                            return;
                         }
                         break;
                 }

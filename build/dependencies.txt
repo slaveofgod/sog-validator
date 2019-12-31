@@ -1,5 +1,5 @@
 ../src/core/core.js
-../src/core/validator-extension.js
+../src/core/validator-abstract.js
 ../src/framework/application.js
 ../src/framework/validator/all-validator.js
 ../src/framework/validator/not-blank-validator.js
@@ -10,3 +10,4 @@
 ../src/framework/validator/is-false-validator.js
 ../src/framework/validator/type-validator.js
 ../src/framework/validator/email-validator.js
+../src/framework/validator/length-validator.js
