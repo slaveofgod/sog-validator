@@ -4,7 +4,7 @@ Object.assign(abv, function () {
     /**
      * @constructor
      * @name abv.LengthValidator
-     * @extends abv.ValidatorAbstract
+     * @extends abv.AbstractValidator
      * @classdesc Validates that a given string length is between some minimum and maximum value.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
@@ -148,7 +148,7 @@ Object.assign(abv, function () {
      */
 
     var LengthValidator = function (data, options, lang) {
-        abv.ValidatorAbstract.call(this);
+        abv.AbstractValidator.call(this);
 
         options = options || {};
 
@@ -167,7 +167,7 @@ Object.assign(abv, function () {
 
         this.__name = 'LengthValidator';
     };
-    LengthValidator.prototype = Object.create(abv.ValidatorAbstract.prototype);
+    LengthValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     LengthValidator.prototype.constructor = LengthValidator;
 
     Object.assign(LengthValidator.prototype, {
@@ -227,10 +227,10 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.ValidatorAbstract#checkRequirements
-         * @description Checking if all required parameters is passed
+         * @name abv.LengthValidator#__beforeValidate
+         * @description Execute before validation is running
          */
-        checkRequirements: function () {
+        __beforeValidate: function () {
             if (!this.min && !this.max) {
                 throw new Error('Either option "min" or "max" must be given for constraint');
             }

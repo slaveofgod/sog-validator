@@ -4,7 +4,7 @@ Object.assign(abv, function () {
     /**
      * @constructor
      * @name abv.IsNullValidator
-     * @extends abv.ValidatorAbstract
+     * @extends abv.AbstractValidator
      * @classdesc Validates that a value is exactly equal to <code class="notranslate">null</code>.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
@@ -48,7 +48,7 @@ Object.assign(abv, function () {
      */
 
     var IsNullValidator = function (data, options, lang) {
-        abv.ValidatorAbstract.call(this);
+        abv.AbstractValidator.call(this);
 
         options = options || {};
 
@@ -59,7 +59,7 @@ Object.assign(abv, function () {
 
         this.__name = 'IsNullValidator';
     };
-    IsNullValidator.prototype = Object.create(abv.ValidatorAbstract.prototype);
+    IsNullValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     IsNullValidator.prototype.constructor = IsNullValidator;
 
     Object.assign(IsNullValidator.prototype, {

@@ -2,21 +2,20 @@ Object.assign(abv, (function () {
     'use strict';
 
     /**
-     * @private
      * @constructor
-     * @name abv.ValidatorAbstract
+     * @name abv.AbstractValidator
      * @classdesc Abstract base class that implements functionality for validation.
      * @description Create a new validation extension.
      */
-    var ValidatorAbstract = function () {
+    var AbstractValidator = function () {
         this.__errorMessage = null;
     };
 
-    Object.assign(ValidatorAbstract.prototype, {
+    Object.assign(AbstractValidator.prototype, {
         /**
          * @private
          * @function
-         * @name abv.ValidatorAbstract#prepareMessage
+         * @name abv.AbstractValidator#prepareMessage
          * @description Prepare error message
          * @param {String} message Error message text
          * @param {Object} parameters Error message parameters
@@ -36,21 +35,21 @@ Object.assign(abv, (function () {
 
         /**
          * @function
-         * @name abv.ValidatorAbstract#isValid
+         * @name abv.AbstractValidator#isValid
          * @description Check if data valid
          * @returns {Boolean} Validation status
          */
         isValid: function () {
-            this.checkRequirements();
-
+            this.__beforeValidate();
             this.validate();
+            this.__afterValidate();
 
             return (null === this.__errorMessage) ? true: false;
         },
 
         /**
          * @function
-         * @name abv.ValidatorAbstract#errorMessage
+         * @name abv.AbstractValidator#errorMessage
          * @description Return error message
          * @returns {String} Error message
          */
@@ -61,7 +60,7 @@ Object.assign(abv, (function () {
         /**
          * @private
          * @function
-         * @name abv.ValidatorAbstract#__setErrorMessage
+         * @name abv.AbstractValidator#__setErrorMessage
          * @param {String} message Error message text
          * @param {Object} parameters Error message parameters
          * @description Set error message
@@ -73,13 +72,21 @@ Object.assign(abv, (function () {
         /**
          * @private
          * @function
-         * @name abv.ValidatorAbstract#checkRequirements
-         * @description Checking if all required parameters is passed
+         * @name abv.AbstractValidator#__beforeValidate
+         * @description Execute before validation is running
          */
-        checkRequirements: function () {}
+        __beforeValidate: function () {},
+
+        /**
+         * @private
+         * @function
+         * @name abv.AbstractValidator#__afterValidate
+         * @description Execute after validation is complete
+         */
+        __afterValidate: function () {}
     });
 
     return {
-        ValidatorAbstract: ValidatorAbstract
+        AbstractValidator: AbstractValidator
     };
 }()));

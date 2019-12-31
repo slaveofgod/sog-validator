@@ -1,5 +1,5 @@
 ../src/core/core.js
-../src/core/validator-abstract.js
+../src/core/abstract-validator.js
 ../src/framework/application.js
 ../src/framework/validator/all-validator.js
 ../src/framework/validator/not-blank-validator.js

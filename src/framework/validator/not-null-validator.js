@@ -4,7 +4,7 @@ Object.assign(abv, function () {
     /**
      * @constructor
      * @name abv.NotNullValidator
-     * @extends abv.ValidatorAbstract
+     * @extends abv.AbstractValidator
      * @classdesc Validates that a value is not strictly equal to <code class="notranslate">null</code>.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
@@ -48,7 +48,7 @@ Object.assign(abv, function () {
      */
 
     var NotNullValidator = function (data, options, lang) {
-        abv.ValidatorAbstract.call(this);
+        abv.AbstractValidator.call(this);
 
         options = options || {};
 
@@ -59,7 +59,7 @@ Object.assign(abv, function () {
 
         this.__name = 'NotNullValidator';
     };
-    NotNullValidator.prototype = Object.create(abv.ValidatorAbstract.prototype);
+    NotNullValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     NotNullValidator.prototype.constructor = NotNullValidator;
 
     Object.assign(NotNullValidator.prototype, {

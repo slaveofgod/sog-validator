@@ -4,7 +4,7 @@ Object.assign(abv, function () {
     /**
      * @constructor
      * @name abv.TypeValidator
-     * @extends abv.ValidatorAbstract
+     * @extends abv.AbstractValidator
      * @classdesc Validates that a value is of a specific data type.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
@@ -84,7 +84,7 @@ Object.assign(abv, function () {
      */
 
     var TypeValidator = function (data, options, lang) {
-        abv.ValidatorAbstract.call(this);
+        abv.AbstractValidator.call(this);
 
         options = options || {};
 
@@ -97,7 +97,7 @@ Object.assign(abv, function () {
         this.__name = 'TypeValidator';
         this.__invalidType = null;
     };
-    TypeValidator.prototype = Object.create(abv.ValidatorAbstract.prototype);
+    TypeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     TypeValidator.prototype.constructor = TypeValidator;
 
     Object.assign(TypeValidator.prototype, {

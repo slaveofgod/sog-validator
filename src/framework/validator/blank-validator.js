@@ -4,7 +4,7 @@ Object.assign(abv, function () {
     /**
      * @constructor
      * @name abv.BlankValidator
-     * @extends abv.ValidatorAbstract
+     * @extends abv.AbstractValidator
      * @classdesc Validates that a value is blank - meaning equal to an empty string or <code class="notranslate">null</code>.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
@@ -48,7 +48,7 @@ Object.assign(abv, function () {
      */
 
     var BlankValidator = function (data, options, lang) {
-        abv.ValidatorAbstract.call(this);
+        abv.AbstractValidator.call(this);
 
         options = options || {};
 
@@ -59,7 +59,7 @@ Object.assign(abv, function () {
 
         this.__name = 'BlankValidator';
     };
-    BlankValidator.prototype = Object.create(abv.ValidatorAbstract.prototype);
+    BlankValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     BlankValidator.prototype.constructor = BlankValidator;
 
     Object.assign(BlankValidator.prototype, {

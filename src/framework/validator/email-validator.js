@@ -4,7 +4,7 @@ Object.assign(abv, function () {
     /**
      * @constructor
      * @name abv.EmailValidator
-     * @extends abv.ValidatorAbstract
+     * @extends abv.AbstractValidator
      * @classdesc Validates that a value is a valid email address. The underlying value is cast to a string before being validated.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
@@ -66,7 +66,7 @@ Object.assign(abv, function () {
      */
 
     var EmailValidator = function (data, options, lang) {
-        abv.ValidatorAbstract.call(this);
+        abv.AbstractValidator.call(this);
 
         options = options || {};
 
@@ -79,7 +79,7 @@ Object.assign(abv, function () {
 
         this.__name = 'EmailValidator';
     };
-    EmailValidator.prototype = Object.create(abv.ValidatorAbstract.prototype);
+    EmailValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     EmailValidator.prototype.constructor = EmailValidator;
 
     Object.assign(EmailValidator.prototype, {
