@@ -4,18 +4,18 @@ const abv = require('../../../../build/output/bob-validator');
 
 describe('false', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('False', () => {
-            expect(abv.isValid(false, 'false')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(false, 'false')).toBe(toBe);
         });
 
         test('0', () => {
-            expect(abv.isValid(0, 'false')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(0, 'false')).toBe(toBe);
         });
 
         test('"0"', () => {
-            expect(abv.isValid("0", 'false')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage("0", 'false')).toBe(toBe);
         });
     });
 

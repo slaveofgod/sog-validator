@@ -4,26 +4,26 @@ const abv = require('../../../../build/output/bob-validator');
 
 describe('not-null', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('Empty string', () => {
-            expect(abv.isValid('', 'not-null')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('', 'not-null')).toBe(toBe);
         });
 
         test('Empty array', () => {
-            expect(abv.isValid([], 'not-null')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage([], 'not-null')).toBe(toBe);
         });
 
         test('Empty object', () => {
-            expect(abv.isValid({}, 'not-null')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage({}, 'not-null')).toBe(toBe);
         });
 
         test('0', () => {
-            expect(abv.isValid(0, 'not-null')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(0, 'not-null')).toBe(toBe);
         });
 
         test('False', () => {
-            expect(abv.isValid(false, 'not-null')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(false, 'not-null')).toBe(toBe);
         });
     });
 

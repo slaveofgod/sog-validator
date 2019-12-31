@@ -4,14 +4,14 @@ const abv = require('../../../../build/output/bob-validator');
 
 describe('not-blank', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('String with spaces only', () => {
-            expect(abv.isValid('   ', 'not-blank')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('   ', 'not-blank')).toBe(toBe);
         });
 
         test('Null [allowNull:true]', () => {
-            expect(abv.isValid(null, 'not-blank;allowNull:true')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(null, 'not-blank;allowNull:true')).toBe(toBe);
         });
     });
 

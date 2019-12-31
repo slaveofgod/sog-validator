@@ -7,10 +7,10 @@ const abv = require('../../../../build/output/bob-validator');
  */
 describe('type[type:array]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('Array', () => {
-            expect(abv.isValid([], 'type;type:array')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage([], 'type;type:array')).toBe(toBe);
         });
     });
 
@@ -44,14 +44,14 @@ describe('type[type:array]', () => {
  */
 describe('type[type:bool]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('True', () => {
-            expect(abv.isValid(true, 'type;type:bool')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(true, 'type;type:bool')).toBe(toBe);
         });
 
         test('False', () => {
-            expect(abv.isValid(false, 'type;type:bool')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(false, 'type;type:bool')).toBe(toBe);
         });
     });
 
@@ -69,14 +69,14 @@ describe('type[type:bool]', () => {
  */
 describe('type[type:callable]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('Function', () => {
-            expect(abv.isValid(function () {}, 'type;type:callable')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(function () {}, 'type;type:callable')).toBe(toBe);
         });
 
         test('abv.isValid', () => {
-            expect(abv.isValid(abv.isValid, 'type;type:callable')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(abv.isValid, 'type;type:callable')).toBe(toBe);
         });
     });
 
@@ -102,10 +102,10 @@ describe('type[type:callable]', () => {
  */
 describe('type[type:float]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('10.25', () => {
-            expect(abv.isValid(10.25, 'type;type:float')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(10.25, 'type;type:float')).toBe(toBe);
         });
     });
 
@@ -135,10 +135,10 @@ describe('type[type:float]', () => {
  */
 describe('type[type:double]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('10.25', () => {
-            expect(abv.isValid(10.25, 'type;type:double')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(10.25, 'type;type:double')).toBe(toBe);
         });
     });
 
@@ -168,10 +168,10 @@ describe('type[type:double]', () => {
  */
 describe('type[type:integer]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('20', () => {
-            expect(abv.isValid(20, 'type;type:integer')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(20, 'type;type:integer')).toBe(toBe);
         });
     });
 
@@ -201,14 +201,14 @@ describe('type[type:integer]', () => {
  */
 describe('type[type:iterable]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('Array', () => {
-            expect(abv.isValid([], 'type;type:iterable')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage([], 'type;type:iterable')).toBe(toBe);
         });
 
         test('String', () => {
-            expect(abv.isValid('Lorem ipsum', 'type;type:iterable')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('Lorem ipsum', 'type;type:iterable')).toBe(toBe);
         });
     });
 
@@ -234,10 +234,10 @@ describe('type[type:iterable]', () => {
  */
 describe('type[type:null]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('Null', () => {
-            expect(abv.isValid(null, 'type;type:null')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(null, 'type;type:null')).toBe(toBe);
         });
     });
 
@@ -275,30 +275,30 @@ describe('type[type:null]', () => {
  */
 describe('type[type:numeric]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('10', () => {
-            expect(abv.isValid(10, 'type;type:numeric')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(10, 'type;type:numeric')).toBe(toBe);
         });
 
         test('"25"', () => {
-            expect(abv.isValid('25', 'type;type:numeric')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('25', 'type;type:numeric')).toBe(toBe);
         });
 
         test('26.98', () => {
-            expect(abv.isValid(26.98, 'type;type:numeric')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(26.98, 'type;type:numeric')).toBe(toBe);
         });
 
         test('"59.63"', () => {
-            expect(abv.isValid('59.63', 'type;type:numeric')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('59.63', 'type;type:numeric')).toBe(toBe);
         });
 
         test('.98', () => {
-            expect(abv.isValid(.36, 'type;type:numeric')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(.36, 'type;type:numeric')).toBe(toBe);
         });
 
         test('".26"', () => {
-            expect(abv.isValid('.26', 'type;type:numeric')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('.26', 'type;type:numeric')).toBe(toBe);
         });
     });
 
@@ -336,18 +336,18 @@ describe('type[type:numeric]', () => {
  */
 describe('type[type:object]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('abv', () => {
-            expect(abv.isValid(abv, 'type;type:object')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(abv, 'type;type:object')).toBe(toBe);
         });
 
         test('Object', () => {
-            expect(abv.isValid({}, 'type;type:object')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage({}, 'type;type:object')).toBe(toBe);
         });
 
         test('Null', () => {
-            expect(abv.isValid(null, 'type;type:object')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(null, 'type;type:object')).toBe(toBe);
         });
     });
 
@@ -377,10 +377,10 @@ describe('type[type:object]', () => {
  */
 describe('type[type:real]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('10.25', () => {
-            expect(abv.isValid(10.25, 'type;type:real')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(10.25, 'type;type:real')).toBe(toBe);
         });
     });
 
@@ -406,26 +406,26 @@ describe('type[type:real]', () => {
  */
 describe('type[type:scalar]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('20', () => {
-            expect(abv.isValid(20, 'type;type:scalar')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(20, 'type;type:scalar')).toBe(toBe);
         });
 
         test('10.25', () => {
-            expect(abv.isValid(10.25, 'type;type:scalar')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(10.25, 'type;type:scalar')).toBe(toBe);
         });
 
         test('True', () => {
-            expect(abv.isValid(true, 'type;type:scalar')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(true, 'type;type:scalar')).toBe(toBe);
         });
 
         test('False', () => {
-            expect(abv.isValid(false, 'type;type:scalar')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(false, 'type;type:scalar')).toBe(toBe);
         });
 
         test('String', () => {
-            expect(abv.isValid('Lorem ipsum', 'type;type:scalar')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('Lorem ipsum', 'type;type:scalar')).toBe(toBe);
         });
     });
 
@@ -455,10 +455,10 @@ describe('type[type:scalar]', () => {
  */
 describe('type[type:string]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('String', () => {
-            expect(abv.isValid('Lorem ipsum', 'type;type:string')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('Lorem ipsum', 'type;type:string')).toBe(toBe);
         });
     });
 
@@ -492,18 +492,18 @@ describe('type[type:string]', () => {
  */
 describe('type[type:alnum]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('String without space(s)', () => {
-            expect(abv.isValid('Loremipsum', 'type;type:alnum')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('Loremipsum', 'type;type:alnum')).toBe(toBe);
         });
 
         test('String "AbF26Fg69H"', () => {
-            expect(abv.isValid('AbF26Fg69H', 'type;type:alnum')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('AbF26Fg69H', 'type;type:alnum')).toBe(toBe);
         });
 
         test('59', () => {
-            expect(abv.isValid(59, 'type;type:alnum')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(59, 'type;type:alnum')).toBe(toBe);
         });
     });
 
@@ -541,10 +541,10 @@ describe('type[type:alnum]', () => {
  */
 describe('type[type:alpha]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('String "Loremipsum"', () => {
-            expect(abv.isValid('Loremipsum', 'type;type:alpha')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('Loremipsum', 'type;type:alpha')).toBe(toBe);
         });
     });
 
@@ -590,10 +590,10 @@ describe('type[type:alpha]', () => {
  */
 describe('type[type:digit]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('59', () => {
-            expect(abv.isValid(59, 'type;type:digit')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(59, 'type;type:digit')).toBe(toBe);
         });
     });
 
@@ -639,26 +639,26 @@ describe('type[type:digit]', () => {
  */
 describe('type[type:graph]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('String "Loremipsum"', () => {
-            expect(abv.isValid('Loremipsum', 'type;type:graph')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('Loremipsum', 'type;type:graph')).toBe(toBe);
         });
 
         test('String "AbF26Fg69H"', () => {
-            expect(abv.isValid('AbF26Fg69H', 'type;type:graph')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('AbF26Fg69H', 'type;type:graph')).toBe(toBe);
         });
 
         test('20', () => {
-            expect(abv.isValid(20, 'type;type:graph')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(20, 'type;type:graph')).toBe(toBe);
         });
 
         test('10.25', () => {
-            expect(abv.isValid(10.25, 'type;type:graph')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(10.25, 'type;type:graph')).toBe(toBe);
         });
 
         test('String with space(s)', () => {
-            expect(abv.isValid('Lorem ipsum', 'type;type:graph')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('Lorem ipsum', 'type;type:graph')).toBe(toBe);
         });
     });
 
@@ -692,10 +692,10 @@ describe('type[type:graph]', () => {
  */
 describe('type[type:lower]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('String "loremipsum"', () => {
-            expect(abv.isValid('loremipsum', 'type;type:lower')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('loremipsum', 'type;type:lower')).toBe(toBe);
         });
     });
 
@@ -753,34 +753,34 @@ describe('type[type:lower]', () => {
  */
 describe('type[type:print]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('String "loremipsum"', () => {
-            expect(abv.isValid('loremipsum', 'type;type:print')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('loremipsum', 'type;type:print')).toBe(toBe);
         });
 
         test('String "lorem25$fcse97ipsum"', () => {
-            expect(abv.isValid('lorem25$fcse97ipsum', 'type;type:print')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('lorem25$fcse97ipsum', 'type;type:print')).toBe(toBe);
         });
 
         test('String "Loremipsum"', () => {
-            expect(abv.isValid('Loremipsum', 'type;type:print')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('Loremipsum', 'type;type:print')).toBe(toBe);
         });
 
         test('String "AbF26Fg69H"', () => {
-            expect(abv.isValid('AbF26Fg69H', 'type;type:print')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('AbF26Fg69H', 'type;type:print')).toBe(toBe);
         });
 
         test('20', () => {
-            expect(abv.isValid(20, 'type;type:print')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(20, 'type;type:print')).toBe(toBe);
         });
 
         test('10.25', () => {
-            expect(abv.isValid(10.25, 'type;type:print')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(10.25, 'type;type:print')).toBe(toBe);
         });
 
         test('String with space(s)', () => {
-            expect(abv.isValid('Lorem ipsum', 'type;type:print')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('Lorem ipsum', 'type;type:print')).toBe(toBe);
         });
     });
 
@@ -814,10 +814,10 @@ describe('type[type:print]', () => {
  */
 describe('type[type:punct]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('String "*&$()"', () => {
-            expect(abv.isValid('*&$()', 'type;type:punct')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('*&$()', 'type;type:punct')).toBe(toBe);
         });
     });
 
@@ -879,10 +879,10 @@ describe('type[type:punct]', () => {
  */
 describe('type[type:space]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('String "\\r\\n\\t"', () => {
-            expect(abv.isValid("\r\n\t", 'type;type:space')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage("\r\n\t", 'type;type:space')).toBe(toBe);
         });
     });
 
@@ -948,10 +948,10 @@ describe('type[type:space]', () => {
  */
 describe('type[type:upper]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('String "GTEFFGGS"', () => {
-            expect(abv.isValid("GTEFFGGS", 'type;type:upper')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage("GTEFFGGS", 'type;type:upper')).toBe(toBe);
         });
     });
 
@@ -1021,14 +1021,14 @@ describe('type[type:upper]', () => {
  */
 describe('type[type:xdigit]', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('20', () => {
-            expect(abv.isValid(20, 'type;type:xdigit')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(20, 'type;type:xdigit')).toBe(toBe);
         });
 
         test('String "AB2569"', () => {
-            expect(abv.isValid("AB2569", 'type;type:xdigit')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage("AB2569", 'type;type:xdigit')).toBe(toBe);
         });
     });
 

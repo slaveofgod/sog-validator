@@ -4,14 +4,14 @@ const abv = require('../../../../build/output/bob-validator');
 
 describe('email', () => {
     describe('Is Valid', () => {
-        let toBe = true;
+        let toBe = null;
 
         test('a@a.com', () => {
-            expect(abv.isValid('a@a.com', 'email;mode:loose')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('a@a.com', 'email;mode:loose')).toBe(toBe);
         });
 
         test('alexey.bob@gmail.com', () => {
-            expect(abv.isValid('alexey.bob@gmail.com', 'email;mode:html5')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('alexey.bob@gmail.com', 'email;mode:html5')).toBe(toBe);
         });
     });
 

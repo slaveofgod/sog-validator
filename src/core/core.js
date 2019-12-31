@@ -262,6 +262,25 @@ var abv = {
         );
 
         return validator.isValid();
+    },
+
+    /**
+     * @function
+     * @name abv.isValidWithErrorMessage
+     * @description Check if data valid according to validation rules
+     * @param {*} data The data which needs to be validated
+     * @param {String} rules Validation rules in string format
+     * @returns {Null|String} If valid this function return null otherwise error message
+     */
+    isValidWithErrorMessage: function (data, rules) {
+        var engine = new abv.Application();
+
+        validator = engine.createSingle(
+            data,
+            rules
+        );
+
+        return validator.errorMessage();
     }
 };
 
