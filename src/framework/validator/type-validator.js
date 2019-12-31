@@ -12,7 +12,7 @@ Object.assign(abv, function () {
      * @example
      * var validator = new abv.TypeValidator(data, {type: 'array'});
      * if (false === validator.isValid()) {
-     *      validator.getErrorMessage();
+     *      validator.errorMessage();
      * }
      */
 
@@ -96,8 +96,6 @@ Object.assign(abv, function () {
 
         this.__name = 'TypeValidator';
         this.__invalidType = null;
-        this.__isValid = true;
-        this.__errorMessage = null;
     };
     TypeValidator.prototype = Object.create(abv.ValidatorAbstract.prototype);
     TypeValidator.prototype.constructor = TypeValidator;
@@ -116,10 +114,8 @@ Object.assign(abv, function () {
                 if (!types.hasOwnProperty(key)) continue;
 
                 if (false === abv.isType(types[key], this.data)) {
-                    this.__isValid = false;
                     this.__invalidType = types[key];
-                    this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
-
+                    this.__setErrorMessage(this.message, this.messageParameters());
                     break;
                 }
             }

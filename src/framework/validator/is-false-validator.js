@@ -12,7 +12,7 @@ Object.assign(abv, function () {
      * @example
      * var validator = new abv.IsFalseValidator(data);
      * if (false === validator.isValid()) {
-     *      validator.getErrorMessage();
+     *      validator.errorMessage();
      * }
      */
 
@@ -58,8 +58,6 @@ Object.assign(abv, function () {
         this.message = options.message || 'This value should be false.';
 
         this.__name = 'IsFalseValidator';
-        this.__isValid = true;
-        this.__errorMessage = null;
     };
     IsFalseValidator.prototype = Object.create(abv.ValidatorAbstract.prototype);
     IsFalseValidator.prototype.constructor = IsFalseValidator;
@@ -77,8 +75,8 @@ Object.assign(abv, function () {
                 && 0 !== this.data
                 && '0' !== this.data
             ) {
-                this.__isValid = false;
-                this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
+                this.__setErrorMessage(this.message, this.messageParameters());
+                return ;
             }
         },
 

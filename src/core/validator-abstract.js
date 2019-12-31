@@ -1,5 +1,5 @@
 Object.assign(abv, (function () {
-    'use strict';ValidatorAbstract
+    'use strict';
 
     /**
      * @private
@@ -9,7 +9,7 @@ Object.assign(abv, (function () {
      * @description Create a new validation extension.
      */
     var ValidatorAbstract = function () {
-
+        this.__errorMessage = null;
     };
 
     Object.assign(ValidatorAbstract.prototype, {
@@ -22,7 +22,7 @@ Object.assign(abv, (function () {
          * @param {Object} parameters Error message parameters
          * @returns {String} Processed message
          */
-        prepareMessage: function (message, parameters) {
+        __prepareMessage: function (message, parameters) {
             parameters = parameters || {};
 
             for (var key in parameters) {
@@ -45,17 +45,29 @@ Object.assign(abv, (function () {
 
             this.validate();
 
-            return this.__isValid;
+            return (null === this.__errorMessage) ? true: false;
         },
 
         /**
          * @function
-         * @name abv.ValidatorAbstract#getErrorMessage
+         * @name abv.ValidatorAbstract#errorMessage
          * @description Return error message
          * @returns {String} Error message
          */
-        getErrorMessage: function () {
+        errorMessage: function () {
             return this.__errorMessage;
+        },
+
+        /**
+         * @private
+         * @function
+         * @name abv.ValidatorAbstract#__setErrorMessage
+         * @param {String} message Error message text
+         * @param {Object} parameters Error message parameters
+         * @description Set error message
+         */
+        __setErrorMessage: function (message, parameters) {
+            this.__errorMessage = this.__prepareMessage(message, parameters);
         },
 
         /**

@@ -36,7 +36,7 @@ Object.assign(abv, function () {
      * });
      *
      * if (false === form['name'].isValid()) {
-     *   console.log(form['name'].getErrorMessage());
+     *   console.log(form['name'].errorMessage());
      * }
      *
      * // Run validation
@@ -109,7 +109,7 @@ Object.assign(abv, function () {
          * );
          *
          * if (false === validator.isValid()) {
-         *     console.log(validator.getErrorMessage());
+         *     console.log(validator.errorMessage());
          * }
          * @returns {Object} Validator object
          */

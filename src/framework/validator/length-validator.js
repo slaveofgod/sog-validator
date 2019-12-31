@@ -12,7 +12,7 @@ Object.assign(abv, function () {
      * @example
      * var validator = new abv.LengthValidator(data);
      * if (false === validator.isValid()) {
-     *      validator.getErrorMessage();
+     *      validator.errorMessage();
      * }
      */
 
@@ -166,8 +166,6 @@ Object.assign(abv, function () {
         this.normalize = options.normalize ? ('true' == options.normalize ? true : false) : false;
 
         this.__name = 'LengthValidator';
-        this.__isValid = true;
-        this.__errorMessage = null;
     };
     LengthValidator.prototype = Object.create(abv.ValidatorAbstract.prototype);
     LengthValidator.prototype.constructor = LengthValidator;
@@ -203,12 +201,10 @@ Object.assign(abv, function () {
                     this.max
                     && length > this.max
                 ) {
-                    this.__isValid = false;
-                    this.__errorMessage = this.prepareMessage(
+                    this.__setErrorMessage(
                         (this.min == this.max ? this.exactMessage : this.maxMessage),
                         (this.min == this.max ? this.exactMessageParameters() : this.maxMessageParameters())
                     );
-
                     return ;
                 }
 
@@ -216,17 +212,15 @@ Object.assign(abv, function () {
                     this.min
                     && length < this.min
                 ) {
-                    this.__isValid = false;
-                    this.__errorMessage = this.prepareMessage(
-                        (this.min == this.max ? this.exactMessage : this.minMessage)
+                    this.__setErrorMessage(
+                        (this.min == this.max ? this.exactMessage : this.minMessage),
                         (this.min == this.max ? this.exactMessageParameters() : this.minMessageParameters())
                     );
-
                     return ;
                 }
             } catch (e) {
-                this.__isValid = false;
-                this.__errorMessage = 'Either data needs to be a string';
+                this.__setErrorMessage('Either data needs to be a string');
+                return ;
             }
         },
 

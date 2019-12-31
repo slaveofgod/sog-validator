@@ -43,8 +43,6 @@ Object.assign(abv, function () {
 
         this.__validatorCollection = [];
         this.__name = 'AllValidator';
-        this.__isValid = true;
-        this.__errorMessage = null;
 
         this.configure();
     };
@@ -91,9 +89,8 @@ Object.assign(abv, function () {
                 if (!this.__validatorCollection.hasOwnProperty(key)) continue;
 
                 if (false === this.__validatorCollection[key].isValid()) {
-                    this.__isValid = false;
-                    this.__errorMessage = this.__validatorCollection[key].getErrorMessage();
-                    break;
+                    this.__setErrorMessage(this.__validatorCollection[key].errorMessage());
+                    break ;
                 }
             }
         }

@@ -12,7 +12,7 @@ Object.assign(abv, function () {
      * @example
      * var validator = new abv.NotNullValidator(data);
      * if (false === validator.isValid()) {
-     *      validator.getErrorMessage();
+     *      validator.errorMessage();
      * }
      */
 
@@ -58,8 +58,6 @@ Object.assign(abv, function () {
         this.message = options.message || 'This value should not be null.';
 
         this.__name = 'NotNullValidator';
-        this.__isValid = true;
-        this.__errorMessage = null;
     };
     NotNullValidator.prototype = Object.create(abv.ValidatorAbstract.prototype);
     NotNullValidator.prototype.constructor = NotNullValidator;
@@ -74,17 +72,14 @@ Object.assign(abv, function () {
         validate: function () {
             // Check if undefined
             if ('undefined' === typeof this.data) {
-                this.__isValid = false;
-                this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
+                this.__setErrorMessage(this.message, this.messageParameters());
+                return ;
             }
 
             // Check if null
-            if (
-                true === this.__isValid
-                && null === this.data
-            ) {
-                this.__isValid = false;
-                this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
+            if (null === this.data) {
+                this.__setErrorMessage(this.message, this.messageParameters());
+                return ;
             }
         },
 

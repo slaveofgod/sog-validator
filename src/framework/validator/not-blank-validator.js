@@ -12,7 +12,7 @@ Object.assign(abv, function () {
      * @example
      * var validator = new abv.NotBlankValidator(data);
      * if (false === validator.isValid()) {
-     *      validator.getErrorMessage();
+     *      validator.errorMessage();
      * }
      */
 
@@ -72,8 +72,6 @@ Object.assign(abv, function () {
         this.normalize = options.normalize ? ('true' == options.normalize ? true : false) : false;
 
         this.__name = 'NotBlankValidator';
-        this.__isValid = true;
-        this.__errorMessage = null;
     };
     NotBlankValidator.prototype = Object.create(abv.ValidatorAbstract.prototype);
     NotBlankValidator.prototype.constructor = NotBlankValidator;
@@ -96,9 +94,7 @@ Object.assign(abv, function () {
 
             // Check if undefined
             if ('undefined' === typeof this.data) {
-                this.__isValid = false;
-                this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
-
+                this.__setErrorMessage(this.message, this.messageParameters());
                 return ;
             }
 
@@ -107,25 +103,19 @@ Object.assign(abv, function () {
                 null === this.data
                 && false === this.allowNull
             ) {
-                this.__isValid = false;
-                this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
-
+                this.__setErrorMessage(this.message, this.messageParameters());
                 return ;
             }
 
             // Check if false
             if (false === this.data) {
-                this.__isValid = false;
-                this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
-
-                return;
+                this.__setErrorMessage(this.message, this.messageParameters());
+                return ;
             }
 
             // Check if empty string
             if ('' === this.data) {
-                this.__isValid = false;
-                this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
-
+                this.__setErrorMessage(this.message, this.messageParameters());
                 return ;
             }
 
@@ -134,9 +124,7 @@ Object.assign(abv, function () {
                 true === Array.isArray(this.data)
                 && 0 === this.data.length
             ) {
-                this.__isValid = false;
-                this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
-
+                this.__setErrorMessage(this.message, this.messageParameters());
                 return ;
             }
         },

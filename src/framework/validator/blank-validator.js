@@ -12,7 +12,7 @@ Object.assign(abv, function () {
      * @example
      * var validator = new abv.BlankValidator(data);
      * if (false === validator.isValid()) {
-     *      validator.getErrorMessage();
+     *      validator.errorMessage();
      * }
      */
 
@@ -58,8 +58,6 @@ Object.assign(abv, function () {
         this.message = options.message || 'This value should be blank.';
 
         this.__name = 'BlankValidator';
-        this.__isValid = true;
-        this.__errorMessage = null;
     };
     BlankValidator.prototype = Object.create(abv.ValidatorAbstract.prototype);
     BlankValidator.prototype.constructor = BlankValidator;
@@ -76,8 +74,8 @@ Object.assign(abv, function () {
                 '' !== this.data
                 && null !== this.data
             ) {
-                this.__isValid = false;
-                this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
+                this.__setErrorMessage(this.message, this.messageParameters());
+                return ;
             }
         },
 

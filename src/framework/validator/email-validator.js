@@ -12,7 +12,7 @@ Object.assign(abv, function () {
      * @example
      * var validator = new abv.EmailValidator(data, {data: 'loose'});
      * if (false === validator.isValid()) {
-     *      validator.getErrorMessage();
+     *      validator.errorMessage();
      * }
      */
 
@@ -77,10 +77,7 @@ Object.assign(abv, function () {
         this.mode = (['loose', 'strict', 'html5'].includes(options.mode)) ? options.mode : 'html5';
         this.normalize = options.normalize ? ('true' == options.normalize ? true : false) : false;
 
-
         this.__name = 'EmailValidator';
-        this.__isValid = true;
-        this.__errorMessage = null;
     };
     EmailValidator.prototype = Object.create(abv.ValidatorAbstract.prototype);
     EmailValidator.prototype.constructor = EmailValidator;
@@ -103,36 +100,28 @@ Object.assign(abv, function () {
 
                 switch (this.mode) {
                     case 'loose':
-                        if (
-                            true === this.__isValid
-                            && false === /^.+\@\S+\.\S+$/.test(this.data)
-                        ) {
-                            this.__isValid = false;
-                            this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
-
-                            return;
+                        if (false === /^.+\@\S+\.\S+$/.test(this.data)) {
+                            this.__setErrorMessage(this.message, this.messageParameters());
+                            return ;
                         }
                         break;
                     /**
                      * @todo Implement [mode:strict]
                      */
                     case 'strict':
-                        this.__isValid = false;
-                        this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
+                        this.__setErrorMessage(this.message, this.messageParameters());
                         return;
-                        break;
+                        break ;
                     case 'html5':
                         if (false === /^[a-zA-Z0-9.!#$%&\'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/.test(this.data)) {
-                            this.__isValid = false;
-                            this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
-
-                            return;
+                            this.__setErrorMessage(this.message, this.messageParameters());
+                            return ;
                         }
                         break;
                 }
             } catch (e) {
-                this.__isValid = false;
-                this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
+                this.__setErrorMessage(this.message, this.messageParameters());
+                return ;
             }
         },
 

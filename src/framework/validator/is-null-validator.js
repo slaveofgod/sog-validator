@@ -12,7 +12,7 @@ Object.assign(abv, function () {
      * @example
      * var validator = new abv.IsNullValidator(data);
      * if (false === validator.isValid()) {
-     *      validator.getErrorMessage();
+     *      validator.errorMessage();
      * }
      */
 
@@ -58,8 +58,6 @@ Object.assign(abv, function () {
         this.message = options.message || 'This value should be null.';
 
         this.__name = 'IsNullValidator';
-        this.__isValid = true;
-        this.__errorMessage = null;
     };
     IsNullValidator.prototype = Object.create(abv.ValidatorAbstract.prototype);
     IsNullValidator.prototype.constructor = IsNullValidator;
@@ -73,8 +71,8 @@ Object.assign(abv, function () {
          */
         validate: function () {
             if (null !== this.data) {
-                this.__isValid = false;
-                this.__errorMessage = this.prepareMessage(this.message, this.messageParameters());
+                this.__setErrorMessage(this.message, this.messageParameters());
+                return ;
             }
         },
 
