@@ -36,32 +36,32 @@ Object.assign(abv, function () {
      * @description If set to true, empty strings are considered valid. The default false value considers empty strings not valid. Defaults to false.
      */
 
-    /**
-     * @name abv.LengthValidator#charset
-     * @type {String}
-     * @description The charset to be used when computing value's length. Defaults to 'UTF-8'.
-     */
-
-    /**
-     * @name abv.LengthValidator#charsetMessage
-     * @type {String}
-     * @description The message that will be shown if the value is not using the given charset. Defaults to 'This value does not match the expected %%charset%% charset.'.
-     * You can use the following parameters in this message:
-     * <table>
-     *     <tr>
-     *         <td><b>Parameter</b></td>
-     *         <td><b>Description</b></td>
-     *     </tr>
-     *     <tr>
-     *         <td>%%charset%%</td>
-     *         <td>The expected charset</td>
-     *     </tr>
-     *     <tr>
-     *         <td>%%value%%</td>
-     *         <td>The current (invalid) value</td>
-     *     </tr>
-     * </table>
-     */
+    // /**
+    //  * @name abv.LengthValidator#charset
+    //  * @type {String}
+    //  * @description The charset to be used when computing value's length. Defaults to 'UTF-8'.
+    //  */
+    //
+    // /**
+    //  * @name abv.LengthValidator#charsetMessage
+    //  * @type {String}
+    //  * @description The message that will be shown if the value is not using the given charset. Defaults to 'This value does not match the expected %%charset%% charset.'.
+    //  * You can use the following parameters in this message:
+    //  * <table>
+    //  *     <tr>
+    //  *         <td><b>Parameter</b></td>
+    //  *         <td><b>Description</b></td>
+    //  *     </tr>
+    //  *     <tr>
+    //  *         <td>%%charset%%</td>
+    //  *         <td>The expected charset</td>
+    //  *     </tr>
+    //  *     <tr>
+    //  *         <td>%%value%%</td>
+    //  *         <td>The current (invalid) value</td>
+    //  *     </tr>
+    //  * </table>
+    //  */
 
     /**
      * @name abv.LengthValidator#exactMessage
@@ -156,8 +156,8 @@ Object.assign(abv, function () {
         this.lang = lang || 'en';
 
         this.allowEmptyString = options.allowEmptyString ? ('true' == options.allowEmptyString ? true : false) : false;
-        this.charset = options.charset || 'UTF-8';
-        this.charsetMessage = options.charsetMessage || 'This value does not match the expected %%charset%% charset.';
+        // this.charset = options.charset || 'UTF-8';
+        // this.charsetMessage = options.charsetMessage || 'This value does not match the expected %%charset%% charset.';
         this.exactMessage = options.exactMessage || 'This value should have exactly %%limit%% characters.';
         this.max = options.max;
         this.maxMessage = options.maxMessage || 'This value is too long. It should have %%limit%% characters or less.';
@@ -178,6 +178,13 @@ Object.assign(abv, function () {
          * @description Validate data
          */
         validate: function () {
+            // Check if value is scalar
+            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type;type:scalar');
+            if(null !== errorMessage) {
+                this.__setErrorMessage(errorMessage, {});
+                return ;
+            }
+
             try {
                 this.data = this.data.toString();
 
@@ -188,7 +195,7 @@ Object.assign(abv, function () {
 
                 // Check if data in empty and [allowEmptyString: true]
                 if (null === this.data || ('' === this.data && true === this.allowEmptyString)) {
-                    return;
+                    return ;
                 }
 
                 /**
