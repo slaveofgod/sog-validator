@@ -16,70 +16,70 @@ describe('email', () => {
     });
 
     describe('Is Invalid', () => {
-        let toBe = false;
+        let toBe = "This value is not a valid email address.";
 
         test('a@a-com', () => {
-            expect(abv.isValid('a@a-com', 'email;mode:loose')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('a@a-com', 'email;mode:loose')).toBe(toBe);
         });
 
         test('abcdefg', () => {
-            expect(abv.isValid('abcdefg', 'email;mode:html5')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('abcdefg', 'email;mode:html5')).toBe(toBe);
         });
 
         test('String "GTEFFGGS"', () => {
-            expect(abv.isValid("GTEFFGGS", 'email')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage("GTEFFGGS", 'email')).toBe(toBe);
         });
 
         test('String "\\r\\n\\t"', () => {
-            expect(abv.isValid("\r\n\t", 'email')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage("\r\n\t", 'email')).toBe(toBe);
         });
 
         test('String "*&$()"', () => {
-            expect(abv.isValid('*&$()', 'email')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('*&$()', 'email')).toBe(toBe);
         });
 
         test('String "loremipsum"', () => {
-            expect(abv.isValid('loremipsum', 'email')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('loremipsum', 'email')).toBe(toBe);
         });
 
         test('String "lorem25$fcse97ipsum"', () => {
-            expect(abv.isValid('lorem25$fcse97ipsum', 'email')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('lorem25$fcse97ipsum', 'email')).toBe(toBe);
         });
 
         test('String "Loremipsum"', () => {
-            expect(abv.isValid('Loremipsum', 'email')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('Loremipsum', 'email')).toBe(toBe);
         });
 
         test('String "AbF26Fg69H"', () => {
-            expect(abv.isValid('AbF26Fg69H', 'email')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('AbF26Fg69H', 'email')).toBe(toBe);
         });
 
         test('10.25', () => {
-            expect(abv.isValid(10.25, 'email')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(10.25, 'email')).toBe(toBe);
         });
 
         test('String with space(s)', () => {
-            expect(abv.isValid('Lorem ipsum', 'email')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('Lorem ipsum', 'email')).toBe(toBe);
         });
 
         test('String with unprintable character(s)', () => {
-            expect(abv.isValid("\r fsd \tf \n", 'email')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage("\r fsd \tf \n", 'email')).toBe(toBe);
         });
 
         test('Function', () => {
-            expect(abv.isValid(function () {}, 'email')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(function () {}, 'email')).toBe(toBe);
         });
 
         test('Null', () => {
-            expect(abv.isValid(null, 'email')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(null, 'email')).toBe(toBe);
         });
 
         test('Object', () => {
-            expect(abv.isValid({}, 'email')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage({}, 'email')).toBe(toBe);
         });
 
         test('Array', () => {
-            expect(abv.isValid([], 'email')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage([], 'email')).toBe(toBe);
         });
     });
 });

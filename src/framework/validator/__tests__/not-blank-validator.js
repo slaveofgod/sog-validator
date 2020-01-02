@@ -16,30 +16,30 @@ describe('not-blank', () => {
     });
 
     describe('Is Invalid', () => {
-        let toBe = false;
+        let toBe = "This value should not be blank.";
 
         test('Undefined', () => {
-            expect(abv.isValid(undefined, 'not-blank')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(undefined, 'not-blank')).toBe(toBe);
         });
 
         test('Null', () => {
-            expect(abv.isValid(null, 'not-blank')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(null, 'not-blank')).toBe(toBe);
         });
 
         test('False', () => {
-            expect(abv.isValid(false, 'not-blank')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(false, 'not-blank')).toBe(toBe);
         });
 
         test('Empty string', () => {
-            expect(abv.isValid('', 'not-blank')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('', 'not-blank')).toBe(toBe);
         });
 
         test('Empty array', () => {
-            expect(abv.isValid([], 'not-blank')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage([], 'not-blank')).toBe(toBe);
         });
 
         test('String with spaces only [normalize:true]', () => {
-            expect(abv.isValid('   ', 'not-blank;normalize:true')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('   ', 'not-blank;normalize:true')).toBe(toBe);
         });
     });
 });

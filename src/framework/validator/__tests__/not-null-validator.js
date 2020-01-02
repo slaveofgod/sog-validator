@@ -28,14 +28,14 @@ describe('not-null', () => {
     });
 
     describe('Is Invalid', () => {
-        let toBe = false;
+        let toBe = "This value should not be null.";
 
         test('Undefined', () => {
-            expect(abv.isValid(undefined, 'not-null')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(undefined, 'not-null')).toBe(toBe);
         });
 
         test('Null', () => {
-            expect(abv.isValid(null, 'not-null')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(null, 'not-null')).toBe(toBe);
         });
     });
 });

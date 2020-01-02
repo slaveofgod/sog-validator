@@ -16,22 +16,22 @@ describe('blank', () => {
     });
 
     describe('Is Invalid', () => {
-        let toBe = false;
+        let toBe = "This value should be blank.";
 
         test('0', () => {
-            expect(abv.isValid(0, 'blank')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(0, 'blank')).toBe(toBe);
         });
 
         test('Not Empty String', () => {
-            expect(abv.isValid('lorem ipsum', 'blank')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('lorem ipsum', 'blank')).toBe(toBe);
         });
 
         test('Empty Object', () => {
-            expect(abv.isValid({}, 'blank')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage({}, 'blank')).toBe(toBe);
         });
 
         test('Empty Array', () => {
-            expect(abv.isValid([], 'blank')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage([], 'blank')).toBe(toBe);
         });
     });
 });

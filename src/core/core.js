@@ -254,9 +254,8 @@ var abv = {
      * @returns {Boolean} Validation status
      */
     isValid: function (data, rules) {
-        var engine = new abv.Application();
-
-        validator = engine.createSingle(
+        var engine = new abv.Application({lang: 'en'});
+        var validator = engine.createSingle(
             data,
             rules
         );
@@ -273,14 +272,13 @@ var abv = {
      * @returns {Null|String} If valid this function return null otherwise error message
      */
     isValidWithErrorMessage: function (data, rules) {
-        var engine = new abv.Application();
-
-        validator = engine.createSingle(
+        var engine = new abv.Application({lang: 'en'});
+        var validator = engine.createSingle(
             data,
             rules
         );
 
-        return validator.errorMessage();
+        return (true === validator.isValid()) ? null : validator.errorMessage();
     }
 };
 

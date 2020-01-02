@@ -20,26 +20,26 @@ describe('false', () => {
     });
 
     describe('Is Invalid', () => {
-        let toBe = false;
+        let toBe = "This value should be false.";
 
         test('Empty', () => {
-            expect(abv.isValid('', 'false')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('', 'false')).toBe(toBe);
         });
 
         test('Null', () => {
-            expect(abv.isValid(null, 'false')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(null, 'false')).toBe(toBe);
         });
 
         test('True', () => {
-            expect(abv.isValid(true, 'false')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(true, 'false')).toBe(toBe);
         });
 
         test('Empty Array', () => {
-            expect(abv.isValid([], 'false')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage([], 'false')).toBe(toBe);
         });
 
         test('Empty Object', () => {
-            expect(abv.isValid({}, 'false')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage({}, 'false')).toBe(toBe);
         });
     });
 });

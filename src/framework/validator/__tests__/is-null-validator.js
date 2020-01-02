@@ -12,18 +12,18 @@ describe('null', () => {
     });
 
     describe('Is Invalid', () => {
-        let toBe = false;
+        let toBe = "This value should be null.";
 
         test('Empty String', () => {
-            expect(abv.isValid('', 'null')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('', 'null')).toBe(toBe);
         });
 
         test('0', () => {
-            expect(abv.isValid(0, 'null')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(0, 'null')).toBe(toBe);
         });
 
         test('Boolean', () => {
-            expect(abv.isValid(false, 'null')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(false, 'null')).toBe(toBe);
         });
     });
 });
