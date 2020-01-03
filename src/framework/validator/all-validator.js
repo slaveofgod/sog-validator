@@ -57,7 +57,7 @@ Object.assign(abv, function () {
          * @description Configure validator
          */
         __configure: function () {
-            var validationRules = abv.parceRules(this.rules);
+            var validationRules = abv.parseRulesFromJsonFormat(this.rules);
             for (var key in validationRules) {
                 if (!validationRules.hasOwnProperty(key)) continue;
 

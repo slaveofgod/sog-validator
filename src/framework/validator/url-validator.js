@@ -80,9 +80,9 @@ Object.assign(abv, function () {
         this.lang = lang || 'en';
 
         this.message = options.message || 'This value is not a valid URL.';
-        this.normalize = options.normalize ? ('true' == options.normalize ? true : false) : false;
+        this.normalize = options.normalize || false;
         this.protocols = options.protocols || ['http', 'https'];
-        this.relativeProtocol = options.relativeProtocol ? ('true' == options.relativeProtocol ? true : false) : false;
+        this.relativeProtocol = options.relativeProtocol || false;
 
         this.__name = 'UrlValidator';
 
@@ -113,7 +113,7 @@ Object.assign(abv, function () {
          */
         validate: function () {
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type;type:scalar');
+            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}');
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;

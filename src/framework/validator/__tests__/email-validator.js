@@ -7,11 +7,11 @@ describe('email', () => {
         let toBe = null;
 
         test('a@a.com', () => {
-            expect(abv.isValidWithErrorMessage('a@a.com', 'email;mode:loose')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('a@a.com', 'email:{"mode":"loose"}')).toBe(toBe);
         });
 
         test('alexey.bob@gmail.com', () => {
-            expect(abv.isValidWithErrorMessage('alexey.bob@gmail.com', 'email;mode:html5')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('alexey.bob@gmail.com', 'email:{"mode":"html5"}')).toBe(toBe);
         });
     });
 
@@ -19,11 +19,11 @@ describe('email', () => {
         let toBe = "This value is not a valid email address.";
 
         test('a@a-com', () => {
-            expect(abv.isValidWithErrorMessage('a@a-com', 'email;mode:loose')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('a@a-com', 'email:{"mode":"loose"}')).toBe(toBe);
         });
 
         test('abcdefg', () => {
-            expect(abv.isValidWithErrorMessage('abcdefg', 'email;mode:html5')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('abcdefg', 'email:{"mode":"html5"}')).toBe(toBe);
         });
 
         test('String "GTEFFGGS"', () => {

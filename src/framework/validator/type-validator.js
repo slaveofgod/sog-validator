@@ -108,7 +108,10 @@ Object.assign(abv, function () {
          * @description Validate data
          */
         validate: function () {
-            var types = this.type.split('%');
+            var types = this.type;
+            if ('string' === typeof this.type) {
+                types = [this.type];
+            }
 
             for (var key in types) {
                 if (!types.hasOwnProperty(key)) continue;

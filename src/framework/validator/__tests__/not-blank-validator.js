@@ -11,7 +11,7 @@ describe('not-blank', () => {
         });
 
         test('Null [allowNull:true]', () => {
-            expect(abv.isValidWithErrorMessage(null, 'not-blank;allowNull:true')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(null, 'not-blank:{"allowNull":true}')).toBe(toBe);
         });
     });
 
@@ -39,7 +39,7 @@ describe('not-blank', () => {
         });
 
         test('String with spaces only [normalize:true]', () => {
-            expect(abv.isValidWithErrorMessage('   ', 'not-blank;normalize:true')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage('   ', 'not-blank:{"normalize":true}')).toBe(toBe);
         });
     });
 });

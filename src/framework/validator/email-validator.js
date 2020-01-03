@@ -75,7 +75,7 @@ Object.assign(abv, function () {
 
         this.message = options.message || 'This value is not a valid email address.';
         this.mode = (['loose', 'strict', 'html5'].includes(options.mode)) ? options.mode : 'html5';
-        this.normalize = options.normalize ? ('true' == options.normalize ? true : false) : false;
+        this.normalize = options.normalize || false;
 
         this.__patternLoose = /^.+\@\S+\.\S+$/;
         this.__patternHtml5 = /^[a-zA-Z0-9.!#$%&\'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
@@ -94,7 +94,7 @@ Object.assign(abv, function () {
          */
         validate: function () {
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type;type:scalar');
+            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}');
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;

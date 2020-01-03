@@ -29,13 +29,12 @@ var abv = {
     /**
      * @private
      * @function
-     * @name abv.parceRules
-     * @description Parce validation rules from string
+     * @name abv.parseRulesFromLaravelFormat
+     * @description Parse validation rules from string (Laravel format)
      * @param {String} rules Validation rules in string format
      * @returns {Object} The roles in array format
      */
-    parceRules: function (rules) {
-        var parceRules = {};
+    parseRulesFromLaravelFormat: function (rules) {
         var splitted = rules.split('|');
         var validators = {};
 
@@ -62,9 +61,40 @@ var abv = {
     },
 
     /**
+     * @private
+     * @function
+     * @name abv.parseRulesFromJsonFormat
+     * @description Parse validation rules from string (JSON format)
+     * @param {String} rules Validation rules in string format
+     * @returns {Object} The roles in array format
+     */
+    parseRulesFromJsonFormat: function (rules) {
+        var splitted = rules.split('|');
+        var validators = {};
+
+        for (var key in splitted) {
+            if (!splitted.hasOwnProperty(key)) continue;
+
+            var rule = splitted[key];
+            var validator = rule.substring(0, rule.indexOf(':'));
+            var options = {};
+
+            if ('' === validator) {
+                validator = rule;
+            } else {
+                options = JSON.parse(rule.substring(rule.indexOf(':') + 1));
+            }
+
+            validators[validator] = options;
+        }
+
+        return validators;
+    },
+
+    /**
      * @function
      * @name abv.isType
-     * @description Parce validation rules from string
+     * @description Parse validation rules from string
      * @param {String} type Type string
      * @param {*} data Data, which type needs to be checked
      * @returns {Boolean} Is correct data type.

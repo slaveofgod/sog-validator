@@ -155,7 +155,7 @@ Object.assign(abv, function () {
         this.data = data;
         this.lang = lang || 'en';
 
-        this.allowEmptyString = options.allowEmptyString ? ('true' == options.allowEmptyString ? true : false) : false;
+        this.allowEmptyString = options.allowEmptyString || false;
         // this.charset = options.charset || 'UTF-8';
         // this.charsetMessage = options.charsetMessage || 'This value does not match the expected %%charset%% charset.';
         this.exactMessage = options.exactMessage || 'This value should have exactly %%limit%% characters.';
@@ -163,7 +163,7 @@ Object.assign(abv, function () {
         this.maxMessage = options.maxMessage || 'This value is too long. It should have %%limit%% characters or less.';
         this.min = options.min;
         this.minMessage = options.minMessage || 'This value is too short. It should have %%limit%% characters or more.';
-        this.normalize = options.normalize ? ('true' == options.normalize ? true : false) : false;
+        this.normalize = options.normalize || false;
 
         this.__name = 'LengthValidator';
     };
@@ -179,7 +179,7 @@ Object.assign(abv, function () {
          */
         validate: function () {
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type;type:scalar');
+            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}');
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;

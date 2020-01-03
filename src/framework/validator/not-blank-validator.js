@@ -67,9 +67,9 @@ Object.assign(abv, function () {
         this.data = data;
         this.lang = lang || 'en';
 
-        this.allowNull = options.allowNull ? ('true' == options.allowNull ? true : false) : false;
+        this.allowNull = options.allowNull || false;
         this.message = options.message || 'This value should not be blank.';
-        this.normalize = options.normalize ? ('true' == options.normalize ? true : false) : false;
+        this.normalize = options.normalize || false;
 
         this.__name = 'NotBlankValidator';
     };
