@@ -67,19 +67,19 @@ describe('email', () => {
         });
 
         test('Function', () => {
-            expect(abv.isValidWithErrorMessage(function () {}, 'email')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(function () {}, 'email')).toBe("This value should be of type scalar.");
         });
 
         test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'email')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(null, 'email')).toBe("This value should be of type scalar.");
         });
 
         test('Object', () => {
-            expect(abv.isValidWithErrorMessage({}, 'email')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage({}, 'email')).toBe("This value should be of type scalar.");
         });
 
         test('Array', () => {
-            expect(abv.isValidWithErrorMessage([], 'email')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage([], 'email')).toBe("This value should be of type scalar.");
         });
     });
 });

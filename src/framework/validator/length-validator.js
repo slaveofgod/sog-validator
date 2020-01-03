@@ -10,7 +10,7 @@ Object.assign(abv, function () {
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @example
-     * var validator = new abv.LengthValidator(data);
+     * var validator = new abv.LengthValidator(data, {min: 10});
      * if (false === validator.isValid()) {
      *      validator.errorMessage();
      * }

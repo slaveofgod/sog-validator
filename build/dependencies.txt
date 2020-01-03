@@ -11,3 +11,4 @@
 ../src/framework/validator/type-validator.js
 ../src/framework/validator/email-validator.js
 ../src/framework/validator/length-validator.js
+../src/framework/validator/url-validator.js

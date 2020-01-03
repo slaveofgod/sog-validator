@@ -44,7 +44,7 @@ Object.assign(abv, function () {
         this.__validatorCollection = [];
         this.__name = 'AllValidator';
 
-        this.configure();
+        this.__configure();
     };
     AllValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     AllValidator.prototype.constructor = AllValidator;
@@ -54,9 +54,9 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.AllValidator#configure
-         * @description Configure validor
+         * @description Configure validator
          */
-        configure: function () {
+        __configure: function () {
             var validationRules = abv.parceRules(this.rules);
             for (var key in validationRules) {
                 if (!validationRules.hasOwnProperty(key)) continue;

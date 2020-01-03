@@ -240,6 +240,9 @@ var abv = {
             case 'length':
                 validatorObject = new abv.LengthValidator(data, options, lang);
                 break;
+            case 'url':
+                validatorObject = new abv.UrlValidator(data, options, lang);
+                break;
         }
 
         return validatorObject;

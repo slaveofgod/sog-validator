@@ -77,6 +77,9 @@ Object.assign(abv, function () {
         this.mode = (['loose', 'strict', 'html5'].includes(options.mode)) ? options.mode : 'html5';
         this.normalize = options.normalize ? ('true' == options.normalize ? true : false) : false;
 
+        this.__patternLoose = /^.+\@\S+\.\S+$/;
+        this.__patternHtml5 = /^[a-zA-Z0-9.!#$%&\'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+
         this.__name = 'EmailValidator';
     };
     EmailValidator.prototype = Object.create(abv.AbstractValidator.prototype);
@@ -90,6 +93,13 @@ Object.assign(abv, function () {
          * @description Validate data
          */
         validate: function () {
+            // Check if value is scalar
+            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type;type:scalar');
+            if(null !== errorMessage) {
+                this.__setErrorMessage(errorMessage, {});
+                return ;
+            }
+
             try {
                 this.data = this.data.toString();
 
@@ -100,7 +110,7 @@ Object.assign(abv, function () {
 
                 switch (this.mode) {
                     case 'loose':
-                        if (false === /^.+\@\S+\.\S+$/.test(this.data)) {
+                        if (false === this.__patternLoose.test(this.data)) {
                             this.__setErrorMessage(this.message, this.messageParameters());
                             return ;
                         }
@@ -113,7 +123,7 @@ Object.assign(abv, function () {
                         return;
                         break ;
                     case 'html5':
-                        if (false === /^[a-zA-Z0-9.!#$%&\'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/.test(this.data)) {
+                        if (false === this.__patternHtml5.test(this.data)) {
                             this.__setErrorMessage(this.message, this.messageParameters());
                             return ;
                         }
