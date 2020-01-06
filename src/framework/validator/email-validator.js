@@ -9,6 +9,8 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
+     * @param {String} lang The language used by the application. Defaults to 'en'.
+     * @param {Boolean} internal It means, that validation called from core.
      * @example
      * var validator = new abv.EmailValidator(data, {data: 'loose'});
      * if (false === validator.isValid()) {

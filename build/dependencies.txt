@@ -15,3 +15,4 @@
 ../src/framework/validator/url-validator.js
 ../src/framework/validator/regex-validator.js
 ../src/framework/validator/ip-validator.js
+../src/framework/validator/json-validator.js

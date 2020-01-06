@@ -288,6 +288,9 @@ var abv = {
             case 'ip':
                 validatorObject = new abv.IpValidator(data, options, lang, internal);
                 break;
+            case 'json':
+                validatorObject = new abv.JsonValidator(data, options, lang, internal);
+                break;
         }
 
         return validatorObject;
