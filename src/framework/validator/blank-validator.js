@@ -48,7 +48,7 @@ Object.assign(abv, function () {
 
         this.message = this.__options.message || 'This value should be blank.';
 
-        this.__name = 'BlankValidator';
+        this.__setName('BlankValidator');
     };
     BlankValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     BlankValidator.prototype.constructor = BlankValidator;

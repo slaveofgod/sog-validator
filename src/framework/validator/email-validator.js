@@ -62,12 +62,12 @@ Object.assign(abv, function () {
 
         this.message = this.__options.message || 'This value is not a valid email address.';
         this.mode = (['loose', 'strict', 'html5'].includes(this.__options.mode)) ? this.__options.mode : 'html5';
-        this.normalize = this.__options.normalize || false;
+        this.normalize = (!this.__options.normalize || false === this.__options.normalize) ? false : true;
 
         this.__patternLoose = /^.+\@\S+\.\S+$/;
         this.__patternHtml5 = /^[a-zA-Z0-9.!#$%&\'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
 
-        this.__name = 'EmailValidator';
+        this.__setName('EmailValidator');
     };
     EmailValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     EmailValidator.prototype.constructor = EmailValidator;
@@ -82,7 +82,7 @@ Object.assign(abv, function () {
         validate: function () {
             // Normalize
             if (true === this.normalize) {
-                this.data = this.data.trim();
+                this.__normalize();
             }
 
             // Check if empty

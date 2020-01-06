@@ -148,7 +148,7 @@ Object.assign(abv, function () {
             normalize: 'type:{"type":"bool"}'
         }, lang, internal);
 
-        this.allowEmptyString = this.__options.allowEmptyString || false;
+        this.allowEmptyString = (!this.__options.allowEmptyString || false === this.__options.allowEmptyString) ? false : true;
         // this.charset = this.__options.charset || 'UTF-8';
         // this.charsetMessage = this.__options.charsetMessage || 'This value does not match the expected %%charset%% charset.';
         this.exactMessage = this.__options.exactMessage || 'This value should have exactly %%limit%% characters.';
@@ -156,9 +156,9 @@ Object.assign(abv, function () {
         this.maxMessage = this.__options.maxMessage || 'This value is too long. It should have %%limit%% characters or less.';
         this.min = this.__options.min;
         this.minMessage = this.__options.minMessage || 'This value is too short. It should have %%limit%% characters or more.';
-        this.normalize = this.__options.normalize || false;
+        this.normalize = (!this.__options.normalize || false === this.__options.normalize) ? false : true;
 
-        this.__name = 'LengthValidator';
+        this.__setName('LengthValidator');
     };
     LengthValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     LengthValidator.prototype.constructor = LengthValidator;
@@ -173,7 +173,7 @@ Object.assign(abv, function () {
         validate: function () {
             // Normalize
             if (true === this.normalize) {
-                this.data = this.data.trim();
+                this.__normalize();
             }
 
             // Check if data in empty and [allowEmptyString: true]

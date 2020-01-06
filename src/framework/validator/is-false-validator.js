@@ -42,7 +42,7 @@ Object.assign(abv, function () {
 
         this.message = this.__options.message || 'This value should be false.';
 
-        this.__name = 'IsFalseValidator';
+        this.__setName('IsFalseValidator');
     };
     IsFalseValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     IsFalseValidator.prototype.constructor = IsFalseValidator;

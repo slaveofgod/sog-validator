@@ -35,6 +35,7 @@ Object.assign(abv, (function () {
         this.__options = options || {};
         this.__errorMessage = null;
         this.__internal = (true === internal);
+        this.__name = null;
 
         if (false === this.__internal) {
             this.__validateOptions(optionRules);
@@ -42,6 +43,17 @@ Object.assign(abv, (function () {
     };
 
     Object.assign(AbstractValidator.prototype, {
+        /**
+         * @private
+         * @function
+         * @name abv.AbstractValidator#__setName
+         * @description Set validator name
+         * @param {String} name The validator name
+         */
+        __setName: function (name) {
+            this.__name = name;
+        },
+
         /**
          * @private
          * @function
@@ -136,8 +148,20 @@ Object.assign(abv, (function () {
 
                 var message = abv.isValidWithErrorMessage(this.__options[key], rules[key], true);
                 if (null !== message) {
-                    throw new Error(message);
+                    throw new Error("[option:" + key + "]: " +  message);
                 }
+            }
+        },
+
+        /**
+         * @private
+         * @function
+         * @name abv.AbstractValidator#__normalize
+         * @description Normalize string data
+         */
+        __normalize: function () {
+            if ('string' === typeof this.data) {
+                this.data = this.data.trim();
             }
         }
     });

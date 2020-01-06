@@ -52,11 +52,11 @@ Object.assign(abv, function () {
             message: 'length:{"min":3,"max":255}'
         }, lang, internal);
 
-        this.allowNull = this.__options.allowNull || false;
+        this.allowNull = (!this.__options.allowNull || false === this.__options.allowNull) ? false : true;
         this.message = this.__options.message || 'This value should not be blank.';
-        this.normalize = this.__options.normalize || false;
+        this.normalize = (!this.__options.normalize || false === this.__options.normalize) ? false : true;
 
-        this.__name = 'NotBlankValidator';
+        this.__setName('NotBlankValidator');
     };
     NotBlankValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     NotBlankValidator.prototype.constructor = NotBlankValidator;
@@ -74,7 +74,7 @@ Object.assign(abv, function () {
                 'string' === typeof this.data
                 && true === this.normalize
             ) {
-                this.data = this.data.trim();
+                this.__normalize();
             }
 
             // Check if undefined

@@ -282,6 +282,9 @@ var abv = {
             case 'url':
                 validatorObject = new abv.UrlValidator(data, options, lang, internal);
                 break;
+            case 'regex':
+                validatorObject = new abv.RegexValidator(data, options, lang, internal);
+                break;
         }
 
         return validatorObject;

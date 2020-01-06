@@ -68,11 +68,11 @@ Object.assign(abv, function () {
         }, lang, internal);
 
         this.message = this.__options.message || 'This value is not a valid URL.';
-        this.normalize = this.__options.normalize || false;
+        this.normalize = (!this.__options.normalize || false === this.__options.normalize) ? false : true;
         this.protocols = this.__options.protocols || ['http', 'https', 'ftp'];
-        this.relativeProtocol = this.__options.relativeProtocol || false;
+        this.relativeProtocol = (!this.__options.relativeProtocol || false === this.__options.relativeProtocol) ? false : true;
 
-        this.__name = 'UrlValidator';
+        this.__setName('UrlValidator');
 
         this.__pattern = "^((((%s):(?:\\/\\/)?)(?:[\\-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9\\.\\-]+|(?:www\\.|[\\-;:&=\\+\\$,\\w]+@)[A-Za-z0-9\\.\\-]+)((?:\\/[\\+~%\\/\\.\\w\\-_]*)?\\??(?:[\\-\\+=&;%@\\.\\w_]*)#?(?:[\\.\\!\\/\\\\\\w]*))?)$";
 
@@ -106,7 +106,7 @@ Object.assign(abv, function () {
         validate: function () {
             // Normalize
             if (true === this.normalize) {
-                this.data = this.data.trim();
+                this.__normalize();
             }
 
             // Check if empty

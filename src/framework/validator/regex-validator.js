@@ -10,7 +10,7 @@ Object.assign(abv, function () {
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @example
-     * var validator = new abv.RegexValidator(data, {pattern: '^.+\@\S+\.\S+$'});
+     * var validator = new abv.RegexValidator(data, {pattern: 'regular expression'});
      * if (false === validator.isValid()) {
      *      validator.errorMessage();
      * }
@@ -63,15 +63,18 @@ Object.assign(abv, function () {
 
     var RegexValidator = function (data, options, lang, internal) {
         abv.AbstractValidator.call(this, data, options,{
-            message: 'length:{"min":3,"max":255}'
+            match: 'type:{"type": "bool"}',
+            message: 'length:{"min":3,"max":255}',
+            pattern: 'required',
+            normalize: 'type:{"type": "bool"}'
         }, lang, internal);
 
-        this.match = this.__options.match || true;
+        this.match = (false === this.__options.match) ? false : true;
         this.message = this.__options.message || 'This value is not valid.';
         this.pattern = this.__options.pattern;
-        this.normalize = this.__options.normalize || false;
+        this.normalize = (!this.__options.normalize || false === this.__options.normalize) ? false : true;
 
-        this.__name = 'RegexValidator';
+        this.__setName('RegexValidator');
     };
     RegexValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     RegexValidator.prototype.constructor = RegexValidator;
@@ -86,7 +89,7 @@ Object.assign(abv, function () {
         validate: function () {
             // Normalize
             if (true === this.normalize) {
-                this.data = this.data.trim();
+                this.__normalize();
             }
 
             // Check if empty
@@ -94,26 +97,10 @@ Object.assign(abv, function () {
                 return;
             }
 
-            switch (this.mode) {
-                case 'loose':
-                    if (false === this.__patternLoose.test(this.data)) {
-                        this.__setErrorMessage(this.message, this.messageParameters());
-                        return ;
-                    }
-                    break;
-                /**
-                 * @todo Implement [mode:strict]
-                 */
-                case 'strict':
-                    this.__setErrorMessage(this.message, this.messageParameters());
-                    return;
-                    break ;
-                case 'html5':
-                    if (false === this.__patternHtml5.test(this.data)) {
-                        this.__setErrorMessage(this.message, this.messageParameters());
-                        return ;
-                    }
-                    break;
+            var regexp = new RegExp(this.pattern);
+            if (this.match !== regexp.test(this.data)) {
+                this.__setErrorMessage(this.message, this.messageParameters());
+                return ;
             }
         },
 

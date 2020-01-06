@@ -80,7 +80,7 @@ Object.assign(abv, function () {
         this.type = this.__options.type || 'string';
         this.message = this.__options.message || 'This value should be of type %%type%%.';
 
-        this.__name = 'TypeValidator';
+        this.__setName('TypeValidator');
         this.__invalidType = null;
     };
     TypeValidator.prototype = Object.create(abv.AbstractValidator.prototype);

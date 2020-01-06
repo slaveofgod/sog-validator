@@ -29,7 +29,7 @@ Object.assign(abv, function () {
         this.rules = rules;
 
         this.__validatorCollection = [];
-        this.__name = 'AllValidator';
+        this.__setName('AllValidator');
 
         this.__configure();
     };
@@ -44,7 +44,11 @@ Object.assign(abv, function () {
          * @description Configure validator
          */
         __configure: function () {
-            var validationRules = abv.parseRulesFromJsonFormat(this.rules);
+            var validationRules = this.rules;
+            if ('string' === typeof this.rules) {
+                var validationRules = abv.parseRulesFromJsonFormat(this.rules);
+            }
+
             for (var key in validationRules) {
                 if (!validationRules.hasOwnProperty(key)) continue;
 

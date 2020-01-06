@@ -12,3 +12,4 @@
 ../src/framework/validator/email-validator.js
 ../src/framework/validator/length-validator.js
 ../src/framework/validator/url-validator.js
+../src/framework/validator/regex-validator.js

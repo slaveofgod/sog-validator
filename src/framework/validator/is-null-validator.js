@@ -42,7 +42,7 @@ Object.assign(abv, function () {
 
         this.message = this.__options.message || 'This value should be null.';
 
-        this.__name = 'IsNullValidator';
+        this.__setName('IsNullValidator');
     };
     IsNullValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     IsNullValidator.prototype.constructor = IsNullValidator;
