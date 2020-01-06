@@ -108,6 +108,10 @@ Object.assign(abv, function () {
          * @description Validate data
          */
         validate: function () {
+            if ('undefined' === typeof this.data) {
+                return;
+            }
+
             var types = this.type;
             if ('string' === typeof this.type) {
                 types = [this.type];

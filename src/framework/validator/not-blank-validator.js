@@ -100,7 +100,7 @@ Object.assign(abv, function () {
 
             // Check if null and allowNull = false
             if (
-                null === this.data
+                ('undefined' === typeof this.data || null === this.data)
                 && false === this.allowNull
             ) {
                 this.__setErrorMessage(this.message, this.messageParameters());

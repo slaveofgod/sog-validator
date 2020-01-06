@@ -186,7 +186,7 @@ Object.assign(abv, function () {
             }
 
             // Check if data in empty and [allowEmptyString: true]
-            if (null === this.data || ('' === this.data && true === this.allowEmptyString)) {
+            if ('undefined' === typeof this.data || null === this.data || ('' === this.data && true === this.allowEmptyString)) {
                 return ;
             }
 

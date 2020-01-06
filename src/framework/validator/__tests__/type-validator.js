@@ -244,10 +244,6 @@ describe('type[type:null]', () => {
     describe('Is Invalid', () => {
         let toBe = "This value should be of type null.";
 
-        test('Undefined', () => {
-            expect(abv.isValidWithErrorMessage(undefined, 'type:{"type":"null"}')).toBe(toBe);
-        });
-
         test('0', () => {
             expect(abv.isValidWithErrorMessage(0, 'type:{"type":"null"}')).toBe(toBe);
         });
@@ -304,10 +300,6 @@ describe('type[type:numeric]', () => {
 
     describe('Is Invalid', () => {
         let toBe = "This value should be of type numeric.";
-
-        test('Undefined', () => {
-            expect(abv.isValidWithErrorMessage(undefined, 'type:{"type":"numeric"}')).toBe(toBe);
-        });
 
         test('Null', () => {
             expect(abv.isValidWithErrorMessage(null, 'type:{"type":"numeric"}')).toBe(toBe);

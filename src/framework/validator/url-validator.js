@@ -120,7 +120,7 @@ Object.assign(abv, function () {
             }
 
             // Check if empty
-            if (null === this.data || '' === this.data) {
+            if ('undefined' === typeof this.data || null === this.data || '' === this.data) {
                 return;
             }
 

@@ -100,6 +100,11 @@ Object.assign(abv, function () {
                 this.data = this.data.trim();
             }
 
+            // Check if empty
+            if ('undefined' === typeof this.data || null === this.data || '' === this.data) {
+                return;
+            }
+
             switch (this.mode) {
                 case 'loose':
                     if (false === this.__patternLoose.test(this.data)) {

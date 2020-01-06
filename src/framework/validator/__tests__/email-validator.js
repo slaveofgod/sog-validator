@@ -13,6 +13,10 @@ describe('email', () => {
         test('alexey.bob@gmail.com', () => {
             expect(abv.isValidWithErrorMessage('alexey.bob@gmail.com', 'email:{"mode":"html5"}')).toBe(toBe);
         });
+
+        test('Empty string will not validate', () => {
+            expect(abv.isValidWithErrorMessage('', 'email:{"mode":"html5"}')).toBe(toBe);
+        });
     });
 
     describe('Is Invalid', () => {
