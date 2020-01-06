@@ -19,18 +19,6 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.LengthValidator#data
-     * @type {*}
-     * @description Data that needs to be validated.
-     */
-
-    /**
-     * @name abv.LengthValidator#lang
-     * @type {String}
-     * @description Language of error messages.
-     */
-
-    /**
      * @name abv.LengthValidator#allowEmptyString
      * @type {Boolean}
      * @description If set to true, empty strings are considered valid. The default false value considers empty strings not valid. Defaults to false.
@@ -147,23 +135,28 @@ Object.assign(abv, function () {
      * @description Normalizer string before validate (trim, etc.). Defaults to false
      */
 
-    var LengthValidator = function (data, options, lang) {
-        abv.AbstractValidator.call(this);
+    var LengthValidator = function (data, options, lang, internal) {
+        abv.AbstractValidator.call(this, data, options,{
+            allowEmptyString: 'type:{"type":"bool"}',
+            charset: 'length:{"min":2,"max":10}',
+            charsetMessage: 'length:{"min":3,"max":255}',
+            exactMessage: 'length:{"min":3,"max":255}',
+            max: 'type:{"type":"integer"}',
+            maxMessage: 'length:{"min":3,"max":255}',
+            min: 'type:{"type":"integer"}',
+            minMessage: 'length:{"min":3,"max":255}',
+            normalize: 'type:{"type":"bool"}'
+        }, lang, internal);
 
-        options = options || {};
-
-        this.data = data;
-        this.lang = lang || 'en';
-
-        this.allowEmptyString = options.allowEmptyString || false;
-        // this.charset = options.charset || 'UTF-8';
-        // this.charsetMessage = options.charsetMessage || 'This value does not match the expected %%charset%% charset.';
-        this.exactMessage = options.exactMessage || 'This value should have exactly %%limit%% characters.';
-        this.max = options.max;
-        this.maxMessage = options.maxMessage || 'This value is too long. It should have %%limit%% characters or less.';
-        this.min = options.min;
-        this.minMessage = options.minMessage || 'This value is too short. It should have %%limit%% characters or more.';
-        this.normalize = options.normalize || false;
+        this.allowEmptyString = this.__options.allowEmptyString || false;
+        // this.charset = this.__options.charset || 'UTF-8';
+        // this.charsetMessage = this.__options.charsetMessage || 'This value does not match the expected %%charset%% charset.';
+        this.exactMessage = this.__options.exactMessage || 'This value should have exactly %%limit%% characters.';
+        this.max = this.__options.max;
+        this.maxMessage = this.__options.maxMessage || 'This value is too long. It should have %%limit%% characters or less.';
+        this.min = this.__options.min;
+        this.minMessage = this.__options.minMessage || 'This value is too short. It should have %%limit%% characters or more.';
+        this.normalize = this.__options.normalize || false;
 
         this.__name = 'LengthValidator';
     };
@@ -178,8 +171,6 @@ Object.assign(abv, function () {
          * @description Validate data
          */
         validate: function () {
-            this.data = this.data.toString();
-
             // Normalize
             if (true === this.normalize) {
                 this.data = this.data.trim();
@@ -231,14 +222,16 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}');
+            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
             }
 
             try {
-                this.data = this.data.toString();
+                if ('undefined' !== typeof this.data) {
+                    this.data = this.data.toString();
+                }
             } catch (e) {
                 this.__setErrorMessage(this.message, this.messageParameters());
                 return ;

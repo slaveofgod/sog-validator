@@ -19,18 +19,6 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.NotBlankValidator#data
-     * @type {*}
-     * @description Data that needs to be validated.
-     */
-
-    /**
-     * @name abv.NotBlankValidator#lang
-     * @type {String}
-     * @description Language of error messages.
-     */
-
-    /**
      * @name abv.NotBlankValidator#allowNull
      * @type {Boolean}
      * @description If set to <code class="notranslate">true</code>, <code class="notranslate">null</code> values are considered valid and won't trigger a constraint violation. Defaults to false
@@ -59,17 +47,14 @@ Object.assign(abv, function () {
      * </table>
      */
 
-    var NotBlankValidator = function (data, options, lang) {
-        abv.AbstractValidator.call(this);
+    var NotBlankValidator = function (data, options, lang, internal) {
+        abv.AbstractValidator.call(this, data, options,{
+            message: 'length:{"min":3,"max":255}'
+        }, lang, internal);
 
-        options = options || {};
-
-        this.data = data;
-        this.lang = lang || 'en';
-
-        this.allowNull = options.allowNull || false;
-        this.message = options.message || 'This value should not be blank.';
-        this.normalize = options.normalize || false;
+        this.allowNull = this.__options.allowNull || false;
+        this.message = this.__options.message || 'This value should not be blank.';
+        this.normalize = this.__options.normalize || false;
 
         this.__name = 'NotBlankValidator';
     };

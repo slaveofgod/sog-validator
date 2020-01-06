@@ -6,9 +6,39 @@ Object.assign(abv, (function () {
      * @name abv.AbstractValidator
      * @classdesc Abstract base class that implements functionality for validation.
      * @description Create a new validation extension.
+     * @param {*} data The data which needs to be validated.
+     * @param {Object} options The setting options
+     * @param {Object} optionRules The validation rules for setting options
+     * @param {String} lang Language of error messages.
+     * @constructor
      */
-    var AbstractValidator = function () {
+
+    // PROPERTIES
+
+    /**
+     * @name abv.RegexValidator#data
+     * @type {*}
+     * @description Data that needs to be validated.
+     */
+
+    /**
+     * @name abv.RegexValidator#lang
+     * @type {String}
+     * @description Language of error messages.
+     */
+
+    var AbstractValidator = function (data, options, optionRules, lang, internal) {
+
+        this.data = data;
+        this.lang = lang || 'en';
+
+        this.__options = options || {};
         this.__errorMessage = null;
+        this.__internal = (true === internal);
+
+        if (false === this.__internal) {
+            this.__validateOptions(optionRules);
+        }
     };
 
     Object.assign(AbstractValidator.prototype, {
@@ -87,7 +117,29 @@ Object.assign(abv, (function () {
          * @name abv.AbstractValidator#__afterValidate
          * @description Execute after validation is complete
          */
-        __afterValidate: function () {}
+        __afterValidate: function () {},
+
+        /**
+         * @private
+         * @function
+         * @name abv.AbstractValidator#__validateOptions
+         * @description Validate options
+         * @param {Object} rules Validation rules
+         */
+        __validateOptions: function (rules) {
+            if ('undefined' === typeof rules || null === rules) {
+                return ;
+            }
+
+            for (var key in rules) {
+                if (!rules.hasOwnProperty(key)) continue;
+
+                var message = abv.isValidWithErrorMessage(this.__options[key], rules[key], true);
+                if (null !== message) {
+                    throw new Error(message);
+                }
+            }
+        }
     });
 
     return {

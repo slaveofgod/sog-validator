@@ -19,18 +19,6 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.TypeValidator#data
-     * @type {*}
-     * @description Data that needs to be validated.
-     */
-
-    /**
-     * @name abv.TypeValidator#lang
-     * @type {String}
-     * @description Language of error messages.
-     */
-
-    /**
      * @name abv.TypeValidator#type
      * @type {String|Array}
      * @description This required option defines the type or collection of types allowed for the given value.
@@ -83,16 +71,14 @@ Object.assign(abv, function () {
      * </table>
      */
 
-    var TypeValidator = function (data, options, lang) {
-        abv.AbstractValidator.call(this);
+    var TypeValidator = function (data, options, lang, internal) {
+        abv.AbstractValidator.call(this, data, options,{
+            type: 'type:{"type":"stringOrArray"}',
+            message: 'length:{"min":3,"max":255}'
+        }, lang, internal);
 
-        options = options || {};
-
-        this.data = data;
-        this.lang = lang || 'en';
-
-        this.type = options.type || 'String';
-        this.message = options.message || 'This value should be of type %%type%%.';
+        this.type = this.__options.type || 'string';
+        this.message = this.__options.message || 'This value should be of type %%type%%.';
 
         this.__name = 'TypeValidator';
         this.__invalidType = null;

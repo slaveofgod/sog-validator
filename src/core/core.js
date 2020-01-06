@@ -101,42 +101,42 @@ var abv = {
      */
     isType: function (type, data) {
         switch (type) {
-            case'array':
+            case 'array':
                 return Array.isArray(data);
                 break;
-            case'bool':
-            case'boolean':
+            case 'bool':
+            case 'boolean':
                 return ("boolean" === typeof data);
                 break;
-            case'callable':
+            case 'callable':
                 return (null !== data && "function" === typeof data);
                 break;
-            case'float':
-            case'double':
+            case 'float':
+            case 'double':
                 return (Number(data) === data && data % 1 !== 0);
                 break;
-            case'int':
-            case'integer':
+            case 'int':
+            case 'integer':
                 return (Number(data) === data && data % 1 === 0);
                 break;
-            case'null':
+            case 'null':
                 return (null === data) ? true : false;
                 break;
-            case'iterable':
+            case 'iterable':
                 // checks for null and undefined
                 if (data == null) return false;
                 return ('function' === typeof data[Symbol.iterator]) ? true : false;
                 break;
-            case'numeric':
+            case 'numeric':
                 if (false === this.isType('scalar', data)) return false;
                 return /^[0-9]{0,}\.?[0-9]+$/.test(data);
                 break;
-            case'object':
+            case 'object':
                 return ('object' === typeof data) ? true : false;
                 break;
-            case'real':
+            case 'real':
                 return ('number' === typeof data && !isNaN(data) && isFinite(data)) ? true : false;
-            case'scalar': // Scalar variables are those containing an integer, float, string or boolean.
+            case 'scalar': // Scalar variables are those containing an integer, float, string or boolean.
                 return (
                     true === this.isType('integer', data)
                     || true === this.isType('float', data)
@@ -144,29 +144,29 @@ var abv = {
                     || true === this.isType('boolean', data)
                 ) ? true : false;
                 break;
-            case'string':
+            case 'string':
                 return ('string' === typeof data) ? true : false;
                 break;
-            case'alnum':
+            case 'alnum':
                 if (false === this.isType('scalar', data)) return false;
                 if (null === data) return false;
                 return /^[a-zA-Z0-9]+$/.test(data);
                 break;
-            case'alpha':
+            case 'alpha':
                 if (false === this.isType('scalar', data)) return false;
                 if (null === data) return false;
                 return /^[a-zA-Z]+$/.test(data);
                 break;
-            case'digit':
+            case 'digit':
                 if (false === this.isType('scalar', data)) return false;
                 if (null === data) return false;
                 return /^[0-9]+$/.test(data);
                 break;
-            case'graph':
+            case 'graph':
                 if (false === this.isType('scalar', data)) return false;
                 return (data.toString() === data.toString().replace(/[\r\n\t]/, '')) ? true : false;
                 break;
-            case'lower':
+            case 'lower':
                 if (false === this.isType('scalar', data)) return false;
                 var matches;
                 if ((matches = /[a-z]+/m.exec(data)) !== null) {
@@ -180,7 +180,7 @@ var abv = {
                 }
                 return false;
                 break;
-            case'print':
+            case 'print':
                 if (false === this.isType('scalar', data)) return false;
                 var regex = /[\r|\n|\t]+/mg;
                 var m;
@@ -196,13 +196,13 @@ var abv = {
 
                 return (counter > 0) ? false : true;
                 break;
-            case'punct':
+            case 'punct':
                 if (false === this.isType('scalar', data)) return false;
                 return (data.toString() === data.toString().replace(/[0-9a-zA-Z \r\n\t]/, '')) ? true : false;
-            case'space':
+            case 'space':
                 if (false === this.isType('scalar', data)) return false;
                 return /^[\r\n\t]+$/.test(data);
-            case'upper':
+            case 'upper':
                 if (false === this.isType('scalar', data)) return false;
                 var matches;
                 if ((matches = /[A-Z]+/m.exec(data)) !== null) {
@@ -216,9 +216,18 @@ var abv = {
                 }
                 return false;
                 break;
-            case'xdigit':
+            case 'xdigit':
                 if (false === this.isType('scalar', data)) return false;
                 return /^[A-Fa-f0-9]+$/.test(data);
+                break;
+            case 'stringOrArray':
+                if (
+                    this.isType('string', data)
+                    || this.isType('array', data)
+                ) {
+                    return true;
+                }
+                return false;
                 break;
         }
 
@@ -231,47 +240,47 @@ var abv = {
      * @description Create object of the validator
      * @param {*} data The data which needs to be validated
      * @param {String} validator Validator name
-     * @param {Object} options Settings for validator
+     * @param {Object} lang The language used by the application. Defaults to 'en'.
+     * @param {Boolean} internal It means, that validation called from core.
      * @returns {Object} The roles in array format
      */
-    createValidator: function (data, validator, options) {
+    createValidator: function (data, validator, options, lang, internal) {
         var validatorObject;
-        var lang = abv.app.lang;
 
         switch (validator) {
             case 'required':
             case 'not-blank':
-                validatorObject = new abv.NotBlankValidator(data, options, lang);
+                validatorObject = new abv.NotBlankValidator(data, options, lang, internal);
                 break;
             case 'blank':
-                validatorObject = new abv.BlankValidator(data, options, lang);
+                validatorObject = new abv.BlankValidator(data, options, lang, internal);
                 break;
             case 'not-null':
-                validatorObject = new abv.NotNullValidator(data, options, lang);
+                validatorObject = new abv.NotNullValidator(data, options, lang, internal);
                 break;
             case 'is-null':
             case 'null':
-                validatorObject = new abv.IsNullValidator(data, options, lang);
+                validatorObject = new abv.IsNullValidator(data, options, lang, internal);
                 break;
             case 'is-true':
             case 'true':
-                validatorObject = new abv.IsTrueValidator(data, options, lang);
+                validatorObject = new abv.IsTrueValidator(data, options, lang, internal);
                 break;
             case 'is-false':
             case 'false':
-                validatorObject = new abv.IsFalseValidator(data, options, lang);
+                validatorObject = new abv.IsFalseValidator(data, options, lang, internal);
                 break;
             case 'type':
-                validatorObject = new abv.TypeValidator(data, options, lang);
+                validatorObject = new abv.TypeValidator(data, options, lang, internal);
                 break;
             case 'email':
-                validatorObject = new abv.EmailValidator(data, options, lang);
+                validatorObject = new abv.EmailValidator(data, options, lang, internal);
                 break;
             case 'length':
-                validatorObject = new abv.LengthValidator(data, options, lang);
+                validatorObject = new abv.LengthValidator(data, options, lang, internal);
                 break;
             case 'url':
-                validatorObject = new abv.UrlValidator(data, options, lang);
+                validatorObject = new abv.UrlValidator(data, options, lang, internal);
                 break;
         }
 
@@ -284,10 +293,15 @@ var abv = {
      * @description Check if data valid according to validation rules
      * @param {*} data The data which needs to be validated
      * @param {String} rules Validation rules in string format
+     * @param {Boolean} internal It means, that validation called from core
      * @returns {Boolean} Validation status
      */
-    isValid: function (data, rules) {
-        var engine = new abv.Application({lang: 'en'});
+    isValid: function (data, rules, internal) {
+        var engine = new abv.Application({
+            lang: 'en',
+            internal: internal
+        });
+
         var validator = engine.createSingle(
             data,
             rules
@@ -302,10 +316,15 @@ var abv = {
      * @description Check if data valid according to validation rules
      * @param {*} data The data which needs to be validated
      * @param {String} rules Validation rules in string format
+     * @param {Boolean} internal It means, that validation called from core
      * @returns {Null|String} If valid this function return null otherwise error message
      */
-    isValidWithErrorMessage: function (data, rules) {
-        var engine = new abv.Application({lang: 'en'});
+    isValidWithErrorMessage: function (data, rules, internal) {
+        var engine = new abv.Application({
+            lang: 'en',
+            internal: internal
+        });
+
         var validator = engine.createSingle(
             data,
             rules

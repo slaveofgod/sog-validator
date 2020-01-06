@@ -15,31 +15,18 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.AllValidator#data
-     * @type {*}
-     * @description Data that needs to be validated.
-     */
-
-    /**
-     * @name abv.AllValidator#lang
-     * @type {String}
-     * @description Language of error messages.
-     */
-
-    /**
      * @name abv.AllValidator#rules
      * @type {String}
      * @description Validation rules.
      */
 
     var AllValidator = function (data, rules, options) {
-        abv.AbstractValidator.call(this);
+        abv.AbstractValidator.call(this, data, options, null,
+            ((options && options['lang']) ? options['lang'] : null),
+            (options && true === options['internal'])
+        );
 
-        options = options || {};
-
-        this.data = data;
         this.rules = rules;
-        this.lang = options.lang || 'en';
 
         this.__validatorCollection = [];
         this.__name = 'AllValidator';
@@ -73,7 +60,7 @@ Object.assign(abv, function () {
          * @param {Object} options The validation settings
          */
         add: function (name, options) {
-            var validator = abv.createValidator(this.data, name, options);
+            var validator = abv.createValidator(this.data, name, options, this.lang, this.__internal);
 
             this.__validatorCollection.push(validator);
         },

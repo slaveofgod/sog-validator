@@ -48,10 +48,16 @@ Object.assign(abv, function () {
     /**
      * @name abv.Application#lang
      * @type {String}
-     * @description The language userd by the application. Defaults to 'en' ({@link https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes|List of ISO 639-1 codes}).
+     * @description The language used by the application. Defaults to 'en' ({@link https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes|List of ISO 639-1 codes}).
      * @example
      * // Set the language for the application
      * this.app.lang = 'en';
+     */
+
+    /**
+     * @name abv.Application#internal
+     * @type {Boolean}
+     * @description It means, that validation called from core.
      */
 
     var Application = function (options) {
@@ -59,6 +65,7 @@ Object.assign(abv, function () {
         options = options || {};
 
         this.lang = options.lang || 'en';
+        this.internal = (true === options.internal);
 
         /**
          * @private
@@ -86,7 +93,10 @@ Object.assign(abv, function () {
             for (var key in rules) {
                 if (!rules.hasOwnProperty(key)) continue;
 
-                validators[key] = new abv.AllValidator(data[key], rules[key], {lang: this.lang});
+                validators[key] = new abv.AllValidator(data[key], rules[key], {
+                    lang: this.lang,
+                    internal: this.internal
+                });
             }
 
             return validators;
@@ -114,7 +124,10 @@ Object.assign(abv, function () {
          * @returns {Object} Validator object
          */
         createSingle: function (data, rules) {
-            var validator =  new abv.AllValidator(data, rules);
+            var validator =  new abv.AllValidator(data, rules, {
+                lang: this.lang,
+                internal: this.internal
+            });
 
             return validator;
         }

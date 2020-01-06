@@ -19,18 +19,6 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.UrlValidator#data
-     * @type {*}
-     * @description Data that needs to be validated.
-     */
-
-    /**
-     * @name abv.UrlValidator#lang
-     * @type {String}
-     * @description Language of error messages.
-     */
-
-    /**
      * @name abv.UrlValidator#message
      * @type {String}
      * @description This message is shown if the URL is invalid. Defaults to "This value is not a valid URL."
@@ -71,18 +59,18 @@ Object.assign(abv, function () {
      * Defaults to false.
      */
 
-    var UrlValidator = function (data, options, lang) {
-        abv.AbstractValidator.call(this);
+    var UrlValidator = function (data, options, lang, internal) {
+        abv.AbstractValidator.call(this, data, options,{
+            message: 'length:{"min":3,"max":255}',
+            normalize: 'type:{"type":"bool"}',
+            protocols: 'type:{"type":"stringOrArray"}',
+            relativeProtocol: 'type:{"type":"bool"}'
+        }, lang, internal);
 
-        options = options || {};
-
-        this.data = data;
-        this.lang = lang || 'en';
-
-        this.message = options.message || 'This value is not a valid URL.';
-        this.normalize = options.normalize || false;
-        this.protocols = options.protocols || ['http', 'https', 'ftp'];
-        this.relativeProtocol = options.relativeProtocol || false;
+        this.message = this.__options.message || 'This value is not a valid URL.';
+        this.normalize = this.__options.normalize || false;
+        this.protocols = this.__options.protocols || ['http', 'https', 'ftp'];
+        this.relativeProtocol = this.__options.relativeProtocol || false;
 
         this.__name = 'UrlValidator';
 
@@ -116,8 +104,6 @@ Object.assign(abv, function () {
          * @description Validate data
          */
         validate: function () {
-            this.data = this.data.toString();
-
             // Normalize
             if (true === this.normalize) {
                 this.data = this.data.trim();
@@ -143,21 +129,23 @@ Object.assign(abv, function () {
          */
         __beforeValidate: function () {
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}');
+            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
             }
 
             try {
-                this.data = this.data.toString();
+                if ('undefined' !== typeof this.data) {
+                    this.data = this.data.toString();
+                }
             } catch (e) {
                 this.__setErrorMessage(this.message, this.messageParameters());
                 return ;
             }
 
             // Check if protocols is array
-            var errorMessage = abv.isValidWithErrorMessage(this.protocols, 'type:{"type":"array"}');
+            var errorMessage = abv.isValidWithErrorMessage(this.protocols, 'type:{"type":"array"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;

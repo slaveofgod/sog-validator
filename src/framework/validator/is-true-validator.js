@@ -19,18 +19,6 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.IsTrueValidator#data
-     * @type {*}
-     * @description Data that needs to be validated.
-     */
-
-    /**
-     * @name abv.IsTrueValidator#lang
-     * @type {String}
-     * @description Language of error messages.
-     */
-
-    /**
      * @name abv.IsTrueValidator#message
      * @type {String}
      * @description This message is shown if the underlying data is not true. Defaults to "This value should be true."
@@ -47,15 +35,12 @@ Object.assign(abv, function () {
      * </table>
      */
 
-    var IsTrueValidator = function (data, options, lang) {
-        abv.AbstractValidator.call(this);
+    var IsTrueValidator = function (data, options, lang, internal) {
+        abv.AbstractValidator.call(this, data, options,{
+            message: 'length:{"min":3,"max":255}'
+        }, lang, internal);
 
-        options = options || {};
-
-        this.data = data;
-        this.lang = lang || 'en';
-
-        this.message = options.message || 'This value should be true.';
+        this.message = this.__options.message || 'This value should be true.';
 
         this.__name = 'IsTrueValidator';
     };

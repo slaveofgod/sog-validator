@@ -19,18 +19,6 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.IsNullValidator#data
-     * @type {*}
-     * @description Data that needs to be validated.
-     */
-
-    /**
-     * @name abv.IsNullValidator#lang
-     * @type {String}
-     * @description Language of error messages.
-     */
-
-    /**
      * @name abv.IsNullValidator#message
      * @type {String}
      * @description This is the message that will be shown if the value is not null. Defaults to "This value should be null."
@@ -47,15 +35,12 @@ Object.assign(abv, function () {
      * </table>
      */
 
-    var IsNullValidator = function (data, options, lang) {
-        abv.AbstractValidator.call(this);
+    var IsNullValidator = function (data, options, lang, internal) {
+        abv.AbstractValidator.call(this, data, options,{
+            message: 'length:{"min":3,"max":255}'
+        }, lang, internal);
 
-        options = options || {};
-
-        this.data = data;
-        this.lang = lang || 'en';
-
-        this.message = options.message || 'This value should be null.';
+        this.message = this.__options.message || 'This value should be null.';
 
         this.__name = 'IsNullValidator';
     };

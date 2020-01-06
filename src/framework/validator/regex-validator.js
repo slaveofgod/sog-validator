@@ -3,14 +3,14 @@ Object.assign(abv, function () {
 
     /**
      * @constructor
-     * @name abv.EmailValidator
+     * @name abv.RegexValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value is a valid email address. The underlying value is cast to a string before being validated.
+     * @classdesc Validates that a value matches a regular expression.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @example
-     * var validator = new abv.EmailValidator(data, {data: 'loose'});
+     * var validator = new abv.RegexValidator(data, {pattern: '^.+\@\S+\.\S+$'});
      * if (false === validator.isValid()) {
      *      validator.errorMessage();
      * }
@@ -19,27 +19,20 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.EmailValidator#mode
-     * @type {String}
-     * @description This option is optional and defines the pattern the email address is validated against. Default to 'html5'
-     * Valid values are:
-     * <ul>
-     *     <li><b>loose</b> - A simple regular expression. Allows all values with an "@" symbol in, and a "." in the second host part of the email address.</li>
-     *     <!--li><b>strict</b> - Uses the egulias/email-validator library to perform an RFC compliant validation. You will need to install that library to use this mode.</li-->
-     *     <li><b>html5</b> - This matches the pattern used for the {@link https://www.w3.org/TR/html5/sec-forms.html#email-state-typeemail|HTML5 email input element}.</li>
-     * </ul>
-     */
-
-    /**
-     * @name abv.EmailValidator#normalize
+     * @name abv.RegexValidator#match
      * @type {Boolean}
-     * @description Normalizer string before validate (trim, etc.). Defaults to false
+     * @description
+     * If true (or not set), this validator will pass if the given string matches the given pattern regular expression.
+     * However, when this option is set to false, the opposite will occur: validation will pass only if the given string does not match the pattern regular expression.
+     * Default to true.
      */
 
     /**
-     * @name abv.EmailValidator#message
+     * @name abv.RegexValidator#message
      * @type {String}
-     * @description This message is shown if the underlying data is not a valid email address. Defaults to "This value is not a valid email address."
+     * @description
+     * This is the message that will be shown if this validator fails.
+     * Defaults to "This value is not valid."
      * You can use the following parameters in this message:
      * <table>
      *     <tr>
@@ -53,30 +46,41 @@ Object.assign(abv, function () {
      * </table>
      */
 
-    var EmailValidator = function (data, options, lang, internal) {
+    /**
+     * @name abv.RegexValidator#pattern
+     * @type {String}
+     * @description
+     * This required option is the regular expression pattern that the input will be matched against.
+     * By default, this validator will fail if the input string does not match this regular expression.
+     * However, if match is set to false, then validation will fail if the input string does match this pattern.
+     */
+
+    /**
+     * @name abv.RegexValidator#normalize
+     * @type {Boolean}
+     * @description Normalizer string before validate (trim, etc.). Defaults to false
+     */
+
+    var RegexValidator = function (data, options, lang, internal) {
         abv.AbstractValidator.call(this, data, options,{
-            message: 'length:{"min":3,"max":255}',
-            mode: 'length:{"min":2,"max":20}',
-            normalize: 'type:{"type":"bool"}'
+            message: 'length:{"min":3,"max":255}'
         }, lang, internal);
 
-        this.message = this.__options.message || 'This value is not a valid email address.';
-        this.mode = (['loose', 'strict', 'html5'].includes(this.__options.mode)) ? this.__options.mode : 'html5';
+        this.match = this.__options.match || true;
+        this.message = this.__options.message || 'This value is not valid.';
+        this.pattern = this.__options.pattern;
         this.normalize = this.__options.normalize || false;
 
-        this.__patternLoose = /^.+\@\S+\.\S+$/;
-        this.__patternHtml5 = /^[a-zA-Z0-9.!#$%&\'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
-
-        this.__name = 'EmailValidator';
+        this.__name = 'RegexValidator';
     };
-    EmailValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-    EmailValidator.prototype.constructor = EmailValidator;
+    RegexValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    RegexValidator.prototype.constructor = RegexValidator;
 
-    Object.assign(EmailValidator.prototype, {
+    Object.assign(RegexValidator.prototype, {
         /**
          * @private
          * @function
-         * @name abv.EmailValidator#validate
+         * @name abv.RegexValidator#validate
          * @description Validate data
          */
         validate: function () {
@@ -116,7 +120,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.EmailValidator#__beforeValidate
+         * @name abv.RegexValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
@@ -140,7 +144,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.EmailValidator#messageParameters
+         * @name abv.RegexValidator#messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -152,6 +156,6 @@ Object.assign(abv, function () {
     });
 
     return {
-        EmailValidator: EmailValidator
+        RegexValidator: RegexValidator
     };
 }());

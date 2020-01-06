@@ -9,6 +9,12 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
+     *
+     * @param {String} lang The language used by the application. Defaults to 'en'.
+     * @param {Boolean} internal It means, that validation called from core.
+     *
+     *
+     *
      * @example
      * var validator = new abv.BlankValidator(data);
      * if (false === validator.isValid()) {
@@ -17,18 +23,6 @@ Object.assign(abv, function () {
      */
 
     // PROPERTIES
-
-    /**
-     * @name abv.BlankValidator#data
-     * @type {*}
-     * @description Data that needs to be validated.
-     */
-
-    /**
-     * @name abv.BlankValidator#lang
-     * @type {String}
-     * @description Language of error messages.
-     */
 
     /**
      * @name abv.BlankValidator#message
@@ -47,15 +41,12 @@ Object.assign(abv, function () {
      * </table>
      */
 
-    var BlankValidator = function (data, options, lang) {
-        abv.AbstractValidator.call(this);
+    var BlankValidator = function (data, options, lang, internal) {
+        abv.AbstractValidator.call(this, data, options,{
+            message: 'length:{"min":3,"max":255}'
+        }, lang, internal);
 
-        options = options || {};
-
-        this.data = data;
-        this.lang = lang || 'en';
-
-        this.message = options.message || 'This value should be blank.';
+        this.message = this.__options.message || 'This value should be blank.';
 
         this.__name = 'BlankValidator';
     };
