@@ -59,7 +59,7 @@ Object.assign(abv, function () {
      * @description
      * The protocols considered to be valid for the URL.
      * For example, if you also consider the ftp:// type URLs to be valid, redefine the protocols array, listing http, https, and also ftp.
-     * Defaults to ['http', 'https']
+     * Defaults to ['http', 'https', 'ftp']
      */
 
     /**
@@ -81,7 +81,7 @@ Object.assign(abv, function () {
 
         this.message = options.message || 'This value is not a valid URL.';
         this.normalize = options.normalize || false;
-        this.protocols = options.protocols || ['http', 'https'];
+        this.protocols = options.protocols || ['http', 'https', 'ftp'];
         this.relativeProtocol = options.relativeProtocol || false;
 
         this.__name = 'UrlValidator';
@@ -101,6 +101,10 @@ Object.assign(abv, function () {
          * @description Configure validator
          */
         __configure: function () {
+            if ('string' === typeof this.protocols) {
+                this.protocols = [this.protocols];
+            }
+
             this.__pattern = (true === this.relativeProtocol) ? this.__pattern.replace('(%s):', '(?:(%s):)?') : this.__pattern;
             this.__pattern = this.__pattern.replace('%s', this.protocols.join('|'));
         },
@@ -149,6 +153,13 @@ Object.assign(abv, function () {
                 this.data = this.data.toString();
             } catch (e) {
                 this.__setErrorMessage(this.message, this.messageParameters());
+                return ;
+            }
+
+            // Check if protocols is array
+            var errorMessage = abv.isValidWithErrorMessage(this.protocols, 'type:{"type":"array"}');
+            if(null !== errorMessage) {
+                this.__setErrorMessage(errorMessage, {});
                 return ;
             }
         },
