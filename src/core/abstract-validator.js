@@ -41,7 +41,11 @@ Object.assign(abv, (function () {
          */
         isValid: function () {
             this.__beforeValidate();
-            this.validate();
+
+            if (null === this.__errorMessage) {
+                this.validate();
+            }
+
             this.__afterValidate();
 
             return (null === this.__errorMessage) ? true: false;

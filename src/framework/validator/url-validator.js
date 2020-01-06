@@ -112,6 +112,32 @@ Object.assign(abv, function () {
          * @description Validate data
          */
         validate: function () {
+            this.data = this.data.toString();
+
+            // Normalize
+            if (true === this.normalize) {
+                this.data = this.data.trim();
+            }
+
+            // Check if empty
+            if (null === this.data || '' === this.data) {
+                return;
+            }
+
+            var pattern = new RegExp(this.__pattern);
+            if (false === pattern.test(this.data)) {
+                this.__setErrorMessage(this.message, this.messageParameters());
+                return ;
+            }
+        },
+
+        /**
+         * @private
+         * @function
+         * @name abv.UrlValidator#__beforeValidate
+         * @description Execute before validation is running
+         */
+        __beforeValidate: function () {
             // Check if value is scalar
             var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}');
             if(null !== errorMessage) {
@@ -121,22 +147,6 @@ Object.assign(abv, function () {
 
             try {
                 this.data = this.data.toString();
-
-                // Normalize
-                if (true === this.normalize) {
-                    this.data = this.data.trim();
-                }
-
-                // Check if empty
-                if (null === this.data || '' === this.data) {
-                    return;
-                }
-
-                var pattern = new RegExp(this.__pattern);
-                if (false === pattern.test(this.data)) {
-                    this.__setErrorMessage(this.message, this.messageParameters());
-                    return ;
-                }
             } catch (e) {
                 this.__setErrorMessage(this.message, this.messageParameters());
                 return ;

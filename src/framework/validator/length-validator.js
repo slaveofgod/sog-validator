@@ -178,55 +178,43 @@ Object.assign(abv, function () {
          * @description Validate data
          */
         validate: function () {
-            // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}');
-            if(null !== errorMessage) {
-                this.__setErrorMessage(errorMessage, {});
+            this.data = this.data.toString();
+
+            // Normalize
+            if (true === this.normalize) {
+                this.data = this.data.trim();
+            }
+
+            // Check if data in empty and [allowEmptyString: true]
+            if (null === this.data || ('' === this.data && true === this.allowEmptyString)) {
                 return ;
             }
 
-            try {
-                this.data = this.data.toString();
+            /**
+             * @todo Check encoding
+             */
 
-                // Normalize
-                if (true === this.normalize) {
-                    this.data = this.data.trim();
-                }
+            var length = this.data.length;
 
-                // Check if data in empty and [allowEmptyString: true]
-                if (null === this.data || ('' === this.data && true === this.allowEmptyString)) {
-                    return ;
-                }
+            if (
+                this.max
+                && length > this.max
+            ) {
+                this.__setErrorMessage(
+                    (this.min == this.max ? this.exactMessage : this.maxMessage),
+                    (this.min == this.max ? this.exactMessageParameters() : this.maxMessageParameters())
+                );
+                return ;
+            }
 
-                /**
-                 * @todo Check encoding
-                 */
-
-                var length = this.data.length;
-
-                if (
-                    this.max
-                    && length > this.max
-                ) {
-                    this.__setErrorMessage(
-                        (this.min == this.max ? this.exactMessage : this.maxMessage),
-                        (this.min == this.max ? this.exactMessageParameters() : this.maxMessageParameters())
-                    );
-                    return ;
-                }
-
-                if (
-                    this.min
-                    && length < this.min
-                ) {
-                    this.__setErrorMessage(
-                        (this.min == this.max ? this.exactMessage : this.minMessage),
-                        (this.min == this.max ? this.exactMessageParameters() : this.minMessageParameters())
-                    );
-                    return ;
-                }
-            } catch (e) {
-                this.__setErrorMessage('Either data needs to be a string');
+            if (
+                this.min
+                && length < this.min
+            ) {
+                this.__setErrorMessage(
+                    (this.min == this.max ? this.exactMessage : this.minMessage),
+                    (this.min == this.max ? this.exactMessageParameters() : this.minMessageParameters())
+                );
                 return ;
             }
         },
@@ -240,6 +228,20 @@ Object.assign(abv, function () {
         __beforeValidate: function () {
             if (!this.min && !this.max) {
                 throw new Error('Either option "min" or "max" must be given for constraint');
+            }
+
+            // Check if value is scalar
+            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}');
+            if(null !== errorMessage) {
+                this.__setErrorMessage(errorMessage, {});
+                return ;
+            }
+
+            try {
+                this.data = this.data.toString();
+            } catch (e) {
+                this.__setErrorMessage(this.message, this.messageParameters());
+                return ;
             }
         },
 

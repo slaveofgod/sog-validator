@@ -93,6 +93,43 @@ Object.assign(abv, function () {
          * @description Validate data
          */
         validate: function () {
+            this.data = this.data.toString();
+
+            // Normalize
+            if (true === this.normalize) {
+                this.data = this.data.trim();
+            }
+
+            switch (this.mode) {
+                case 'loose':
+                    if (false === this.__patternLoose.test(this.data)) {
+                        this.__setErrorMessage(this.message, this.messageParameters());
+                        return ;
+                    }
+                    break;
+                /**
+                 * @todo Implement [mode:strict]
+                 */
+                case 'strict':
+                    this.__setErrorMessage(this.message, this.messageParameters());
+                    return;
+                    break ;
+                case 'html5':
+                    if (false === this.__patternHtml5.test(this.data)) {
+                        this.__setErrorMessage(this.message, this.messageParameters());
+                        return ;
+                    }
+                    break;
+            }
+        },
+
+        /**
+         * @private
+         * @function
+         * @name abv.EmailValidator#__beforeValidate
+         * @description Execute before validation is running
+         */
+        __beforeValidate: function () {
             // Check if value is scalar
             var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}');
             if(null !== errorMessage) {
@@ -102,33 +139,6 @@ Object.assign(abv, function () {
 
             try {
                 this.data = this.data.toString();
-
-                // Normalize
-                if (true === this.normalize) {
-                    this.data = this.data.trim();
-                }
-
-                switch (this.mode) {
-                    case 'loose':
-                        if (false === this.__patternLoose.test(this.data)) {
-                            this.__setErrorMessage(this.message, this.messageParameters());
-                            return ;
-                        }
-                        break;
-                    /**
-                     * @todo Implement [mode:strict]
-                     */
-                    case 'strict':
-                        this.__setErrorMessage(this.message, this.messageParameters());
-                        return;
-                        break ;
-                    case 'html5':
-                        if (false === this.__patternHtml5.test(this.data)) {
-                            this.__setErrorMessage(this.message, this.messageParameters());
-                            return ;
-                        }
-                        break;
-                }
             } catch (e) {
                 this.__setErrorMessage(this.message, this.messageParameters());
                 return ;
