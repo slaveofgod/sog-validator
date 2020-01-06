@@ -50,7 +50,32 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * This determines exactly how the IP address is validated and can take one of a variety of different values.
-     * Defaults to 4.
+     * Defaults to "4".
+     * <br />
+     * <b>All ranges</b>
+     * <ul>
+     *     <li><b>4</b> - Validates for IPv4 addresses</li>
+     *     <li><b>6</b> - Validates for IPv6 addresses</li>
+     *     <li><b>all</b> - Validates all IP formats</li>
+     * </ul>
+     * <b>No private ranges</b>
+     * <ul>
+     *     <li><b>4_no_priv</b> - Validates for IPv4 but without private IP ranges</li>
+     *     <li><b>6_no_priv</b> - Validates for IPv6 but without private IP ranges</li>
+     *     <li><b>all_no_priv</b> - Validates for all IP formats but without private IP ranges</li>
+     * </ul>
+     * <b>No reserved ranges</b>
+     * <ul>
+     *     <li><b>4_no_res</b> - Validates for IPv4 but without reserved IP ranges</li>
+     *     <li><b>6_no_res</b> - Validates for IPv6 but without reserved IP ranges</li>
+     *     <li><b>all_no_res</b> - Validates for all IP formats but without reserved IP ranges</li>
+     * </ul>
+     * <b>Only public ranges</b>
+     * <ul>
+     *     <li><b>4_public</b> - Validates for IPv4 but without private and reserved ranges</li>
+     *     <li><b>6_public</b> - Validates for IPv6 but without private and reserved ranges</li>
+     *     <li><b>all_public</b> - Validates for all IP formats but without private and reserved ranges</li>
+     * </ul>
      */
 
     var IpValidator = function (data, options, lang, internal) {
