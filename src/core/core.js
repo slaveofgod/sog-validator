@@ -285,6 +285,9 @@ var abv = {
             case 'regex':
                 validatorObject = new abv.RegexValidator(data, options, lang, internal);
                 break;
+            case 'ip':
+                validatorObject = new abv.IpValidator(data, options, lang, internal);
+                break;
         }
 
         return validatorObject;

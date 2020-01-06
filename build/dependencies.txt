@@ -1,6 +1,7 @@
 ../src/core/core.js
 ../src/core/abstract-validator.js
 ../src/framework/application.js
+../src/framework/helper/filter_var.js
 ../src/framework/validator/all-validator.js
 ../src/framework/validator/not-blank-validator.js
 ../src/framework/validator/blank-validator.js
@@ -13,3 +14,4 @@
 ../src/framework/validator/length-validator.js
 ../src/framework/validator/url-validator.js
 ../src/framework/validator/regex-validator.js
+../src/framework/validator/ip-validator.js
