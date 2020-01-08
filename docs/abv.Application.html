@@ -89,7 +89,7 @@ let form = validationEngine.make({
 });
 
 if (false === form['name'].isValid()) {
-  console.log(form['name'].messages().first());
+  form['name'].messages().first();
 }
 
 // Run validation
@@ -170,7 +170,7 @@ let form = validationEngine.make({
 });
 
 if (false === form['name'].isValid()) {
-  console.log(form['name'].messages().first());
+  form['name'].messages().first();
 }
 
 // Run validation
@@ -230,7 +230,7 @@ validator = validationEngine.makeSingle(
 );
 
 if (false === validator.isValid()) {
-    console.log(validator.messages().first());
+    validator.messages().first();
 }</code></pre>
 
     <h4>Parameters</h4>
