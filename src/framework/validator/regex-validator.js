@@ -10,11 +10,11 @@ Object.assign(abv, function () {
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {String} lang The language used by the application. Defaults to 'en'.
-     * @param {Boolean} internal It means, that validation called from core.
+     * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.RegexValidator(data, {pattern: 'regular expression'});
      * if (false === validator.isValid()) {
-     *      validator.errorMessage();
+     *      validator.messages().first();
      * }
      */
 
@@ -85,10 +85,10 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.RegexValidator#validate
+         * @name abv.RegexValidator#__validate
          * @description Validate data
          */
-        validate: function () {
+        __validate: function () {
             // Normalize
             if (true === this.normalize) {
                 this.__normalize();
@@ -101,7 +101,7 @@ Object.assign(abv, function () {
 
             var regexp = new RegExp(this.pattern);
             if (this.match !== regexp.test(this.data)) {
-                this.__setErrorMessage(this.message, this.messageParameters());
+                this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
         },
@@ -125,7 +125,7 @@ Object.assign(abv, function () {
                     this.data = this.data.toString();
                 }
             } catch (e) {
-                this.__setErrorMessage(this.message, this.messageParameters());
+                this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
         },
@@ -133,11 +133,11 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.RegexValidator#messageParameters
+         * @name abv.RegexValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
-        messageParameters: function () {
+        __messageParameters: function () {
             return {
                 'value': this.data
             }

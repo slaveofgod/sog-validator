@@ -10,11 +10,11 @@ Object.assign(abv, function () {
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {String} lang The language used by the application. Defaults to 'en'.
-     * @param {Boolean} internal It means, that validation called from core.
+     * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.IsTrueValidator(data);
      * if (false === validator.isValid()) {
-     *      validator.errorMessage();
+     *      validator.messages().first();
      * }
      */
 
@@ -53,16 +53,16 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IsTrueValidator#validate
+         * @name abv.IsTrueValidator#__validate
          * @description Validate data
          */
-        validate: function () {
+        __validate: function () {
             if (
                 true !== this.data
                 && 1 !== this.data
                 && '1' !== this.data
             ) {
-                this.__setErrorMessage(this.message, this.messageParameters());
+                this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
         },
@@ -70,11 +70,11 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IsTrueValidator#messageParameters
+         * @name abv.IsTrueValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
-        messageParameters: function () {
+        __messageParameters: function () {
             return {
                 'value': this.data
             }

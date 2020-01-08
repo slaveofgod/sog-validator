@@ -10,11 +10,11 @@ Object.assign(abv, function () {
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {String} lang The language used by the application. Defaults to 'en'.
-     * @param {Boolean} internal It means, that validation called from core.
+     * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.JsonValidator(data);
      * if (false === validator.isValid()) {
-     *      validator.errorMessage();
+     *      validator.messages().first();
      * }
      */
 
@@ -44,14 +44,14 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.JsonValidator#validate
+         * @name abv.JsonValidator#__validate
          * @description Validate data
          */
-        validate: function () {
+        __validate: function () {
             try {
                 JSON.parse(this.data);
             } catch (e) {
-                this.__setErrorMessage(this.message, this.messageParameters());
+                this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
         },
@@ -75,7 +75,7 @@ Object.assign(abv, function () {
                     this.data = this.data.toString();
                 }
             } catch (e) {
-                this.__setErrorMessage(this.message, this.messageParameters());
+                this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
         },
@@ -83,11 +83,11 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.JsonValidator#messageParameters
+         * @name abv.JsonValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
-        messageParameters: function () {
+        __messageParameters: function () {
             return {
                 'value': this.data
             }

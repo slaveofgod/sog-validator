@@ -64,7 +64,7 @@ Object.assign(abv, function () {
          * @param {Object} options The validation settings
          */
         add: function (name, options) {
-            var validator = abv.createValidator(this.data, name, options, this.lang, this.__internal);
+            var validator = abv.makeValidator(this.data, name, options, this.lang, this.__internal);
 
             this.__validatorCollection.push(validator);
         },
@@ -72,15 +72,15 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.AllValidator#validate
+         * @name abv.AllValidator#__validate
          * @description Validate data
          */
-        validate: function () {
+        __validate: function () {
             for (var key in this.__validatorCollection) {
                 if (!this.__validatorCollection.hasOwnProperty(key)) continue;
 
                 if (false === this.__validatorCollection[key].isValid()) {
-                    this.__setErrorMessage(this.__validatorCollection[key].errorMessage());
+                    this.__setErrorMessage(this.__validatorCollection[key].messages().first());
                     break ;
                 }
             }

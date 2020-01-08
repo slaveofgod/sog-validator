@@ -2,7 +2,7 @@
 
 const abv = require('../../../../build/output/bob-validator');
 
-describe('blank', () => {
+describe('regex', () => {
     describe('Is Valid', () => {
         let toBe = null;
 

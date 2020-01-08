@@ -12,7 +12,7 @@ Object.assign(abv, function () {
      * // validation will fail
      * }
      *
-     * let form = validationEngine.create({
+     * let form = validationEngine.make({
      *   name: 'required',
      *   name: 'required',
      *   email: 'required|email',
@@ -36,7 +36,7 @@ Object.assign(abv, function () {
      * });
      *
      * if (false === form['name'].isValid()) {
-     *   console.log(form['name'].errorMessage());
+     *   form['name'].messages().first();
      * }
      *
      * // Run validation
@@ -57,7 +57,7 @@ Object.assign(abv, function () {
     /**
      * @name abv.Application#internal
      * @type {Boolean}
-     * @description It means, that validation called from core.
+     * @description If this parameter is true, it means, that validation called from core.
      */
 
     var Application = function (options) {
@@ -81,13 +81,13 @@ Object.assign(abv, function () {
     Object.assign(Application.prototype, {
         /**
          * @function
-         * @name abv.Application#create
-         * @description Create validors for all the fields
+         * @name abv.Application#make
+         * @description Create validators for all the fields
          * @param {Object} rules The validation rules
          * @param {Object} data The data which needs to be validated
          * @returns {Object} List of validators
          */
-        create: function (rules, data) {
+        make: function (rules, data) {
             var validators = {};
 
             for (var key in rules) {
@@ -104,8 +104,8 @@ Object.assign(abv, function () {
 
         /**
          * @function
-         * @name abv.Application#createSingle
-         * @description Create single validor
+         * @name abv.Application#makeSingle
+         * @description Create single validator
          * @param {*} data The data which needs to be validated
          * @param {String} rules The validation rules
          * @example
@@ -113,17 +113,17 @@ Object.assign(abv, function () {
          *     lang: 'en'
          * });
          *
-         * validator = validationEngine.createSingle(
+         * validator = validationEngine.makeSingle(
          *     'leo.lane38@example.com',
          *     'required|email'
          * );
          *
          * if (false === validator.isValid()) {
-         *     console.log(validator.errorMessage());
+         *     validator.messages().first();
          * }
          * @returns {Object} Validator object
          */
-        createSingle: function (data, rules) {
+        makeSingle: function (data, rules) {
             var validator =  new abv.AllValidator(data, rules, {
                 lang: this.lang,
                 internal: this.internal

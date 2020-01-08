@@ -82,7 +82,12 @@ var abv = {
             if ('' === validator) {
                 validator = rule;
             } else {
-                options = JSON.parse(rule.substring(rule.indexOf(':') + 1));
+                var rulesString = rule.substring(rule.indexOf(':') + 1);
+                try {
+                    options = JSON.parse(rulesString);
+                } catch (e) {
+                    throw new Error('Invalid JSON: "' + rulesString + '"');
+                }
             }
 
             validators[validator] = options;
@@ -236,15 +241,15 @@ var abv = {
 
     /**
      * @function
-     * @name abv.createValidator
+     * @name abv.makeValidator
      * @description Create object of the validator
      * @param {*} data The data which needs to be validated
      * @param {String} validator Validator name
      * @param {Object} lang The language used by the application. Defaults to 'en'.
-     * @param {Boolean} internal It means, that validation called from core.
+     * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @returns {Object} The roles in array format
      */
-    createValidator: function (data, validator, options, lang, internal) {
+    makeValidator: function (data, validator, options, lang, internal) {
         var validatorObject;
 
         switch (validator) {
@@ -291,6 +296,9 @@ var abv = {
             case 'json':
                 validatorObject = new abv.JsonValidator(data, options, lang, internal);
                 break;
+            case 'uuid':
+                validatorObject = new abv.UuidValidator(data, options, lang, internal);
+                break;
         }
 
         return validatorObject;
@@ -311,7 +319,7 @@ var abv = {
             internal: internal
         });
 
-        var validator = engine.createSingle(
+        var validator = engine.makeSingle(
             data,
             rules
         );
@@ -334,12 +342,12 @@ var abv = {
             internal: internal
         });
 
-        var validator = engine.createSingle(
+        var validator = engine.makeSingle(
             data,
             rules
         );
 
-        return (true === validator.isValid()) ? null : validator.errorMessage();
+        return (true === validator.isValid()) ? null : validator.messages().first();
     }
 };
 

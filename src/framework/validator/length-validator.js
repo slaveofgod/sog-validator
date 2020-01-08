@@ -10,11 +10,11 @@ Object.assign(abv, function () {
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {String} lang The language used by the application. Defaults to 'en'.
-     * @param {Boolean} internal It means, that validation called from core.
+     * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.LengthValidator(data, {min: 10});
      * if (false === validator.isValid()) {
-     *      validator.errorMessage();
+     *      validator.messages().first();
      * }
      */
 
@@ -169,10 +169,10 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LengthValidator#validate
+         * @name abv.LengthValidator#__validate
          * @description Validate data
          */
-        validate: function () {
+        __validate: function () {
             // Normalize
             if (true === this.normalize) {
                 this.__normalize();
@@ -195,7 +195,7 @@ Object.assign(abv, function () {
             ) {
                 this.__setErrorMessage(
                     (this.min == this.max ? this.exactMessage : this.maxMessage),
-                    (this.min == this.max ? this.exactMessageParameters() : this.maxMessageParameters())
+                    (this.min == this.max ? this.exact__messageParameters() : this.max__messageParameters())
                 );
                 return ;
             }
@@ -206,7 +206,7 @@ Object.assign(abv, function () {
             ) {
                 this.__setErrorMessage(
                     (this.min == this.max ? this.exactMessage : this.minMessage),
-                    (this.min == this.max ? this.exactMessageParameters() : this.minMessageParameters())
+                    (this.min == this.max ? this.exact__messageParameters() : this.min__messageParameters())
                 );
                 return ;
             }
@@ -235,7 +235,7 @@ Object.assign(abv, function () {
                     this.data = this.data.toString();
                 }
             } catch (e) {
-                this.__setErrorMessage(this.message, this.messageParameters());
+                this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
         },
@@ -243,11 +243,11 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LengthValidator#exactMessageParameters
+         * @name abv.LengthValidator#exact__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
-        exactMessageParameters: function () {
+        exact__messageParameters: function () {
             return {
                 'value': this.data,
                 'limit': this.min
@@ -257,11 +257,11 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LengthValidator#maxMessageParameters
+         * @name abv.LengthValidator#max__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
-        maxMessageParameters: function () {
+        max__messageParameters: function () {
             return {
                 'value': this.data,
                 'limit': this.max
@@ -271,11 +271,11 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LengthValidator#minMessageParameters
+         * @name abv.LengthValidator#min__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
-        minMessageParameters: function () {
+        min__messageParameters: function () {
             return {
                 'value': this.data,
                 'limit': this.min

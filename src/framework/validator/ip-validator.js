@@ -10,11 +10,11 @@ Object.assign(abv, function () {
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {String} lang The language used by the application. Defaults to 'en'.
-     * @param {Boolean} internal It means, that validation called from core.
+     * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.IpValidator(data);
      * if (false === validator.isValid()) {
-     *      validator.errorMessage();
+     *      validator.messages().first();
      * }
      */
 
@@ -85,21 +85,21 @@ Object.assign(abv, function () {
             version: 'length:{"min":1,"max":255}'
         }, lang, internal);
 
-        this.Ip__V4 = "4";
-        this.Ip__V6 = "6"
-        this.Ip__ALL = "all";
+        this.V4 = "4";
+        this.V6 = "6"
+        this.ALL = "all";
         // adds FILTER_FLAG_NO_PRIV_RANGE flag (skip private ranges)
-        this.Ip__V4_NO_PRIV = "4_no_priv";
-        this.Ip__V6_NO_PRIV = "6_no_priv";
-        this.Ip__ALL_NO_PRIV = "all_no_priv";
+        this.V4_NO_PRIV = "4_no_priv";
+        this.V6_NO_PRIV = "6_no_priv";
+        this.ALL_NO_PRIV = "all_no_priv";
         // adds FILTER_FLAG_NO_RES_RANGE flag (skip reserved ranges)
-        this.Ip__V4_NO_RES = "4_no_res";
-        this.Ip__V6_NO_RES = "6_no_res";
-        this.Ip__ALL_NO_RES = "all_no_res";
+        this.V4_NO_RES = "4_no_res";
+        this.V6_NO_RES = "6_no_res";
+        this.ALL_NO_RES = "all_no_res";
         // adds FILTER_FLAG_NO_PRIV_RANGE and FILTER_FLAG_NO_RES_RANGE flags (skip both)
-        this.Ip__V4_ONLY_PUBLIC = "4_public";
-        this.Ip__V6_ONLY_PUBLIC = "6_public";
-        this.Ip__ALL_ONLY_PUBLIC = "all_public";
+        this.V4_ONLY_PUBLIC = "4_public";
+        this.V6_ONLY_PUBLIC = "6_public";
+        this.ALL_ONLY_PUBLIC = "all_public";
 
         this.FILTER_VALIDATE_IP = 275;
         this.FILTER_FLAG_IPV4 = 1048576;
@@ -110,18 +110,18 @@ Object.assign(abv, function () {
         this.message = this.__options.message || 'This is not a valid IP address.';
         this.normalize = (!this.__options.normalize || false === this.__options.normalize) ? false : true;
         this.version = ([
-            this.Ip__V4,
-            this.Ip__V6,
-            this.Ip__ALL,
-            this.Ip__V4_NO_PRIV,
-            this.Ip__V6_NO_PRIV,
-            this.Ip__ALL_NO_PRIV,
-            this.Ip__V4_NO_RES,
-            this.Ip__V6_NO_RES,
-            this.Ip__ALL_NO_RES,
-            this.Ip__V4_ONLY_PUBLIC,
-            this.Ip__V6_ONLY_PUBLIC,
-            this.Ip__ALL_ONLY_PUBLIC
+            this.V4,
+            this.V6,
+            this.ALL,
+            this.V4_NO_PRIV,
+            this.V6_NO_PRIV,
+            this.ALL_NO_PRIV,
+            this.V4_NO_RES,
+            this.V6_NO_RES,
+            this.ALL_NO_RES,
+            this.V4_ONLY_PUBLIC,
+            this.V6_ONLY_PUBLIC,
+            this.ALL_ONLY_PUBLIC
         ].includes(this.__options.mode)) ? this.__options.mode : '4';
 
         this.__setName('IpValidator');
@@ -133,10 +133,10 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IpValidator#validate
+         * @name abv.IpValidator#__validate
          * @description Validate data
          */
-        validate: function () {
+        __validate: function () {
             // Normalize
             if (true === this.normalize) {
                 this.__normalize();
@@ -149,37 +149,37 @@ Object.assign(abv, function () {
 
             var flag = null;
             switch (this.version) {
-                case this.Ip__V4:
+                case this.V4:
                     flag = this.FILTER_FLAG_IPV4;
                     break;
-                case this.Ip__V6:
+                case this.V6:
                     flag = this.FILTER_FLAG_IPV6;
                     break;
-                case this.Ip__V4_NO_PRIV:
+                case this.V4_NO_PRIV:
                     flag = this.FILTER_FLAG_IPV4 | this.FILTER_FLAG_NO_PRIV_RANGE;
                     break;
-                case this.Ip__V6_NO_PRIV:
+                case this.V6_NO_PRIV:
                     flag = this.FILTER_FLAG_IPV6 | this.FILTER_FLAG_NO_PRIV_RANGE;
                     break;
-                case this.Ip__ALL_NO_PRIV:
+                case this.ALL_NO_PRIV:
                     flag = this.FILTER_FLAG_NO_PRIV_RANGE;
                     break;
-                case this.Ip__V4_NO_RES:
+                case this.V4_NO_RES:
                     flag = this.FILTER_FLAG_IPV4 | this.FILTER_FLAG_NO_RES_RANGE;
                     break;
-                case this.Ip__V6_NO_RES:
+                case this.V6_NO_RES:
                     flag = this.FILTER_FLAG_IPV6 | this.FILTER_FLAG_NO_RES_RANGE;
                     break;
-                case this.Ip__ALL_NO_RES:
+                case this.ALL_NO_RES:
                     flag = this.FILTER_FLAG_NO_RES_RANGE;
                     break;
-                case this.Ip__V4_ONLY_PUBLIC:
+                case this.V4_ONLY_PUBLIC:
                     flag = this.FILTER_FLAG_IPV4 | this.FILTER_FLAG_NO_PRIV_RANGE | this.FILTER_FLAG_NO_RES_RANGE;
                     break;
-                case this.Ip__V6_ONLY_PUBLIC:
+                case this.V6_ONLY_PUBLIC:
                     flag = this.FILTER_FLAG_IPV6 | this.FILTER_FLAG_NO_PRIV_RANGE | this.FILTER_FLAG_NO_RES_RANGE;
                     break;
-                case this.Ip__ALL_ONLY_PUBLIC:
+                case this.ALL_ONLY_PUBLIC:
                     flag = this.FILTER_FLAG_NO_PRIV_RANGE | this.FILTER_FLAG_NO_RES_RANGE;
                     break;
                 default:
@@ -188,7 +188,7 @@ Object.assign(abv, function () {
             }
 
             if (!abv.filter_var(this.data, this.FILTER_VALIDATE_IP, flag)) {
-                this.__setErrorMessage(this.message, this.messageParameters());
+                this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
         },
@@ -212,7 +212,7 @@ Object.assign(abv, function () {
                     this.data = this.data.toString();
                 }
             } catch (e) {
-                this.__setErrorMessage(this.message, this.messageParameters());
+                this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
         },
@@ -220,11 +220,11 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IpValidator#messageParameters
+         * @name abv.IpValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
-        messageParameters: function () {
+        __messageParameters: function () {
             return {
                 'value': this.data
             }

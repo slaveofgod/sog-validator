@@ -33,7 +33,7 @@ Object.assign(abv, (function () {
         this.lang = lang || 'en';
 
         this.__options = options || {};
-        this.__errorMessage = null;
+        this.__error = new abv.ErrorCollection({"lang": lang});
         this.__internal = (true === internal);
         this.__name = null;
 
@@ -55,27 +55,6 @@ Object.assign(abv, (function () {
         },
 
         /**
-         * @private
-         * @function
-         * @name abv.AbstractValidator#prepareMessage
-         * @description Prepare error message
-         * @param {String} message Error message text
-         * @param {Object} parameters Error message parameters
-         * @returns {String} Processed message
-         */
-        __prepareMessage: function (message, parameters) {
-            parameters = parameters || {};
-
-            for (var key in parameters) {
-                if (!parameters.hasOwnProperty(key)) continue;
-
-                message = message.replace("%%" + key + "%%", parameters[key]);
-            }
-
-            return message;
-        },
-
-        /**
          * @function
          * @name abv.AbstractValidator#isValid
          * @description Check if data valid
@@ -84,23 +63,34 @@ Object.assign(abv, (function () {
         isValid: function () {
             this.__beforeValidate();
 
-            if (null === this.__errorMessage) {
-                this.validate();
+            if (false === this.__hasMessages()) {
+                this.__validate();
             }
 
             this.__afterValidate();
 
-            return (null === this.__errorMessage) ? true: false;
+            return (false === this.__hasMessages()) ? true: false;
+        },
+
+        /**
+         * @private
+         * @function
+         * @name abv.AbstractValidator#isValid
+         * @description Check if data valid
+         * @returns {Boolean} Validation status
+         */
+        __hasMessages: function () {
+            return this.__error.has();
         },
 
         /**
          * @function
-         * @name abv.AbstractValidator#errorMessage
-         * @description Return error message
-         * @returns {String} Error message
+         * @name abv.AbstractValidator#messages
+         * @description Return error messages
+         * @returns {abv.Error} Error messages
          */
-        errorMessage: function () {
-            return this.__errorMessage;
+        messages: function () {
+            return this.__error;
         },
 
         /**
@@ -112,7 +102,7 @@ Object.assign(abv, (function () {
          * @description Set error message
          */
         __setErrorMessage: function (message, parameters) {
-            this.__errorMessage = this.__prepareMessage(message, parameters);
+            this.__error.add(message, parameters);
         },
 
         /**

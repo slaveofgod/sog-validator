@@ -10,11 +10,11 @@ Object.assign(abv, function () {
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {String} lang The language used by the application. Defaults to 'en'.
-     * @param {Boolean} internal It means, that validation called from core.
+     * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.NotBlankValidator(data);
      * if (false === validator.isValid()) {
-     *      validator.errorMessage();
+     *      validator.messages().first();
      * }
      */
 
@@ -67,10 +67,10 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.NotBlankValidator#validate
+         * @name abv.NotBlankValidator#__validate
          * @description Validate data
          */
-        validate: function () {
+        __validate: function () {
             // Normalize
             if (
                 'string' === typeof this.data
@@ -81,7 +81,7 @@ Object.assign(abv, function () {
 
             // Check if undefined
             if ('undefined' === typeof this.data) {
-                this.__setErrorMessage(this.message, this.messageParameters());
+                this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
 
@@ -90,19 +90,19 @@ Object.assign(abv, function () {
                 ('undefined' === typeof this.data || null === this.data)
                 && false === this.allowNull
             ) {
-                this.__setErrorMessage(this.message, this.messageParameters());
+                this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
 
             // Check if false
             if (false === this.data) {
-                this.__setErrorMessage(this.message, this.messageParameters());
+                this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
 
             // Check if empty string
             if ('' === this.data) {
-                this.__setErrorMessage(this.message, this.messageParameters());
+                this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
 
@@ -111,7 +111,7 @@ Object.assign(abv, function () {
                 true === Array.isArray(this.data)
                 && 0 === this.data.length
             ) {
-                this.__setErrorMessage(this.message, this.messageParameters());
+                this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
         },
@@ -119,11 +119,11 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.NotBlankValidator#messageParameters
+         * @name abv.NotBlankValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
-        messageParameters: function () {
+        __messageParameters: function () {
             return {
                 'value': this.data
             }
