@@ -23,19 +23,23 @@ Object.assign(abv, function () {
     /**
      * @name abv.NotBlankValidator#allowNull
      * @type {Boolean}
-     * @description If set to <code class="notranslate">true</code>, <code class="notranslate">null</code> values are considered valid and won't trigger a constraint violation. Defaults to false
+     * @description
+     * If set to <code class="notranslate">true</code>, <code class="notranslate">null</code> values are considered valid and won't trigger a constraint violation.
+     * Defaults to false
      */
 
     /**
      * @name abv.NotBlankValidator#normalize
      * @type {Boolean}
-     * @description Normalizer string before validate (trim, etc.). Defaults to false
+     * @description Normalizer string before validate (trim, etc.).
+     * Defaults to false
      */
 
     /**
      * @name abv.NotBlankValidator#message
      * @type {String}
-     * @description This is the message that will be shown if the value is blank. Defaults to "This value should not be blank."
+     * @description This is the message that will be shown if the value is blank.
+     * Defaults to "This value should not be blank."
      * You can use the following parameters in this message:
      * <table>
      *     <tr>

@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision 8cc4372
+ * Bob Validator Library v2.0 revision 09b5980
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"8cc4372", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
+var abv = {version:"2.0", revision:"09b5980", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
   var splitted = rules.split("|");
   var validators = {};
   for (key in splitted) {
@@ -64,6 +64,9 @@ var abv = {version:"2.0", revision:"8cc4372", config:{}, common:{}, parseRulesFr
     validators[validator] = options;
   }
   return validators;
+}, getType:function(data) {
+  var results = /function (.{1,})\(/.exec(data.constructor.toString());
+  return results && results.length > 1 ? results[1] : "";
 }, isType:function(type, data) {
   switch(type) {
     case "array":
@@ -211,13 +214,13 @@ var abv = {version:"2.0", revision:"8cc4372", config:{}, common:{}, parseRulesFr
 }, makeValidator:function(data, validator, options, lang, internal) {
   var validatorObject;
   switch(validator) {
-    case "required":
     case "not-blank":
       validatorObject = new abv.NotBlankValidator(data, options, lang, internal);
       break;
     case "blank":
       validatorObject = new abv.BlankValidator(data, options, lang, internal);
       break;
+    case "required":
     case "not-null":
       validatorObject = new abv.NotNullValidator(data, options, lang, internal);
       break;
@@ -256,6 +259,9 @@ var abv = {version:"2.0", revision:"8cc4372", config:{}, common:{}, parseRulesFr
       break;
     case "uuid":
       validatorObject = new abv.UuidValidator(data, options, lang, internal);
+      break;
+    case "equal-to":
+      validatorObject = new abv.EqualToValidator(data, options, lang, internal);
       break;
   }
   return validatorObject;
@@ -319,6 +325,45 @@ if (typeof exports !== "undefined") {
     }
   }});
   return {AbstractValidator:AbstractValidator};
+}());
+Object.assign(abv, function() {
+  var AbstractComparisonValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, optionRules, lang, internal);
+    this.value = this.__options.value;
+  };
+  AbstractComparisonValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  AbstractComparisonValidator.prototype.constructor = AbstractComparisonValidator;
+  Object.assign(AbstractComparisonValidator.prototype, {__validate:function() {
+    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+      return;
+    }
+    if (false === this.__compareValues(this.__prepareDataForComparing(this.__convertDataToValueType()), this.__prepareDataForComparing(this.value))) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __prepareDataForComparing:function(data) {
+    switch(abv.getType(data)) {
+      case "Date":
+        return data.getTime();
+        break;
+      case "Object":
+      case "Array":
+        return JSON.stringify(data);
+        break;
+    }
+    return data;
+  }, __convertDataToValueType:function() {
+    if (abv.getType(this.data) === abv.getType(this.value)) {
+      return this.data;
+    }
+    switch(abv.getType(this.value)) {
+      case "Date":
+        return new Date(this.data);
+        break;
+    }
+    return this.data;
+  }});
+  return {AbstractComparisonValidator:AbstractComparisonValidator};
 }());
 Object.assign(abv, function() {
   var Application = function(options) {
@@ -1221,6 +1266,21 @@ Object.assign(abv, function() {
     return {"value":this.data};
   }});
   return {UuidValidator:UuidValidator};
+}());
+Object.assign(abv, function() {
+  var EqualToValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', value:"required"}, lang, internal);
+    this.message = this.__options.message || "This value should be equal to %%compared_value%%.";
+    this.__setName("EqualToValidator");
+  };
+  EqualToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  EqualToValidator.prototype.constructor = EqualToValidator;
+  Object.assign(EqualToValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value == comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {EqualToValidator:EqualToValidator};
 }());
 
 

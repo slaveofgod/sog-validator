@@ -97,7 +97,7 @@ Object.assign(abv, function () {
          */
         __validate: function () {
             if ('undefined' === typeof this.data) {
-                return;
+                return ;
             }
 
             var types = this.type;

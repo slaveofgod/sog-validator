@@ -98,6 +98,19 @@ var abv = {
 
     /**
      * @function
+     * @name abv.getType
+     * @description Get data type
+     * @param {*} data Data, which type needs to be defined
+     * @returns {String}
+     */
+    getType: function (data) {
+        var results = /function (.{1,})\(/.exec(data.constructor.toString());
+
+        return (results && results.length > 1) ? results[1] : "";
+    },
+
+    /**
+     * @function
      * @name abv.isType
      * @description Parse validation rules from string
      * @param {String} type Type string
@@ -253,13 +266,13 @@ var abv = {
         var validatorObject;
 
         switch (validator) {
-            case 'required':
             case 'not-blank':
                 validatorObject = new abv.NotBlankValidator(data, options, lang, internal);
                 break;
             case 'blank':
                 validatorObject = new abv.BlankValidator(data, options, lang, internal);
                 break;
+            case 'required':
             case 'not-null':
                 validatorObject = new abv.NotNullValidator(data, options, lang, internal);
                 break;
@@ -298,6 +311,9 @@ var abv = {
                 break;
             case 'uuid':
                 validatorObject = new abv.UuidValidator(data, options, lang, internal);
+                break;
+            case 'equal-to':
+                validatorObject = new abv.EqualToValidator(data, options, lang, internal);
                 break;
         }
 

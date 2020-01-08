@@ -2,6 +2,7 @@ Object.assign(abv, (function () {
     'use strict';
 
     /**
+     * @abstract
      * @constructor
      * @name abv.AbstractValidator
      * @classdesc Abstract base class that implements functionality for validation.

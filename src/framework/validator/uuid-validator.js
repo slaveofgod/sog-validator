@@ -158,7 +158,7 @@ Object.assign(abv, function () {
 
             // Check if empty
             if ('undefined' === typeof this.data || null === this.data || '' === this.data) {
-                return;
+                return ;
             }
 
             if (true === this.strict) {

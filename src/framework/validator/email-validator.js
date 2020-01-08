@@ -89,7 +89,7 @@ Object.assign(abv, function () {
 
             // Check if empty
             if ('undefined' === typeof this.data || null === this.data || '' === this.data) {
-                return;
+                return ;
             }
 
             switch (this.mode) {
@@ -104,7 +104,7 @@ Object.assign(abv, function () {
                  */
                 case 'strict':
                     this.__setErrorMessage(this.message, this.__messageParameters());
-                    return;
+                    return ;
                     break ;
                 case 'html5':
                     if (false === this.__patternHtml5.test(this.data)) {
