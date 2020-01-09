@@ -30,7 +30,9 @@ Object.assign(abv, (function () {
 
     var AbstractValidator = function (data, options, optionRules, lang, internal) {
 
-        this.data = data;
+        var __data = data;
+
+        this.data = __data;
         this.lang = lang || 'en';
 
         this.__options = options || {};

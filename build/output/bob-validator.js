@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision d76c520
+ * Bob Validator Library v2.0 revision 8eaab2e
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"d76c520", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
+var abv = {version:"2.0", revision:"8eaab2e", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
   var splitted = rules.split("|");
   var validators = {};
   for (key in splitted) {
@@ -266,6 +266,9 @@ var abv = {version:"2.0", revision:"d76c520", config:{}, common:{}, parseRulesFr
     case "equal-to":
       validatorObject = new abv.EqualToValidator(data, options, lang, internal);
       break;
+    case "not-equal-to":
+      validatorObject = new abv.NotEqualToValidator(data, options, lang, internal);
+      break;
   }
   return validatorObject;
 }, isValid:function(data, rules, internal) {
@@ -282,7 +285,8 @@ if (typeof exports !== "undefined") {
 }
 ;Object.assign(abv, function() {
   var AbstractValidator = function(data, options, optionRules, lang, internal) {
-    this.data = data;
+    var __data = data;
+    this.data = __data;
     this.lang = lang || "en";
     this.__options = options || {};
     this.__error = new abv.ErrorCollection({"lang":lang});
@@ -1347,6 +1351,24 @@ Object.assign(abv, function() {
     return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
   }});
   return {EqualToValidator:EqualToValidator};
+}());
+Object.assign(abv, function() {
+  var NotEqualToValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', value:"required"}, lang, internal);
+    this.message = this.__options.message || "This value should not be equal to %%compared_value%%.";
+    this.__setName("NotEqualToValidator");
+  };
+  NotEqualToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  NotEqualToValidator.prototype.constructor = NotEqualToValidator;
+  Object.defineProperty(NotEqualToValidator.prototype, "name", {get:function() {
+    return this.__getName();
+  }});
+  Object.assign(NotEqualToValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value != comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {NotEqualToValidator:NotEqualToValidator};
 }());
 
 
