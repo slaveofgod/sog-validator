@@ -248,15 +248,6 @@ var abv = {
                 if (false === this.isType('scalar', data)) return false;
                 return /^[A-Fa-f0-9]+$/.test(data);
                 break;
-            case 'stringOrArray':
-                if (
-                    this.isType('string', data)
-                    || this.isType('array', data)
-                ) {
-                    return true;
-                }
-                return false;
-                break;
             case 'date':
             case 'datetime':
                 if (
@@ -266,6 +257,10 @@ var abv = {
                     return true;
                 }
                 return false;
+                break;
+            case 'date-string':
+                if (false === this.isType('string', data)) return false;
+                return Number.isNaN(Date.parse(data)) ? false : true;
                 break;
         }
 
@@ -355,6 +350,9 @@ var abv = {
                 break;
             case 'greater-than-or-equal':
                 validatorObject = new abv.GreaterThanOrEqualThanValidator(data, options, lang, internal);
+                break;
+            case 'range':
+                validatorObject = new abv.RangeValidator(data, options, lang, internal);
                 break;
         }
 

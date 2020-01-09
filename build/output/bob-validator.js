@@ -1,21 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision 09d52bc
- * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
- */
-/*
- * Bob Validator Library v2.0 revision 09d52bc
- * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
- */
-/*
- * Bob Validator Library v2.0 revision 09d52bc
- * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
- */
-/*
- * Bob Validator Library v2.0 revision 09d52bc
- * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
- */
-/*
- * Bob Validator Library v2.0 revision 09d52bc
+ * Bob Validator Library v2.0 revision 878f597
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -36,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"09d52bc", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
+var abv = {version:"2.0", revision:"878f597", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
   var splitted = rules.split("|");
   var validators = {};
   for (key in splitted) {
@@ -225,18 +209,18 @@ var abv = {version:"2.0", revision:"09d52bc", config:{}, common:{}, parseRulesFr
       }
       return /^[A-Fa-f0-9]+$/.test(data);
       break;
-    case "stringOrArray":
-      if (this.isType("string", data) || this.isType("array", data)) {
-        return true;
-      }
-      return false;
-      break;
     case "date":
     case "datetime":
       if ("object" === typeof data && "Date" === this.getType(data)) {
         return true;
       }
       return false;
+      break;
+    case "date-string":
+      if (false === this.isType("string", data)) {
+        return false;
+      }
+      return Number.isNaN(Date.parse(data)) ? false : true;
       break;
   }
   return false;
@@ -312,6 +296,9 @@ var abv = {version:"2.0", revision:"09d52bc", config:{}, common:{}, parseRulesFr
       break;
     case "greater-than-or-equal":
       validatorObject = new abv.GreaterThanOrEqualThanValidator(data, options, lang, internal);
+      break;
+    case "range":
+      validatorObject = new abv.RangeValidator(data, options, lang, internal);
       break;
   }
   return validatorObject;
@@ -844,7 +831,7 @@ Object.assign(abv, function() {
 }());
 Object.assign(abv, function() {
   var TypeValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {type:'type:{"type":"stringOrArray"}', message:'length:{"min":3,"max":255}', any:'type:{"type":"boolean"}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {type:'type:{"type":["string","array"],"any":true}', message:'length:{"min":3,"max":255}', any:'type:{"type":"boolean"}'}, lang, internal);
     this.type = this.__options.type || "string";
     this.message = this.__options.message || "This value should be of type %%type%%.";
     this.any = true === this.__options.any;
@@ -1018,7 +1005,7 @@ Object.assign(abv, function() {
 }());
 Object.assign(abv, function() {
   var UrlValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}', protocols:'type:{"type":"stringOrArray"}', relativeProtocol:'type:{"type":"bool"}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}', protocols:'type:{"type":["string","array"],"any":true}', relativeProtocol:'type:{"type":"bool"}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid URL.";
     this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
     this.protocols = this.__options.protocols || ["http", "https", "ftp"];
@@ -1542,59 +1529,70 @@ Object.assign(abv, function() {
   }});
   return {GreaterThanOrEqualThanValidator:GreaterThanOrEqualThanValidator};
 }());
-
-
-return abv;
-}));
-
-alue)};
-  }});
-  return {GreaterThanOrEqualThanValidator:GreaterThanOrEqualThanValidator};
-}());
-
-
-return abv;
-}));
-
-GreaterThanOrEqualThanValidator:GreaterThanOrEqualThanValidator};
-}());
-
-
-return abv;
-}));
-
-rn {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
-  }});
-  return {GreaterThanOrEqualThanValidator:GreaterThanOrEqualThanValidator};
-}());
-
-
-return abv;
-}));
-
-GreaterThanOrEqualThanValidator:GreaterThanOrEqualThanValidator};
-}());
-
-
-return abv;
-}));
-
-GreaterThanOrEqualThanValidator:GreaterThanOrEqualThanValidator};
-}());
-
-
-return abv;
-}));
-
-ion() {
+Object.assign(abv, function() {
+  var RangeValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {invalidMessage:'length:{"min":3,"max":255}', max:'required|type:{"type":["numeric","date-string"],"any":true}', maxMessage:'length:{"min":3,"max":255}', min:'required|type:{"type":["numeric","date-string"],"any":true}', minMessage:'length:{"min":3,"max":255}', notInRangeMessage:'length:{"min":3,"max":255}'}, lang, internal);
+    this.invalidMessage = this.__options.invalidMessage || "This value should be a valid number.";
+    this.max = this.__options.max;
+    this.maxMessage = this.__options.maxMessage || "This value should be %%limit%% or less.";
+    this.min = this.__options.min;
+    this.minMessage = this.__options.minMessage || "This value should be %%limit%% or more.";
+    this.notInRangeMessage = this.__options.notInRangeMessage || "This value should be between %%min%% and %%max%%.";
+    this.__setName("RangeValidator");
+  };
+  RangeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  RangeValidator.prototype.constructor = RangeValidator;
+  Object.defineProperty(RangeValidator.prototype, "name", {get:function() {
     return this.__getName();
   }});
-  Object.assign(GreaterThanOrEqualThanValidator.prototype, {__compareValues:function(value, comparedValue) {
-    return value >= comparedValue;
-  }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  Object.assign(RangeValidator.prototype, {__validate:function() {
+    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+      return;
+    }
+    var hasLowerLimit = null !== this.min;
+    var hasUpperLimit = null !== this.max;
+    if (hasLowerLimit && hasUpperLimit && (this.data < this.min || this.data > this.max)) {
+      this.__setErrorMessage(this.notInRangeMessage, this.__notInRangeMessageParameters());
+      return;
+    }
+    if (hasUpperLimit && this.data > this.max) {
+      this.__setErrorMessage(this.maxMessage, this.__maxMessageParameters());
+      return;
+    }
+    if (hasLowerLimit && this.data < this.min) {
+      this.__setErrorMessage(this.minMessage, this.__minMessageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+      return;
+    }
+    if (false === abv.isType("numeric", this.data) && false === abv.isType("date-string", this.data)) {
+      this.__setErrorMessage(this.invalidMessage, this.__invalidMessageParameters());
+      return;
+    }
+    if (false === abv.isType("numeric", this.data) && true === abv.isType("date-string", this.data)) {
+      var date = new Date(this.data);
+      this.data = date.getTime();
+    }
+    if (false === abv.isType("numeric", this.min) && true === abv.isType("date-string", this.min)) {
+      var date = new Date(this.min);
+      this.min = date.getTime();
+    }
+    if (false === abv.isType("numeric", this.max) && true === abv.isType("date-string", this.max)) {
+      var date = new Date(this.max);
+      this.max = date.getTime();
+    }
+  }, __invalidMessageParameters:function() {
+    return {"value":this.data};
+  }, __notInRangeMessageParameters:function() {
+    return {"max":this.max, "min":this.min, "value":this.data};
+  }, __maxMessageParameters:function() {
+    return {"limit":this.max, "value":this.data};
+  }, __minMessageParameters:function() {
+    return {"limit":this.min, "value":this.data};
   }});
-  return {GreaterThanOrEqualThanValidator:GreaterThanOrEqualThanValidator};
+  return {RangeValidator:RangeValidator};
 }());
 
 

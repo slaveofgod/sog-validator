@@ -83,7 +83,7 @@ Object.assign(abv, function () {
 
     var TypeValidator = function (data, options, lang, internal) {
         abv.AbstractValidator.call(this, data, options,{
-            type: 'type:{"type":"stringOrArray"}',
+            type: 'type:{"type":["string","array"],"any":true}',
             message: 'length:{"min":3,"max":255}',
             any: 'type:{"type":"boolean"}'
         }, lang, internal);

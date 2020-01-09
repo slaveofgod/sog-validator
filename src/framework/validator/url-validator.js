@@ -65,7 +65,7 @@ Object.assign(abv, function () {
         abv.AbstractValidator.call(this, data, options,{
             message: 'length:{"min":3,"max":255}',
             normalize: 'type:{"type":"bool"}',
-            protocols: 'type:{"type":"stringOrArray"}',
+            protocols: 'type:{"type":["string","array"],"any":true}',
             relativeProtocol: 'type:{"type":"bool"}'
         }, lang, internal);
 

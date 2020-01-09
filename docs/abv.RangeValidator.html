@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>abv.BlankValidator | PlayCanvas API Reference</title>
+        <title>abv.RangeValidator | PlayCanvas API Reference</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/png" href="images/playcanvas-favicon.png">
 
@@ -69,10 +69,10 @@
 </nav>
 <div class='sidebarToggle'><span></span>Class List</div>
             <main class="cls">
-    <h1>abv.BlankValidator</h1>
+    <h1>abv.RangeValidator</h1>
     <p class="extends">Extends: <a href="abv.AbstractValidator.html">abv.AbstractValidator</a></p>
-    <p>Validates that a value is blank - meaning equal to an empty string or <code class="notranslate">null</code>.</p>
-        <pre><code class="javascript">var validator = new abv.BlankValidator(data);
+    <p>Validates that a given number or Date object is between some minimum and maximum.</p>
+        <pre><code class="javascript">var validator = new abv.RangeValidator(data);
 if (false === validator.isValid()) {
      validator.messages().first();
 }</code></pre>
@@ -90,7 +90,22 @@ if (false === validator.isValid()) {
     <h3>Properties</h3>
     <table class="properties">
     <tr>
-        <td><a href="#message">message</a></td><td>This is the message that will be shown if the value is not blank.</td>
+        <td><a href="#invalidMessage">invalidMessage</a></td><td>The message that will be shown if the underlying value is not a number.</td>
+    </tr>
+    <tr>
+        <td><a href="#max">max</a></td><td>This required option is the "max" value.</td>
+    </tr>
+    <tr>
+        <td><a href="#maxMessage">maxMessage</a></td><td>The message that will be shown if the underlying value is more than the max option.</td>
+    </tr>
+    <tr>
+        <td><a href="#min">min</a></td><td>This required option is the "min" value.</td>
+    </tr>
+    <tr>
+        <td><a href="#minMessage">minMessage</a></td><td>The message that will be shown if the underlying value is less than the min option.</td>
+    </tr>
+    <tr>
+        <td><a href="#notInRangeMessage">notInRangeMessage</a></td><td>The message that will be shown if the underlying value is less than the min option or greater than the max option.</td>
     </tr>
     </table>
 
@@ -128,10 +143,10 @@ if (false === validator.isValid()) {
 
     <h2>Constructor</h2>
     <!-- Constructor -->
-    <div id="BlankValidator">
-    <h3 class="methodname">BlankValidator(data, options, lang, internal) <a class="font-icon" href="#BlankValidator">&#58216;</a></h3>
+    <div id="RangeValidator">
+    <h3 class="methodname">RangeValidator(data, options, lang, internal) <a class="font-icon" href="#RangeValidator">&#58216;</a></h3>
     <p>Create a new Validator.</p>
-    <pre><code class="javascript">var validator = new abv.BlankValidator(data);
+    <pre><code class="javascript">var validator = new abv.RangeValidator(data);
 if (false === validator.isValid()) {
      validator.messages().first();
 }</code></pre>
@@ -156,14 +171,87 @@ if (false === validator.isValid()) {
 
     <!--properties-->
     <h2>Properties</h2>
-        <div id="message">
-    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">message <a class="font-icon" href="#message">&#58216;</a></span>
-    <p>This is the message that will be shown if the value is not blank. Defaults to "This value should be blank."
+        <div id="invalidMessage">
+    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">invalidMessage <a class="font-icon" href="#invalidMessage">&#58216;</a></span>
+    <p>The message that will be shown if the underlying value is not a number.
+Defaults to "This value should be a valid number."
 You can use the following parameters in this message:
 <table>
     <tr>
         <td><b>Parameter</b></td>
         <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>%%value%%</td>
+        <td>The current (invalid) value</td>
+    </tr>
+</table></p>
+</div>
+        <div id="max">
+    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, <a href="Date.html">Date</a></span><span class="property">max <a class="font-icon" href="#max">&#58216;</a></span>
+    <p>This required option is the "max" value. Validation will fail if the given value is greater than this max value.</p>
+</div>
+        <div id="maxMessage">
+    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">maxMessage <a class="font-icon" href="#maxMessage">&#58216;</a></span>
+    <p>The message that will be shown if the underlying value is more than the max option.
+Defaults to "This value should be %%limit%% or less."
+You can use the following parameters in this message:
+<table>
+    <tr>
+        <td><b>Parameter</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>%%limit%%</td>
+        <td>The upper limit</td>
+    </tr>
+    <tr>
+        <td>%%value%%</td>
+        <td>The current (invalid) value</td>
+    </tr>
+</table></p>
+</div>
+        <div id="min">
+    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, <a href="Date.html">Date</a></span><span class="property">min <a class="font-icon" href="#min">&#58216;</a></span>
+    <p>This required option is the "min" value. Validation will fail if the given value is less than this min value.</p>
+</div>
+        <div id="minMessage">
+    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">minMessage <a class="font-icon" href="#minMessage">&#58216;</a></span>
+    <p>The message that will be shown if the underlying value is less than the min option.
+Defaults to "This value should be %%limit%% or more."
+You can use the following parameters in this message:
+<table>
+    <tr>
+        <td><b>Parameter</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>%%limit%%</td>
+        <td>The lower limit</td>
+    </tr>
+    <tr>
+        <td>%%value%%</td>
+        <td>The current (invalid) value</td>
+    </tr>
+</table></p>
+</div>
+        <div id="notInRangeMessage">
+    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">notInRangeMessage <a class="font-icon" href="#notInRangeMessage">&#58216;</a></span>
+    <p>The message that will be shown if the underlying value is less than the min option or greater than the max option.
+Defaults to "This value should be between %%min%% and %%max%%."
+You can use the following parameters in this message:
+<table>
+    <tr>
+        <td><b>Parameter</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>%%max%%</td>
+        <td>The upper limit</td>
+    </tr>
+    <tr>
+        <td>%%max%%</td>
+        <td>The lower limit</td>
     </tr>
     <tr>
         <td>%%value%%</td>

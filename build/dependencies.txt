@@ -28,3 +28,4 @@
 ../src/framework/validator/less-than-or-equal-validator.js
 ../src/framework/validator/greater-than-validator.js
 ../src/framework/validator/greater-than-or-equal-validator.js
+../src/framework/validator/range-validator.js
