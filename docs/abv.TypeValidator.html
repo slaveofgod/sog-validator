@@ -45,6 +45,8 @@
         <li id="nav-abv.EmailValidator"><a href="abv.EmailValidator.html">EmailValidator</a></li>
         <li id="nav-abv.EqualToValidator"><a href="abv.EqualToValidator.html">EqualToValidator</a></li>
         <li id="nav-abv.ErrorCollection"><a href="abv.ErrorCollection.html">ErrorCollection</a></li>
+        <li id="nav-abv.GreaterThanOrEqualThanValidator"><a href="abv.GreaterThanOrEqualThanValidator.html">GreaterThanOrEqualThanValidator</a></li>
+        <li id="nav-abv.GreaterThanValidator"><a href="abv.GreaterThanValidator.html">GreaterThanValidator</a></li>
         <li id="nav-abv.IdenticalToValidator"><a href="abv.IdenticalToValidator.html">IdenticalToValidator</a></li>
         <li id="nav-abv.IpValidator"><a href="abv.IpValidator.html">IpValidator</a></li>
         <li id="nav-abv.IsFalseValidator"><a href="abv.IsFalseValidator.html">IsFalseValidator</a></li>
@@ -52,6 +54,8 @@
         <li id="nav-abv.IsTrueValidator"><a href="abv.IsTrueValidator.html">IsTrueValidator</a></li>
         <li id="nav-abv.JsonValidator"><a href="abv.JsonValidator.html">JsonValidator</a></li>
         <li id="nav-abv.LengthValidator"><a href="abv.LengthValidator.html">LengthValidator</a></li>
+        <li id="nav-abv.LessThanOrEqualValidator"><a href="abv.LessThanOrEqualValidator.html">LessThanOrEqualValidator</a></li>
+        <li id="nav-abv.LessThanValidator"><a href="abv.LessThanValidator.html">LessThanValidator</a></li>
         <li id="nav-abv.NotBlankValidator"><a href="abv.NotBlankValidator.html">NotBlankValidator</a></li>
         <li id="nav-abv.NotEqualToValidator"><a href="abv.NotEqualToValidator.html">NotEqualToValidator</a></li>
         <li id="nav-abv.NotIdenticalToValidator"><a href="abv.NotIdenticalToValidator.html">NotIdenticalToValidator</a></li>
@@ -84,6 +88,9 @@ if (false === validator.isValid()) {
     <!--properties-->
     <h3>Properties</h3>
     <table class="properties">
+    <tr>
+        <td><a href="#any">any</a></td><td>If true, one of data type needs to be valid, otherwise passed data should be valid for all types.</td>
+    </tr>
     <tr>
         <td><a href="#message">message</a></td><td>The message if the underlying data is not of the given type.</td>
     </tr>
@@ -154,6 +161,11 @@ if (false === validator.isValid()) {
 
     <!--properties-->
     <h2>Properties</h2>
+        <div id="any">
+    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span><span class="property">any <a class="font-icon" href="#any">&#58216;</a></span>
+    <p>If true, one of data type needs to be valid, otherwise passed data should be valid for all types.
+Defaults to false</p>
+</div>
         <div id="message">
     <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">message <a class="font-icon" href="#message">&#58216;</a></span>
     <p>The message if the underlying data is not of the given type. Defaults to "This value should be of type %%type%%."

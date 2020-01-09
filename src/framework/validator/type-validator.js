@@ -53,6 +53,14 @@ Object.assign(abv, function () {
      */
 
     /**
+     * @name abv.TypeValidator#any
+     * @type {Boolean}
+     * @description
+     * If true, one of data type needs to be valid, otherwise passed data should be valid for all types.
+     * Defaults to false
+     */
+
+    /**
      * @name abv.TypeValidator#message
      * @type {String}
      * @description The message if the underlying data is not of the given type. Defaults to "This value should be of type %%type%%."
@@ -76,11 +84,13 @@ Object.assign(abv, function () {
     var TypeValidator = function (data, options, lang, internal) {
         abv.AbstractValidator.call(this, data, options,{
             type: 'type:{"type":"stringOrArray"}',
-            message: 'length:{"min":3,"max":255}'
+            message: 'length:{"min":3,"max":255}',
+            any: 'type:{"type":"boolean"}'
         }, lang, internal);
 
         this.type = this.__options.type || 'string';
         this.message = this.__options.message || 'This value should be of type %%type%%.';
+        this.any = (true === this.__options.any);
 
         this.__setName('TypeValidator');
         this.__invalidType = null;
@@ -111,15 +121,54 @@ Object.assign(abv, function () {
                 types = [this.type];
             }
 
+            if (true === this.any) {
+                this.__validateAnyTypes(types);
+            } else {
+                this.__validateAllTypes(types);
+            }
+        },
+
+        /**
+         * @private
+         * @function
+         * @name abv.TypeValidator#__validateAllTypes
+         * @param {Array} types Types
+         * @description Check if all types is valid for the data
+         */
+        __validateAllTypes: function (types) {
             for (var key in types) {
                 if (!types.hasOwnProperty(key)) continue;
 
                 if (false === abv.isType(types[key], this.data)) {
                     this.__invalidType = types[key];
                     this.__setErrorMessage(this.message, this.__messageParameters());
-                    break;
+                    return ;
                 }
             }
+
+            return ;
+        },
+
+        /**
+         * @private
+         * @function
+         * @name abv.TypeValidator#__validateAnyTypes
+         * @param {Array} types Types
+         * @description Check if at least one of the types is valid for the data
+         */
+        __validateAnyTypes: function (types) {
+            for (var key in types) {
+                if (!types.hasOwnProperty(key)) continue;
+
+                if (true === abv.isType(types[key], this.data)) {
+                    return ;
+                }
+            }
+
+            this.__invalidType = types[key];
+            this.__setErrorMessage(this.message, this.__messageParameters());
+
+            return ;
         },
 
         /**

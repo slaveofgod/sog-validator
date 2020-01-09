@@ -161,6 +161,7 @@ var abv = {
                 break;
             case 'real':
                 return ('number' === typeof data && !isNaN(data) && isFinite(data)) ? true : false;
+                break;
             case 'scalar': // Scalar variables are those containing an integer, float, string or boolean.
                 return (
                     true === this.isType('integer', data)
@@ -224,9 +225,11 @@ var abv = {
             case 'punct':
                 if (false === this.isType('scalar', data)) return false;
                 return (data.toString() === data.toString().replace(/[0-9a-zA-Z \r\n\t]/, '')) ? true : false;
+                break;
             case 'space':
                 if (false === this.isType('scalar', data)) return false;
                 return /^[\r\n\t]+$/.test(data);
+                break;
             case 'upper':
                 if (false === this.isType('scalar', data)) return false;
                 var matches;
@@ -249,6 +252,16 @@ var abv = {
                 if (
                     this.isType('string', data)
                     || this.isType('array', data)
+                ) {
+                    return true;
+                }
+                return false;
+                break;
+            case 'date':
+            case 'datetime':
+                if (
+                    'object' === typeof data
+                    && 'Date' === this.getType(data)
                 ) {
                     return true;
                 }
@@ -330,6 +343,18 @@ var abv = {
                 break;
             case 'not-identical-to':
                 validatorObject = new abv.NotIdenticalToValidator(data, options, lang, internal);
+                break;
+            case 'less-than':
+                validatorObject = new abv.LessThanValidator(data, options, lang, internal);
+                break;
+            case 'less-than-or-equal':
+                validatorObject = new abv.LessThanOrEqualValidator(data, options, lang, internal);
+                break;
+            case 'greater-than':
+                validatorObject = new abv.GreaterThanValidator(data, options, lang, internal);
+                break;
+            case 'greater-than-or-equal':
+                validatorObject = new abv.GreaterThanOrEqualThanValidator(data, options, lang, internal);
                 break;
         }
 

@@ -1,5 +1,21 @@
 /*
- * Bob Validator Library v2.0 revision 7c17ed6
+ * Bob Validator Library v2.0 revision 09d52bc
+ * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
+ */
+/*
+ * Bob Validator Library v2.0 revision 09d52bc
+ * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
+ */
+/*
+ * Bob Validator Library v2.0 revision 09d52bc
+ * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
+ */
+/*
+ * Bob Validator Library v2.0 revision 09d52bc
+ * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
+ */
+/*
+ * Bob Validator Library v2.0 revision 09d52bc
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +36,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"7c17ed6", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
+var abv = {version:"2.0", revision:"09d52bc", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
   var splitted = rules.split("|");
   var validators = {};
   for (key in splitted) {
@@ -110,6 +126,7 @@ var abv = {version:"2.0", revision:"7c17ed6", config:{}, common:{}, parseRulesFr
       break;
     case "real":
       return "number" === typeof data && !isNaN(data) && isFinite(data) ? true : false;
+      break;
     case "scalar":
       return true === this.isType("integer", data) || true === this.isType("float", data) || true === this.isType("string", data) || true === this.isType("boolean", data) ? true : false;
       break;
@@ -182,11 +199,13 @@ var abv = {version:"2.0", revision:"7c17ed6", config:{}, common:{}, parseRulesFr
         return false;
       }
       return data.toString() === data.toString().replace(/[0-9a-zA-Z \r\n\t]/, "") ? true : false;
+      break;
     case "space":
       if (false === this.isType("scalar", data)) {
         return false;
       }
       return /^[\r\n\t]+$/.test(data);
+      break;
     case "upper":
       if (false === this.isType("scalar", data)) {
         return false;
@@ -208,6 +227,13 @@ var abv = {version:"2.0", revision:"7c17ed6", config:{}, common:{}, parseRulesFr
       break;
     case "stringOrArray":
       if (this.isType("string", data) || this.isType("array", data)) {
+        return true;
+      }
+      return false;
+      break;
+    case "date":
+    case "datetime":
+      if ("object" === typeof data && "Date" === this.getType(data)) {
         return true;
       }
       return false;
@@ -274,6 +300,18 @@ var abv = {version:"2.0", revision:"7c17ed6", config:{}, common:{}, parseRulesFr
       break;
     case "not-identical-to":
       validatorObject = new abv.NotIdenticalToValidator(data, options, lang, internal);
+      break;
+    case "less-than":
+      validatorObject = new abv.LessThanValidator(data, options, lang, internal);
+      break;
+    case "less-than-or-equal":
+      validatorObject = new abv.LessThanOrEqualValidator(data, options, lang, internal);
+      break;
+    case "greater-than":
+      validatorObject = new abv.GreaterThanValidator(data, options, lang, internal);
+      break;
+    case "greater-than-or-equal":
+      validatorObject = new abv.GreaterThanOrEqualThanValidator(data, options, lang, internal);
       break;
   }
   return validatorObject;
@@ -806,9 +844,10 @@ Object.assign(abv, function() {
 }());
 Object.assign(abv, function() {
   var TypeValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {type:'type:{"type":"stringOrArray"}', message:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {type:'type:{"type":"stringOrArray"}', message:'length:{"min":3,"max":255}', any:'type:{"type":"boolean"}'}, lang, internal);
     this.type = this.__options.type || "string";
     this.message = this.__options.message || "This value should be of type %%type%%.";
+    this.any = true === this.__options.any;
     this.__setName("TypeValidator");
     this.__invalidType = null;
   };
@@ -825,6 +864,12 @@ Object.assign(abv, function() {
     if ("string" === typeof this.type) {
       types = [this.type];
     }
+    if (true === this.any) {
+      this.__validateAnyTypes(types);
+    } else {
+      this.__validateAllTypes(types);
+    }
+  }, __validateAllTypes:function(types) {
     for (var key in types) {
       if (!types.hasOwnProperty(key)) {
         continue;
@@ -832,9 +877,22 @@ Object.assign(abv, function() {
       if (false === abv.isType(types[key], this.data)) {
         this.__invalidType = types[key];
         this.__setErrorMessage(this.message, this.__messageParameters());
-        break;
+        return;
       }
     }
+    return;
+  }, __validateAnyTypes:function(types) {
+    for (var key in types) {
+      if (!types.hasOwnProperty(key)) {
+        continue;
+      }
+      if (true === abv.isType(types[key], this.data)) {
+        return;
+      }
+    }
+    this.__invalidType = types[key];
+    this.__setErrorMessage(this.message, this.__messageParameters());
+    return;
   }, __messageParameters:function() {
     return {"type":this.__invalidType, "value":this.data};
   }});
@@ -1411,6 +1469,132 @@ Object.assign(abv, function() {
     return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
   }});
   return {NotIdenticalToValidator:NotIdenticalToValidator};
+}());
+Object.assign(abv, function() {
+  var LessThanValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+    this.message = this.__options.message || "This value should be less than %%compared_value%%.";
+    this.__setName("LessThanValidator");
+  };
+  LessThanValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  LessThanValidator.prototype.constructor = LessThanValidator;
+  Object.defineProperty(LessThanValidator.prototype, "name", {get:function() {
+    return this.__getName();
+  }});
+  Object.assign(LessThanValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value < comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {LessThanValidator:LessThanValidator};
+}());
+Object.assign(abv, function() {
+  var LessThanOrEqualValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+    this.message = this.__options.message || "This value should be less than or equal to %%compared_value%%.";
+    this.__setName("LessThanOrEqualValidator");
+  };
+  LessThanOrEqualValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  LessThanOrEqualValidator.prototype.constructor = LessThanOrEqualValidator;
+  Object.defineProperty(LessThanOrEqualValidator.prototype, "name", {get:function() {
+    return this.__getName();
+  }});
+  Object.assign(LessThanOrEqualValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value <= comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {LessThanOrEqualValidator:LessThanOrEqualValidator};
+}());
+Object.assign(abv, function() {
+  var GreaterThanValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+    this.message = this.__options.message || "This value should be greater than %%compared_value%%.";
+    this.__setName("GreaterThanValidator");
+  };
+  GreaterThanValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  GreaterThanValidator.prototype.constructor = GreaterThanValidator;
+  Object.defineProperty(GreaterThanValidator.prototype, "name", {get:function() {
+    return this.__getName();
+  }});
+  Object.assign(GreaterThanValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value > comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {GreaterThanValidator:GreaterThanValidator};
+}());
+Object.assign(abv, function() {
+  var GreaterThanOrEqualThanValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+    this.message = this.__options.message || "This value should be greater than or equal to %%compared_value%%.";
+    this.__setName("GreaterThanOrEqualThanValidator");
+  };
+  GreaterThanOrEqualThanValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  GreaterThanOrEqualThanValidator.prototype.constructor = GreaterThanOrEqualThanValidator;
+  Object.defineProperty(GreaterThanOrEqualThanValidator.prototype, "name", {get:function() {
+    return this.__getName();
+  }});
+  Object.assign(GreaterThanOrEqualThanValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value >= comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {GreaterThanOrEqualThanValidator:GreaterThanOrEqualThanValidator};
+}());
+
+
+return abv;
+}));
+
+alue)};
+  }});
+  return {GreaterThanOrEqualThanValidator:GreaterThanOrEqualThanValidator};
+}());
+
+
+return abv;
+}));
+
+GreaterThanOrEqualThanValidator:GreaterThanOrEqualThanValidator};
+}());
+
+
+return abv;
+}));
+
+rn {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {GreaterThanOrEqualThanValidator:GreaterThanOrEqualThanValidator};
+}());
+
+
+return abv;
+}));
+
+GreaterThanOrEqualThanValidator:GreaterThanOrEqualThanValidator};
+}());
+
+
+return abv;
+}));
+
+GreaterThanOrEqualThanValidator:GreaterThanOrEqualThanValidator};
+}());
+
+
+return abv;
+}));
+
+ion() {
+    return this.__getName();
+  }});
+  Object.assign(GreaterThanOrEqualThanValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value >= comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {GreaterThanOrEqualThanValidator:GreaterThanOrEqualThanValidator};
 }());
 
 

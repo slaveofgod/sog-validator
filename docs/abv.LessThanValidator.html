@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>abv.AllValidator | PlayCanvas API Reference</title>
+        <title>abv.LessThanValidator | PlayCanvas API Reference</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/png" href="images/playcanvas-favicon.png">
 
@@ -68,9 +68,13 @@
 </nav>
 <div class='sidebarToggle'><span></span>Class List</div>
             <main class="cls">
-    <h1>abv.AllValidator</h1>
-    <p class="extends">Extends: <a href="abv.AbstractValidator.html">abv.AbstractValidator</a></p>
-    <p>Validates that a value is valid according to list of validation rules.</p>
+    <h1>abv.LessThanValidator</h1>
+    <p class="extends">Extends: <a href="abv.AbstractComparisonValidator.html">abv.AbstractComparisonValidator</a></p>
+    <p>Validates that a value is less than another value, defined in the options.</p>
+        <pre><code class="javascript">var validator = new abv.LessThanValidator(data, {"value": "the value to compare to"});
+if (false === validator.isValid()) {
+     validator.messages().first();
+}</code></pre>
 
     <!-- summary -->
     <h1>Summary</h1>
@@ -85,17 +89,14 @@
     <h3>Properties</h3>
     <table class="properties">
     <tr>
-        <td><a href="#rules">rules</a></td><td>Validation rules.</td>
+        <td><a href="#message">message</a></td><td>This is the message that will be shown if the value is not less than the comparison value.</td>
+    </tr>
+    <tr>
+        <td><a href="#value">value</a></td><td>This option is required.</td>
     </tr>
     </table>
 
     <!--methods-->
-    <h3>Methods</h3>
-    <table class="properties">
-    <tr>
-        <td><a href="#add">add</a></td><td>Add new validator</td>
-    </tr>
-    </table>
 
     <!--events-->
 
@@ -129,9 +130,13 @@
 
     <h2>Constructor</h2>
     <!-- Constructor -->
-    <div id="AllValidator">
-    <h3 class="methodname">AllValidator(data, rules, options) <a class="font-icon" href="#AllValidator">&#58216;</a></h3>
+    <div id="LessThanValidator">
+    <h3 class="methodname">LessThanValidator(data, options, lang, internal) <a class="font-icon" href="#LessThanValidator">&#58216;</a></h3>
     <p>Create a new Validator.</p>
+    <pre><code class="javascript">var validator = new abv.LessThanValidator(data, {"value": "the value to compare to"});
+if (false === validator.isValid()) {
+     validator.messages().first();
+}</code></pre>
 
     <h4>Parameters</h4>
     <table>
@@ -139,10 +144,13 @@
             <td>data</td><td><a href="#">*</a></td><td>The data which needs to be validated.</td>
         </tr>
         <tr>
-            <td>rules</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></td><td>Validation rules.</td>
+            <td>options</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></td><td>The setting options</td>
         </tr>
         <tr>
-            <td>options</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></td><td>The setting options.</td>
+            <td>lang</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></td><td>The language used by the application. Defaults to 'en'.</td>
+        </tr>
+        <tr>
+            <td>internal</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></td><td>If this parameter is true, it means, that validation called from core.</td>
         </tr>
     </table>
 
@@ -150,28 +158,36 @@
 
     <!--properties-->
     <h2>Properties</h2>
-        <div id="rules">
-    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">rules <a class="font-icon" href="#rules">&#58216;</a></span>
-    <p>Validation rules.</p>
+        <div id="message">
+    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">message <a class="font-icon" href="#message">&#58216;</a></span>
+    <p>This is the message that will be shown if the value is not less than the comparison value.
+Defaults to "This value should be less than %%compared_value%%."
+You can use the following parameters in this message:
+<table>
+    <tr>
+        <td><b>Parameter</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>%%compared_value%%</td>
+        <td>The expected value</td>
+    </tr>
+    <tr>
+        <td>%%compared_value_type%%</td>
+        <td>TThe expected value type</td>
+    </tr>
+    <tr>
+        <td>%%value%%</td>
+        <td>The current (invalid) value</td>
+    </tr>
+</table></p>
+</div>
+        <div id="value">
+    <span class="property"><a href="#">*</a></span><span class="property">value <a class="font-icon" href="#value">&#58216;</a></span>
+    <p>This option is required. It defines the value to compare to. It can be a string, number or date object.</p>
 </div>
 
     <!--methods-->
-    <h2>Methods</h2>
-        <div id="add">
-    <h3 class="methodname">add(name, options) <a class="font-icon" href="#add">&#58216;</a></h3>
-    <p>Add new validator</p>
-
-    <h4>Parameters</h4>
-    <table>
-        <tr>
-            <td>name</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></td><td>The validator name</td>
-        </tr>
-        <tr>
-            <td>options</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></td><td>The validation settings</td>
-        </tr>
-    </table>
-
-</div>
 
     <!--events-->
 
