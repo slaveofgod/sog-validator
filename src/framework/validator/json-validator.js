@@ -40,6 +40,12 @@ Object.assign(abv, function () {
     JsonValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     JsonValidator.prototype.constructor = JsonValidator;
 
+    Object.defineProperty(JsonValidator.prototype, 'name', {
+        get: function () {
+            return this.__getName();
+        }
+    });
+
     Object.assign(JsonValidator.prototype, {
         /**
          * @private

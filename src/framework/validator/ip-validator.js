@@ -129,6 +129,12 @@ Object.assign(abv, function () {
     IpValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     IpValidator.prototype.constructor = IpValidator;
 
+    Object.defineProperty(IpValidator.prototype, 'name', {
+        get: function () {
+            return this.__getName();
+        }
+    });
+
     Object.assign(IpValidator.prototype, {
         /**
          * @private

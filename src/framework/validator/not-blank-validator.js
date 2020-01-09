@@ -67,6 +67,12 @@ Object.assign(abv, function () {
     NotBlankValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     NotBlankValidator.prototype.constructor = NotBlankValidator;
 
+    Object.defineProperty(NotBlankValidator.prototype, 'name', {
+        get: function () {
+            return this.__getName();
+        }
+    });
+
     Object.assign(NotBlankValidator.prototype, {
         /**
          * @private

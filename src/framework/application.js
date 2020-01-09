@@ -78,6 +78,12 @@ Object.assign(abv, function () {
     };
     Application.prototype.constructor = Application;
 
+    Object.defineProperty(Application.prototype, 'name', {
+        get: function () {
+            return 'Application';
+        }
+    });
+
     Object.assign(Application.prototype, {
         /**
          * @function

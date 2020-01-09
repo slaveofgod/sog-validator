@@ -83,6 +83,12 @@ Object.assign(abv, function () {
     UrlValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     UrlValidator.prototype.constructor = UrlValidator;
 
+    Object.defineProperty(UrlValidator.prototype, 'name', {
+        get: function () {
+            return this.__getName();
+        }
+    });
+
     Object.assign(UrlValidator.prototype, {
         /**
          * @private

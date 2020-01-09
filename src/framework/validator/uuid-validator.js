@@ -143,6 +143,12 @@ Object.assign(abv, function () {
     UuidValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     UuidValidator.prototype.constructor = UuidValidator;
 
+    Object.defineProperty(UuidValidator.prototype, 'name', {
+        get: function () {
+            return this.__getName();
+        }
+    });
+
     Object.assign(UuidValidator.prototype, {
         /**
          * @private

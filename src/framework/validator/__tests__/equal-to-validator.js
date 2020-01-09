@@ -61,10 +61,26 @@ describe('equal-to', () => {
                 }
             })).toBe(toBe);
         });
+
+        test('new abv.Application({"lang": "en"}) == new abv.Application({"lang": "en"})', () => {
+            expect(abv.isValidWithErrorMessage(new abv.Application({"lang": "en"}), {
+                "equal-to": {
+                    "value": new abv.Application({"lang": "en"})
+                }
+            })).toBe(toBe);
+        });
     });
 
     describe('Is Invalid', () => {
         let toBe = "This value should be equal to ...";
+
+        test('new abv.Application({"lang": "en"}) == new abv.Application({"lang": "de"})', () => {
+            expect(abv.isValidWithErrorMessage(new abv.Application({"lang": "en"}), {
+                "equal-to": {
+                    "value": new abv.Application({"lang": "de"})
+                }
+            })).toBe("This value should be equal to [object Object].");
+        });
 
         test('Lorem ipsum == new Date("1995-12-17T03:24:00")', () => {
             expect(abv.isValidWithErrorMessage('Lorem ipsum', {

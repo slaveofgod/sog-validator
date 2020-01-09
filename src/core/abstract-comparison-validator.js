@@ -67,6 +67,14 @@ Object.assign(abv, function () {
                     break;
             }
 
+            if ('object' === typeof data) {
+                try {
+                    return JSON.stringify(data);
+                } catch (e) {
+                    return data;
+                }
+            }
+
             return data;
         },
 

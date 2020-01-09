@@ -74,6 +74,12 @@ Object.assign(abv, function () {
     EmailValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     EmailValidator.prototype.constructor = EmailValidator;
 
+    Object.defineProperty(EmailValidator.prototype, 'name', {
+        get: function () {
+            return this.__getName();
+        }
+    });
+
     Object.assign(EmailValidator.prototype, {
         /**
          * @private

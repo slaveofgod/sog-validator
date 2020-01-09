@@ -49,6 +49,12 @@ Object.assign(abv, function () {
     IsFalseValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     IsFalseValidator.prototype.constructor = IsFalseValidator;
 
+    Object.defineProperty(IsFalseValidator.prototype, 'name', {
+        get: function () {
+            return this.__getName();
+        }
+    });
+
     Object.assign(IsFalseValidator.prototype, {
         /**
          * @private

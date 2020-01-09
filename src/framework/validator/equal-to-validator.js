@@ -67,6 +67,12 @@ Object.assign(abv, function () {
     EqualToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
     EqualToValidator.prototype.constructor = EqualToValidator;
 
+    Object.defineProperty(EqualToValidator.prototype, 'name', {
+        get: function () {
+            return this.__getName();
+        }
+    });
+
     Object.assign(EqualToValidator.prototype, {
         /**
          * @private

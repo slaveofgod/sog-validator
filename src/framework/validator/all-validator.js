@@ -36,6 +36,12 @@ Object.assign(abv, function () {
     AllValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     AllValidator.prototype.constructor = AllValidator;
 
+    Object.defineProperty(AllValidator.prototype, 'name', {
+        get: function () {
+            return this.__getName();
+        }
+    });
+
     Object.assign(AllValidator.prototype, {
         /**
          * @private

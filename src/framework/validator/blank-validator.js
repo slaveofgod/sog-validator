@@ -49,6 +49,12 @@ Object.assign(abv, function () {
     BlankValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     BlankValidator.prototype.constructor = BlankValidator;
 
+    Object.defineProperty(BlankValidator.prototype, 'name', {
+        get: function () {
+            return this.__getName();
+        }
+    });
+
     Object.assign(BlankValidator.prototype, {
         /**
          * @private

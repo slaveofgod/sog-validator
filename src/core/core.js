@@ -106,6 +106,13 @@ var abv = {
     getType: function (data) {
         var results = /function (.{1,})\(/.exec(data.constructor.toString());
 
+        if (
+            null === results
+            && 'undefined' !== typeof data.name
+        ) {
+            return data.name;
+        }
+
         return (results && results.length > 1) ? results[1] : "";
     },
 

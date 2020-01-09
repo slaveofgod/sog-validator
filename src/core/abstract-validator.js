@@ -54,6 +54,16 @@ Object.assign(abv, (function () {
         __setName: function (name) {
             this.__name = name;
         },
+        /**
+         * @private
+         * @function
+         * @name abv.AbstractValidator#__setName
+         * @description Get validator name
+         * @returns {String} The validator name
+         */
+        __getName: function () {
+            return this.__name;
+        },
 
         /**
          * @function

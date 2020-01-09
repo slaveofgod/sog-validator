@@ -165,6 +165,12 @@ Object.assign(abv, function () {
     LengthValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     LengthValidator.prototype.constructor = LengthValidator;
 
+    Object.defineProperty(LengthValidator.prototype, 'name', {
+        get: function () {
+            return this.__getName();
+        }
+    });
+
     Object.assign(LengthValidator.prototype, {
         /**
          * @private

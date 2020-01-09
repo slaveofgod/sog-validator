@@ -23,6 +23,12 @@ Object.assign(abv, function () {
         this.__messages = [];
     };
 
+    Object.defineProperty(ErrorCollection.prototype, 'name', {
+        get: function () {
+            return 'ErrorCollection';
+        }
+    });
+
     Object.assign(ErrorCollection.prototype, {
         /**
          * @function
