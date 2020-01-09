@@ -325,6 +325,9 @@ var abv = {
             case 'not-equal-to':
                 validatorObject = new abv.NotEqualToValidator(data, options, lang, internal);
                 break;
+            case 'identical-to':
+                validatorObject = new abv.IdenticalToValidator(data, options, lang, internal);
+                break;
         }
 
         return validatorObject;

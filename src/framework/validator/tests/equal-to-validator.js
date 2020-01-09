@@ -72,8 +72,6 @@ describe('equal-to', () => {
     });
 
     describe('Is Invalid', () => {
-        let toBe = "This value should be equal to ...";
-
         test('new abv.Application({"lang": "en"}) == new abv.Application({"lang": "de"})', () => {
             expect(abv.isValidWithErrorMessage(new abv.Application({"lang": "en"}), {
                 "equal-to": {

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>abv.IsFalseValidator | PlayCanvas API Reference</title>
+        <title>abv.NotEqualToValidator | PlayCanvas API Reference</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/png" href="images/playcanvas-favicon.png">
 
@@ -63,10 +63,11 @@
 </nav>
 <div class='sidebarToggle'><span></span>Class List</div>
             <main class="cls">
-    <h1>abv.IsFalseValidator</h1>
-    <p class="extends">Extends: <a href="abv.AbstractValidator.html">abv.AbstractValidator</a></p>
-    <p>Validates that a value is false. Specifically, this checks to see if the value is exactly <code class="notranslate">false</code>, exactly the integer <code class="notranslate">0</code>, or exactly the string <code class="notranslate">"0"</code>.</p>
-        <pre><code class="javascript">var validator = new abv.IsFalseValidator(data);
+    <h1>abv.NotEqualToValidator</h1>
+    <p class="extends">Extends: <a href="abv.AbstractComparisonValidator.html">abv.AbstractComparisonValidator</a></p>
+    <p>Validates that a value is not equal to another value, defined in the options.
+This constraint compares using !=, so 3 and "3" are considered equal. abv.Use NotIdenticalTo to compare with !==.</p>
+        <pre><code class="javascript">var validator = new abv.NotEqualToValidator(data, {"value": "the value to compare to"});
 if (false === validator.isValid()) {
      validator.messages().first();
 }</code></pre>
@@ -84,7 +85,10 @@ if (false === validator.isValid()) {
     <h3>Properties</h3>
     <table class="properties">
     <tr>
-        <td><a href="#message">message</a></td><td>This message is shown if the underlying data is not false.</td>
+        <td><a href="#message">message</a></td><td>This is the message that will be shown if the value is not equal.</td>
+    </tr>
+    <tr>
+        <td><a href="#value">value</a></td><td>This option is required.</td>
     </tr>
     </table>
 
@@ -122,10 +126,10 @@ if (false === validator.isValid()) {
 
     <h2>Constructor</h2>
     <!-- Constructor -->
-    <div id="IsFalseValidator">
-    <h3 class="methodname">IsFalseValidator(data, options, lang, internal) <a class="font-icon" href="#IsFalseValidator">&#58216;</a></h3>
+    <div id="NotEqualToValidator">
+    <h3 class="methodname">NotEqualToValidator(data, options, lang, internal) <a class="font-icon" href="#NotEqualToValidator">&#58216;</a></h3>
     <p>Create a new Validator.</p>
-    <pre><code class="javascript">var validator = new abv.IsFalseValidator(data);
+    <pre><code class="javascript">var validator = new abv.NotEqualToValidator(data, {"value": "the value to compare to"});
 if (false === validator.isValid()) {
      validator.messages().first();
 }</code></pre>
@@ -152,7 +156,8 @@ if (false === validator.isValid()) {
     <h2>Properties</h2>
         <div id="message">
     <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">message <a class="font-icon" href="#message">&#58216;</a></span>
-    <p>This message is shown if the underlying data is not false. Defaults to "This value should be false."
+    <p>This is the message that will be shown if the value is not equal.
+Defaults to "This value should not be equal to %%compared_value%%."
 You can use the following parameters in this message:
 <table>
     <tr>
@@ -160,10 +165,22 @@ You can use the following parameters in this message:
         <td><b>Description</b></td>
     </tr>
     <tr>
+        <td>%%compared_value%%</td>
+        <td>The expected value</td>
+    </tr>
+    <tr>
+        <td>%%compared_value_type%%</td>
+        <td>TThe expected value type</td>
+    </tr>
+    <tr>
         <td>%%value%%</td>
         <td>The current (invalid) value</td>
     </tr>
 </table></p>
+</div>
+        <div id="value">
+    <span class="property"><a href="#">*</a></span><span class="property">value <a class="font-icon" href="#value">&#58216;</a></span>
+    <p>This option is required. It defines the value to compare to. It can be a string, number or object.</p>
 </div>
 
     <!--methods-->

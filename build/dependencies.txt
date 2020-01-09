@@ -22,3 +22,4 @@
 ../src/framework/validator/uuid-validator.js
 ../src/framework/validator/equal-to-validator.js
 ../src/framework/validator/not-equal-to-validator.js
+../src/framework/validator/identical-to-validator.js

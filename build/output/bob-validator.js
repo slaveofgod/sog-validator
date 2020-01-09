@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision 8eaab2e
+ * Bob Validator Library v2.0 revision 0d96f46
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"8eaab2e", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
+var abv = {version:"2.0", revision:"0d96f46", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
   var splitted = rules.split("|");
   var validators = {};
   for (key in splitted) {
@@ -268,6 +268,9 @@ var abv = {version:"2.0", revision:"8eaab2e", config:{}, common:{}, parseRulesFr
       break;
     case "not-equal-to":
       validatorObject = new abv.NotEqualToValidator(data, options, lang, internal);
+      break;
+    case "identical-to":
+      validatorObject = new abv.IdenticalToValidator(data, options, lang, internal);
       break;
   }
   return validatorObject;
@@ -1369,6 +1372,24 @@ Object.assign(abv, function() {
     return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
   }});
   return {NotEqualToValidator:NotEqualToValidator};
+}());
+Object.assign(abv, function() {
+  var IdenticalToValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', value:"required"}, lang, internal);
+    this.message = this.__options.message || "This value should be identical to %%compared_value_type%% %%compared_value%%.";
+    this.__setName("IdenticalToValidator");
+  };
+  IdenticalToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  IdenticalToValidator.prototype.constructor = IdenticalToValidator;
+  Object.defineProperty(IdenticalToValidator.prototype, "name", {get:function() {
+    return this.__getName();
+  }});
+  Object.assign(IdenticalToValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value === comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {IdenticalToValidator:IdenticalToValidator};
 }());
 
 

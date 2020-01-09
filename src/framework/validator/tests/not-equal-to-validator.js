@@ -60,8 +60,6 @@ describe('not-equal-to', () => {
     });
 
     describe('Is Invalid', () => {
-        let toBe = "This value should be equal to ...";
-
         test('"a@a.com" != "a@a.com"', () => {
             expect(abv.isValidWithErrorMessage('a@a.com', 'not-equal-to:{"value":"a@a.com"}')).toBe("This value should not be equal to a@a.com.");
         });
