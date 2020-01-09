@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>abv.AbstractValidator | PlayCanvas API Reference</title>
+        <title>abv.DivisibleByValidator | PlayCanvas API Reference</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/png" href="images/playcanvas-favicon.png">
 
@@ -70,8 +70,13 @@
 </nav>
 <div class='sidebarToggle'><span></span>Class List</div>
             <main class="cls">
-    <h1>abv.AbstractValidator</h1>
-    <p>Abstract base class that implements functionality for validation.</p>
+    <h1>abv.DivisibleByValidator</h1>
+    <p class="extends">Extends: <a href="abv.AbstractComparisonValidator.html">abv.AbstractComparisonValidator</a></p>
+    <p>Validates that a value is divisible by another value, defined in the options.</p>
+        <pre><code class="javascript">var validator = new abv.DivisibleByValidator(data, {"value": "the value to compare to"});
+if (false === validator.isValid()) {
+     validator.messages().first();
+}</code></pre>
 
     <!-- summary -->
     <h1>Summary</h1>
@@ -83,8 +88,24 @@
     <!--static methods-->
 
     <!--properties-->
+    <h3>Properties</h3>
+    <table class="properties">
+    <tr>
+        <td><a href="#message">message</a></td><td>This is the message that will be shown if the value is not divisible by the comparison value.</td>
+    </tr>
+    </table>
 
     <!--methods-->
+
+    <!--events-->
+
+    <h2>Inherited</h2>
+
+    <!--inherited methods-->
+
+        <!--inherited properties-->
+
+    <!--inherited static methods-->
     <h3>Methods</h3>
     <table class="properties">
     <tr>
@@ -95,7 +116,7 @@
     </tr>
     </table>
 
-    <!--events-->
+    <!--inherited events-->
 
 
     <h1>Details</h1>
@@ -108,9 +129,13 @@
 
     <h2>Constructor</h2>
     <!-- Constructor -->
-    <div id="AbstractValidator">
-    <h3 class="methodname">AbstractValidator(data, options, optionRules, lang) <a class="font-icon" href="#AbstractValidator">&#58216;</a></h3>
-    <p>Create a new validation extension.</p>
+    <div id="DivisibleByValidator">
+    <h3 class="methodname">DivisibleByValidator(data, options, lang, internal) <a class="font-icon" href="#DivisibleByValidator">&#58216;</a></h3>
+    <p>Create a new Validator.</p>
+    <pre><code class="javascript">var validator = new abv.DivisibleByValidator(data, {"value": "the value to compare to"});
+if (false === validator.isValid()) {
+     validator.messages().first();
+}</code></pre>
 
     <h4>Parameters</h4>
     <table>
@@ -121,18 +146,50 @@
             <td>options</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></td><td>The setting options</td>
         </tr>
         <tr>
-            <td>optionRules</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></td><td>The validation rules for setting options</td>
+            <td>lang</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></td><td>The language used by the application. Defaults to 'en'.</td>
         </tr>
         <tr>
-            <td>lang</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></td><td>Language of error messages.</td>
+            <td>internal</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></td><td>If this parameter is true, it means, that validation called from core.</td>
         </tr>
     </table>
 
 </div>
 
     <!--properties-->
+    <h2>Properties</h2>
+        <div id="message">
+    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">message <a class="font-icon" href="#message">&#58216;</a></span>
+    <p>This is the message that will be shown if the value is not divisible by the comparison value.
+Defaults to "This value should be a multiple of %%compared_value%%."
+You can use the following parameters in this message:
+<table>
+    <tr>
+        <td><b>Parameter</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>%%compared_value%%</td>
+        <td>The expected value</td>
+    </tr>
+    <tr>
+        <td>%%compared_value_type%%</td>
+        <td>TThe expected value type</td>
+    </tr>
+    <tr>
+        <td>%%value%%</td>
+        <td>The current (invalid) value</td>
+    </tr>
+</table></p>
+</div>
 
     <!--methods-->
+
+    <!--events-->
+
+    <h2>Inherited</h2>
+    <!--inherited properties-->
+
+    <!--inherited methods-->
     <h2>Methods</h2>
         <div id="isValid">
     <h3 class="methodname">isValid() <a class="font-icon" href="#isValid">&#58216;</a></h3>
@@ -151,8 +208,7 @@
     <a href="abv.Error.html">abv.Error</a> Error messages
 </div>
 
-    <!--events-->
-
+    <!--inherited events-->
 </main>
         </div>
 

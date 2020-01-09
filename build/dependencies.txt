@@ -5,6 +5,8 @@
 ../src/framework/helper/filter-var.js
 ../src/framework/helper/hexdec.js
 ../src/framework/helper/error-collection.js
+../src/framework/helper/fmod.js
+../src/framework/helper/sprintf.js
 ../src/framework/validator/all-validator.js
 ../src/framework/validator/not-blank-validator.js
 ../src/framework/validator/blank-validator.js
@@ -29,3 +31,4 @@
 ../src/framework/validator/greater-than-validator.js
 ../src/framework/validator/greater-than-or-equal-validator.js
 ../src/framework/validator/range-validator.js
+../src/framework/validator/divisible-by-validator.js

@@ -354,6 +354,9 @@ var abv = {
             case 'range':
                 validatorObject = new abv.RangeValidator(data, options, lang, internal);
                 break;
+            case 'divisible-by':
+                validatorObject = new abv.DivisibleByValidator(data, options, lang, internal);
+                break;
         }
 
         return validatorObject;

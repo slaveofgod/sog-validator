@@ -1,3 +1,5 @@
+'use strict'
+
 abv.hexdec = function  (hexString) {
     //  discuss at: https://locutus.io/php/hexdec/
     // original by: Philippe Baumann
