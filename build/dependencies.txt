@@ -33,3 +33,7 @@
 ../src/framework/validator/range-validator.js
 ../src/framework/validator/divisible-by-validator.js
 ../src/framework/validator/unique-validator.js
+../src/framework/validator/positive-validator.js
+../src/framework/validator/positive-or-zero-validator.js
+../src/framework/validator/negative-validator.js
+../src/framework/validator/negative-or-zero-validator.js

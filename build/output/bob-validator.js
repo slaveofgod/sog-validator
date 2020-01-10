@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision d1df3ad
+ * Bob Validator Library v2.0 revision fd3864a
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"d1df3ad", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
+var abv = {version:"2.0", revision:"fd3864a", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
   var splitted = rules.split("|");
   var validators = {};
   for (var key in splitted) {
@@ -306,14 +306,26 @@ var abv = {version:"2.0", revision:"d1df3ad", config:{}, common:{}, parseRulesFr
     case "unique":
       validatorObject = new abv.UniqueValidator(data, options, lang, internal);
       break;
+    case "positive":
+      validatorObject = new abv.PositiveValidator(data, options, lang, internal);
+      break;
+    case "positive-or-zero":
+      validatorObject = new abv.PositiveOrZeroValidator(data, options, lang, internal);
+      break;
+    case "negative":
+      validatorObject = new abv.NegativeValidator(data, options, lang, internal);
+      break;
+    case "negative-or-zero":
+      validatorObject = new abv.NegativeOrZeroValidator(data, options, lang, internal);
+      break;
   }
   return validatorObject;
 }, isValid:function(data, rules, internal) {
-  var engine = new abv.Application({lang:"en", internal:internal});
+  var engine = new abv.Application({internal:internal});
   var validator = engine.makeSingle(data, rules);
   return validator.isValid();
 }, isValidWithErrorMessage:function(data, rules, internal) {
-  var engine = new abv.Application({lang:"en", internal:internal});
+  var engine = new abv.Application({internal:internal});
   var validator = engine.makeSingle(data, rules);
   return true === validator.isValid() ? null : validator.messages().first();
 }};
@@ -1838,6 +1850,82 @@ Object.assign(abv, function() {
     return {"value":JSON.stringify(this.__repeated)};
   }});
   return {UniqueValidator:UniqueValidator};
+}());
+Object.assign(abv, function() {
+  var PositiveValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    this.value = 0;
+    this.message = this.__options.message || "This value should be positive.";
+    this.__setName("PositiveValidator");
+  };
+  PositiveValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  PositiveValidator.prototype.constructor = PositiveValidator;
+  Object.defineProperty(PositiveValidator.prototype, "name", {get:function() {
+    return this.__getName();
+  }});
+  Object.assign(PositiveValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value > comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {PositiveValidator:PositiveValidator};
+}());
+Object.assign(abv, function() {
+  var PositiveOrZeroValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    this.value = 0;
+    this.message = this.__options.message || "This value should be either positive or zero.";
+    this.__setName("PositiveOrZeroValidator");
+  };
+  PositiveOrZeroValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  PositiveOrZeroValidator.prototype.constructor = PositiveOrZeroValidator;
+  Object.defineProperty(PositiveOrZeroValidator.prototype, "name", {get:function() {
+    return this.__getName();
+  }});
+  Object.assign(PositiveOrZeroValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value >= comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {PositiveOrZeroValidator:PositiveOrZeroValidator};
+}());
+Object.assign(abv, function() {
+  var NegativeValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    this.value = 0;
+    this.message = this.__options.message || "This value should be negative.";
+    this.__setName("NegativeValidator");
+  };
+  NegativeValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  NegativeValidator.prototype.constructor = NegativeValidator;
+  Object.defineProperty(NegativeValidator.prototype, "name", {get:function() {
+    return this.__getName();
+  }});
+  Object.assign(NegativeValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value < comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {NegativeValidator:NegativeValidator};
+}());
+Object.assign(abv, function() {
+  var NegativeOrZeroValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    this.value = 0;
+    this.message = this.__options.message || "This value should be either negative or zero.";
+    this.__setName("NegativeOrZeroValidator");
+  };
+  NegativeOrZeroValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  NegativeOrZeroValidator.prototype.constructor = NegativeOrZeroValidator;
+  Object.defineProperty(NegativeOrZeroValidator.prototype, "name", {get:function() {
+    return this.__getName();
+  }});
+  Object.assign(NegativeOrZeroValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value <= comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {NegativeOrZeroValidator:NegativeOrZeroValidator};
 }());
 
 

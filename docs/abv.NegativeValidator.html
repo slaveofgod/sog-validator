@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>abv.NotIdenticalToValidator | PlayCanvas API Reference</title>
+        <title>abv.NegativeValidator | PlayCanvas API Reference</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/png" href="images/playcanvas-favicon.png">
 
@@ -75,11 +75,11 @@
 </nav>
 <div class='sidebarToggle'><span></span>Class List</div>
             <main class="cls">
-    <h1>abv.NotIdenticalToValidator</h1>
+    <h1>abv.NegativeValidator</h1>
     <p class="extends">Extends: <a href="abv.AbstractComparisonValidator.html">abv.AbstractComparisonValidator</a></p>
-    <p>Validates that a value is not identical to another value, defined in the options.
-This constraint compares using !==, so 3 and "3" are considered not equal.</p>
-        <pre><code class="javascript">var validator = new abv.NotIdenticalToValidator(data, {"value": "the value to compare to"});
+    <p>Validates that a value is a negative number.
+Zero is neither positive nor negative, so you must use abv.NegativeOrZero if you want to allow zero as value.</p>
+        <pre><code class="javascript">var validator = new abv.NegativeValidator(data, {"value": "the value to compare to"});
 if (false === validator.isValid()) {
      validator.messages().first();
 }</code></pre>
@@ -97,10 +97,7 @@ if (false === validator.isValid()) {
     <h3>Properties</h3>
     <table class="properties">
     <tr>
-        <td><a href="#message">message</a></td><td>This is the message that will be shown if the value is identical.</td>
-    </tr>
-    <tr>
-        <td><a href="#value">value</a></td><td>This option is required.</td>
+        <td><a href="#message">message</a></td><td>The default message supplied when the value is not less than zero.</td>
     </tr>
     </table>
 
@@ -138,10 +135,10 @@ if (false === validator.isValid()) {
 
     <h2>Constructor</h2>
     <!-- Constructor -->
-    <div id="NotIdenticalToValidator">
-    <h3 class="methodname">NotIdenticalToValidator(data, options, lang, internal) <a class="font-icon" href="#NotIdenticalToValidator">&#58216;</a></h3>
+    <div id="NegativeValidator">
+    <h3 class="methodname">NegativeValidator(data, options, lang, internal) <a class="font-icon" href="#NegativeValidator">&#58216;</a></h3>
     <p>Create a new Validator.</p>
-    <pre><code class="javascript">var validator = new abv.NotIdenticalToValidator(data, {"value": "the value to compare to"});
+    <pre><code class="javascript">var validator = new abv.NegativeValidator(data, {"value": "the value to compare to"});
 if (false === validator.isValid()) {
      validator.messages().first();
 }</code></pre>
@@ -168,8 +165,8 @@ if (false === validator.isValid()) {
     <h2>Properties</h2>
         <div id="message">
     <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">message <a class="font-icon" href="#message">&#58216;</a></span>
-    <p>This is the message that will be shown if the value is identical.
-Defaults to "This value should not be identical to %%compared_value_type%% %%compared_value%%."
+    <p>The default message supplied when the value is not less than zero.
+Defaults to "This value should be negative."
 You can use the following parameters in this message:
 <table>
     <tr>
@@ -189,10 +186,6 @@ You can use the following parameters in this message:
         <td>The current (invalid) value</td>
     </tr>
 </table></p>
-</div>
-        <div id="value">
-    <span class="property"><a href="#">*</a></span><span class="property">value <a class="font-icon" href="#value">&#58216;</a></span>
-    <p>This option is required. It defines the value to compare to. It can be a string, number or object.</p>
 </div>
 
     <!--methods-->

@@ -360,6 +360,18 @@ var abv = {
             case 'unique':
                 validatorObject = new abv.UniqueValidator(data, options, lang, internal);
                 break;
+            case 'positive':
+                validatorObject = new abv.PositiveValidator(data, options, lang, internal);
+                break;
+            case 'positive-or-zero':
+                validatorObject = new abv.PositiveOrZeroValidator(data, options, lang, internal);
+                break;
+            case 'negative':
+                validatorObject = new abv.NegativeValidator(data, options, lang, internal);
+                break;
+            case 'negative-or-zero':
+                validatorObject = new abv.NegativeOrZeroValidator(data, options, lang, internal);
+                break;
         }
 
         return validatorObject;
@@ -376,7 +388,6 @@ var abv = {
      */
     isValid: function (data, rules, internal) {
         var engine = new abv.Application({
-            lang: 'en',
             internal: internal
         });
 
@@ -399,7 +410,6 @@ var abv = {
      */
     isValidWithErrorMessage: function (data, rules, internal) {
         var engine = new abv.Application({
-            lang: 'en',
             internal: internal
         });
 
