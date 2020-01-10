@@ -34,6 +34,8 @@ Object.assign(abv, (function () {
 
         this.data = __data;
         this.lang = lang || 'en';
+        // ensure setup of localization variables takes place
+        abv.setlocale('LC_ALL', 'en');
 
         this.__options = options || {};
         this.__error = new abv.ErrorCollection({"lang": lang});

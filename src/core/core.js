@@ -127,6 +127,66 @@ var abv = {
     isType: function (type, data) {
         switch (type) {
             case 'array':
+            case 'bool':
+            case 'boolean':
+            case 'callable':
+            case 'float':
+            case 'double':
+            case 'int':
+            case 'integer':
+            case 'null':
+            case 'iterable':
+            case 'numeric':
+            case 'object':
+            case 'real':
+            case 'scalar':
+            case 'string':
+                return abv["is_" + type](data);
+                break;
+            case 'alnum':
+            case 'alpha':
+            case 'alpha':
+            case 'digit':
+            case 'graph':
+            case 'lower':
+            case 'print':
+            case 'punct':
+            case 'space':
+            case 'upper':
+            case 'xdigit':
+                return abv["ctype_" + type](data);
+                break;
+            case 'date':
+            case 'datetime':
+                if (
+                    'object' === typeof data
+                    && 'Date' === this.getType(data)
+                ) {
+                    return true;
+                }
+                return false;
+                break;
+            case 'date-string':
+                if (false === this.isType('string', data)) return false;
+                return Number.isNaN(Date.parse(data)) ? false : true;
+                break;
+        }
+
+        return false;
+    },
+
+    /**
+     * @function
+     * @deprecated
+     * @name abv.isType
+     * @description Parse validation rules from string
+     * @param {String} type Type string
+     * @param {*} data Data, which type needs to be checked
+     * @returns {Boolean} Is correct data type.
+     */
+    __isType: function (type, data) {
+        switch (type) {
+            case 'array':
                 return Array.isArray(data);
                 break;
             case 'bool':

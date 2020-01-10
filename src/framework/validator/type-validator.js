@@ -41,6 +41,7 @@ Object.assign(abv, function () {
      *     <li><b>string</b> - Find whether the type of a variable is string</li>
      *     <li><b>alnum</b> - Check for alphanumeric character(s)</li>
      *     <li><b>alpha</b> - Check for alphabetic character(s)</li>
+     *     <li><b>cntrl</b> - Check for control character(s)</li>
      *     <li><b>digit</b> - Check for numeric character(s)</li>
      *     <li><b>graph</b> - Check for any printable character(s) except space</li>
      *     <li><b>lower</b> - Check for lowercase character(s)</li>

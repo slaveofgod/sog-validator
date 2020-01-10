@@ -81,8 +81,6 @@ Object.assign(abv, function () {
                 || true === abv.isType('array', this.data)
             ) {
                 this.__validateArray();
-            } else if (true === abv.isType('object', this.data)) {
-                this.__validateObject();
             }
 
             if (this.__repeated.length > 0) {
@@ -120,20 +118,15 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.UniqueValidator#__validateObject
-         * @description Validate object data
-         */
-        __validateObject: function () {
-            console.log(1111111);
-        },
-
-        /**
-         * @private
-         * @function
          * @name abv.UniqueValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
+            // Check if empty
+            if ('undefined' === typeof this.data || null === this.data || '' === this.data) {
+                return ;
+            }
+
             // Check if value is scalar
             var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', true);
             if(null !== errorMessage) {

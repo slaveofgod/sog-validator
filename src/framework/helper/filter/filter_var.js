@@ -1,5 +1,3 @@
-'use strict'
-
 abv.filter_var = function(input, filter, options) {
     // http://kevin.vanzonneveld.net
     // +   original by: Brett Zamir (http://brett-zamir.me)

@@ -10,6 +10,10 @@ describe('unique', () => {
             expect(abv.isValidWithErrorMessage('', 'unique')).toBe(toBe);
         });
 
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'unique')).toBe(toBe);
+        });
+
         test('Empty Array', () => {
             expect(abv.isValidWithErrorMessage([], 'unique')).toBe(toBe);
         });
@@ -54,10 +58,6 @@ describe('unique', () => {
 
         test('Empty Object', () => {
             expect(abv.isValidWithErrorMessage({}, 'unique')).toBe("This value should be of type iterable.");
-        });
-
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'unique')).toBe("This value should be of type iterable.");
         });
     });
 });

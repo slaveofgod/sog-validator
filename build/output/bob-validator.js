@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision fd3864a
+ * Bob Validator Library v2.0 revision eb31d32
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"fd3864a", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
+var abv = {version:"2.0", revision:"eb31d32", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
   var splitted = rules.split("|");
   var validators = {};
   for (var key in splitted) {
@@ -71,6 +71,53 @@ var abv = {version:"2.0", revision:"fd3864a", config:{}, common:{}, parseRulesFr
   }
   return results && results.length > 1 ? results[1] : "";
 }, isType:function(type, data) {
+  switch(type) {
+    case "array":
+    case "bool":
+    case "boolean":
+    case "callable":
+    case "float":
+    case "double":
+    case "int":
+    case "integer":
+    case "null":
+    case "iterable":
+    case "numeric":
+    case "object":
+    case "real":
+    case "scalar":
+    case "string":
+      return abv["is_" + type](data);
+      break;
+    case "alnum":
+    case "alpha":
+    case "alpha":
+    case "digit":
+    case "graph":
+    case "lower":
+    case "print":
+    case "punct":
+    case "space":
+    case "upper":
+    case "xdigit":
+      return abv["ctype_" + type](data);
+      break;
+    case "date":
+    case "datetime":
+      if ("object" === typeof data && "Date" === this.getType(data)) {
+        return true;
+      }
+      return false;
+      break;
+    case "date-string":
+      if (false === this.isType("string", data)) {
+        return false;
+      }
+      return Number.isNaN(Date.parse(data)) ? false : true;
+      break;
+  }
+  return false;
+}, __isType:function(type, data) {
   switch(type) {
     case "array":
       return Array.isArray(data);
@@ -337,6 +384,7 @@ if (typeof exports !== "undefined") {
     var __data = data;
     this.data = __data;
     this.lang = lang || "en";
+    abv.setlocale("LC_ALL", "en");
     this.__options = options || {};
     this.__error = new abv.ErrorCollection({"lang":lang});
     this.__internal = true === internal;
@@ -456,166 +504,6 @@ Object.assign(abv, function() {
   }});
   return {Application:Application};
 }());
-abv.filter_var = function(input, filter, options) {
-  function is(val, type) {
-    if (val == null) {
-      return type === "null";
-    }
-    if (type === "primitive") {
-      return val !== Object(val);
-    }
-    var actual = typeof val;
-    if (actual === "object") {
-      return {"[object Array]":"array", "[object RegExp]":"regex"}[Object.prototype.toString.call(val)] || "object";
-    }
-    if (actual === "number") {
-      if (isNaN(val)) {
-        return type === "nan";
-      }
-      if (!isFinite(val)) {
-        return "inf";
-      }
-    }
-    return type === actual;
-  }
-  function str2regex(str) {
-  }
-  function isPrimitive(val) {
-    return val !== Object(val);
-  }
-  var supportedFilters = {FILTER_VALIDATE_INT:257, FILTER_VALIDATE_BOOLEAN:258, FILTER_VALIDATE_FLOAT:259, FILTER_VALIDATE_REGEXP:272, FILTER_VALIDATE_URL:273, FILTER_VALIDATE_EMAIL:274, FILTER_VALIDATE_IP:275, FILTER_SANITIZE_STRING:513, FILTER_SANITIZE_STRIPPED:513, FILTER_SANITIZE_ENCODED:514, FILTER_SANITIZE_SPECIAL_CHARS:515, FILTER_UNSAFE_RAW:516, FILTER_DEFAULT:516, FILTER_SANITIZE_EMAIL:517, FILTER_SANITIZE_URL:518, FILTER_SANITIZE_NUMBER_INT:519, FILTER_SANITIZE_NUMBER_FLOAT:520, FILTER_SANITIZE_MAGIC_QUOTES:521, 
-  FILTER_SANITIZE_FULL_SPECIAL_CHARS:-1, FILTER_CALLBACK:1024};
-  var supportedFlags = {FILTER_FLAG_ALLOW_OCTAL:1, FILTER_FLAG_ALLOW_HEX:2, FILTER_FLAG_STRIP_LOW:4, FILTER_FLAG_STRIP_HIGH:8, FILTER_FLAG_ENCODE_LOW:16, FILTER_FLAG_ENCODE_HIGH:32, FILTER_FLAG_ENCODE_AMP:64, FILTER_FLAG_NO_ENCODE_QUOTES:128, FILTER_FLAG_ALLOW_FRACTION:4096, FILTER_FLAG_ALLOW_THOUSAND:8192, FILTER_FLAG_ALLOW_SCIENTIFIC:16384, FILTER_FLAG_PATH_REQUIRED:262144, FILTER_FLAG_QUERY_REQUIRED:524288, FILTER_FLAG_IPV4:1048576, FILTER_FLAG_IPV6:2097152, FILTER_FLAG_NO_RES_RANGE:4194304, FILTER_FLAG_NO_PRIV_RANGE:8388608, 
-  FILTER_NULL_ON_FAILURE:134217728};
-  if (is(filter, "null")) {
-    filter = supportedFilters.FILTER_DEFAULT;
-  } else {
-    if (is(filter, "string")) {
-      filter = supportedFilters[filter];
-    }
-  }
-  var flags = 0;
-  if (is(options, "number")) {
-    flags = options;
-  } else {
-    if (is(options, "string")) {
-      flags = supportedFlags[options] || 0;
-    } else {
-      if (is(options, "object") && is(options.flags, "number")) {
-        flags = options.flags;
-      }
-    }
-  }
-  var opts = {};
-  if (is(options, "object")) {
-    opts = options.options || {};
-  }
-  var failure = flags & supportedFlags.FILTER_NULL_ON_FAILURE ? null : false;
-  if (!is(filter, "number")) {
-    return failure;
-  }
-  if (!isPrimitive(input)) {
-    return failure;
-  }
-  var data = is(input, "string") ? input.replace(/(^\s+)|(\s+$)/g, "") : input;
-  switch(filter) {
-    case supportedFilters.FILTER_VALIDATE_BOOLEAN:
-      return /^(?:1|true|yes|on)$/i.test(data) || (/^(?:0|false|no|off)$/i.test(data) ? false : failure);
-    case supportedFilters.FILTER_VALIDATE_INT:
-      var numValue = +data;
-      if (!/^(?:0|[+\-]?[1-9]\d*)$/.test(data)) {
-        if (flags & supportedFlags.FILTER_FLAG_ALLOW_HEX && /^0x[\da-f]+$/i.test(data)) {
-          numValue = parseInt(data, 16);
-        } else {
-          if (flags & supportedFlags.FILTER_FLAG_ALLOW_OCTAL && /^0[0-7]+$/.test(data)) {
-            numValue = parseInt(data, 8);
-          } else {
-            return failure;
-          }
-        }
-      }
-      var minValue = is(opts.min_range, "number") ? opts.min_range : -Infinity;
-      var maxValue = is(opts.max_range, "number") ? opts.max_range : Infinity;
-      if (!is(numValue, "number") || numValue % 1 || numValue < minValue || numValue > maxValue) {
-        return failure;
-      }
-      return numValue;
-    case supportedFilters.FILTER_VALIDATE_REGEXP:
-      if (is(options.regexp, "regex")) {
-        var matches = options.regexp(data);
-        return matches ? matches[0] : failure;
-      }
-    case supportedFilters.FILTER_VALIDATE_IP:
-      var ipv4 = /^(25[0-5]|2[0-4]\d|[01]?\d?\d)\.(25[0-5]|2[0-4]\d|[01]?\d?\d)\.(25[0-5]|2[0-4]\d|[01]?\d?\d)\.(25[0-5]|2[0-4]\d|[01]?\d?\d)$/;
-      var ipv4privrange = /^(?:0?10|172\.0?(?:1[6-9]|2\d|3[01])|192\.168)\./;
-      var ipv4resrange = /^(?:0?0?0\.|127\.0?0?0\.0?0?0\.0?0?1|128\.0?0?0\.|169\.254\.|191\.255\.|192\.0?0?0\.0?0?2\.|25[0-5]\.|2[34]\d\.|22[4-9]\.)/;
-      var ipv6 = /^((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?$/;
-      var mode = supportedFlags.FILTER_FLAG_IPV4 | supportedFlags.FILTER_FLAG_IPV6;
-      if (flags !== 0) {
-        mode &= flags;
-      }
-      if (mode & supportedFlags.FILTER_FLAG_IPV4) {
-        var ip = ipv4.test(input);
-        if (ip) {
-          if (flags & supportedFlags.FILTER_FLAG_NO_PRIV_RANGE && ipv4privrange.test(data)) {
-            return failure;
-          }
-          if (flags & supportedFlags.FILTER_FLAG_NO_RES_RANGE && ipv4resrange.test(data)) {
-            return failure;
-          }
-          return input;
-        }
-      }
-      if (mode & supportedFlags.FILTER_FLAG_IPV6) {
-        var ip = ipv6.test(input);
-        if (ip) {
-          return input;
-        }
-      }
-      return failure;
-    case supportedFilters.FILTER_CALLBACK:
-      var fn = opts;
-      if (is(fn, "string")) {
-        fn = this.window[fn];
-      }
-      if (is(fn, "function")) {
-        return fn(input);
-      }
-      return failure;
-    case supportedFilters.FILTER_SANITIZE_NUMBER_INT:
-      return ("" + input).replace(/[^\d+\-]/g, "");
-    case supportedFilters.FILTER_SANITIZE_NUMBER_FLOAT:
-      return ("" + input).replace(/[^\deE.,+\-]/g, "").replace(/[eE.,]/g, function(m) {
-        return {".":filter & supportedFilters.FILTER_FLAG_ALLOW_FRACTION ? "." : "", ",":filter & supportedFilters.FILTER_FLAG_ALLOW_THOUSAND ? "," : "", "e":filter & supportedFilters.FILTER_FLAG_ALLOW_SCIENTIFIC ? "e" : "", "E":filter & supportedFilters.FILTER_FLAG_ALLOW_SCIENTIFIC ? "e" : ""}[m];
-      });
-    case supportedFilters.FILTER_SANITIZE_URL:
-      return ("" + data).replace(/[^a-zA-Z\d$\-_.+!*'(),{}|\\\^~\[\]`<>#%";\/?:@&=]/g, "");
-    case supportedFilters.FILTER_SANITIZE_EMAIL:
-      return ("" + data).replace(/[^a-zA-Z\d!#$%&'*+\-\/=?\^_`{|}~@.\[\]]/g, "");
-    case supportedFilters.FILTER_DEFAULT:
-    case supportedFilters.FILTER_UNSAFE_RAW:
-      data = input + "";
-      if (flags & supportedFlags.FILTER_FLAG_ENCODE_AMP) {
-        data = data.replace(/&/g, "&#38");
-      }
-      if ((supportedFlags.FILTER_FLAG_ENCODE_LOW | supportedFlags.FILTER_FLAG_STRIP_LOW | supportedFlags.FILTER_FLAG_ENCODE_HIGH | supportedFlags.FILTER_FLAG_STRIP_HIGH) & flags) {
-        data = data.replace(/[\s\S]/g, function(c) {
-          var charCode = c.charCodeAt(0);
-          if (charCode < 32) {
-            return flags & supportedFlags.FILTER_FLAG_STRIP_LOW ? "" : flags & supportedFlags.FILTER_FLAG_ENCODE_LOW ? "&#" + charCode : c;
-          } else {
-            if (charCode > 127) {
-              return flags & supportedFlags.FILTER_FLAG_STRIP_HIGH ? "" : flags & supportedFlags.FILTER_FLAG_ENCODE_HIGH ? "&#" + charCode : c;
-            }
-          }
-          return c;
-        });
-      }
-      return data;
-    default:
-      return false;
-  }
-};
 abv.hexdec = function(hexString) {
   hexString = (hexString + "").replace(/[^a-f0-9]/gi, "");
   return parseInt(hexString, 16);
@@ -817,6 +705,609 @@ abv.sprintf_parse = function(fmt) {
     _fmt = _fmt.substring(match[0].length);
   }
   return abv.sprintf_cache[fmt] = parse_tree;
+};
+abv.checkdate = function(m, d, y) {
+  return m > 0 && m < 13 && y > 0 && y < 32768 && d > 0 && d <= (new Date(y, m, 0)).getDate();
+};
+abv.filter_var = function(input, filter, options) {
+  function is(val, type) {
+    if (val == null) {
+      return type === "null";
+    }
+    if (type === "primitive") {
+      return val !== Object(val);
+    }
+    var actual = typeof val;
+    if (actual === "object") {
+      return {"[object Array]":"array", "[object RegExp]":"regex"}[Object.prototype.toString.call(val)] || "object";
+    }
+    if (actual === "number") {
+      if (isNaN(val)) {
+        return type === "nan";
+      }
+      if (!isFinite(val)) {
+        return "inf";
+      }
+    }
+    return type === actual;
+  }
+  function str2regex(str) {
+  }
+  function isPrimitive(val) {
+    return val !== Object(val);
+  }
+  var supportedFilters = {FILTER_VALIDATE_INT:257, FILTER_VALIDATE_BOOLEAN:258, FILTER_VALIDATE_FLOAT:259, FILTER_VALIDATE_REGEXP:272, FILTER_VALIDATE_URL:273, FILTER_VALIDATE_EMAIL:274, FILTER_VALIDATE_IP:275, FILTER_SANITIZE_STRING:513, FILTER_SANITIZE_STRIPPED:513, FILTER_SANITIZE_ENCODED:514, FILTER_SANITIZE_SPECIAL_CHARS:515, FILTER_UNSAFE_RAW:516, FILTER_DEFAULT:516, FILTER_SANITIZE_EMAIL:517, FILTER_SANITIZE_URL:518, FILTER_SANITIZE_NUMBER_INT:519, FILTER_SANITIZE_NUMBER_FLOAT:520, FILTER_SANITIZE_MAGIC_QUOTES:521, 
+  FILTER_SANITIZE_FULL_SPECIAL_CHARS:-1, FILTER_CALLBACK:1024};
+  var supportedFlags = {FILTER_FLAG_ALLOW_OCTAL:1, FILTER_FLAG_ALLOW_HEX:2, FILTER_FLAG_STRIP_LOW:4, FILTER_FLAG_STRIP_HIGH:8, FILTER_FLAG_ENCODE_LOW:16, FILTER_FLAG_ENCODE_HIGH:32, FILTER_FLAG_ENCODE_AMP:64, FILTER_FLAG_NO_ENCODE_QUOTES:128, FILTER_FLAG_ALLOW_FRACTION:4096, FILTER_FLAG_ALLOW_THOUSAND:8192, FILTER_FLAG_ALLOW_SCIENTIFIC:16384, FILTER_FLAG_PATH_REQUIRED:262144, FILTER_FLAG_QUERY_REQUIRED:524288, FILTER_FLAG_IPV4:1048576, FILTER_FLAG_IPV6:2097152, FILTER_FLAG_NO_RES_RANGE:4194304, FILTER_FLAG_NO_PRIV_RANGE:8388608, 
+  FILTER_NULL_ON_FAILURE:134217728};
+  if (is(filter, "null")) {
+    filter = supportedFilters.FILTER_DEFAULT;
+  } else {
+    if (is(filter, "string")) {
+      filter = supportedFilters[filter];
+    }
+  }
+  var flags = 0;
+  if (is(options, "number")) {
+    flags = options;
+  } else {
+    if (is(options, "string")) {
+      flags = supportedFlags[options] || 0;
+    } else {
+      if (is(options, "object") && is(options.flags, "number")) {
+        flags = options.flags;
+      }
+    }
+  }
+  var opts = {};
+  if (is(options, "object")) {
+    opts = options.options || {};
+  }
+  var failure = flags & supportedFlags.FILTER_NULL_ON_FAILURE ? null : false;
+  if (!is(filter, "number")) {
+    return failure;
+  }
+  if (!isPrimitive(input)) {
+    return failure;
+  }
+  var data = is(input, "string") ? input.replace(/(^\s+)|(\s+$)/g, "") : input;
+  switch(filter) {
+    case supportedFilters.FILTER_VALIDATE_BOOLEAN:
+      return /^(?:1|true|yes|on)$/i.test(data) || (/^(?:0|false|no|off)$/i.test(data) ? false : failure);
+    case supportedFilters.FILTER_VALIDATE_INT:
+      var numValue = +data;
+      if (!/^(?:0|[+\-]?[1-9]\d*)$/.test(data)) {
+        if (flags & supportedFlags.FILTER_FLAG_ALLOW_HEX && /^0x[\da-f]+$/i.test(data)) {
+          numValue = parseInt(data, 16);
+        } else {
+          if (flags & supportedFlags.FILTER_FLAG_ALLOW_OCTAL && /^0[0-7]+$/.test(data)) {
+            numValue = parseInt(data, 8);
+          } else {
+            return failure;
+          }
+        }
+      }
+      var minValue = is(opts.min_range, "number") ? opts.min_range : -Infinity;
+      var maxValue = is(opts.max_range, "number") ? opts.max_range : Infinity;
+      if (!is(numValue, "number") || numValue % 1 || numValue < minValue || numValue > maxValue) {
+        return failure;
+      }
+      return numValue;
+    case supportedFilters.FILTER_VALIDATE_REGEXP:
+      if (is(options.regexp, "regex")) {
+        var matches = options.regexp(data);
+        return matches ? matches[0] : failure;
+      }
+    case supportedFilters.FILTER_VALIDATE_IP:
+      var ipv4 = /^(25[0-5]|2[0-4]\d|[01]?\d?\d)\.(25[0-5]|2[0-4]\d|[01]?\d?\d)\.(25[0-5]|2[0-4]\d|[01]?\d?\d)\.(25[0-5]|2[0-4]\d|[01]?\d?\d)$/;
+      var ipv4privrange = /^(?:0?10|172\.0?(?:1[6-9]|2\d|3[01])|192\.168)\./;
+      var ipv4resrange = /^(?:0?0?0\.|127\.0?0?0\.0?0?0\.0?0?1|128\.0?0?0\.|169\.254\.|191\.255\.|192\.0?0?0\.0?0?2\.|25[0-5]\.|2[34]\d\.|22[4-9]\.)/;
+      var ipv6 = /^((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?$/;
+      var mode = supportedFlags.FILTER_FLAG_IPV4 | supportedFlags.FILTER_FLAG_IPV6;
+      if (flags !== 0) {
+        mode &= flags;
+      }
+      if (mode & supportedFlags.FILTER_FLAG_IPV4) {
+        var ip = ipv4.test(input);
+        if (ip) {
+          if (flags & supportedFlags.FILTER_FLAG_NO_PRIV_RANGE && ipv4privrange.test(data)) {
+            return failure;
+          }
+          if (flags & supportedFlags.FILTER_FLAG_NO_RES_RANGE && ipv4resrange.test(data)) {
+            return failure;
+          }
+          return input;
+        }
+      }
+      if (mode & supportedFlags.FILTER_FLAG_IPV6) {
+        var ip = ipv6.test(input);
+        if (ip) {
+          return input;
+        }
+      }
+      return failure;
+    case supportedFilters.FILTER_CALLBACK:
+      var fn = opts;
+      if (is(fn, "string")) {
+        fn = this.window[fn];
+      }
+      if (is(fn, "function")) {
+        return fn(input);
+      }
+      return failure;
+    case supportedFilters.FILTER_SANITIZE_NUMBER_INT:
+      return ("" + input).replace(/[^\d+\-]/g, "");
+    case supportedFilters.FILTER_SANITIZE_NUMBER_FLOAT:
+      return ("" + input).replace(/[^\deE.,+\-]/g, "").replace(/[eE.,]/g, function(m) {
+        return {".":filter & supportedFilters.FILTER_FLAG_ALLOW_FRACTION ? "." : "", ",":filter & supportedFilters.FILTER_FLAG_ALLOW_THOUSAND ? "," : "", "e":filter & supportedFilters.FILTER_FLAG_ALLOW_SCIENTIFIC ? "e" : "", "E":filter & supportedFilters.FILTER_FLAG_ALLOW_SCIENTIFIC ? "e" : ""}[m];
+      });
+    case supportedFilters.FILTER_SANITIZE_URL:
+      return ("" + data).replace(/[^a-zA-Z\d$\-_.+!*'(),{}|\\\^~\[\]`<>#%";\/?:@&=]/g, "");
+    case supportedFilters.FILTER_SANITIZE_EMAIL:
+      return ("" + data).replace(/[^a-zA-Z\d!#$%&'*+\-\/=?\^_`{|}~@.\[\]]/g, "");
+    case supportedFilters.FILTER_DEFAULT:
+    case supportedFilters.FILTER_UNSAFE_RAW:
+      data = input + "";
+      if (flags & supportedFlags.FILTER_FLAG_ENCODE_AMP) {
+        data = data.replace(/&/g, "&#38");
+      }
+      if ((supportedFlags.FILTER_FLAG_ENCODE_LOW | supportedFlags.FILTER_FLAG_STRIP_LOW | supportedFlags.FILTER_FLAG_ENCODE_HIGH | supportedFlags.FILTER_FLAG_STRIP_HIGH) & flags) {
+        data = data.replace(/[\s\S]/g, function(c) {
+          var charCode = c.charCodeAt(0);
+          if (charCode < 32) {
+            return flags & supportedFlags.FILTER_FLAG_STRIP_LOW ? "" : flags & supportedFlags.FILTER_FLAG_ENCODE_LOW ? "&#" + charCode : c;
+          } else {
+            if (charCode > 127) {
+              return flags & supportedFlags.FILTER_FLAG_STRIP_HIGH ? "" : flags & supportedFlags.FILTER_FLAG_ENCODE_HIGH ? "&#" + charCode : c;
+            }
+          }
+          return c;
+        });
+      }
+      return data;
+    default:
+      return false;
+  }
+};
+abv.getenv = function(varname) {
+  if (typeof process !== "undefined" || !process.env || !process.env[varname]) {
+    return false;
+  }
+  return process.env[varname];
+};
+abv.ini_get = function(varname) {
+  var $global = typeof window !== "undefined" ? window : global;
+  $global.$locutus = $global.$locutus || {};
+  var $locutus = $global.$locutus;
+  $locutus.php = $locutus.php || {};
+  $locutus.php.ini = $locutus.php.ini || {};
+  if ($locutus.php.ini[varname] && $locutus.php.ini[varname].local_value !== undefined) {
+    if ($locutus.php.ini[varname].local_value === null) {
+      return "";
+    }
+    return $locutus.php.ini[varname].local_value;
+  }
+  return "";
+};
+abv.setlocale = function(category, locale) {
+  var categ = "";
+  var cats = [];
+  var i = 0;
+  var _copy = function _copy(orig) {
+    if (orig instanceof RegExp) {
+      return new RegExp(orig);
+    } else {
+      if (orig instanceof Date) {
+        return new Date(orig);
+      }
+    }
+    var newObj = {};
+    for (var i in orig) {
+      if (typeof orig[i] === "object") {
+        newObj[i] = _copy(orig[i]);
+      } else {
+        newObj[i] = orig[i];
+      }
+    }
+    return newObj;
+  };
+  var _nplurals2a = function(n) {
+    return n !== 1 ? 1 : 0;
+  };
+  var _nplurals2b = function(n) {
+    return n > 1 ? 1 : 0;
+  };
+  var $global = typeof window !== "undefined" ? window : global;
+  $global.$locutus = $global.$locutus || {};
+  var $locutus = $global.$locutus;
+  $locutus.php = $locutus.php || {};
+  if (!$locutus.php.locales || !$locutus.php.locales.fr_CA || !$locutus.php.locales.fr_CA.LC_TIME || !$locutus.php.locales.fr_CA.LC_TIME.x) {
+    $locutus.php.locales = {};
+    $locutus.php.locales.en = {"LC_COLLATE":function(str1, str2) {
+      return str1 === str2 ? 0 : str1 > str2 ? 1 : -1;
+    }, "LC_CTYPE":{an:/^[A-Za-z\d]+$/g, al:/^[A-Za-z]+$/g, ct:/^[\u0000-\u001F\u007F]+$/g, dg:/^[\d]+$/g, gr:/^[\u0021-\u007E]+$/g, lw:/^[a-z]+$/g, pr:/^[\u0020-\u007E]+$/g, pu:/^[\u0021-\u002F\u003A-\u0040\u005B-\u0060\u007B-\u007E]+$/g, sp:/^[\f\n\r\t\v ]+$/g, up:/^[A-Z]+$/g, xd:/^[A-Fa-f\d]+$/g, CODESET:"UTF-8", lower:"abcdefghijklmnopqrstuvwxyz", upper:"ABCDEFGHIJKLMNOPQRSTUVWXYZ"}, "LC_TIME":{a:["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], A:["Sunday", "Monday", "Tuesday", "Wednesday", 
+    "Thursday", "Friday", "Saturday"], b:["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], B:["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], c:"%a %d %b %Y %r %Z", p:["AM", "PM"], P:["am", "pm"], r:"%I:%M:%S %p", x:"%m/%d/%Y", X:"%r", alt_digits:"", ERA:"", ERA_YEAR:"", ERA_D_T_FMT:"", ERA_D_FMT:"", ERA_T_FMT:""}, "LC_MONETARY":{int_curr_symbol:"USD", currency_symbol:"$", mon_decimal_point:".", 
+    mon_thousands_sep:",", mon_grouping:[3], positive_sign:"", negative_sign:"-", int_frac_digits:2, frac_digits:2, p_cs_precedes:1, p_sep_by_space:0, n_cs_precedes:1, n_sep_by_space:0, p_sign_posn:3, n_sign_posn:0}, "LC_NUMERIC":{decimal_point:".", thousands_sep:",", grouping:[3]}, "LC_MESSAGES":{YESEXPR:"^[yY].*", NOEXPR:"^[nN].*", YESSTR:"", NOSTR:""}, nplurals:_nplurals2a};
+    $locutus.php.locales.en_US = _copy($locutus.php.locales.en);
+    $locutus.php.locales.en_US.LC_TIME.c = "%a %d %b %Y %r %Z";
+    $locutus.php.locales.en_US.LC_TIME.x = "%D";
+    $locutus.php.locales.en_US.LC_TIME.X = "%r";
+    $locutus.php.locales.en_US.LC_MONETARY.int_curr_symbol = "USD ";
+    $locutus.php.locales.en_US.LC_MONETARY.p_sign_posn = 1;
+    $locutus.php.locales.en_US.LC_MONETARY.n_sign_posn = 1;
+    $locutus.php.locales.en_US.LC_MONETARY.mon_grouping = [3, 3];
+    $locutus.php.locales.en_US.LC_NUMERIC.thousands_sep = "";
+    $locutus.php.locales.en_US.LC_NUMERIC.grouping = [];
+    $locutus.php.locales.en_GB = _copy($locutus.php.locales.en);
+    $locutus.php.locales.en_GB.LC_TIME.r = "%l:%M:%S %P %Z";
+    $locutus.php.locales.en_AU = _copy($locutus.php.locales.en_GB);
+    $locutus.php.locales.C = _copy($locutus.php.locales.en);
+    $locutus.php.locales.C.LC_CTYPE.CODESET = "ANSI_X3.4-1968";
+    $locutus.php.locales.C.LC_MONETARY = {int_curr_symbol:"", currency_symbol:"", mon_decimal_point:"", mon_thousands_sep:"", mon_grouping:[], p_cs_precedes:127, p_sep_by_space:127, n_cs_precedes:127, n_sep_by_space:127, p_sign_posn:127, n_sign_posn:127, positive_sign:"", negative_sign:"", int_frac_digits:127, frac_digits:127};
+    $locutus.php.locales.C.LC_NUMERIC = {decimal_point:".", thousands_sep:"", grouping:[]};
+    $locutus.php.locales.C.LC_TIME.c = "%a %b %e %H:%M:%S %Y";
+    $locutus.php.locales.C.LC_TIME.x = "%m/%d/%y";
+    $locutus.php.locales.C.LC_TIME.X = "%H:%M:%S";
+    $locutus.php.locales.C.LC_MESSAGES.YESEXPR = "^[yY]";
+    $locutus.php.locales.C.LC_MESSAGES.NOEXPR = "^[nN]";
+    $locutus.php.locales.fr = _copy($locutus.php.locales.en);
+    $locutus.php.locales.fr.nplurals = _nplurals2b;
+    $locutus.php.locales.fr.LC_TIME.a = ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"];
+    $locutus.php.locales.fr.LC_TIME.A = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+    $locutus.php.locales.fr.LC_TIME.b = ["jan", "f\u00e9v", "mar", "avr", "mai", "jun", "jui", "ao\u00fb", "sep", "oct", "nov", "d\u00e9c"];
+    $locutus.php.locales.fr.LC_TIME.B = ["janvier", "f\u00e9vrier", "mars", "avril", "mai", "juin", "juillet", "ao\u00fbt", "septembre", "octobre", "novembre", "d\u00e9cembre"];
+    $locutus.php.locales.fr.LC_TIME.c = "%a %d %b %Y %T %Z";
+    $locutus.php.locales.fr.LC_TIME.p = ["", ""];
+    $locutus.php.locales.fr.LC_TIME.P = ["", ""];
+    $locutus.php.locales.fr.LC_TIME.x = "%d.%m.%Y";
+    $locutus.php.locales.fr.LC_TIME.X = "%T";
+    $locutus.php.locales.fr_CA = _copy($locutus.php.locales.fr);
+    $locutus.php.locales.fr_CA.LC_TIME.x = "%Y-%m-%d";
+  }
+  if (!$locutus.php.locale) {
+    $locutus.php.locale = "en_US";
+    if (typeof window !== "undefined" && window.document) {
+      var d = window.document;
+      var NS_XHTML = "https://www.w3.org/1999/xhtml";
+      var NS_XML = "https://www.w3.org/XML/1998/namespace";
+      if (d.getElementsByTagNameNS && d.getElementsByTagNameNS(NS_XHTML, "html")[0]) {
+        if (d.getElementsByTagNameNS(NS_XHTML, "html")[0].getAttributeNS && d.getElementsByTagNameNS(NS_XHTML, "html")[0].getAttributeNS(NS_XML, "lang")) {
+          $locutus.php.locale = d.getElementsByTagName(NS_XHTML, "html")[0].getAttributeNS(NS_XML, "lang");
+        } else {
+          if (d.getElementsByTagNameNS(NS_XHTML, "html")[0].lang) {
+            $locutus.php.locale = d.getElementsByTagNameNS(NS_XHTML, "html")[0].lang;
+          }
+        }
+      } else {
+        if (d.getElementsByTagName("html")[0] && d.getElementsByTagName("html")[0].lang) {
+          $locutus.php.locale = d.getElementsByTagName("html")[0].lang;
+        }
+      }
+    }
+  }
+  $locutus.php.locale = $locutus.php.locale.replace("-", "_");
+  if (!($locutus.php.locale in $locutus.php.locales)) {
+    if ($locutus.php.locale.replace(/_[a-zA-Z]+$/, "") in $locutus.php.locales) {
+      $locutus.php.locale = $locutus.php.locale.replace(/_[a-zA-Z]+$/, "");
+    }
+  }
+  if (!$locutus.php.localeCategories) {
+    $locutus.php.localeCategories = {"LC_COLLATE":$locutus.php.locale, "LC_CTYPE":$locutus.php.locale, "LC_MONETARY":$locutus.php.locale, "LC_NUMERIC":$locutus.php.locale, "LC_TIME":$locutus.php.locale, "LC_MESSAGES":$locutus.php.locale};
+  }
+  if (locale === null || locale === "") {
+    locale = abv.getenv(category) || abv.getenv("LANG");
+  } else {
+    if (Object.prototype.toString.call(locale) === "[object Array]") {
+      for (i = 0; i < locale.length; i++) {
+        if (!(locale[i] in $locutus.php.locales)) {
+          if (i === locale.length - 1) {
+            return false;
+          }
+          continue;
+        }
+        locale = locale[i];
+        break;
+      }
+    }
+  }
+  if (locale === "0" || locale === 0) {
+    if (category === "LC_ALL") {
+      for (categ in $locutus.php.localeCategories) {
+        cats.push(categ + "=" + $locutus.php.localeCategories[categ]);
+      }
+      return cats.join(";");
+    }
+    return $locutus.php.localeCategories[category];
+  }
+  if (!(locale in $locutus.php.locales)) {
+    return false;
+  }
+  if (category === "LC_ALL") {
+    for (categ in $locutus.php.localeCategories) {
+      $locutus.php.localeCategories[categ] = locale;
+    }
+  } else {
+    $locutus.php.localeCategories[category] = locale;
+  }
+  return locale;
+};
+abv.ctype_alnum = function(text) {
+  if (typeof text !== "string") {
+    return false;
+  }
+  abv.setlocale("LC_ALL", 0);
+  var $global = typeof window !== "undefined" ? window : global;
+  $global.$locutus = $global.$locutus || {};
+  var $locutus = $global.$locutus;
+  var p = $locutus.php;
+  return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.an) !== -1;
+};
+abv.ctype_alpha = function(text) {
+  if (typeof text !== "string") {
+    return false;
+  }
+  abv.setlocale("LC_ALL", 0);
+  var $global = typeof window !== "undefined" ? window : global;
+  $global.$locutus = $global.$locutus || {};
+  var $locutus = $global.$locutus;
+  var p = $locutus.php;
+  return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.al) !== -1;
+};
+abv.ctype_cntrl = function(text) {
+  if (typeof text !== "string") {
+    return false;
+  }
+  abv.setlocale("LC_ALL", 0);
+  var $global = typeof window !== "undefined" ? window : global;
+  $global.$locutus = $global.$locutus || {};
+  var $locutus = $global.$locutus;
+  var p = $locutus.php;
+  return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.ct) !== -1;
+};
+abv.ctype_digit = function(text) {
+  if (typeof text !== "string") {
+    return false;
+  }
+  abv.setlocale("LC_ALL", 0);
+  var $global = typeof window !== "undefined" ? window : global;
+  $global.$locutus = $global.$locutus || {};
+  var $locutus = $global.$locutus;
+  var p = $locutus.php;
+  return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.dg) !== -1;
+};
+abv.ctype_graph = function(text) {
+  if (typeof text !== "string") {
+    return false;
+  }
+  abv.setlocale("LC_ALL", 0);
+  var $global = typeof window !== "undefined" ? window : global;
+  $global.$locutus = $global.$locutus || {};
+  var $locutus = $global.$locutus;
+  var p = $locutus.php;
+  return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.gr) !== -1;
+};
+abv.ctype_lower = function(text) {
+  if (typeof text !== "string") {
+    return false;
+  }
+  abv.setlocale("LC_ALL", 0);
+  var $global = typeof window !== "undefined" ? window : global;
+  $global.$locutus = $global.$locutus || {};
+  var $locutus = $global.$locutus;
+  var p = $locutus.php;
+  return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.lw) !== -1;
+};
+abv.ctype_print = function(text) {
+  if (typeof text !== "string") {
+    return false;
+  }
+  abv.setlocale("LC_ALL", 0);
+  var $global = typeof window !== "undefined" ? window : global;
+  $global.$locutus = $global.$locutus || {};
+  var $locutus = $global.$locutus;
+  var p = $locutus.php;
+  return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.pr) !== -1;
+};
+abv.ctype_punct = function(text) {
+  if (typeof text !== "string") {
+    return false;
+  }
+  abv.setlocale("LC_ALL", 0);
+  var $global = typeof window !== "undefined" ? window : global;
+  $global.$locutus = $global.$locutus || {};
+  var $locutus = $global.$locutus;
+  var p = $locutus.php;
+  return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.pu) !== -1;
+};
+abv.ctype_space = function(text) {
+  if (typeof text !== "string") {
+    return false;
+  }
+  abv.setlocale("LC_ALL", 0);
+  var $global = typeof window !== "undefined" ? window : global;
+  $global.$locutus = $global.$locutus || {};
+  var $locutus = $global.$locutus;
+  var p = $locutus.php;
+  return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.sp) !== -1;
+};
+abv.ctype_upper = function(text) {
+  if (typeof text !== "string") {
+    return false;
+  }
+  abv.setlocale("LC_ALL", 0);
+  var $global = typeof window !== "undefined" ? window : global;
+  $global.$locutus = $global.$locutus || {};
+  var $locutus = $global.$locutus;
+  var p = $locutus.php;
+  return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.up) !== -1;
+};
+abv.ctype_xdigit = function(text) {
+  if (typeof text !== "string") {
+    return false;
+  }
+  abv.setlocale("LC_ALL", 0);
+  var $global = typeof window !== "undefined" ? window : global;
+  $global.$locutus = $global.$locutus || {};
+  var $locutus = $global.$locutus;
+  var p = $locutus.php;
+  return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.xd) !== -1;
+};
+abv.is_array = function(mixedVar) {
+  var _getFuncName = function(fn) {
+    var name = /\W*function\s+([\w$]+)\s*\(/.exec(fn);
+    if (!name) {
+      return "(Anonymous)";
+    }
+    return name[1];
+  };
+  var _isArray = function(mixedVar) {
+    if (!mixedVar || typeof mixedVar !== "object" || typeof mixedVar.length !== "number") {
+      return false;
+    }
+    var len = mixedVar.length;
+    mixedVar[mixedVar.length] = "bogus";
+    if (len !== mixedVar.length) {
+      mixedVar.length -= 1;
+      return true;
+    }
+    delete mixedVar[mixedVar.length];
+    return false;
+  };
+  if (!mixedVar || typeof mixedVar !== "object") {
+    return false;
+  }
+  var isArray = _isArray(mixedVar);
+  if (isArray) {
+    return true;
+  }
+  var iniVal = (typeof require !== "undefined" ? abv.ini_get("locutus.objectsAsArrays") : undefined) || "on";
+  if (iniVal === "on") {
+    var asString = Object.prototype.toString.call(mixedVar);
+    var asFunc = _getFuncName(mixedVar.constructor);
+    if (asString === "[object Object]" && asFunc === "Object") {
+      return true;
+    }
+  }
+  return false;
+};
+abv.is_binary = function(vr) {
+  return typeof vr === "string";
+};
+abv.is_bool = function(mixedVar) {
+  return mixedVar === true || mixedVar === false;
+};
+abv.is_buffer = function(vr) {
+  return typeof vr === "string";
+};
+abv.is_callable = function(mixedVar, syntaxOnly, callableName) {
+  var $global = typeof window !== "undefined" ? window : global;
+  var validJSFunctionNamePattern = /^[_$a-zA-Z\xA0-\uFFFF][_$a-zA-Z0-9\xA0-\uFFFF]*$/;
+  var name = "";
+  var obj = {};
+  var method = "";
+  var validFunctionName = false;
+  var getFuncName = function(fn) {
+    var name = /\W*function\s+([\w$]+)\s*\(/.exec(fn);
+    if (!name) {
+      return "(Anonymous)";
+    }
+    return name[1];
+  };
+  if (/(^class|\(this,)/.test(mixedVar.toString())) {
+    return false;
+  }
+  if (typeof mixedVar === "string") {
+    obj = $global;
+    method = mixedVar;
+    name = mixedVar;
+    validFunctionName = !!name.match(validJSFunctionNamePattern);
+  } else {
+    if (typeof mixedVar === "function") {
+      return true;
+    } else {
+      if (Object.prototype.toString.call(mixedVar) === "[object Array]" && mixedVar.length === 2 && typeof mixedVar[0] === "object" && typeof mixedVar[1] === "string") {
+        obj = mixedVar[0];
+        method = mixedVar[1];
+        name = (obj.constructor && getFuncName(obj.constructor)) + "::" + method;
+      }
+    }
+  }
+  if (syntaxOnly || typeof obj[method] === "function") {
+    if (callableName) {
+      $global[callableName] = name;
+    }
+    return true;
+  }
+  if (validFunctionName && typeof eval(method) === "function") {
+    if (callableName) {
+      $global[callableName] = name;
+    }
+    return true;
+  }
+  return false;
+};
+abv.is_double = function(mixedVar) {
+  return abv.is_float(mixedVar);
+};
+abv.is_float = function is_float(mixedVar) {
+  return +mixedVar === mixedVar && (!isFinite(mixedVar) || !!(mixedVar % 1));
+};
+abv.is_integer = function(mixedVar) {
+  return abv.is_int(mixedVar);
+};
+abv.is_int = function(mixedVar) {
+  return mixedVar === +mixedVar && isFinite(mixedVar) && !(mixedVar % 1);
+};
+abv.is_long = function(mixedVar) {
+  return abv.is_float(mixedVar);
+};
+abv.is_null = function(mixedVar) {
+  return mixedVar === null;
+};
+abv.is_numeric = function(mixedVar) {
+  var whitespace = [" ", "\n", "\r", "\t", "\f", "\x0B", "\u00a0", "\u2000", "\u2001", "\u2002", "\u2003", "\u2004", "\u2005", "\u2006", "\u2007", "\u2008", "\u2009", "\u200a", "\u200b", "\u2028", "\u2029", "\u3000"].join("");
+  return (typeof mixedVar === "number" || typeof mixedVar === "string" && whitespace.indexOf(mixedVar.slice(-1)) === -1) && mixedVar !== "" && !isNaN(mixedVar);
+};
+abv.is_object = function(mixedVar) {
+  if (Object.prototype.toString.call(mixedVar) === "[object Array]") {
+    return false;
+  }
+  return mixedVar !== null && typeof mixedVar === "object";
+};
+abv.is_real = function(mixedVar) {
+  return abv.is_float(mixedVar);
+};
+abv.is_scalar = function(mixedVar) {
+  return /boolean|number|string/.test(typeof mixedVar);
+};
+abv.is_string = function(mixedVar) {
+  return typeof mixedVar === "string";
+};
+abv.is_unicode = function(vr) {
+  if (typeof vr !== "string") {
+    return false;
+  }
+  var arr = [];
+  var highSurrogate = "[\ud800-\udbff]";
+  var lowSurrogate = "[\udc00-\udfff]";
+  var highSurrogateBeforeAny = new RegExp(highSurrogate + "([\\s\\S])", "g");
+  var lowSurrogateAfterAny = new RegExp("([\\s\\S])" + lowSurrogate, "g");
+  var singleLowSurrogate = new RegExp("^" + lowSurrogate + "$");
+  var singleHighSurrogate = new RegExp("^" + highSurrogate + "$");
+  while ((arr = highSurrogateBeforeAny.exec(vr)) !== null) {
+    if (!arr[1] || !arr[1].match(singleLowSurrogate)) {
+      return false;
+    }
+  }
+  while ((arr = lowSurrogateAfterAny.exec(vr)) !== null) {
+    if (!arr[1] || !arr[1].match(singleHighSurrogate)) {
+      return false;
+    }
+  }
+  return true;
+};
+abv.is_iterable = function(mixedVar) {
+  return mixedVar && "function" === typeof mixedVar[Symbol.iterator] ? true : false;
 };
 Object.assign(abv, function() {
   var AllValidator = function(data, rules, options) {
@@ -1817,10 +2308,6 @@ Object.assign(abv, function() {
     }
     if (true === abv.isType("string", this.data) || true === abv.isType("array", this.data)) {
       this.__validateArray();
-    } else {
-      if (true === abv.isType("object", this.data)) {
-        this.__validateObject();
-      }
     }
     if (this.__repeated.length > 0) {
       this.__setErrorMessage(this.message, this.__messageParameters());
@@ -1838,9 +2325,10 @@ Object.assign(abv, function() {
         this.__repeated.push(key);
       }
     }
-  }, __validateObject:function() {
-    console.log(1111111);
   }, __beforeValidate:function() {
+    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+      return;
+    }
     var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
