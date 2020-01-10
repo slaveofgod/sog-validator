@@ -32,3 +32,4 @@
 ../src/framework/validator/greater-than-or-equal-validator.js
 ../src/framework/validator/range-validator.js
 ../src/framework/validator/divisible-by-validator.js
+../src/framework/validator/unique-validator.js

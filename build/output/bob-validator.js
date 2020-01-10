@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision 8b37b09
+ * Bob Validator Library v2.0 revision d1df3ad
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,10 +20,10 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"8b37b09", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
+var abv = {version:"2.0", revision:"d1df3ad", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
   var splitted = rules.split("|");
   var validators = {};
-  for (key in splitted) {
+  for (var key in splitted) {
     if (!splitted.hasOwnProperty(key)) {
       continue;
     }
@@ -303,6 +303,9 @@ var abv = {version:"2.0", revision:"8b37b09", config:{}, common:{}, parseRulesFr
     case "divisible-by":
       validatorObject = new abv.DivisibleByValidator(data, options, lang, internal);
       break;
+    case "unique":
+      validatorObject = new abv.UniqueValidator(data, options, lang, internal);
+      break;
   }
   return validatorObject;
 }, isValid:function(data, rules, internal) {
@@ -542,10 +545,10 @@ abv.filter_var = function(input, filter, options) {
       if (mode & supportedFlags.FILTER_FLAG_IPV4) {
         var ip = ipv4.test(input);
         if (ip) {
-          if (flags & supportedFlags.FILTER_FLAG_NO_PRIV_RANGE && privrange.test(data)) {
+          if (flags & supportedFlags.FILTER_FLAG_NO_PRIV_RANGE && ipv4privrange.test(data)) {
             return failure;
           }
-          if (flags & supportedFlags.FILTER_FLAG_NO_RES_RANGE && resrange.test(data)) {
+          if (flags & supportedFlags.FILTER_FLAG_NO_RES_RANGE && ipv4resrange.test(data)) {
             return failure;
           }
           return input;
@@ -600,7 +603,6 @@ abv.filter_var = function(input, filter, options) {
     default:
       return false;
   }
-  return false;
 };
 abv.hexdec = function(hexString) {
   hexString = (hexString + "").replace(/[^a-f0-9]/gi, "");
@@ -1784,6 +1786,58 @@ Object.assign(abv, function() {
     return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
   }});
   return {DivisibleByValidator:DivisibleByValidator};
+}());
+Object.assign(abv, function() {
+  var UniqueValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    this.message = this.__options.message || "This collection should contain only unique elements.";
+    this.__repeated = [];
+    this.__setName("UniqueValidator");
+  };
+  UniqueValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  UniqueValidator.prototype.constructor = UniqueValidator;
+  Object.defineProperty(UniqueValidator.prototype, "name", {get:function() {
+    return this.__getName();
+  }});
+  Object.assign(UniqueValidator.prototype, {__validate:function() {
+    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+      return;
+    }
+    if (true === abv.isType("string", this.data) || true === abv.isType("array", this.data)) {
+      this.__validateArray();
+    } else {
+      if (true === abv.isType("object", this.data)) {
+        this.__validateObject();
+      }
+    }
+    if (this.__repeated.length > 0) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __validateArray:function() {
+    var counter = {};
+    for (var i = 0; i < this.data.length; i++) {
+      var key = typeof this.data[i] + " '" + this.data[i] + "'";
+      if ("undefined" === typeof counter[key]) {
+        counter[key] = 0;
+      }
+      counter[key]++;
+      if (false === this.__repeated.includes(key) && counter[key] > 1) {
+        this.__repeated.push(key);
+      }
+    }
+  }, __validateObject:function() {
+    console.log(1111111);
+  }, __beforeValidate:function() {
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":JSON.stringify(this.__repeated)};
+  }});
+  return {UniqueValidator:UniqueValidator};
 }());
 
 

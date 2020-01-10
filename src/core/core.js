@@ -38,7 +38,7 @@ var abv = {
         var splitted = rules.split('|');
         var validators = {};
 
-        for (key in splitted) {
+        for (var key in splitted) {
             if (!splitted.hasOwnProperty(key)) continue;
 
             var rule = splitted[key];
@@ -356,6 +356,9 @@ var abv = {
                 break;
             case 'divisible-by':
                 validatorObject = new abv.DivisibleByValidator(data, options, lang, internal);
+                break;
+            case 'unique':
+                validatorObject = new abv.UniqueValidator(data, options, lang, internal);
                 break;
         }
 

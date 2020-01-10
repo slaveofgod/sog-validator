@@ -182,11 +182,11 @@ abv.filter_var = function(input, filter, options) {
                 var ip = ipv4.test(input);
 
                 if (ip) {
-                    if ((flags & supportedFlags.FILTER_FLAG_NO_PRIV_RANGE) && privrange.test(data)) {
+                    if ((flags & supportedFlags.FILTER_FLAG_NO_PRIV_RANGE) && ipv4privrange.test(data)) {
                         return failure;
                     }
 
-                    if ((flags & supportedFlags.FILTER_FLAG_NO_RES_RANGE) && resrange.test(data)) {
+                    if ((flags & supportedFlags.FILTER_FLAG_NO_RES_RANGE) && ipv4resrange.test(data)) {
                         return failure;
                     }
 
@@ -276,6 +276,4 @@ abv.filter_var = function(input, filter, options) {
         default:
             return false;
     }
-
-    return false;
-}
+};
