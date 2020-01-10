@@ -42,6 +42,8 @@
         <li id="nav-abv.AllValidator"><a href="abv.AllValidator.html">AllValidator</a></li>
         <li id="nav-abv.Application"><a href="abv.Application.html">Application</a></li>
         <li id="nav-abv.BlankValidator"><a href="abv.BlankValidator.html">BlankValidator</a></li>
+        <li id="nav-abv.DateTimeValidator"><a href="abv.DateTimeValidator.html">DateTimeValidator</a></li>
+        <li id="nav-abv.DateValidator"><a href="abv.DateValidator.html">DateValidator</a></li>
         <li id="nav-abv.DivisibleByValidator"><a href="abv.DivisibleByValidator.html">DivisibleByValidator</a></li>
         <li id="nav-abv.EmailValidator"><a href="abv.EmailValidator.html">EmailValidator</a></li>
         <li id="nav-abv.EqualToValidator"><a href="abv.EqualToValidator.html">EqualToValidator</a></li>
@@ -67,6 +69,7 @@
         <li id="nav-abv.PositiveValidator"><a href="abv.PositiveValidator.html">PositiveValidator</a></li>
         <li id="nav-abv.RangeValidator"><a href="abv.RangeValidator.html">RangeValidator</a></li>
         <li id="nav-abv.RegexValidator"><a href="abv.RegexValidator.html">RegexValidator</a></li>
+        <li id="nav-abv.TimeValidator"><a href="abv.TimeValidator.html">TimeValidator</a></li>
         <li id="nav-abv.TypeValidator"><a href="abv.TypeValidator.html">TypeValidator</a></li>
         <li id="nav-abv.UniqueValidator"><a href="abv.UniqueValidator.html">UniqueValidator</a></li>
         <li id="nav-abv.UrlValidator"><a href="abv.UrlValidator.html">UrlValidator</a></li>
@@ -169,22 +172,26 @@ if (false === validator.isValid()) {
 Defaults to "This value should be either positive or zero."
 You can use the following parameters in this message:
 <table>
-    <tr>
-        <td><b>Parameter</b></td>
-        <td><b>Description</b></td>
-    </tr>
-    <tr>
-        <td>%%compared_value%%</td>
-        <td>The expected value</td>
-    </tr>
-    <tr>
-        <td>%%compared_value_type%%</td>
-        <td>TThe expected value type</td>
-    </tr>
-    <tr>
-        <td>%%value%%</td>
-        <td>The current (invalid) value</td>
-    </tr>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>%%compared_value%%</td>
+            <td>The expected value</td>
+        </tr>
+        <tr>
+            <td>%%compared_value_type%%</td>
+            <td>TThe expected value type</td>
+        </tr>
+        <tr>
+            <td>%%value%%</td>
+            <td>The current (invalid) value</td>
+        </tr>
+    </tbody>
 </table></p>
 </div>
 

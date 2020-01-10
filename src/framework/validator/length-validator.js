@@ -225,6 +225,7 @@ Object.assign(abv, function () {
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
+            // Check "min" or "max" exist
             if (!this.min && !this.max) {
                 throw new Error('Either option "min" or "max" must be given for constraint');
             }

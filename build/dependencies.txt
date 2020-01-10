@@ -2,6 +2,7 @@
 ../src/core/abstract-validator.js
 ../src/core/abstract-comparison-validator.js
 ../src/framework/application.js
+../src/framework/helper/moment.js
 ../src/framework/helper/hexdec.js
 ../src/framework/helper/error-collection.js
 ../src/framework/helper/fmod.js
@@ -70,3 +71,6 @@
 ../src/framework/validator/positive-or-zero-validator.js
 ../src/framework/validator/negative-validator.js
 ../src/framework/validator/negative-or-zero-validator.js
+../src/framework/validator/date-validator.js
+../src/framework/validator/date-time-validator.js
+../src/framework/validator/time-validator.js

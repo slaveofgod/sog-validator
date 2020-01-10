@@ -6,6 +6,14 @@ describe('url', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'url')).toBe(toBe);
+        });
+
+        test('Empty string will not validate', () => {
+            expect(abv.isValidWithErrorMessage('', 'email:{"mode":"html5"}')).toBe(toBe);
+        });
+
         test('https://www.google.com/', () => {
             expect(abv.isValidWithErrorMessage('https://www.google.com/', 'url')).toBe(toBe);
         });
@@ -52,10 +60,6 @@ describe('url', () => {
 
         test('String " http://www.google.com/ "', () => {
             expect(abv.isValidWithErrorMessage(' http://www.google.com/ ', 'url')).toBe("This value is not a valid URL.");
-        });
-
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'url')).toBe("This value should be of type scalar.");
         });
 
         test('False', () => {

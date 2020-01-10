@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>abv.IpValidator | PlayCanvas API Reference</title>
+        <title>abv.TimeValidator | PlayCanvas API Reference</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/png" href="images/playcanvas-favicon.png">
 
@@ -78,10 +78,10 @@
 </nav>
 <div class='sidebarToggle'><span></span>Class List</div>
             <main class="cls">
-    <h1>abv.IpValidator</h1>
+    <h1>abv.TimeValidator</h1>
     <p class="extends">Extends: <a href="abv.AbstractValidator.html">abv.AbstractValidator</a></p>
-    <p>Validates that a value is a valid IP address. By default, this will validate the value as IPv4, but a number of different options exist to validate as IPv6 and many other combinations.</p>
-        <pre><code class="javascript">var validator = new abv.IpValidator(data);
+    <p>Validates that a value is a valid time, meaning a string (or an object that can be cast into a string) that follows a valid HH:mm:ss format.</p>
+        <pre><code class="javascript">var validator = new abv.TimeValidator(data);
 if (false === validator.isValid()) {
      validator.messages().first();
 }</code></pre>
@@ -99,13 +99,7 @@ if (false === validator.isValid()) {
     <h3>Properties</h3>
     <table class="properties">
     <tr>
-        <td><a href="#message">message</a></td><td>This message is shown if the string is not a valid IP address.</td>
-    </tr>
-    <tr>
-        <td><a href="#normalize">normalize</a></td><td>Normalizer string before validate (trim, etc.</td>
-    </tr>
-    <tr>
-        <td><a href="#version">version</a></td><td>This determines exactly how the IP address is validated and can take one of a variety of different values.</td>
+        <td><a href="#message">message</a></td><td>This message is shown if the underlying data is not a valid time.</td>
     </tr>
     </table>
 
@@ -143,10 +137,10 @@ if (false === validator.isValid()) {
 
     <h2>Constructor</h2>
     <!-- Constructor -->
-    <div id="IpValidator">
-    <h3 class="methodname">IpValidator(data, options, lang, internal) <a class="font-icon" href="#IpValidator">&#58216;</a></h3>
+    <div id="TimeValidator">
+    <h3 class="methodname">TimeValidator(data, options, lang, internal) <a class="font-icon" href="#TimeValidator">&#58216;</a></h3>
     <p>Create a new Validator.</p>
-    <pre><code class="javascript">var validator = new abv.IpValidator(data);
+    <pre><code class="javascript">var validator = new abv.TimeValidator(data);
 if (false === validator.isValid()) {
      validator.messages().first();
 }</code></pre>
@@ -173,8 +167,8 @@ if (false === validator.isValid()) {
     <h2>Properties</h2>
         <div id="message">
     <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">message <a class="font-icon" href="#message">&#58216;</a></span>
-    <p>This message is shown if the string is not a valid IP address.
-Defaults to "This is not a valid IP address."
+    <p>This message is shown if the underlying data is not a valid time.
+Defaults to "This value is not a valid time."
 You can use the following parameters in this message:
 <table>
     <thead>
@@ -190,40 +184,6 @@ You can use the following parameters in this message:
         </tr>
     </tbody>
 </table></p>
-</div>
-        <div id="normalize">
-    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span><span class="property">normalize <a class="font-icon" href="#normalize">&#58216;</a></span>
-    <p>Normalizer string before validate (trim, etc.). Defaults to false.</p>
-</div>
-        <div id="version">
-    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">version <a class="font-icon" href="#version">&#58216;</a></span>
-    <p>This determines exactly how the IP address is validated and can take one of a variety of different values.
-Defaults to "4".
-<br />
-<b>All ranges</b>
-<ul>
-    <li><b>4</b> - Validates for IPv4 addresses</li>
-    <li><b>6</b> - Validates for IPv6 addresses</li>
-    <li><b>all</b> - Validates all IP formats</li>
-</ul>
-<b>No private ranges</b>
-<ul>
-    <li><b>4_no_priv</b> - Validates for IPv4 but without private IP ranges</li>
-    <li><b>6_no_priv</b> - Validates for IPv6 but without private IP ranges</li>
-    <li><b>all_no_priv</b> - Validates for all IP formats but without private IP ranges</li>
-</ul>
-<b>No reserved ranges</b>
-<ul>
-    <li><b>4_no_res</b> - Validates for IPv4 but without reserved IP ranges</li>
-    <li><b>6_no_res</b> - Validates for IPv6 but without reserved IP ranges</li>
-    <li><b>all_no_res</b> - Validates for all IP formats but without reserved IP ranges</li>
-</ul>
-<b>Only public ranges</b>
-<ul>
-    <li><b>4_public</b> - Validates for IPv4 but without private and reserved ranges</li>
-    <li><b>6_public</b> - Validates for IPv6 but without private and reserved ranges</li>
-    <li><b>all_public</b> - Validates for all IP formats but without private and reserved ranges</li>
-</ul></p>
 </div>
 
     <!--methods-->

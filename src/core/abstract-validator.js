@@ -34,13 +34,16 @@ Object.assign(abv, (function () {
 
         this.data = __data;
         this.lang = lang || 'en';
-        // ensure setup of localization variables takes place
-        abv.setlocale('LC_ALL', 'en');
 
         this.__options = options || {};
         this.__error = new abv.ErrorCollection({"lang": lang});
         this.__internal = (true === internal);
+        this.__moment = abv.moment;
         this.__name = null;
+
+        // ensure setup of localization variables takes place
+        this.__moment.locale(this.lang);
+        abv.setlocale('LC_ALL', this.lang);
 
         if (false === this.__internal) {
             this.__validateOptions(optionRules);

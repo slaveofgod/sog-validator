@@ -26,14 +26,18 @@ Object.assign(abv, function () {
      * @description This is the message that will be shown if the value is null. Defaults to "This value should not be null."
      * You can use the following parameters in this message:
      * <table>
-     *     <tr>
-     *         <td><b>Parameter</b></td>
-     *         <td><b>Description</b></td>
-     *     </tr>
-     *     <tr>
-     *         <td>%%value%%</td>
-     *         <td>The current (invalid) value</td>
-     *     </tr>
+     *     <thead>
+     *         <tr>
+     *             <th>Parameter</th>
+     *             <th>Description</th>
+     *         </tr>
+     *     </thead>
+     *     <tbody>
+     *         <tr>
+     *             <td>%%value%%</td>
+     *             <td>The current (invalid) value</td>
+     *         </tr>
+     *     </tbody>
      * </table>
      */
 

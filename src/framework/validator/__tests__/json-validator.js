@@ -13,6 +13,14 @@ describe('json', () => {
         test('{"first_name": "Alexey", "last_name": "Ivalov", "age": 25}', () => {
             expect(abv.isValidWithErrorMessage('{"first_name": "Alexey", "last_name": "Ivalov", "age": 25}', 'json')).toBe(toBe);
         });
+
+        test('Empty string will not validate', () => {
+            expect(abv.isValidWithErrorMessage('', 'email:{"mode":"html5"}')).toBe(toBe);
+        });
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'json')).toBe(toBe);
+        });
     });
 
     describe('Is Invalid', () => {
@@ -76,10 +84,6 @@ describe('json', () => {
 
         test('Function', () => {
             expect(abv.isValidWithErrorMessage(function () {}, 'json')).toBe("This value should be of type scalar.");
-        });
-
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'json')).toBe("This value should be of type scalar.");
         });
 
         test('Object', () => {

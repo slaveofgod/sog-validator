@@ -17,6 +17,10 @@ describe('email', () => {
         test('Empty string will not validate', () => {
             expect(abv.isValidWithErrorMessage('', 'email:{"mode":"html5"}')).toBe(toBe);
         });
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'email')).toBe(toBe);
+        });
     });
 
     describe('Is Invalid', () => {
@@ -72,10 +76,6 @@ describe('email', () => {
 
         test('Function', () => {
             expect(abv.isValidWithErrorMessage(function () {}, 'email')).toBe("This value should be of type scalar.");
-        });
-
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'email')).toBe("This value should be of type scalar.");
         });
 
         test('Object', () => {

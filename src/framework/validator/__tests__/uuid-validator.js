@@ -10,6 +10,10 @@ describe('uuid', () => {
             expect(abv.isValidWithErrorMessage('', 'uuid')).toBe(toBe);
         });
 
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'uuid')).toBe(toBe);
+        });
+
         test('String "216f-ff40-98d9-11e3-a5e2-0800-200c-9a66" [strict: false]', () => {
             expect(abv.isValidWithErrorMessage('216f-ff40-98d9-11e3-a5e2-0800-200c-9a66', 'uuid:{"strict": false}')).toBe(toBe);
         });
@@ -72,10 +76,6 @@ describe('uuid', () => {
 
         test('Function', () => {
             expect(abv.isValidWithErrorMessage(function () {}, 'uuid')).toBe("This value should be of type scalar.");
-        });
-
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'uuid')).toBe("This value should be of type scalar.");
         });
 
         test('Boolean', () => {

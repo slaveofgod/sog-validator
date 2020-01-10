@@ -67,18 +67,22 @@ Object.assign(abv, function () {
      * @description The message if the underlying data is not of the given type. Defaults to "This value should be of type %%type%%."
      * You can use the following parameters in this message:
      * <table>
-     *     <tr>
-     *         <td><b>Parameter</b></td>
-     *         <td><b>Description</b></td>
-     *     </tr>
-     *     <tr>
-     *         <td>%%type%%</td>
-     *         <td>The expected type</td>
-     *     </tr>
-     *     <tr>
-     *         <td>%%value%%</td>
-     *         <td>The current (invalid) value</td>
-     *     </tr>
+     *     <thead>
+     *         <tr>
+     *             <th>Parameter</th>
+     *             <th>Description</th>
+     *         </tr>
+     *     </thead>
+     *     <tbody>
+     *         <tr>
+     *             <td>%%type%%</td>
+     *             <td>The expected type</td>
+     *         </tr>
+     *         <tr>
+     *             <td>%%value%%</td>
+     *             <td>The current (invalid) value</td>
+     *         </tr>
+     *     </tbody>
      * </table>
      */
 

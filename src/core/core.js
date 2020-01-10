@@ -432,6 +432,15 @@ var abv = {
             case 'negative-or-zero':
                 validatorObject = new abv.NegativeOrZeroValidator(data, options, lang, internal);
                 break;
+            case 'date':
+                validatorObject = new abv.DateValidator(data, options, lang, internal);
+                break;
+            case 'date-time':
+                validatorObject = new abv.DateTimeValidator(data, options, lang, internal);
+                break;
+            case 'time':
+                validatorObject = new abv.TimeValidator(data, options, lang, internal);
+                break;
         }
 
         return validatorObject;

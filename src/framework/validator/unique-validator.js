@@ -31,14 +31,18 @@ Object.assign(abv, function () {
      * Defaults to "This collection should contain only unique elements."
      * You can use the following parameters in this message:
      * <table>
-     *     <tr>
-     *         <td><b>Parameter</b></td>
-     *         <td><b>Description</b></td>
-     *     </tr>
-     *     <tr>
-     *         <td>%%value%%</td>
-     *         <td>The repeated value</td>
-     *     </tr>
+     *     <thead>
+     *         <tr>
+     *             <th>Parameter</th>
+     *             <th>Description</th>
+     *         </tr>
+     *     </thead>
+     *     <tbody>
+     *         <tr>
+     *             <td>%%value%%</td>
+     *             <td>The repeated value</td>
+     *         </tr>
+     *     </tbody>
      * </table>
      */
 

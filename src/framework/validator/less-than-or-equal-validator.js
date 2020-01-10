@@ -28,22 +28,26 @@ Object.assign(abv, function () {
      * Defaults to "This value should be less than or equal to %%compared_value%%."
      * You can use the following parameters in this message:
      * <table>
-     *     <tr>
-     *         <td><b>Parameter</b></td>
-     *         <td><b>Description</b></td>
-     *     </tr>
-     *     <tr>
-     *         <td>%%compared_value%%</td>
-     *         <td>The expected value</td>
-     *     </tr>
-     *     <tr>
-     *         <td>%%compared_value_type%%</td>
-     *         <td>TThe expected value type</td>
-     *     </tr>
-     *     <tr>
-     *         <td>%%value%%</td>
-     *         <td>The current (invalid) value</td>
-     *     </tr>
+     *     <thead>
+     *         <tr>
+     *             <th>Parameter</th>
+     *             <th>Description</th>
+     *         </tr>
+     *     </thead>
+     *     <tbody>
+     *         <tr>
+     *             <td>%%compared_value%%</td>
+     *             <td>The expected value</td>
+     *         </tr>
+     *         <tr>
+     *             <td>%%compared_value_type%%</td>
+     *             <td>TThe expected value type</td>
+     *         </tr>
+     *         <tr>
+     *             <td>%%value%%</td>
+     *             <td>The current (invalid) value</td>
+     *         </tr>
+     *     </tbody>
      * </table>
      */
 

@@ -26,14 +26,18 @@ Object.assign(abv, function () {
      * @description This message is shown if the URL is invalid. Defaults to "This value is not a valid URL."
      * You can use the following parameters in this message:
      * <table>
-     *     <tr>
-     *         <td><b>Parameter</b></td>
-     *         <td><b>Description</b></td>
-     *     </tr>
-     *     <tr>
-     *         <td>%%value%%</td>
-     *         <td>The current (invalid) value</td>
-     *     </tr>
+     *     <thead>
+     *         <tr>
+     *             <th>Parameter</th>
+     *             <th>Description</th>
+     *         </tr>
+     *     </thead>
+     *     <tbody>
+     *         <tr>
+     *             <td>%%value%%</td>
+     *             <td>The current (invalid) value</td>
+     *         </tr>
+     *     </tbody>
      * </table>
      */
 
@@ -136,6 +140,11 @@ Object.assign(abv, function () {
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
+            // Check if empty
+            if ('undefined' === typeof this.data || null === this.data || '' === this.data) {
+                return ;
+            }
+
             // Check if value is scalar
             var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
