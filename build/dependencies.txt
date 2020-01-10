@@ -2,7 +2,8 @@
 ../src/core/abstract-validator.js
 ../src/core/abstract-comparison-validator.js
 ../src/framework/application.js
-../src/framework/helper/moment.js
+../src/framework/helper/moment/moment.js
+../src/framework/helper/moment/moment-timezone.js
 ../src/framework/helper/hexdec.js
 ../src/framework/helper/error-collection.js
 ../src/framework/helper/fmod.js
