@@ -5,7 +5,9 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.TimezoneValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value is a valid timezone identifier (e.g. Europe/Paris).
+     * @classdesc
+     * Validates that a value is a valid timezone identifier (e.g. Europe/Paris).
+     * {@link https://en.wikipedia.org/wiki/List_of_tz_database_time_zones|List of tz database time zones}.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
