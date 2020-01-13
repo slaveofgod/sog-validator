@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision 40acbf1
+ * Bob Validator Library v2.0 revision 4c4e7e8
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"40acbf1", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
+var abv = {version:"2.0", revision:"4c4e7e8", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
   var splitted = rules.split("|");
   var validators = {};
   for (var key in splitted) {
@@ -374,6 +374,9 @@ var abv = {version:"2.0", revision:"40acbf1", config:{}, common:{}, parseRulesFr
     case "time":
       validatorObject = new abv.TimeValidator(data, options, lang, internal);
       break;
+    case "timezone":
+      validatorObject = new abv.TimezoneValidator(data, options, lang, internal);
+      break;
   }
   return validatorObject;
 }, isValid:function(data, rules, internal) {
@@ -398,6 +401,7 @@ if (typeof exports !== "undefined") {
     this.__internal = true === internal;
     this.__moment = abv.moment;
     this.__name = null;
+    this.__skip = false;
     this.__moment.locale(this.lang);
     abv.setlocale("LC_ALL", this.lang);
     if (false === this.__internal) {
@@ -410,7 +414,7 @@ if (typeof exports !== "undefined") {
     return this.__name;
   }, isValid:function() {
     this.__beforeValidate();
-    if (false === this.__hasMessages()) {
+    if (false === this.__hasMessages() && false === this.__skip) {
       this.__validate();
     }
     this.__afterValidate();
@@ -440,6 +444,8 @@ if (typeof exports !== "undefined") {
     if ("string" === typeof this.data) {
       this.data = this.data.trim();
     }
+  }, __isEmptyData:function() {
+    return "undefined" === typeof this.data || null === this.data || "" === this.data;
   }});
   return {AbstractValidator:AbstractValidator};
 }());
@@ -9016,7 +9022,7 @@ Object.assign(abv, function() {
     if (true === this.normalize) {
       this.__normalize();
     }
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+    if (true === this.__isEmptyData()) {
       return;
     }
     switch(this.mode) {
@@ -9038,7 +9044,8 @@ Object.assign(abv, function() {
         break;
     }
   }, __beforeValidate:function() {
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
       return;
     }
     var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
@@ -9144,7 +9151,7 @@ Object.assign(abv, function() {
     if (true === this.normalize) {
       this.__normalize();
     }
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+    if (true === this.__isEmptyData()) {
       return;
     }
     var pattern = new RegExp(this.__pattern);
@@ -9153,7 +9160,8 @@ Object.assign(abv, function() {
       return;
     }
   }, __beforeValidate:function() {
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
       return;
     }
     var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
@@ -9197,7 +9205,7 @@ Object.assign(abv, function() {
     if (true === this.normalize) {
       this.__normalize();
     }
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+    if (true === this.__isEmptyData()) {
       return;
     }
     var regexp = new RegExp(this.pattern);
@@ -9206,7 +9214,8 @@ Object.assign(abv, function() {
       return;
     }
   }, __beforeValidate:function() {
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
       return;
     }
     var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
@@ -9261,7 +9270,7 @@ Object.assign(abv, function() {
     if (true === this.normalize) {
       this.__normalize();
     }
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+    if (true === this.__isEmptyData()) {
       return;
     }
     var flag = null;
@@ -9308,7 +9317,8 @@ Object.assign(abv, function() {
       return;
     }
   }, __beforeValidate:function() {
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
       return;
     }
     var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
@@ -9348,7 +9358,8 @@ Object.assign(abv, function() {
       return;
     }
   }, __beforeValidate:function() {
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
       return;
     }
     var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
@@ -9400,7 +9411,7 @@ Object.assign(abv, function() {
     if (true === this.normalize) {
       this.__normalize();
     }
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+    if (true === this.__isEmptyData()) {
       return;
     }
     if (true === this.strict) {
@@ -9477,7 +9488,8 @@ Object.assign(abv, function() {
       return;
     }
   }, __beforeValidate:function() {
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
       return;
     }
     var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
@@ -9676,9 +9688,6 @@ Object.assign(abv, function() {
     return this.__getName();
   }});
   Object.assign(RangeValidator.prototype, {__validate:function() {
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
-      return;
-    }
     var hasLowerLimit = null !== this.min;
     var hasUpperLimit = null !== this.max;
     if (hasLowerLimit && hasUpperLimit && (this.data < this.min || this.data > this.max)) {
@@ -9694,7 +9703,8 @@ Object.assign(abv, function() {
       return;
     }
   }, __beforeValidate:function() {
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
       return;
     }
     if (false === abv.isType("numeric", this.data) && false === abv.isType("date-string", this.data)) {
@@ -9762,9 +9772,6 @@ Object.assign(abv, function() {
     return this.__getName();
   }});
   Object.assign(UniqueValidator.prototype, {__validate:function() {
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
-      return;
-    }
     if (true === abv.isType("string", this.data) || true === abv.isType("array", this.data)) {
       this.__validateArray();
     }
@@ -9785,7 +9792,8 @@ Object.assign(abv, function() {
       }
     }
   }, __beforeValidate:function() {
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
       return;
     }
     var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', true);
@@ -9887,15 +9895,13 @@ Object.assign(abv, function() {
     return this.__getName();
   }});
   Object.assign(DateValidator.prototype, {__validate:function() {
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
-      return;
-    }
     if (this.data !== this.__moment(this.data, this.format).format(this.format)) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
   }, __beforeValidate:function() {
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
       return;
     }
     var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
@@ -9929,9 +9935,6 @@ Object.assign(abv, function() {
     return this.__getName();
   }});
   Object.assign(DateTimeValidator.prototype, {__validate:function() {
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
-      return;
-    }
     var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"date-string"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
@@ -9942,7 +9945,8 @@ Object.assign(abv, function() {
       return;
     }
   }, __beforeValidate:function() {
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
       return;
     }
     var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
@@ -9976,15 +9980,13 @@ Object.assign(abv, function() {
     return this.__getName();
   }});
   Object.assign(TimeValidator.prototype, {__validate:function() {
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
-      return;
-    }
     if (this.data !== this.__moment(this.data, this.format).format(this.format)) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
   }, __beforeValidate:function() {
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
       return;
     }
     var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
@@ -10004,6 +10006,46 @@ Object.assign(abv, function() {
     return {"value":this.data};
   }});
   return {TimeValidator:TimeValidator};
+}());
+Object.assign(abv, function() {
+  var TimezoneValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    this.message = this.__options.message || "This value is not a valid timezone.";
+    this.__setName("TimezoneValidator");
+  };
+  TimezoneValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  TimezoneValidator.prototype.constructor = TimezoneValidator;
+  Object.defineProperty(TimezoneValidator.prototype, "name", {get:function() {
+    return this.__getName();
+  }});
+  Object.assign(TimezoneValidator.prototype, {__validate:function() {
+    var zone = this.__moment.tz.zone(this.data);
+    if (null === zone) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {TimezoneValidator:TimezoneValidator};
 }());
 
 

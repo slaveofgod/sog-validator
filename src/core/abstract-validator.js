@@ -40,6 +40,7 @@ Object.assign(abv, (function () {
         this.__internal = (true === internal);
         this.__moment = abv.moment;
         this.__name = null;
+        this.__skip = false; // Skip validation (do not validate this value)
 
         // ensure setup of localization variables takes place
         this.__moment.locale(this.lang);
@@ -81,7 +82,10 @@ Object.assign(abv, (function () {
         isValid: function () {
             this.__beforeValidate();
 
-            if (false === this.__hasMessages()) {
+            if (
+                false === this.__hasMessages()
+                && false === this.__skip
+            ) {
                 this.__validate();
             }
 
@@ -171,6 +175,17 @@ Object.assign(abv, (function () {
             if ('string' === typeof this.data) {
                 this.data = this.data.trim();
             }
+        },
+
+        /**
+         * @private
+         * @function
+         * @name abv.AbstractValidator#__isEmptyData
+         * @returns {Boolean} Status
+         * @description Checking, if data empty
+         */
+        __isEmptyData: function () {
+            return ('undefined' === typeof this.data || null === this.data || '' === this.data);
         }
     });
 

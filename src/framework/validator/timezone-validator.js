@@ -3,16 +3,16 @@ Object.assign(abv, function () {
 
     /**
      * @constructor
-     * @name abv.DateValidator
+     * @name abv.TimezoneValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value is a valid date, meaning a string (or an object that can be cast into a string) that follows a valid YYYY-MM-DD format.
+     * @classdesc Validates that a value is a valid timezone identifier (e.g. Europe/Paris).
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {String} lang The language used by the application. Defaults to 'en'.
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
-     * var validator = new abv.DateValidator(data);
+     * var validator = new abv.TimezoneValidator(data);
      * if (false === validator.isValid()) {
      *      validator.messages().first();
      * }
@@ -21,11 +21,11 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.DateValidator#message
+     * @name abv.TimezoneValidator#message
      * @type {String}
      * @description
-     * This message is shown if the underlying data is not a valid date.
-     * Defaults to "This value is not a valid date."
+     * This message is shown if the underlying data is not a valid timezone identifier.
+     * Defaults to "This value is not a valid timezone."
      * You can use the following parameters in this message:
      * <table>
      *     <thead>
@@ -43,34 +43,34 @@ Object.assign(abv, function () {
      * </table>
      */
 
-    var DateValidator = function (data, options, lang, internal) {
+    var TimezoneValidator = function (data, options, lang, internal) {
         abv.AbstractValidator.call(this, data, options,{
             message: 'length:{"min":3,"max":255}'
         }, lang, internal);
 
-        this.message = this.__options.message || 'This value is not a valid date.';
-        this.format = this.__options.format || 'YYYY-MM-DD';
+        this.message = this.__options.message || 'This value is not a valid timezone.';
 
-        this.__setName('DateValidator');
+        this.__setName('TimezoneValidator');
     };
-    DateValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-    DateValidator.prototype.constructor = DateValidator;
+    TimezoneValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    TimezoneValidator.prototype.constructor = TimezoneValidator;
 
-    Object.defineProperty(DateValidator.prototype, 'name', {
+    Object.defineProperty(TimezoneValidator.prototype, 'name', {
         get: function () {
             return this.__getName();
         }
     });
 
-    Object.assign(DateValidator.prototype, {
+    Object.assign(TimezoneValidator.prototype, {
         /**
          * @private
          * @function
-         * @name abv.DateValidator#__validate
+         * @name abv.TimezoneValidator#__validate
          * @description Validate data
          */
         __validate: function () {
-            if (this.data !== this.__moment(this.data, this.format).format(this.format)) {
+            var zone = this.__moment.tz.zone(this.data);
+            if (null === zone) {
                 this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
@@ -79,7 +79,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.DateValidator#__beforeValidate
+         * @name abv.EmailValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
@@ -109,7 +109,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.DateValidator#__messageParameters
+         * @name abv.TimezoneValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -121,6 +121,6 @@ Object.assign(abv, function () {
     });
 
     return {
-        DateValidator: DateValidator
+        TimezoneValidator: TimezoneValidator
     };
 }());

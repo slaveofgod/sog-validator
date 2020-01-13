@@ -302,11 +302,6 @@ Object.assign(abv, function () {
          * @description Validate data
          */
         __validate: function () {
-            // Check if empty
-            if ('undefined' === typeof this.data || null === this.data || '' === this.data) {
-                return ;
-            }
-
             // Check if value is date
             var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"date-string"}', true);
             if(null !== errorMessage) {
@@ -328,7 +323,8 @@ Object.assign(abv, function () {
          */
         __beforeValidate: function () {
             // Check if empty
-            if ('undefined' === typeof this.data || null === this.data || '' === this.data) {
+            if (true === this.__isEmptyData()) {
+                this.__skip = true;
                 return ;
             }
 

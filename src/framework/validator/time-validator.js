@@ -70,11 +70,6 @@ Object.assign(abv, function () {
          * @description Validate data
          */
         __validate: function () {
-            // Check if empty
-            if ('undefined' === typeof this.data || null === this.data || '' === this.data) {
-                return ;
-            }
-
             if (this.data !== this.__moment(this.data, this.format).format(this.format)) {
                 this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
@@ -89,7 +84,8 @@ Object.assign(abv, function () {
          */
         __beforeValidate: function () {
             // Check if empty
-            if ('undefined' === typeof this.data || null === this.data || '' === this.data) {
+            if (true === this.__isEmptyData()) {
+                this.__skip = true;
                 return ;
             }
 

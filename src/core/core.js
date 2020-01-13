@@ -441,6 +441,9 @@ var abv = {
             case 'time':
                 validatorObject = new abv.TimeValidator(data, options, lang, internal);
                 break;
+            case 'timezone':
+                validatorObject = new abv.TimezoneValidator(data, options, lang, internal);
+                break;
         }
 
         return validatorObject;

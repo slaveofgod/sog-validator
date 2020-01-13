@@ -153,7 +153,7 @@ Object.assign(abv, function () {
             }
 
             // Check if empty
-            if ('undefined' === typeof this.data || null === this.data || '' === this.data) {
+            if (true === this.__isEmptyData()) {
                 return ;
             }
 
@@ -211,7 +211,8 @@ Object.assign(abv, function () {
          */
         __beforeValidate: function () {
             // Check if empty
-            if ('undefined' === typeof this.data || null === this.data || '' === this.data) {
+            if (true === this.__isEmptyData()) {
+                this.__skip = true;
                 return ;
             }
 

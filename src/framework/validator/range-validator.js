@@ -166,11 +166,6 @@ Object.assign(abv, function () {
          * @description Validate data
          */
         __validate: function () {
-            // Check if empty
-            if ('undefined' === typeof this.data || null === this.data || '' === this.data) {
-                return ;
-            }
-
             var hasLowerLimit = null !== this.min;
             var hasUpperLimit = null !== this.max;
 
@@ -198,7 +193,8 @@ Object.assign(abv, function () {
          */
         __beforeValidate: function () {
             // Check if empty
-            if ('undefined' === typeof this.data || null === this.data || '' === this.data) {
+            if (true === this.__isEmptyData()) {
+                this.__skip = true;
                 return ;
             }
 

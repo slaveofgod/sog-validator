@@ -75,3 +75,4 @@
 ../src/framework/validator/date-validator.js
 ../src/framework/validator/date-time-validator.js
 ../src/framework/validator/time-validator.js
+../src/framework/validator/timezone-validator.js
