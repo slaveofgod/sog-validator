@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Defaults to 'en'.
+     * @param {String} lang The language used by the application. Default: 'en'.
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.NotBlankValidator(data);
@@ -25,21 +25,21 @@ Object.assign(abv, function () {
      * @type {Boolean}
      * @description
      * If set to <code class="notranslate">true</code>, <code class="notranslate">null</code> values are considered valid and won't trigger a constraint violation.
-     * Defaults to false
+     * Default: false
      */
 
     /**
      * @name abv.NotBlankValidator#normalize
      * @type {Boolean}
      * @description Normalizer string before validate (trim, etc.).
-     * Defaults to false
+     * Default: false
      */
 
     /**
      * @name abv.NotBlankValidator#message
      * @type {String}
      * @description This is the message that will be shown if the value is blank.
-     * Defaults to "This value should not be blank."
+     * Default: "This value should not be blank."
      * You can use the following parameters in this message:
      * <table>
      *     <thead>

@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Defaults to 'en'.
+     * @param {String} lang The language used by the application. Default: 'en'.
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.RegexValidator(data, {pattern: 'regular expression'});
@@ -34,7 +34,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * This is the message that will be shown if this validator fails.
-     * Defaults to "This value is not valid."
+     * Default: "This value is not valid."
      * You can use the following parameters in this message:
      * <table>
      *     <thead>
@@ -64,7 +64,7 @@ Object.assign(abv, function () {
     /**
      * @name abv.RegexValidator#normalize
      * @type {Boolean}
-     * @description Normalizer string before validate (trim, etc.). Defaults to false
+     * @description Normalizer string before validate (trim, etc.). Default: false
      */
 
     var RegexValidator = function (data, options, lang, internal) {

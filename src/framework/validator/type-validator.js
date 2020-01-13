@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Defaults to 'en'.
+     * @param {String} lang The language used by the application. Default: 'en'.
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.TypeValidator(data, {type: 'array'});
@@ -58,13 +58,13 @@ Object.assign(abv, function () {
      * @type {Boolean}
      * @description
      * If true, one of data type needs to be valid, otherwise passed data should be valid for all types.
-     * Defaults to false
+     * Default: false
      */
 
     /**
      * @name abv.TypeValidator#message
      * @type {String}
-     * @description The message if the underlying data is not of the given type. Defaults to "This value should be of type %%type%%."
+     * @description The message if the underlying data is not of the given type. Default: "This value should be of type %%type%%."
      * You can use the following parameters in this message:
      * <table>
      *     <thead>

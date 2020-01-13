@@ -11,7 +11,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Defaults to 'en'.
+     * @param {String} lang The language used by the application. Default: 'en'.
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.TimezoneValidator(data);
@@ -27,7 +27,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * This message is shown if the underlying data is not a valid timezone identifier.
-     * Defaults to "This value is not a valid timezone."
+     * Default: "This value is not a valid timezone."
      * You can use the following parameters in this message:
      * <table>
      *     <thead>

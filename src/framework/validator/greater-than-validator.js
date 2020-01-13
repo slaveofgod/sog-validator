@@ -10,7 +10,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Defaults to 'en'.
+     * @param {String} lang The language used by the application. Default: 'en'.
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.GreaterThanValidator(data, {"value": "the value to compare to"});
@@ -25,7 +25,7 @@ Object.assign(abv, function () {
      * @name abv.GreaterThanValidator#message
      * @type {String}
      * @description This is the message that will be shown if the value is not greater than the comparison value.
-     * Defaults to "This value should be greater than %%compared_value%%."
+     * Default: "This value should be greater than %%compared_value%%."
      * You can use the following parameters in this message:
      * <table>
      *     <thead>

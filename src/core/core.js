@@ -444,6 +444,9 @@ var abv = {
             case 'timezone':
                 validatorObject = new abv.TimezoneValidator(data, options, lang, internal);
                 break;
+            case 'choice':
+                validatorObject = new abv.ChoiceValidator(data, options, lang, internal);
+                break;
         }
 
         return validatorObject;

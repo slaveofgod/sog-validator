@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Defaults to 'en'.
+     * @param {String} lang The language used by the application. Default: 'en'.
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.RangeValidator('1991-12-17T03:24:00', {"min":"1990-12-17T03:24:00","max":"1995-12-17T03:24:00"});
@@ -25,7 +25,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The message that will be shown if the underlying value is not a number.
-     * Defaults to "This value should be a valid number."
+     * Default: "This value should be a valid number."
      * You can use the following parameters in this message:
      * <table>
      *     <thead>
@@ -55,7 +55,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The message that will be shown if the underlying value is more than the max option.
-     * Defaults to "This value should be %%limit%% or less."
+     * Default: "This value should be %%limit%% or less."
      * You can use the following parameters in this message:
      * <table>
      *     <tr>
@@ -85,7 +85,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The message that will be shown if the underlying value is less than the min option.
-     * Defaults to "This value should be %%limit%% or more."
+     * Default: "This value should be %%limit%% or more."
      * You can use the following parameters in this message:
      * <table>
      *     <tr>
@@ -108,7 +108,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The message that will be shown if the underlying value is less than the min option or greater than the max option.
-     * Defaults to "This value should be between %%min%% and %%max%%."
+     * Default: "This value should be between %%min%% and %%max%%."
      * You can use the following parameters in this message:
      * <table>
      *     <tr>

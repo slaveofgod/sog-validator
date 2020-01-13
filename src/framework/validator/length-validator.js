@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Defaults to 'en'.
+     * @param {String} lang The language used by the application. Default: 'en'.
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.LengthValidator(data, {min: 10});
@@ -23,19 +23,19 @@ Object.assign(abv, function () {
     /**
      * @name abv.LengthValidator#allowEmptyString
      * @type {Boolean}
-     * @description If set to true, empty strings are considered valid. The default false value considers empty strings not valid. Defaults to false.
+     * @description If set to true, empty strings are considered valid. The default false value considers empty strings not valid. Default: false.
      */
 
     // /**
     //  * @name abv.LengthValidator#charset
     //  * @type {String}
-    //  * @description The charset to be used when computing value's length. Defaults to 'UTF-8'.
+    //  * @description The charset to be used when computing value's length. Default: 'UTF-8'.
     //  */
     //
     // /**
     //  * @name abv.LengthValidator#charsetMessage
     //  * @type {String}
-    //  * @description The message that will be shown if the value is not using the given charset. Defaults to 'This value does not match the expected %%charset%% charset.'.
+    //  * @description The message that will be shown if the value is not using the given charset. Default: 'This value does not match the expected %%charset%% charset.'.
     //  * You can use the following parameters in this message:
     //  * <table>
     //  *     <tr>
@@ -56,7 +56,7 @@ Object.assign(abv, function () {
     /**
      * @name abv.LengthValidator#exactMessage
      * @type {String}
-     * @description The message that will be shown if min and max values are equal and the underlying value's length is not exactly this value. Defaults to 'This value should have exactly %%limit%% characters.'.
+     * @description The message that will be shown if min and max values are equal and the underlying value's length is not exactly this value. Default: 'This value should have exactly %%limit%% characters.'.
      * You can use the following parameters in this message:
      * <table>
      *     <tr>
@@ -84,7 +84,7 @@ Object.assign(abv, function () {
     /**
      * @name abv.LengthValidator#maxMessage
      * @type {String}
-     * @description The message that will be shown if the underlying value's length is more than the max option. Defaults to 'This value is too long. It should have %%limit%% characters or less.'.
+     * @description The message that will be shown if the underlying value's length is more than the max option. Default: 'This value is too long. It should have %%limit%% characters or less.'.
      * You can use the following parameters in this message:
      * <table>
      *     <tr>
@@ -113,7 +113,7 @@ Object.assign(abv, function () {
     /**
      * @name abv.LengthValidator#minMessage
      * @type {String}
-     * @description The message that will be shown if the underlying value's length is less than the min option. Defaults to 'This value is too short. It should have %%limit%% characters or more.'.
+     * @description The message that will be shown if the underlying value's length is less than the min option. Default: 'This value is too short. It should have %%limit%% characters or more.'.
      * You can use the following parameters in this message:
      * <table>
      *     <tr>
@@ -134,7 +134,7 @@ Object.assign(abv, function () {
     /**
      * @name abv.LengthValidator#normalize
      * @type {Boolean}
-     * @description Normalizer string before validate (trim, etc.). Defaults to false
+     * @description Normalizer string before validate (trim, etc.). Default: false
      */
 
     var LengthValidator = function (data, options, lang, internal) {

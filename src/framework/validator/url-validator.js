@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Defaults to 'en'.
+     * @param {String} lang The language used by the application. Default: 'en'.
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.UrlValidator(data);
@@ -23,7 +23,7 @@ Object.assign(abv, function () {
     /**
      * @name abv.UrlValidator#message
      * @type {String}
-     * @description This message is shown if the URL is invalid. Defaults to "This value is not a valid URL."
+     * @description This message is shown if the URL is invalid. Default: "This value is not a valid URL."
      * You can use the following parameters in this message:
      * <table>
      *     <thead>
@@ -44,7 +44,7 @@ Object.assign(abv, function () {
     /**
      * @name abv.UrlValidator#normalize
      * @type {Boolean}
-     * @description Normalizer string before validate (trim, etc.). Defaults to false.
+     * @description Normalizer string before validate (trim, etc.). Default: false.
      */
 
     /**
@@ -53,7 +53,7 @@ Object.assign(abv, function () {
      * @description
      * The protocols considered to be valid for the URL.
      * For example, if you also consider the ftp:// type URLs to be valid, redefine the protocols array, listing http, https, and also ftp.
-     * Defaults to ['http', 'https', 'ftp']
+     * Default: ['http', 'https', 'ftp']
      */
 
     /**
@@ -62,7 +62,7 @@ Object.assign(abv, function () {
      * @description
      * If true, the protocol is considered optional when validating the syntax of the given URL.
      * This means that both http:// and https:// are valid but also relative URLs that contain no protocol (e.g. //example.com).
-     * Defaults to false.
+     * Default: false.
      */
 
     var UrlValidator = function (data, options, lang, internal) {

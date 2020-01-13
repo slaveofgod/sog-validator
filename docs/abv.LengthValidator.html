@@ -42,6 +42,7 @@
         <li id="nav-abv.AllValidator"><a href="abv.AllValidator.html">AllValidator</a></li>
         <li id="nav-abv.Application"><a href="abv.Application.html">Application</a></li>
         <li id="nav-abv.BlankValidator"><a href="abv.BlankValidator.html">BlankValidator</a></li>
+        <li id="nav-abv.ChoiceValidator"><a href="abv.ChoiceValidator.html">ChoiceValidator</a></li>
         <li id="nav-abv.DateTimeValidator"><a href="abv.DateTimeValidator.html">DateTimeValidator</a></li>
         <li id="nav-abv.DateValidator"><a href="abv.DateValidator.html">DateValidator</a></li>
         <li id="nav-abv.DivisibleByValidator"><a href="abv.DivisibleByValidator.html">DivisibleByValidator</a></li>
@@ -173,7 +174,7 @@ if (false === validator.isValid()) {
             <td>options</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></td><td>The setting options</td>
         </tr>
         <tr>
-            <td>lang</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></td><td>The language used by the application. Defaults to 'en'.</td>
+            <td>lang</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></td><td>The language used by the application. Default: 'en'.</td>
         </tr>
         <tr>
             <td>internal</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></td><td>If this parameter is true, it means, that validation called from core.</td>
@@ -186,11 +187,11 @@ if (false === validator.isValid()) {
     <h2>Properties</h2>
         <div id="allowEmptyString">
     <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span><span class="property">allowEmptyString <a class="font-icon" href="#allowEmptyString">&#58216;</a></span>
-    <p>If set to true, empty strings are considered valid. The default false value considers empty strings not valid. Defaults to false.</p>
+    <p>If set to true, empty strings are considered valid. The default false value considers empty strings not valid. Default: false.</p>
 </div>
         <div id="exactMessage">
     <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">exactMessage <a class="font-icon" href="#exactMessage">&#58216;</a></span>
-    <p>The message that will be shown if min and max values are equal and the underlying value's length is not exactly this value. Defaults to 'This value should have exactly %%limit%% characters.'.
+    <p>The message that will be shown if min and max values are equal and the underlying value's length is not exactly this value. Default: 'This value should have exactly %%limit%% characters.'.
 You can use the following parameters in this message:
 <table>
     <tr>
@@ -214,7 +215,7 @@ This option is required when the "min: option is not defined.</p>
 </div>
         <div id="maxMessage">
     <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">maxMessage <a class="font-icon" href="#maxMessage">&#58216;</a></span>
-    <p>The message that will be shown if the underlying value's length is more than the max option. Defaults to 'This value is too long. It should have %%limit%% characters or less.'.
+    <p>The message that will be shown if the underlying value's length is more than the max option. Default: 'This value is too long. It should have %%limit%% characters or less.'.
 You can use the following parameters in this message:
 <table>
     <tr>
@@ -239,7 +240,7 @@ It is important to notice that NULL values and empty strings are considered vali
 </div>
         <div id="minMessage">
     <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">minMessage <a class="font-icon" href="#minMessage">&#58216;</a></span>
-    <p>The message that will be shown if the underlying value's length is less than the min option. Defaults to 'This value is too short. It should have %%limit%% characters or more.'.
+    <p>The message that will be shown if the underlying value's length is less than the min option. Default: 'This value is too short. It should have %%limit%% characters or more.'.
 You can use the following parameters in this message:
 <table>
     <tr>
@@ -258,7 +259,7 @@ You can use the following parameters in this message:
 </div>
         <div id="normalize">
     <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span><span class="property">normalize <a class="font-icon" href="#normalize">&#58216;</a></span>
-    <p>Normalizer string before validate (trim, etc.). Defaults to false</p>
+    <p>Normalizer string before validate (trim, etc.). Default: false</p>
 </div>
 
     <!--methods-->

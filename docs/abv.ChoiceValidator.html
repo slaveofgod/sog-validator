@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>abv.TypeValidator | PlayCanvas API Reference</title>
+        <title>abv.ChoiceValidator | PlayCanvas API Reference</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/png" href="images/playcanvas-favicon.png">
 
@@ -80,10 +80,10 @@
 </nav>
 <div class='sidebarToggle'><span></span>Class List</div>
             <main class="cls">
-    <h1>abv.TypeValidator</h1>
+    <h1>abv.ChoiceValidator</h1>
     <p class="extends">Extends: <a href="abv.AbstractValidator.html">abv.AbstractValidator</a></p>
-    <p>Validates that a value is of a specific data type.</p>
-        <pre><code class="javascript">var validator = new abv.TypeValidator(data, {type: 'array'});
+    <p>Validates that a value is blank - meaning equal to an empty string or <code class="notranslate">null</code>.</p>
+        <pre><code class="javascript">var validator = new abv.ChoiceValidator(data);
 if (false === validator.isValid()) {
      validator.messages().first();
 }</code></pre>
@@ -101,13 +101,31 @@ if (false === validator.isValid()) {
     <h3>Properties</h3>
     <table class="properties">
     <tr>
-        <td><a href="#any">any</a></td><td>If true, one of data type needs to be valid, otherwise passed data should be valid for all types.</td>
+        <td><a href="#callback">callback</a></td><td>This is a callback method that can be used instead of the choices option to return the choices array.</td>
     </tr>
     <tr>
-        <td><a href="#message">message</a></td><td>The message if the underlying data is not of the given type.</td>
+        <td><a href="#choices">choices</a></td><td>A required option (unless callback is specified) - this is the array of options that should be considered in the valid set.</td>
     </tr>
     <tr>
-        <td><a href="#type">type</a></td><td>This required option defines the type or collection of types allowed for the given value.</td>
+        <td><a href="#max">max</a></td><td>If the multiple option is true, then you can use the max option to force no more than XX number of values to be selected.</td>
+    </tr>
+    <tr>
+        <td><a href="#maxMessage">maxMessage</a></td><td>This is the validation error message that's displayed when the user chooses too many options per the max option.</td>
+    </tr>
+    <tr>
+        <td><a href="#message">message</a></td><td>This is the message that you will receive if the multiple option is set to false and the underlying value is not in the valid array of choices.</td>
+    </tr>
+    <tr>
+        <td><a href="#min">min</a></td><td>If the multiple option is true, then you can use the min option to force at least XX number of values to be selected.</td>
+    </tr>
+    <tr>
+        <td><a href="#minMessage">minMessage</a></td><td>This is the validation error message that's displayed when the user chooses too few choices per the min option.</td>
+    </tr>
+    <tr>
+        <td><a href="#multiple">multiple</a></td><td>If this option is true, the input value is expected to be an array instead of a single, scalar value.</td>
+    </tr>
+    <tr>
+        <td><a href="#multipleMessage">multipleMessage</a></td><td>This is the message that you will receive if the multiple option is set to true and one of the values on the underlying array being checked is not in the array of valid choices.</td>
     </tr>
     </table>
 
@@ -145,10 +163,10 @@ if (false === validator.isValid()) {
 
     <h2>Constructor</h2>
     <!-- Constructor -->
-    <div id="TypeValidator">
-    <h3 class="methodname">TypeValidator(data, options, lang, internal) <a class="font-icon" href="#TypeValidator">&#58216;</a></h3>
+    <div id="ChoiceValidator">
+    <h3 class="methodname">ChoiceValidator(data, options, lang, internal) <a class="font-icon" href="#ChoiceValidator">&#58216;</a></h3>
     <p>Create a new Validator.</p>
-    <pre><code class="javascript">var validator = new abv.TypeValidator(data, {type: 'array'});
+    <pre><code class="javascript">var validator = new abv.ChoiceValidator(data);
 if (false === validator.isValid()) {
      validator.messages().first();
 }</code></pre>
@@ -173,14 +191,24 @@ if (false === validator.isValid()) {
 
     <!--properties-->
     <h2>Properties</h2>
-        <div id="any">
-    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span><span class="property">any <a class="font-icon" href="#any">&#58216;</a></span>
-    <p>If true, one of data type needs to be valid, otherwise passed data should be valid for all types.
-Default: false</p>
+        <div id="callback">
+    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>, <a href="Closure.html">Closure</a></span><span class="property">callback <a class="font-icon" href="#callback">&#58216;</a></span>
+    <p>This is a callback method that can be used instead of the choices option to return the choices array.</p>
 </div>
-        <div id="message">
-    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">message <a class="font-icon" href="#message">&#58216;</a></span>
-    <p>The message if the underlying data is not of the given type. Default: "This value should be of type %%type%%."
+        <div id="choices">
+    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span><span class="property">choices <a class="font-icon" href="#choices">&#58216;</a></span>
+    <p>A required option (unless callback is specified) - this is the array of options that should be considered in the valid set.
+The input value will be matched against this array.</p>
+</div>
+        <div id="max">
+    <span class="property"><a href="Integer.html">Integer</a></span><span class="property">max <a class="font-icon" href="#max">&#58216;</a></span>
+    <p>If the multiple option is true, then you can use the max option to force no more than XX number of values to be selected.
+For example, if max is 3, but the input array contains 4 valid items, the validation will fail.</p>
+</div>
+        <div id="maxMessage">
+    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">maxMessage <a class="font-icon" href="#maxMessage">&#58216;</a></span>
+    <p>This is the validation error message that's displayed when the user chooses too many options per the max option.
+Default: "You must select at most {{ limit }} choices."
 You can use the following parameters in this message:
 <table>
     <thead>
@@ -191,8 +219,12 @@ You can use the following parameters in this message:
     </thead>
     <tbody>
         <tr>
-            <td>%%type%%</td>
-            <td>The expected type</td>
+            <td>%%limit%%</td>
+            <td>Max count of selected options</td>
+        </tr>
+        <tr>
+            <td>%%choices%%</td>
+            <td>A comma-separated list of available choices</td>
         </tr>
         <tr>
             <td>%%value%%</td>
@@ -201,36 +233,85 @@ You can use the following parameters in this message:
     </tbody>
 </table></p>
 </div>
-        <div id="type">
-    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span><span class="property">type <a class="font-icon" href="#type">&#58216;</a></span>
-    <p>This required option defines the type or collection of types allowed for the given value.
-The following types are available:
-<ul>
-    <li><b>array</b> - Finds whether a variable is an array</li>
-    <li><b>bool</b>, <b>boolean</b> - Finds out whether a variable is a boolean</li>
-    <li><b>callable</b> - Verify that the contents of a variable can be called as a function</li>
-    <li><b>float</b> - Finds whether the type of a variable is float</li>
-    <li><b>double</b> - Finds whether the type of a variable is double</li>
-    <li><b>int</b>, <b>integer</b> - Find whether the type of a variable is integer</li>
-    <li><b>iterable</b> - Verify that the contents of a variable is an iterable value</li>
-    <li><b>null</b> - Finds whether a variable is NULL</li>
-    <li><b>numeric</b> - Finds whether a variable is a number or a numeric string</li>
-    <li><b>object</b> - Finds whether a variable is an object</li>
-    <li><b>real</b> - Finds whether the type of a variable is real</li>
-    <li><b>scalar</b> - Finds whether a variable is a scalar. <i>Scalar variables are those containing an integer, float, string or boolean.</i></li>
-    <li><b>string</b> - Find whether the type of a variable is string</li>
-    <li><b>alnum</b> - Check for alphanumeric character(s)</li>
-    <li><b>alpha</b> - Check for alphabetic character(s)</li>
-    <li><b>cntrl</b> - Check for control character(s)</li>
-    <li><b>digit</b> - Check for numeric character(s)</li>
-    <li><b>graph</b> - Check for any printable character(s) except space</li>
-    <li><b>lower</b> - Check for lowercase character(s)</li>
-    <li><b>print</b> - Check for printable character(s)</li>
-    <li><b>punct</b> - Check for any printable character which is not whitespace or an alphanumeric character</li>
-    <li><b>space</b> - Check for whitespace character(s)</li>
-    <li><b>upper</b> - Check for uppercase character(s)</li>
-    <li><b>xdigit</b> - Check for character(s) representing a hexadecimal digit</li>
-</b></li></p>
+        <div id="message">
+    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">message <a class="font-icon" href="#message">&#58216;</a></span>
+    <p>This is the message that you will receive if the multiple option is set to false and the underlying value is not in the valid array of choices.
+Default: "The value you selected is not a valid choice."
+You can use the following parameters in this message:
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>%%value%%</td>
+            <td>The current (invalid) value</td>
+        </tr>
+    </tbody>
+</table></p>
+</div>
+        <div id="min">
+    <span class="property"><a href="Integer.html">Integer</a></span><span class="property">min <a class="font-icon" href="#min">&#58216;</a></span>
+    <p>If the multiple option is true, then you can use the min option to force at least XX number of values to be selected.
+For example, if min is 3, but the input array only contains 2 valid items, the validation will fail.</p>
+</div>
+        <div id="minMessage">
+    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">minMessage <a class="font-icon" href="#minMessage">&#58216;</a></span>
+    <p>This is the validation error message that's displayed when the user chooses too few choices per the min option.
+Default: "You must select at least {{ limit }} choices."
+You can use the following parameters in this message:
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>%%limit%%</td>
+            <td>Min count of selected options</td>
+        </tr>
+        <tr>
+            <td>%%choices%%</td>
+            <td>A comma-separated list of available choices</td>
+        </tr>
+        <tr>
+            <td>%%value%%</td>
+            <td>The current (invalid) value</td>
+        </tr>
+    </tbody>
+</table></p>
+</div>
+        <div id="multiple">
+    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span><span class="property">multiple <a class="font-icon" href="#multiple">&#58216;</a></span>
+    <p>If this option is true, the input value is expected to be an array instead of a single, scalar value.
+The constraint will check that each value of the input array can be found in the array of valid choices.
+If even one of the input values cannot be found, the validation will fail.
+Default: false</p>
+</div>
+        <div id="multipleMessage">
+    <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">multipleMessage <a class="font-icon" href="#multipleMessage">&#58216;</a></span>
+    <p>This is the message that you will receive if the multiple option is set to true and one of the values on the underlying array being checked is not in the array of valid choices.
+Default: "One or more of the given values is invalid."
+You can use the following parameters in this message:
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>%%value%%</td>
+            <td>The current (invalid) value</td>
+        </tr>
+    </tbody>
+</table></p>
 </div>
 
     <!--methods-->

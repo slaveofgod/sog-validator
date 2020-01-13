@@ -42,6 +42,7 @@
         <li id="nav-abv.AllValidator"><a href="abv.AllValidator.html">AllValidator</a></li>
         <li id="nav-abv.Application"><a href="abv.Application.html">Application</a></li>
         <li id="nav-abv.BlankValidator"><a href="abv.BlankValidator.html">BlankValidator</a></li>
+        <li id="nav-abv.ChoiceValidator"><a href="abv.ChoiceValidator.html">ChoiceValidator</a></li>
         <li id="nav-abv.DateTimeValidator"><a href="abv.DateTimeValidator.html">DateTimeValidator</a></li>
         <li id="nav-abv.DateValidator"><a href="abv.DateValidator.html">DateValidator</a></li>
         <li id="nav-abv.DivisibleByValidator"><a href="abv.DivisibleByValidator.html">DivisibleByValidator</a></li>
@@ -170,7 +171,7 @@ if (false === validator.isValid()) {
             <td>options</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></td><td>The setting options</td>
         </tr>
         <tr>
-            <td>lang</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></td><td>The language used by the application. Defaults to 'en'.</td>
+            <td>lang</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></td><td>The language used by the application. Default: 'en'.</td>
         </tr>
         <tr>
             <td>internal</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></td><td>If this parameter is true, it means, that validation called from core.</td>
@@ -184,7 +185,7 @@ if (false === validator.isValid()) {
         <div id="invalidMessage">
     <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">invalidMessage <a class="font-icon" href="#invalidMessage">&#58216;</a></span>
     <p>The message that will be shown if the underlying value is not a number.
-Defaults to "This value should be a valid number."
+Default: "This value should be a valid number."
 You can use the following parameters in this message:
 <table>
     <thead>
@@ -208,7 +209,7 @@ You can use the following parameters in this message:
         <div id="maxMessage">
     <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">maxMessage <a class="font-icon" href="#maxMessage">&#58216;</a></span>
     <p>The message that will be shown if the underlying value is more than the max option.
-Defaults to "This value should be %%limit%% or less."
+Default: "This value should be %%limit%% or less."
 You can use the following parameters in this message:
 <table>
     <tr>
@@ -232,7 +233,7 @@ You can use the following parameters in this message:
         <div id="minMessage">
     <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">minMessage <a class="font-icon" href="#minMessage">&#58216;</a></span>
     <p>The message that will be shown if the underlying value is less than the min option.
-Defaults to "This value should be %%limit%% or more."
+Default: "This value should be %%limit%% or more."
 You can use the following parameters in this message:
 <table>
     <tr>
@@ -252,7 +253,7 @@ You can use the following parameters in this message:
         <div id="notInRangeMessage">
     <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">notInRangeMessage <a class="font-icon" href="#notInRangeMessage">&#58216;</a></span>
     <p>The message that will be shown if the underlying value is less than the min option or greater than the max option.
-Defaults to "This value should be between %%min%% and %%max%%."
+Default: "This value should be between %%min%% and %%max%%."
 You can use the following parameters in this message:
 <table>
     <tr>

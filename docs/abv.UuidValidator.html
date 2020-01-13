@@ -42,6 +42,7 @@
         <li id="nav-abv.AllValidator"><a href="abv.AllValidator.html">AllValidator</a></li>
         <li id="nav-abv.Application"><a href="abv.Application.html">Application</a></li>
         <li id="nav-abv.BlankValidator"><a href="abv.BlankValidator.html">BlankValidator</a></li>
+        <li id="nav-abv.ChoiceValidator"><a href="abv.ChoiceValidator.html">ChoiceValidator</a></li>
         <li id="nav-abv.DateTimeValidator"><a href="abv.DateTimeValidator.html">DateTimeValidator</a></li>
         <li id="nav-abv.DateValidator"><a href="abv.DateValidator.html">DateValidator</a></li>
         <li id="nav-abv.DivisibleByValidator"><a href="abv.DivisibleByValidator.html">DivisibleByValidator</a></li>
@@ -166,7 +167,7 @@ if (false === validator.isValid()) {
             <td>options</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></td><td>The setting options</td>
         </tr>
         <tr>
-            <td>lang</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></td><td>The language used by the application. Defaults to 'en'.</td>
+            <td>lang</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></td><td>The language used by the application. Default: 'en'.</td>
         </tr>
         <tr>
             <td>internal</td><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></td><td>If this parameter is true, it means, that validation called from core.</td>
@@ -180,7 +181,7 @@ if (false === validator.isValid()) {
         <div id="message">
     <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">message <a class="font-icon" href="#message">&#58216;</a></span>
     <p>This message is shown if the string is not a valid UUID.
-Defaults to "This is not a valid UUID."
+Default: "This is not a valid UUID."
 You can use the following parameters in this message:
 <table>
     <thead>
@@ -199,12 +200,12 @@ You can use the following parameters in this message:
 </div>
         <div id="normalize">
     <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span><span class="property">normalize <a class="font-icon" href="#normalize">&#58216;</a></span>
-    <p>Normalizer string before validate (trim, etc.). Defaults to false.</p>
+    <p>Normalizer string before validate (trim, etc.). Default: false.</p>
 </div>
         <div id="strict">
     <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span><span class="property">strict <a class="font-icon" href="#strict">&#58216;</a></span>
     <p>If this option is set to true the constraint will check if the UUID is formatted per the RFC's input format rules: 216fff40-98d9-11e3-a5e2-0800200c9a66.
-Defaults to true.
+Default: true.
 Setting this to false will allow alternate input formats like:
 <br />
 <ul>
@@ -217,7 +218,7 @@ Setting this to false will allow alternate input formats like:
     <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span><span class="property">versions <a class="font-icon" href="#versions">&#58216;</a></span>
     <p>This option can be used to only allow specific <a href="https://en.wikipedia.org/wiki/Universally_unique_identifier#Variants_and_versions">UUID versions</a>.
 Valid versions are 1 - 5.
-Defaults to "[1,2,3,4,5]".
+Default: "[1,2,3,4,5]".
 The following PHP constants can also be used:
 <br />
 <ul>

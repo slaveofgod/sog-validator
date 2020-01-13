@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Defaults to 'en'.
+     * @param {String} lang The language used by the application. Default: 'en'.
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.JsonValidator(data);
@@ -25,7 +25,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * This message is shown if the underlying data is not a valid JSON value.
-     * Defaults to "This value should be valid JSON."
+     * Default: "This value should be valid JSON."
      */
 
     var JsonValidator = function (data, options, lang, internal) {

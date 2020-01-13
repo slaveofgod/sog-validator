@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Defaults to 'en'.
+     * @param {String} lang The language used by the application. Default: 'en'.
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.IpValidator(data);
@@ -25,7 +25,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * This message is shown if the string is not a valid IP address.
-     * Defaults to "This is not a valid IP address."
+     * Default: "This is not a valid IP address."
      * You can use the following parameters in this message:
      * <table>
      *     <thead>
@@ -46,7 +46,7 @@ Object.assign(abv, function () {
     /**
      * @name abv.IpValidator#normalize
      * @type {Boolean}
-     * @description Normalizer string before validate (trim, etc.). Defaults to false.
+     * @description Normalizer string before validate (trim, etc.). Default: false.
      */
 
     /**
@@ -54,7 +54,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * This determines exactly how the IP address is validated and can take one of a variety of different values.
-     * Defaults to "4".
+     * Default: "4".
      * <br />
      * <b>All ranges</b>
      * <ul>

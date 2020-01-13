@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision ca6c84d
+ * Bob Validator Library v2.0 revision 6300ce0
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"ca6c84d", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
+var abv = {version:"2.0", revision:"6300ce0", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
   var splitted = rules.split("|");
   var validators = {};
   for (var key in splitted) {
@@ -376,6 +376,9 @@ var abv = {version:"2.0", revision:"ca6c84d", config:{}, common:{}, parseRulesFr
       break;
     case "timezone":
       validatorObject = new abv.TimezoneValidator(data, options, lang, internal);
+      break;
+    case "choice":
+      validatorObject = new abv.ChoiceValidator(data, options, lang, internal);
       break;
   }
   return validatorObject;
@@ -10046,6 +10049,84 @@ Object.assign(abv, function() {
     return {"value":this.data};
   }});
   return {TimezoneValidator:TimezoneValidator};
+}());
+Object.assign(abv, function() {
+  var ChoiceValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {callback:'type:{"type":["string","array","callable"],"any":true}', choices:'type:{"type":"array"}', max:'type:{"type":"numeric"}', maxMessage:'length:{"min":3,"max":255}', min:'type:{"type":"numeric"}', minMessage:'length:{"min":3,"max":255}', multiple:'type:{"type":"bool"}', multipleMessage:'length:{"min":3,"max":255}'}, lang, internal);
+    this.callback = this.__options.callback;
+    this.choices = this.__options.choices;
+    this.max = this.__options.max;
+    this.maxMessage = this.__options.maxMessage || "You must select at most %%limit%% choices.";
+    this.message = this.__options.message || "The value you selected is not a valid choice.";
+    this.min = this.__options.min;
+    this.minMessage = this.__options.minMessage || "You must select at least %%limit%% choices.";
+    this.multiple = true === this.__options.multiple;
+    this.multipleMessage = this.__options.multipleMessage || "One or more of the given values is invalid.";
+    this.__currentInvalidDataItem = null;
+    this.__setName("ChoiceValidator");
+  };
+  ChoiceValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  ChoiceValidator.prototype.constructor = ChoiceValidator;
+  Object.defineProperty(ChoiceValidator.prototype, "name", {get:function() {
+    return this.__getName();
+  }});
+  Object.assign(ChoiceValidator.prototype, {__validate:function() {
+    if (true === this.multiple) {
+      for (var key in this.value) {
+        if (!this.value.hasOwnProperty(key)) {
+          continue;
+        }
+        if (false === this.choices.includes(this.value[key])) {
+          this.__currentInvalidDataItem = this.value[key];
+          this.__setErrorMessage(this.multipleMessage, this.__multipleMessageParameters());
+          return;
+        }
+      }
+      var count = this.data.length;
+      if (this.min && count < this.min) {
+        this.__setErrorMessage(this.minMessage, this.__minMessageParameters());
+        return;
+      }
+      if (this.max && count > this.max) {
+        this.__setErrorMessage(this.maxMessage, this.__maxMessageParameters());
+        return;
+      }
+    } else {
+      if (false === this.choices.includes(this.data)) {
+        this.__setErrorMessage(this.message, this.__messageParameters());
+        return;
+      }
+    }
+  }, __beforeValidate:function() {
+    if (false === abv.isType("array", this.choices) && "undefined" === typeof this.callback) {
+      throw new Error('Either "choices" or "callback" must be specified on constraint Choice');
+    }
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    if (true === this.multiple && false === abv.isType("array", this.data)) {
+      this.__setErrorMessage(abv.sprintf("Expected argument of type '%s', '%s' given", "Array", abv.getType(this.data)));
+      this.__skip = true;
+      return;
+    }
+    if (this.callback) {
+      try {
+        this.choices = this.callback.call();
+      } catch (e) {
+        throw new Error("The Choice constraint expects a valid callback");
+      }
+    }
+  }, __multipleMessageParameters:function() {
+    return {"value":this.__currentInvalidDataItem};
+  }, __minMessageParameters:function() {
+    return {"limit":this.min, "choices":JSON.stringify(this.choices), "value":JSON.stringify(this.data)};
+  }, __maxMessageParameters:function() {
+    return {"limit":this.max, "choices":JSON.stringify(this.choices), "value":JSON.stringify(this.data)};
+  }, __messageParameters:function() {
+    return {"value":JSON.stringify(this.data)};
+  }});
+  return {ChoiceValidator:ChoiceValidator};
 }());
 
 

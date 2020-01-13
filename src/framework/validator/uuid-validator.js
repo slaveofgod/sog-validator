@@ -12,7 +12,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Defaults to 'en'.
+     * @param {String} lang The language used by the application. Default: 'en'.
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.UuidValidator(data);
@@ -28,7 +28,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * This message is shown if the string is not a valid UUID.
-     * Defaults to "This is not a valid UUID."
+     * Default: "This is not a valid UUID."
      * You can use the following parameters in this message:
      * <table>
      *     <thead>
@@ -49,7 +49,7 @@ Object.assign(abv, function () {
     /**
      * @name abv.UuidValidator#normalize
      * @type {Boolean}
-     * @description Normalizer string before validate (trim, etc.). Defaults to false.
+     * @description Normalizer string before validate (trim, etc.). Default: false.
      */
 
     /**
@@ -57,7 +57,7 @@ Object.assign(abv, function () {
      * @type {Boolean}
      * @description
      * If this option is set to true the constraint will check if the UUID is formatted per the RFC's input format rules: 216fff40-98d9-11e3-a5e2-0800200c9a66.
-     * Defaults to true.
+     * Default: true.
      * Setting this to false will allow alternate input formats like:
      * <br />
      * <ul>
@@ -73,7 +73,7 @@ Object.assign(abv, function () {
      * @description
      * This option can be used to only allow specific {@link https://en.wikipedia.org/wiki/Universally_unique_identifier#Variants_and_versions|UUID versions}.
      * Valid versions are 1 - 5.
-     * Defaults to "[1,2,3,4,5]".
+     * Default: "[1,2,3,4,5]".
      * The following PHP constants can also be used:
      * <br />
      * <ul>
