@@ -34,10 +34,6 @@ describe('json', () => {
             expect(abv.isValidWithErrorMessage('alexey.bob@gmail.com', 'json')).toBe(toBe);
         });
 
-        test('Empty string will not validate', () => {
-            expect(abv.isValidWithErrorMessage('', 'json')).toBe(toBe);
-        });
-
         test('a@a-com', () => {
             expect(abv.isValidWithErrorMessage('a@a-com', 'json')).toBe(toBe);
         });

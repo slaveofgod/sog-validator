@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision 4c4e7e8
+ * Bob Validator Library v2.0 revision daad00b
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"4c4e7e8", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
+var abv = {version:"2.0", revision:"daad00b", config:{}, common:{}, parseRulesFromLaravelFormat:function(rules) {
   var splitted = rules.split("|");
   var validators = {};
   for (var key in splitted) {
