@@ -77,3 +77,6 @@
 ../src/framework/validator/time-validator.js
 ../src/framework/validator/timezone-validator.js
 ../src/framework/validator/choice-validator.js
+../src/framework/validator/language-validator.js
+../src/framework/validator/locale-validator.js
+../src/framework/validator/country-validator.js

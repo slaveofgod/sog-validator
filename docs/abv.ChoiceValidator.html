@@ -43,6 +43,7 @@
         <li id="nav-abv.Application"><a href="abv.Application.html">Application</a></li>
         <li id="nav-abv.BlankValidator"><a href="abv.BlankValidator.html">BlankValidator</a></li>
         <li id="nav-abv.ChoiceValidator"><a href="abv.ChoiceValidator.html">ChoiceValidator</a></li>
+        <li id="nav-abv.CountryValidator"><a href="abv.CountryValidator.html">CountryValidator</a></li>
         <li id="nav-abv.DateTimeValidator"><a href="abv.DateTimeValidator.html">DateTimeValidator</a></li>
         <li id="nav-abv.DateValidator"><a href="abv.DateValidator.html">DateValidator</a></li>
         <li id="nav-abv.DivisibleByValidator"><a href="abv.DivisibleByValidator.html">DivisibleByValidator</a></li>
@@ -57,9 +58,11 @@
         <li id="nav-abv.IsNullValidator"><a href="abv.IsNullValidator.html">IsNullValidator</a></li>
         <li id="nav-abv.IsTrueValidator"><a href="abv.IsTrueValidator.html">IsTrueValidator</a></li>
         <li id="nav-abv.JsonValidator"><a href="abv.JsonValidator.html">JsonValidator</a></li>
+        <li id="nav-abv.LanguageValidator"><a href="abv.LanguageValidator.html">LanguageValidator</a></li>
         <li id="nav-abv.LengthValidator"><a href="abv.LengthValidator.html">LengthValidator</a></li>
         <li id="nav-abv.LessThanOrEqualValidator"><a href="abv.LessThanOrEqualValidator.html">LessThanOrEqualValidator</a></li>
         <li id="nav-abv.LessThanValidator"><a href="abv.LessThanValidator.html">LessThanValidator</a></li>
+        <li id="nav-abv.LocaleValidator"><a href="abv.LocaleValidator.html">LocaleValidator</a></li>
         <li id="nav-abv.NegativeOrZeroValidator"><a href="abv.NegativeOrZeroValidator.html">NegativeOrZeroValidator</a></li>
         <li id="nav-abv.NegativeValidator"><a href="abv.NegativeValidator.html">NegativeValidator</a></li>
         <li id="nav-abv.NotBlankValidator"><a href="abv.NotBlankValidator.html">NotBlankValidator</a></li>
@@ -83,7 +86,18 @@
     <h1>abv.ChoiceValidator</h1>
     <p class="extends">Extends: <a href="abv.AbstractValidator.html">abv.AbstractValidator</a></p>
     <p>Validates that a value is blank - meaning equal to an empty string or <code class="notranslate">null</code>.</p>
-        <pre><code class="javascript">var validator = new abv.ChoiceValidator(data);
+        <pre><code class="javascript">var validator = new abv.ChoiceValidator(["Liam", "Noah", "William", "James"], {
+    'choice': {
+        "choices": [
+            "Liam", "Noah", "William", "James", "Logan", "Benjamin", "Mason", "Elijah",
+            "Oliver", "Jacob", "Lucas", "Michael", "Alexander", "Ethan", "Daniel",
+            "Matthew", "Aiden", "Henry", "Joseph", "Jackson", "Samuel", "Sebastian",
+            "David", "Carter", "Wyatt", "Jayden", "John", "Owen", "Dylan", "Luke"
+        ],
+        "multiple": true,
+        "min": 5
+    }
+});
 if (false === validator.isValid()) {
      validator.messages().first();
 }</code></pre>
@@ -166,7 +180,18 @@ if (false === validator.isValid()) {
     <div id="ChoiceValidator">
     <h3 class="methodname">ChoiceValidator(data, options, lang, internal) <a class="font-icon" href="#ChoiceValidator">&#58216;</a></h3>
     <p>Create a new Validator.</p>
-    <pre><code class="javascript">var validator = new abv.ChoiceValidator(data);
+    <pre><code class="javascript">var validator = new abv.ChoiceValidator(["Liam", "Noah", "William", "James"], {
+    'choice': {
+        "choices": [
+            "Liam", "Noah", "William", "James", "Logan", "Benjamin", "Mason", "Elijah",
+            "Oliver", "Jacob", "Lucas", "Michael", "Alexander", "Ethan", "Daniel",
+            "Matthew", "Aiden", "Henry", "Joseph", "Jackson", "Samuel", "Sebastian",
+            "David", "Carter", "Wyatt", "Jayden", "John", "Owen", "Dylan", "Luke"
+        ],
+        "multiple": true,
+        "min": 5
+    }
+});
 if (false === validator.isValid()) {
      validator.messages().first();
 }</code></pre>

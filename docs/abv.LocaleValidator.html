@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>abv.PositiveValidator | PlayCanvas API Reference</title>
+        <title>abv.LocaleValidator | PlayCanvas API Reference</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/png" href="images/playcanvas-favicon.png">
 
@@ -83,11 +83,13 @@
 </nav>
 <div class='sidebarToggle'><span></span>Class List</div>
             <main class="cls">
-    <h1>abv.PositiveValidator</h1>
-    <p class="extends">Extends: <a href="abv.AbstractComparisonValidator.html">abv.AbstractComparisonValidator</a></p>
-    <p>Validates that a value is a positive number.
-Zero is neither positive nor negative, so you must use abv.PositiveOrZero if you want to allow zero as value.</p>
-        <pre><code class="javascript">var validator = new abv.PositiveValidator(data, {"value": "the value to compare to"});
+    <h1>abv.LocaleValidator</h1>
+    <p class="extends">Extends: <a href="abv.AbstractValidator.html">abv.AbstractValidator</a></p>
+    <p>Validates that a value is a valid locale.
+The "value" for each locale is any of the @link(http://userguide.icu-project.org/locale|ICU format locale IDs).
+For example, the two letter @link(https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes|ISO 639-1) language code (e.g. fr), or the language code followed by an underscore (_) and the @link(https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes|ISO 3166-1 alpha-2) country code (e.g. fr_FR for French/France).
+The given locale values are canonicalized before validating them to avoid issues with wrong uppercase/lowercase values and to remove unneeded elements (e.g. FR-fr.utf8 will be validated as fr_FR).</p>
+        <pre><code class="javascript">var validator = new abv.LocaleValidator(data);
 if (false === validator.isValid()) {
      validator.messages().first();
 }</code></pre>
@@ -105,7 +107,7 @@ if (false === validator.isValid()) {
     <h3>Properties</h3>
     <table class="properties">
     <tr>
-        <td><a href="#message">message</a></td><td>The default message supplied when the value is not greater than zero.</td>
+        <td><a href="#message">message</a></td><td>This message is shown if the string is not a valid locale.</td>
     </tr>
     </table>
 
@@ -143,10 +145,10 @@ if (false === validator.isValid()) {
 
     <h2>Constructor</h2>
     <!-- Constructor -->
-    <div id="PositiveValidator">
-    <h3 class="methodname">PositiveValidator(data, options, lang, internal) <a class="font-icon" href="#PositiveValidator">&#58216;</a></h3>
+    <div id="LocaleValidator">
+    <h3 class="methodname">LocaleValidator(data, options, lang, internal) <a class="font-icon" href="#LocaleValidator">&#58216;</a></h3>
     <p>Create a new Validator.</p>
-    <pre><code class="javascript">var validator = new abv.PositiveValidator(data, {"value": "the value to compare to"});
+    <pre><code class="javascript">var validator = new abv.LocaleValidator(data);
 if (false === validator.isValid()) {
      validator.messages().first();
 }</code></pre>
@@ -173,8 +175,8 @@ if (false === validator.isValid()) {
     <h2>Properties</h2>
         <div id="message">
     <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">message <a class="font-icon" href="#message">&#58216;</a></span>
-    <p>The default message supplied when the value is not greater than zero.
-Default: "This value should be positive."
+    <p>This message is shown if the string is not a valid locale.
+Default: "This value is not a valid locale."
 You can use the following parameters in this message:
 <table>
     <thead>
@@ -184,14 +186,6 @@ You can use the following parameters in this message:
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>%%compared_value%%</td>
-            <td>The expected value</td>
-        </tr>
-        <tr>
-            <td>%%compared_value_type%%</td>
-            <td>TThe expected value type</td>
-        </tr>
         <tr>
             <td>%%value%%</td>
             <td>The current (invalid) value</td>

@@ -12,7 +12,18 @@ Object.assign(abv, function () {
      * @param {String} lang The language used by the application. Default: 'en'.
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
-     * var validator = new abv.ChoiceValidator(data);
+     * var validator = new abv.ChoiceValidator(["Liam", "Noah", "William", "James"], {
+     *     'choice': {
+     *         "choices": [
+     *             "Liam", "Noah", "William", "James", "Logan", "Benjamin", "Mason", "Elijah",
+     *             "Oliver", "Jacob", "Lucas", "Michael", "Alexander", "Ethan", "Daniel",
+     *             "Matthew", "Aiden", "Henry", "Joseph", "Jackson", "Samuel", "Sebastian",
+     *             "David", "Carter", "Wyatt", "Jayden", "John", "Owen", "Dylan", "Luke"
+     *         ],
+     *         "multiple": true,
+     *         "min": 5
+     *     }
+     * });
      * if (false === validator.isValid()) {
      *      validator.messages().first();
      * }

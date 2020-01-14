@@ -447,6 +447,15 @@ var abv = {
             case 'choice':
                 validatorObject = new abv.ChoiceValidator(data, options, lang, internal);
                 break;
+            case 'language':
+                validatorObject = new abv.LanguageValidator(data, options, lang, internal);
+                break;
+            case 'locale':
+                validatorObject = new abv.LocaleValidator(data, options, lang, internal);
+                break;
+            case 'country':
+                validatorObject = new abv.CountryValidator(data, options, lang, internal);
+                break;
         }
 
         return validatorObject;
