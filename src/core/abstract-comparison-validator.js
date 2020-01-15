@@ -23,6 +23,8 @@ Object.assign(abv, function () {
         abv.AbstractValidator.call(this, data, options, optionRules, lang, internal);
 
         this.value = this.__options.value;
+
+        this.name = 'AbstractComparisonValidator';
     };
     AbstractComparisonValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     AbstractComparisonValidator.prototype.constructor = AbstractComparisonValidator;

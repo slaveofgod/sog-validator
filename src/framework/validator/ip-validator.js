@@ -128,14 +128,14 @@ Object.assign(abv, function () {
             this.ALL_ONLY_PUBLIC
         ].includes(this.__options.mode)) ? this.__options.mode : '4';
 
-        this.__setName('IpValidator');
+        this.name = 'IpValidator';
     };
     IpValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     IpValidator.prototype.constructor = IpValidator;
 
-    Object.defineProperty(IpValidator.prototype, 'name', {
+    Object.defineProperty(IpValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'ip';
         }
     });
 
@@ -251,3 +251,5 @@ Object.assign(abv, function () {
         IpValidator: IpValidator
     };
 }());
+
+abv.registry(abv.IpValidator);

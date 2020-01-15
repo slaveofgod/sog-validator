@@ -52,14 +52,14 @@ Object.assign(abv, function () {
 
         this.message = this.__options.message || 'This value is not a valid timezone.';
 
-        this.__setName('TimezoneValidator');
+        this.name = 'TimezoneValidator';
     };
     TimezoneValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     TimezoneValidator.prototype.constructor = TimezoneValidator;
 
-    Object.defineProperty(TimezoneValidator.prototype, 'name', {
+    Object.defineProperty(TimezoneValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'timezone';
         }
     });
 
@@ -126,3 +126,5 @@ Object.assign(abv, function () {
         TimezoneValidator: TimezoneValidator
     };
 }());
+
+abv.registry(abv.TimezoneValidator);

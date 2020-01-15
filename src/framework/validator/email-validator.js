@@ -73,14 +73,14 @@ Object.assign(abv, function () {
         this.__patternLoose = /^.+\@\S+\.\S+$/;
         this.__patternHtml5 = /^[a-zA-Z0-9.!#$%&\'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
 
-        this.__setName('EmailValidator');
+        this.name = 'EmailValidator';
     };
     EmailValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     EmailValidator.prototype.constructor = EmailValidator;
 
-    Object.defineProperty(EmailValidator.prototype, 'name', {
+    Object.defineProperty(EmailValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'email';
         }
     });
 
@@ -173,3 +173,5 @@ Object.assign(abv, function () {
         EmailValidator: EmailValidator
     };
 }());
+
+abv.registry(abv.EmailValidator);

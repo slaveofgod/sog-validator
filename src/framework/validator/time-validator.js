@@ -51,14 +51,14 @@ Object.assign(abv, function () {
         this.message = this.__options.message || 'This value is not a valid time.';
         this.format = this.__options.format || 'HH:mm:ss';
 
-        this.__setName('TimeValidator');
+        this.name = 'TimeValidator';
     };
     TimeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     TimeValidator.prototype.constructor = TimeValidator;
 
-    Object.defineProperty(TimeValidator.prototype, 'name', {
+    Object.defineProperty(TimeValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'time';
         }
     });
 
@@ -124,3 +124,5 @@ Object.assign(abv, function () {
         TimeValidator: TimeValidator
     };
 }());
+
+abv.registry(abv.TimeValidator);

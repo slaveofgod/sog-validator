@@ -66,14 +66,14 @@ Object.assign(abv, function () {
 
         this.message = this.__options.message || 'This value should be identical to %%compared_value_type%% %%compared_value%%.';
 
-        this.__setName('IdenticalToValidator');
+        this.name = 'IdenticalToValidator';
     };
     IdenticalToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
     IdenticalToValidator.prototype.constructor = IdenticalToValidator;
 
-    Object.defineProperty(IdenticalToValidator.prototype, 'name', {
+    Object.defineProperty(IdenticalToValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'identical-to';
         }
     });
 
@@ -111,3 +111,5 @@ Object.assign(abv, function () {
         IdenticalToValidator: IdenticalToValidator
     };
 }());
+
+abv.registry(abv.IdenticalToValidator);

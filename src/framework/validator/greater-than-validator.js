@@ -65,14 +65,14 @@ Object.assign(abv, function () {
 
         this.message = this.__options.message || 'This value should be greater than %%compared_value%%.';
 
-        this.__setName('GreaterThanValidator');
+        this.name = 'GreaterThanValidator';
     };
     GreaterThanValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
     GreaterThanValidator.prototype.constructor = GreaterThanValidator;
 
-    Object.defineProperty(GreaterThanValidator.prototype, 'name', {
+    Object.defineProperty(GreaterThanValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'greater-than';
         }
     });
 
@@ -110,3 +110,5 @@ Object.assign(abv, function () {
         GreaterThanValidator: GreaterThanValidator
     };
 }());
+
+abv.registry(abv.GreaterThanValidator);

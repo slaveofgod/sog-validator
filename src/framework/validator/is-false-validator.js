@@ -48,14 +48,14 @@ Object.assign(abv, function () {
 
         this.message = this.__options.message || 'This value should be false.';
 
-        this.__setName('IsFalseValidator');
+        this.name = 'IsFalseValidator';
     };
     IsFalseValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     IsFalseValidator.prototype.constructor = IsFalseValidator;
 
-    Object.defineProperty(IsFalseValidator.prototype, 'name', {
+    Object.defineProperty(IsFalseValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return ['is-false', 'false'];
         }
     });
 
@@ -95,3 +95,5 @@ Object.assign(abv, function () {
         IsFalseValidator: IsFalseValidator
     };
 }());
+
+abv.registry(abv.IsFalseValidator);

@@ -24,17 +24,62 @@ var abv = {
     revision: "__REVISION__",
     config: { },
     common: { },
+    validators: { },
 
+    /**
+     * @function
+     * @name abv.registry
+     * @description Register validator
+     * @param {Function} validator Validator
+     */
+    registry: function (validator) {
+        var __v = [validator];
+        var __validator = new __v[0](null, {}, 'en', true);
+        var alias = __validator.alias;
+
+        // Check that "alias" property exist
+        if ('undefined' === typeof alias) {
+            throw new Error('The validator has to have "alias" property');
+        }
+
+        // Check that the validator extend from "abv.AbstractValidator" abstract class
+        if ('AbstractValidator' !== __validator.base) {
+            throw new Error('The validator has to extend "abv.AbstractValidator" abstract class');
+        }
+
+        // Check that "__validate" method is implemented
+        if ('undefined' === typeof __validator.__validate) {
+            throw new Error('The validator has to implement "__validate" method');
+        }
+
+        // Check that alias is type of "string" or "array"
+        if (
+            false === abv.isType('string', alias)
+            && false === abv.isType('array', alias)
+        ) {
+            throw new Error('The alias must be type of "string" or "array", "' + abv.getType(alias) + '" given');
+        }
+
+        if ('string' === typeof alias) {
+            alias = [alias];
+        }
+
+        alias.forEach(function (element) {
+            if ('undefined' === typeof abv.validators[element]) {
+                abv.validators[element] = validator;
+            }
+        });
+    },
 
     /**
      * @private
      * @function
-     * @name abv.parseRulesFromLaravelFormat
+     * @name abv.__parseRulesFromLaravelFormat
      * @description Parse validation rules from string (Laravel format)
      * @param {String} rules Validation rules in string format
      * @returns {Object} The roles in array format
      */
-    parseRulesFromLaravelFormat: function (rules) {
+    __parseRulesFromLaravelFormat: function (rules) {
         var splitted = rules.split('|');
         var validators = {};
 
@@ -63,12 +108,12 @@ var abv = {
     /**
      * @private
      * @function
-     * @name abv.parseRulesFromJsonFormat
+     * @name abv.__parseRulesFromJsonFormat
      * @description Parse validation rules from string (JSON format)
      * @param {String} rules Validation rules in string format
      * @returns {Object} The roles in array format
      */
-    parseRulesFromJsonFormat: function (rules) {
+    __parseRulesFromJsonFormat: function (rules) {
         var splitted = rules.split('|');
         var validators = {};
 
@@ -177,158 +222,6 @@ var abv = {
 
     /**
      * @function
-     * @deprecated
-     * @name abv.isType
-     * @description Parse validation rules from string
-     * @param {String} type Type string
-     * @param {*} data Data, which type needs to be checked
-     * @returns {Boolean} Is correct data type.
-     */
-    __isType: function (type, data) {
-        switch (type) {
-            case 'array':
-                return Array.isArray(data);
-                break;
-            case 'bool':
-            case 'boolean':
-                return ("boolean" === typeof data);
-                break;
-            case 'callable':
-                return (null !== data && "function" === typeof data);
-                break;
-            case 'float':
-            case 'double':
-                return (Number(data) === data && data % 1 !== 0);
-                break;
-            case 'int':
-            case 'integer':
-                return (Number(data) === data && data % 1 === 0);
-                break;
-            case 'null':
-                return (null === data) ? true : false;
-                break;
-            case 'iterable':
-                // checks for null and undefined
-                if (data == null) return false;
-                return ('function' === typeof data[Symbol.iterator]) ? true : false;
-                break;
-            case 'numeric':
-                if (false === this.isType('scalar', data)) return false;
-                return /^[0-9]{0,}\.?[0-9]+$/.test(data);
-                break;
-            case 'object':
-                return ('object' === typeof data) ? true : false;
-                break;
-            case 'real':
-                return ('number' === typeof data && !isNaN(data) && isFinite(data)) ? true : false;
-                break;
-            case 'scalar': // Scalar variables are those containing an integer, float, string or boolean.
-                return (
-                    true === this.isType('integer', data)
-                    || true === this.isType('float', data)
-                    || true === this.isType('string', data)
-                    || true === this.isType('boolean', data)
-                ) ? true : false;
-                break;
-            case 'string':
-                return ('string' === typeof data) ? true : false;
-                break;
-            case 'alnum':
-                if (false === this.isType('scalar', data)) return false;
-                if (null === data) return false;
-                return /^[a-zA-Z0-9]+$/.test(data);
-                break;
-            case 'alpha':
-                if (false === this.isType('scalar', data)) return false;
-                if (null === data) return false;
-                return /^[a-zA-Z]+$/.test(data);
-                break;
-            case 'digit':
-                if (false === this.isType('scalar', data)) return false;
-                if (null === data) return false;
-                return /^[0-9]+$/.test(data);
-                break;
-            case 'graph':
-                if (false === this.isType('scalar', data)) return false;
-                return (data.toString() === data.toString().replace(/[\r\n\t]/, '')) ? true : false;
-                break;
-            case 'lower':
-                if (false === this.isType('scalar', data)) return false;
-                var matches;
-                if ((matches = /[a-z]+/m.exec(data)) !== null) {
-                    if (
-                        'undefined' !== matches[0]
-                        && matches[0] === data
-                    ) {
-                        return true;
-                    }
-                    return false;
-                }
-                return false;
-                break;
-            case 'print':
-                if (false === this.isType('scalar', data)) return false;
-                var regex = /[\r|\n|\t]+/mg;
-                var m;
-                var counter = 0;
-                while ((m = regex.exec(data)) !== null) {
-                    // This is necessary to avoid infinite loops with zero-width matches
-                    if (m.index === regex.lastIndex) {
-                        regex.lastIndex++;
-                    }
-
-                    counter ++;
-                }
-
-                return (counter > 0) ? false : true;
-                break;
-            case 'punct':
-                if (false === this.isType('scalar', data)) return false;
-                return (data.toString() === data.toString().replace(/[0-9a-zA-Z \r\n\t]/, '')) ? true : false;
-                break;
-            case 'space':
-                if (false === this.isType('scalar', data)) return false;
-                return /^[\r\n\t]+$/.test(data);
-                break;
-            case 'upper':
-                if (false === this.isType('scalar', data)) return false;
-                var matches;
-                if ((matches = /[A-Z]+/m.exec(data)) !== null) {
-                    if (
-                        'undefined' !== matches[0]
-                        && matches[0] === data
-                    ) {
-                        return true;
-                    }
-                    return false;
-                }
-                return false;
-                break;
-            case 'xdigit':
-                if (false === this.isType('scalar', data)) return false;
-                return /^[A-Fa-f0-9]+$/.test(data);
-                break;
-            case 'date':
-            case 'datetime':
-                if (
-                    'object' === typeof data
-                    && 'Date' === this.getType(data)
-                ) {
-                    return true;
-                }
-                return false;
-                break;
-            case 'date-string':
-                if (false === this.isType('string', data)) return false;
-                return Number.isNaN(Date.parse(data)) ? false : true;
-                break;
-        }
-
-        return false;
-    },
-
-    /**
-     * @function
      * @name abv.makeValidator
      * @description Create object of the validator
      * @param {*} data The data which needs to be validated
@@ -338,127 +231,11 @@ var abv = {
      * @returns {Object} The roles in array format
      */
     makeValidator: function (data, validator, options, lang, internal) {
-        var validatorObject;
-
-        switch (validator) {
-            case 'not-blank':
-                validatorObject = new abv.NotBlankValidator(data, options, lang, internal);
-                break;
-            case 'blank':
-                validatorObject = new abv.BlankValidator(data, options, lang, internal);
-                break;
-            case 'required':
-            case 'not-null':
-                validatorObject = new abv.NotNullValidator(data, options, lang, internal);
-                break;
-            case 'is-null':
-            case 'null':
-                validatorObject = new abv.IsNullValidator(data, options, lang, internal);
-                break;
-            case 'is-true':
-            case 'true':
-                validatorObject = new abv.IsTrueValidator(data, options, lang, internal);
-                break;
-            case 'is-false':
-            case 'false':
-                validatorObject = new abv.IsFalseValidator(data, options, lang, internal);
-                break;
-            case 'type':
-                validatorObject = new abv.TypeValidator(data, options, lang, internal);
-                break;
-            case 'email':
-                validatorObject = new abv.EmailValidator(data, options, lang, internal);
-                break;
-            case 'length':
-                validatorObject = new abv.LengthValidator(data, options, lang, internal);
-                break;
-            case 'url':
-                validatorObject = new abv.UrlValidator(data, options, lang, internal);
-                break;
-            case 'regex':
-                validatorObject = new abv.RegexValidator(data, options, lang, internal);
-                break;
-            case 'ip':
-                validatorObject = new abv.IpValidator(data, options, lang, internal);
-                break;
-            case 'json':
-                validatorObject = new abv.JsonValidator(data, options, lang, internal);
-                break;
-            case 'uuid':
-                validatorObject = new abv.UuidValidator(data, options, lang, internal);
-                break;
-            case 'equal-to':
-                validatorObject = new abv.EqualToValidator(data, options, lang, internal);
-                break;
-            case 'not-equal-to':
-                validatorObject = new abv.NotEqualToValidator(data, options, lang, internal);
-                break;
-            case 'identical-to':
-                validatorObject = new abv.IdenticalToValidator(data, options, lang, internal);
-                break;
-            case 'not-identical-to':
-                validatorObject = new abv.NotIdenticalToValidator(data, options, lang, internal);
-                break;
-            case 'less-than':
-                validatorObject = new abv.LessThanValidator(data, options, lang, internal);
-                break;
-            case 'less-than-or-equal':
-                validatorObject = new abv.LessThanOrEqualValidator(data, options, lang, internal);
-                break;
-            case 'greater-than':
-                validatorObject = new abv.GreaterThanValidator(data, options, lang, internal);
-                break;
-            case 'greater-than-or-equal':
-                validatorObject = new abv.GreaterThanOrEqualThanValidator(data, options, lang, internal);
-                break;
-            case 'range':
-                validatorObject = new abv.RangeValidator(data, options, lang, internal);
-                break;
-            case 'divisible-by':
-                validatorObject = new abv.DivisibleByValidator(data, options, lang, internal);
-                break;
-            case 'unique':
-                validatorObject = new abv.UniqueValidator(data, options, lang, internal);
-                break;
-            case 'positive':
-                validatorObject = new abv.PositiveValidator(data, options, lang, internal);
-                break;
-            case 'positive-or-zero':
-                validatorObject = new abv.PositiveOrZeroValidator(data, options, lang, internal);
-                break;
-            case 'negative':
-                validatorObject = new abv.NegativeValidator(data, options, lang, internal);
-                break;
-            case 'negative-or-zero':
-                validatorObject = new abv.NegativeOrZeroValidator(data, options, lang, internal);
-                break;
-            case 'date':
-                validatorObject = new abv.DateValidator(data, options, lang, internal);
-                break;
-            case 'date-time':
-                validatorObject = new abv.DateTimeValidator(data, options, lang, internal);
-                break;
-            case 'time':
-                validatorObject = new abv.TimeValidator(data, options, lang, internal);
-                break;
-            case 'timezone':
-                validatorObject = new abv.TimezoneValidator(data, options, lang, internal);
-                break;
-            case 'choice':
-                validatorObject = new abv.ChoiceValidator(data, options, lang, internal);
-                break;
-            case 'language':
-                validatorObject = new abv.LanguageValidator(data, options, lang, internal);
-                break;
-            case 'locale':
-                validatorObject = new abv.LocaleValidator(data, options, lang, internal);
-                break;
-            case 'country':
-                validatorObject = new abv.CountryValidator(data, options, lang, internal);
-                break;
+        if ('undefined' === typeof abv.validators[validator]) {
+            throw new Error('Validator with alias "' + validator + '" is not registered');
         }
 
-        return validatorObject;
+        return new abv.validators[validator](data, options, lang, internal);
     },
 
     /**

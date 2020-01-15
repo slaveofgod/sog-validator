@@ -3,7 +3,7 @@ Object.assign(abv, function () {
 
     /**
      * @constructor
-     * @name abv.GreaterThanOrEqualThanValidator
+     * @name abv.GreaterThanOrEqualValidator
      * @extends abv.AbstractComparisonValidator
      * @classdesc
      * Validates that a value is greater than or equal to another value, defined in the options.
@@ -13,7 +13,7 @@ Object.assign(abv, function () {
      * @param {String} lang The language used by the application. Default: 'en'.
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
-     * var validator = new abv.GreaterThanOrEqualThanValidator(data, {"value": "the value to compare to"});
+     * var validator = new abv.GreaterThanOrEqualValidator(data, {"value": "the value to compare to"});
      * if (false === validator.isValid()) {
      *      validator.messages().first();
      * }
@@ -22,7 +22,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.GreaterThanOrEqualThanValidator#message
+     * @name abv.GreaterThanOrEqualValidator#message
      * @type {String}
      * @description This is the message that will be shown if the value is not greater than or equal to the comparison value.
      * Default: "This value should be greater than or equal to %%compared_value%%."
@@ -52,12 +52,12 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.GreaterThanOrEqualThanValidator#value
+     * @name abv.GreaterThanOrEqualValidator#value
      * @type {*}
      * @description This option is required. It defines the value to compare to. It can be a string, number or date object.
      */
 
-    var GreaterThanOrEqualThanValidator = function (data, options, lang, internal) {
+    var GreaterThanOrEqualValidator = function (data, options, lang, internal) {
         abv.AbstractComparisonValidator.call(this, data, options,{
             message: 'length:{"min":3,"max":255}',
             value: 'required|type:{"type":["scalar","date"],"any":true}'
@@ -65,22 +65,22 @@ Object.assign(abv, function () {
 
         this.message = this.__options.message || 'This value should be greater than or equal to %%compared_value%%.';
 
-        this.__setName('GreaterThanOrEqualThanValidator');
+        this.name = 'GreaterThanOrEqualValidator';
     };
-    GreaterThanOrEqualThanValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
-    GreaterThanOrEqualThanValidator.prototype.constructor = GreaterThanOrEqualThanValidator;
+    GreaterThanOrEqualValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+    GreaterThanOrEqualValidator.prototype.constructor = GreaterThanOrEqualValidator;
 
-    Object.defineProperty(GreaterThanOrEqualThanValidator.prototype, 'name', {
+    Object.defineProperty(GreaterThanOrEqualValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'greater-than-or-equal';
         }
     });
 
-    Object.assign(GreaterThanOrEqualThanValidator.prototype, {
+    Object.assign(GreaterThanOrEqualValidator.prototype, {
         /**
          * @private
          * @function
-         * @name abv.GreaterThanOrEqualThanValidator#__compareValues
+         * @name abv.GreaterThanOrEqualValidator#__compareValues
          * @description Compare two value
          * @param {*} value Value
          * @param {*} comparedValue Compared value
@@ -93,7 +93,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.GreaterThanOrEqualThanValidator#__messageParameters
+         * @name abv.GreaterThanOrEqualValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -107,6 +107,8 @@ Object.assign(abv, function () {
     });
 
     return {
-        GreaterThanOrEqualThanValidator: GreaterThanOrEqualThanValidator
+        GreaterThanOrEqualValidator: GreaterThanOrEqualValidator
     };
 }());
+
+abv.registry(abv.GreaterThanOrEqualValidator);

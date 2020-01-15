@@ -61,14 +61,14 @@ Object.assign(abv, function () {
         this.value = 0;
         this.message = this.__options.message || 'This value should be negative.';
 
-        this.__setName('NegativeValidator');
+        this.name = 'NegativeValidator';
     };
     NegativeValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
     NegativeValidator.prototype.constructor = NegativeValidator;
 
-    Object.defineProperty(NegativeValidator.prototype, 'name', {
+    Object.defineProperty(NegativeValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'negative';
         }
     });
 
@@ -106,3 +106,5 @@ Object.assign(abv, function () {
         NegativeValidator: NegativeValidator
     };
 }());
+
+abv.registry(abv.NegativeValidator);

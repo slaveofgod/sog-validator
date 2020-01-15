@@ -65,14 +65,14 @@ Object.assign(abv, function () {
 
         this.message = this.__options.message || 'This value should be a multiple of %%compared_value%%.';
 
-        this.__setName('DivisibleByValidator');
+        this.name = 'DivisibleByValidator';
     };
     DivisibleByValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
     DivisibleByValidator.prototype.constructor = DivisibleByValidator;
 
-    Object.defineProperty(DivisibleByValidator.prototype, 'name', {
+    Object.defineProperty(DivisibleByValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'divisible-by';
         }
     });
 
@@ -119,3 +119,5 @@ Object.assign(abv, function () {
         DivisibleByValidator: DivisibleByValidator
     };
 }());
+
+abv.registry(abv.DivisibleByValidator);

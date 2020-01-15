@@ -66,14 +66,14 @@ Object.assign(abv, function () {
 
         this.message = this.__options.message || 'This value should not be equal to %%compared_value%%.';
 
-        this.__setName('NotEqualToValidator');
+        this.name = 'NotEqualToValidator';
     };
     NotEqualToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
     NotEqualToValidator.prototype.constructor = NotEqualToValidator;
 
-    Object.defineProperty(NotEqualToValidator.prototype, 'name', {
+    Object.defineProperty(NotEqualToValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'not-equal-to';
         }
     });
 
@@ -111,3 +111,5 @@ Object.assign(abv, function () {
         NotEqualToValidator: NotEqualToValidator
     };
 }());
+
+abv.registry(abv.NotEqualToValidator);

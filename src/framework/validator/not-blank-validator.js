@@ -66,14 +66,14 @@ Object.assign(abv, function () {
         this.message = this.__options.message || 'This value should not be blank.';
         this.normalize = (!this.__options.normalize || false === this.__options.normalize) ? false : true;
 
-        this.__setName('NotBlankValidator');
+        this.name = 'NotBlankValidator';
     };
     NotBlankValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     NotBlankValidator.prototype.constructor = NotBlankValidator;
 
-    Object.defineProperty(NotBlankValidator.prototype, 'name', {
+    Object.defineProperty(NotBlankValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'not-blank';
         }
     });
 
@@ -148,3 +148,5 @@ Object.assign(abv, function () {
         NotBlankValidator: NotBlankValidator
     };
 }());
+
+abv.registry(abv.NotBlankValidator);

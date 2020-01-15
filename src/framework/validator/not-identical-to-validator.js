@@ -66,14 +66,14 @@ Object.assign(abv, function () {
 
         this.message = this.__options.message || 'This value should not be identical to %%compared_value_type%% %%compared_value%%.';
 
-        this.__setName('NotIdenticalToValidator');
+        this.name = 'NotIdenticalToValidator';
     };
     NotIdenticalToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
     NotIdenticalToValidator.prototype.constructor = NotIdenticalToValidator;
 
-    Object.defineProperty(NotIdenticalToValidator.prototype, 'name', {
+    Object.defineProperty(NotIdenticalToValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'not-identical-to';
         }
     });
 
@@ -111,3 +111,5 @@ Object.assign(abv, function () {
         NotIdenticalToValidator: NotIdenticalToValidator
     };
 }());
+
+abv.registry(abv.NotIdenticalToValidator);

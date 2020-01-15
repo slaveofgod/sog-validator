@@ -75,10 +75,12 @@ Object.assign(abv, function () {
          * @description Gets the current application, if any.
          */
         abv.app = this;
+
+        this.name = 'Application';
     };
     Application.prototype.constructor = Application;
 
-    Object.defineProperty(Application.prototype, 'name', {
+    Object.defineProperty(Application.prototype, 'alias', {
         get: function () {
             return 'Application';
         }

@@ -35,14 +35,14 @@ Object.assign(abv, function () {
 
         this.message = this.__options.message || 'This value should be valid JSON.';
 
-        this.__setName('JsonValidator');
+        this.name = 'JsonValidator';
     };
     JsonValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     JsonValidator.prototype.constructor = JsonValidator;
 
-    Object.defineProperty(JsonValidator.prototype, 'name', {
+    Object.defineProperty(JsonValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'json';
         }
     });
 
@@ -110,3 +110,5 @@ Object.assign(abv, function () {
         JsonValidator: JsonValidator
     };
 }());
+
+abv.registry(abv.JsonValidator);

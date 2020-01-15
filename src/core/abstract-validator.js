@@ -49,30 +49,12 @@ Object.assign(abv, (function () {
         if (false === this.__internal) {
             this.__validateOptions(optionRules);
         }
+
+        this.name = 'AbstractValidator';
+        this.base = 'AbstractValidator';
     };
 
     Object.assign(AbstractValidator.prototype, {
-        /**
-         * @private
-         * @function
-         * @name abv.AbstractValidator#__setName
-         * @description Set validator name
-         * @param {String} name The validator name
-         */
-        __setName: function (name) {
-            this.__name = name;
-        },
-        /**
-         * @private
-         * @function
-         * @name abv.AbstractValidator#__setName
-         * @description Get validator name
-         * @returns {String} The validator name
-         */
-        __getName: function () {
-            return this.__name;
-        },
-
         /**
          * @function
          * @name abv.AbstractValidator#isValid

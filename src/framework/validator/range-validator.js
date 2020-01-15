@@ -147,14 +147,14 @@ Object.assign(abv, function () {
         this.minMessage = this.__options.minMessage || 'This value should be %%limit%% or more.';
         this.notInRangeMessage = this.__options.notInRangeMessage || 'This value should be between %%min%% and %%max%%.';
 
-        this.__setName('RangeValidator');
+        this.name = 'RangeValidator';
     };
     RangeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     RangeValidator.prototype.constructor = RangeValidator;
 
-    Object.defineProperty(RangeValidator.prototype, 'name', {
+    Object.defineProperty(RangeValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'range';
         }
     });
 
@@ -296,3 +296,5 @@ Object.assign(abv, function () {
         RangeValidator: RangeValidator
     };
 }());
+
+abv.registry(abv.RangeValidator);

@@ -61,14 +61,14 @@ Object.assign(abv, function () {
         this.value = 0;
         this.message = this.__options.message || 'This value should be either positive or zero.';
 
-        this.__setName('PositiveOrZeroValidator');
+        this.name = 'PositiveOrZeroValidator';
     };
     PositiveOrZeroValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
     PositiveOrZeroValidator.prototype.constructor = PositiveOrZeroValidator;
 
-    Object.defineProperty(PositiveOrZeroValidator.prototype, 'name', {
+    Object.defineProperty(PositiveOrZeroValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'positive-or-zero';
         }
     });
 
@@ -106,3 +106,5 @@ Object.assign(abv, function () {
         PositiveOrZeroValidator: PositiveOrZeroValidator
     };
 }());
+
+abv.registry(abv.PositiveOrZeroValidator);

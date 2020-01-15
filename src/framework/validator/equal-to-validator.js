@@ -66,14 +66,14 @@ Object.assign(abv, function () {
 
         this.message = this.__options.message || 'This value should be equal to %%compared_value%%.';
 
-        this.__setName('EqualToValidator');
+        this.name = 'EqualToValidator';
     };
     EqualToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
     EqualToValidator.prototype.constructor = EqualToValidator;
 
-    Object.defineProperty(EqualToValidator.prototype, 'name', {
+    Object.defineProperty(EqualToValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'equal-to';
         }
     });
 
@@ -111,3 +111,5 @@ Object.assign(abv, function () {
         EqualToValidator: EqualToValidator
     };
 }());
+
+abv.registry(abv.EqualToValidator);

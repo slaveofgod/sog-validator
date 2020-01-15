@@ -56,14 +56,14 @@ Object.assign(abv, function () {
         // Repeated elements
         this.__repeated = [];
 
-        this.__setName('UniqueValidator');
+        this.name = 'UniqueValidator';
     };
     UniqueValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     UniqueValidator.prototype.constructor = UniqueValidator;
 
-    Object.defineProperty(UniqueValidator.prototype, 'name', {
+    Object.defineProperty(UniqueValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'unique';
         }
     });
 
@@ -153,3 +153,5 @@ Object.assign(abv, function () {
         UniqueValidator: UniqueValidator
     };
 }());
+
+abv.registry(abv.UniqueValidator);

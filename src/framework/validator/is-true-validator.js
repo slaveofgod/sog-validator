@@ -48,14 +48,14 @@ Object.assign(abv, function () {
 
         this.message = this.__options.message || 'This value should be true.';
 
-        this.__setName('IsTrueValidator');
+        this.name = 'IsTrueValidator';
     };
     IsTrueValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     IsTrueValidator.prototype.constructor = IsTrueValidator;
 
-    Object.defineProperty(IsTrueValidator.prototype, 'name', {
+    Object.defineProperty(IsTrueValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return ['is-true', 'true'];
         }
     });
 
@@ -95,3 +95,5 @@ Object.assign(abv, function () {
         IsTrueValidator: IsTrueValidator
     };
 }());
+
+abv.registry(abv.IsTrueValidator);

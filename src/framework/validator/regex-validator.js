@@ -80,14 +80,14 @@ Object.assign(abv, function () {
         this.pattern = this.__options.pattern;
         this.normalize = (!this.__options.normalize || false === this.__options.normalize) ? false : true;
 
-        this.__setName('RegexValidator');
+        this.name = 'RegexValidator';
     };
     RegexValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     RegexValidator.prototype.constructor = RegexValidator;
 
-    Object.defineProperty(RegexValidator.prototype, 'name', {
+    Object.defineProperty(RegexValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'regex';
         }
     });
 
@@ -164,3 +164,5 @@ Object.assign(abv, function () {
         RegexValidator: RegexValidator
     };
 }());
+
+abv.registry(abv.RegexValidator);

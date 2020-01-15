@@ -29,16 +29,17 @@ Object.assign(abv, function () {
         this.rules = rules;
 
         this.__validatorCollection = [];
-        this.__setName('AllValidator');
+
+        this.name = 'AllValidator';
 
         this.__configure();
     };
     AllValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     AllValidator.prototype.constructor = AllValidator;
 
-    Object.defineProperty(AllValidator.prototype, 'name', {
+    Object.defineProperty(AllValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'all';
         }
     });
 
@@ -52,7 +53,7 @@ Object.assign(abv, function () {
         __configure: function () {
             var validationRules = this.rules;
             if ('string' === typeof this.rules) {
-                var validationRules = abv.parseRulesFromJsonFormat(this.rules);
+                var validationRules = abv.__parseRulesFromJsonFormat(this.rules);
             }
 
             for (var key in validationRules) {

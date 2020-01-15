@@ -160,14 +160,14 @@ Object.assign(abv, function () {
         this.minMessage = this.__options.minMessage || 'This value is too short. It should have %%limit%% characters or more.';
         this.normalize = (!this.__options.normalize || false === this.__options.normalize) ? false : true;
 
-        this.__setName('LengthValidator');
+        this.name = 'LengthValidator';
     };
     LengthValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     LengthValidator.prototype.constructor = LengthValidator;
 
-    Object.defineProperty(LengthValidator.prototype, 'name', {
+    Object.defineProperty(LengthValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'length';
         }
     });
 
@@ -294,3 +294,5 @@ Object.assign(abv, function () {
         LengthValidator: LengthValidator
     };
 }());
+
+abv.registry(abv.LengthValidator);

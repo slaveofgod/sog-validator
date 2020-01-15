@@ -48,14 +48,14 @@ Object.assign(abv, function () {
 
         this.message = this.__options.message || 'This value should be blank.';
 
-        this.__setName('BlankValidator');
+        this.name = 'BlankValidator';
     };
     BlankValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     BlankValidator.prototype.constructor = BlankValidator;
 
-    Object.defineProperty(BlankValidator.prototype, 'name', {
+    Object.defineProperty(BlankValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'blank';
         }
     });
 
@@ -94,3 +94,5 @@ Object.assign(abv, function () {
         BlankValidator: BlankValidator
     };
 }());
+
+abv.registry(abv.BlankValidator);

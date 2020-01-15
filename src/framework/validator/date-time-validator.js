@@ -283,14 +283,14 @@ Object.assign(abv, function () {
         this.message = this.__options.message || 'This value is not a valid datetime.';
         this.format = this.__options.format || 'YYYY-MM-DD HH:mm:ss';
 
-        this.__setName('DateTimeValidator');
+        this.name = 'DateTimeValidator';
     };
     DateTimeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     DateTimeValidator.prototype.constructor = DateTimeValidator;
 
-    Object.defineProperty(DateTimeValidator.prototype, 'name', {
+    Object.defineProperty(DateTimeValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'date-time';
         }
     });
 
@@ -363,3 +363,5 @@ Object.assign(abv, function () {
         DateTimeValidator: DateTimeValidator
     };
 }());
+
+abv.registry(abv.DateTimeValidator);

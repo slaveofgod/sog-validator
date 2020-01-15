@@ -183,14 +183,14 @@ Object.assign(abv, function () {
 
         this.message = this.__options.message || 'This value is not a valid language.';
 
-        this.__setName('LanguageValidator');
+        this.name = 'LanguageValidator';
     };
     LanguageValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     LanguageValidator.prototype.constructor = LanguageValidator;
 
-    Object.defineProperty(LanguageValidator.prototype, 'name', {
+    Object.defineProperty(LanguageValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'language';
         }
     });
 
@@ -257,3 +257,5 @@ Object.assign(abv, function () {
         LanguageValidator: LanguageValidator
     };
 }());
+
+abv.registry(abv.LanguageValidator);

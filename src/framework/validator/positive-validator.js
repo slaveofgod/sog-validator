@@ -61,14 +61,14 @@ Object.assign(abv, function () {
         this.value = 0;
         this.message = this.__options.message || 'This value should be positive.';
 
-        this.__setName('PositiveValidator');
+        this.name = 'PositiveValidator';
     };
     PositiveValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
     PositiveValidator.prototype.constructor = PositiveValidator;
 
-    Object.defineProperty(PositiveValidator.prototype, 'name', {
+    Object.defineProperty(PositiveValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'positive';
         }
     });
 
@@ -106,3 +106,5 @@ Object.assign(abv, function () {
         PositiveValidator: PositiveValidator
     };
 }());
+
+abv.registry(abv.PositiveValidator);

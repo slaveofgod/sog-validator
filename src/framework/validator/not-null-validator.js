@@ -48,14 +48,14 @@ Object.assign(abv, function () {
 
         this.message = this.__options.message || 'This value should not be null.';
 
-        this.__setName('NotNullValidator');
+        this.name = 'NotNullValidator';
     };
     NotNullValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     NotNullValidator.prototype.constructor = NotNullValidator;
 
-    Object.defineProperty(NotNullValidator.prototype, 'name', {
+    Object.defineProperty(NotNullValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return ['not-null', 'required'];
         }
     });
 
@@ -98,3 +98,5 @@ Object.assign(abv, function () {
         NotNullValidator: NotNullValidator
     };
 }());
+
+abv.registry(abv.NotNullValidator);

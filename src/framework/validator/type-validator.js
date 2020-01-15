@@ -97,15 +97,15 @@ Object.assign(abv, function () {
         this.message = this.__options.message || 'This value should be of type %%type%%.';
         this.any = (true === this.__options.any);
 
-        this.__setName('TypeValidator');
+        this.name = 'TypeValidator';
         this.__invalidType = null;
     };
     TypeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     TypeValidator.prototype.constructor = TypeValidator;
 
-    Object.defineProperty(TypeValidator.prototype, 'name', {
+    Object.defineProperty(TypeValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'type';
         }
     });
 
@@ -195,3 +195,5 @@ Object.assign(abv, function () {
         TypeValidator: TypeValidator
     };
 }());
+
+abv.registry(abv.TypeValidator);

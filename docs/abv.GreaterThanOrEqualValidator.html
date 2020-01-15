@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>abv.NotEqualToValidator | PlayCanvas API Reference</title>
+        <title>abv.GreaterThanOrEqualValidator | PlayCanvas API Reference</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/png" href="images/playcanvas-favicon.png">
 
@@ -83,11 +83,10 @@
 </nav>
 <div class='sidebarToggle'><span></span>Class List</div>
             <main class="cls">
-    <h1>abv.NotEqualToValidator</h1>
+    <h1>abv.GreaterThanOrEqualValidator</h1>
     <p class="extends">Extends: <a href="abv.AbstractComparisonValidator.html">abv.AbstractComparisonValidator</a></p>
-    <p>Validates that a value is not equal to another value, defined in the options.
-This constraint compares using !=, so 3 and "3" are considered equal. abv.Use NotIdenticalTo to compare with !==.</p>
-        <pre><code class="javascript">var validator = new abv.NotEqualToValidator(data, {"value": "the value to compare to"});
+    <p>Validates that a value is greater than or equal to another value, defined in the options.</p>
+        <pre><code class="javascript">var validator = new abv.GreaterThanOrEqualValidator(data, {"value": "the value to compare to"});
 if (false === validator.isValid()) {
      validator.messages().first();
 }</code></pre>
@@ -105,7 +104,7 @@ if (false === validator.isValid()) {
     <h3>Properties</h3>
     <table class="properties">
     <tr>
-        <td><a href="#message">message</a></td><td>This is the message that will be shown if the value is not equal.</td>
+        <td><a href="#message">message</a></td><td>This is the message that will be shown if the value is not greater than or equal to the comparison value.</td>
     </tr>
     <tr>
         <td><a href="#value">value</a></td><td>This option is required.</td>
@@ -146,10 +145,10 @@ if (false === validator.isValid()) {
 
     <h2>Constructor</h2>
     <!-- Constructor -->
-    <div id="NotEqualToValidator">
-    <h3 class="methodname">NotEqualToValidator(data, options, lang, internal) <a class="font-icon" href="#NotEqualToValidator">&#58216;</a></h3>
+    <div id="GreaterThanOrEqualValidator">
+    <h3 class="methodname">GreaterThanOrEqualValidator(data, options, lang, internal) <a class="font-icon" href="#GreaterThanOrEqualValidator">&#58216;</a></h3>
     <p>Create a new Validator.</p>
-    <pre><code class="javascript">var validator = new abv.NotEqualToValidator(data, {"value": "the value to compare to"});
+    <pre><code class="javascript">var validator = new abv.GreaterThanOrEqualValidator(data, {"value": "the value to compare to"});
 if (false === validator.isValid()) {
      validator.messages().first();
 }</code></pre>
@@ -176,8 +175,8 @@ if (false === validator.isValid()) {
     <h2>Properties</h2>
         <div id="message">
     <span class="property"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span class="property">message <a class="font-icon" href="#message">&#58216;</a></span>
-    <p>This is the message that will be shown if the value is not equal.
-Default: "This value should not be equal to %%compared_value%%."
+    <p>This is the message that will be shown if the value is not greater than or equal to the comparison value.
+Default: "This value should be greater than or equal to %%compared_value%%."
 You can use the following parameters in this message:
 <table>
     <thead>
@@ -204,7 +203,7 @@ You can use the following parameters in this message:
 </div>
         <div id="value">
     <span class="property"><a href="#">*</a></span><span class="property">value <a class="font-icon" href="#value">&#58216;</a></span>
-    <p>This option is required. It defines the value to compare to. It can be a string, number or object.</p>
+    <p>This option is required. It defines the value to compare to. It can be a string, number or date object.</p>
 </div>
 
     <!--methods-->

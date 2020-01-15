@@ -142,14 +142,14 @@ Object.assign(abv, function () {
         this.strict = (false === this.__options.strict) ? false : true;
         this.versions = (this.__checkVersions()) ? this.__options.versions : this.__versions;
 
-        this.__setName('UuidValidator');
+        this.name = 'UuidValidator';
     };
     UuidValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     UuidValidator.prototype.constructor = UuidValidator;
 
-    Object.defineProperty(UuidValidator.prototype, 'name', {
+    Object.defineProperty(UuidValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'uuid';
         }
     });
 
@@ -373,3 +373,5 @@ Object.assign(abv, function () {
         UuidValidator: UuidValidator
     };
 }());
+
+abv.registry(abv.UuidValidator);

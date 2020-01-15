@@ -203,14 +203,14 @@ Object.assign(abv, function () {
 
         this.__currentInvalidDataItem = null;
 
-        this.__setName('ChoiceValidator');
+        this.name = 'ChoiceValidator';
     };
     ChoiceValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     ChoiceValidator.prototype.constructor = ChoiceValidator;
 
-    Object.defineProperty(ChoiceValidator.prototype, 'name', {
+    Object.defineProperty(ChoiceValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'choice';
         }
     });
 
@@ -342,3 +342,5 @@ Object.assign(abv, function () {
         ChoiceValidator: ChoiceValidator
     };
 }());
+
+abv.registry(abv.ChoiceValidator);

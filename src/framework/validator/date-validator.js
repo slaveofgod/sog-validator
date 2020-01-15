@@ -51,14 +51,14 @@ Object.assign(abv, function () {
         this.message = this.__options.message || 'This value is not a valid date.';
         this.format = this.__options.format || 'YYYY-MM-DD';
 
-        this.__setName('DateValidator');
+        this.name = 'DateValidator';
     };
     DateValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     DateValidator.prototype.constructor = DateValidator;
 
-    Object.defineProperty(DateValidator.prototype, 'name', {
+    Object.defineProperty(DateValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'date';
         }
     });
 
@@ -124,3 +124,5 @@ Object.assign(abv, function () {
         DateValidator: DateValidator
     };
 }());
+
+abv.registry(abv.DateValidator);

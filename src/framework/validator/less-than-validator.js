@@ -65,14 +65,14 @@ Object.assign(abv, function () {
 
         this.message = this.__options.message || 'This value should be less than %%compared_value%%.';
 
-        this.__setName('LessThanValidator');
+        this.name = 'LessThanValidator';
     };
     LessThanValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
     LessThanValidator.prototype.constructor = LessThanValidator;
 
-    Object.defineProperty(LessThanValidator.prototype, 'name', {
+    Object.defineProperty(LessThanValidator.prototype, 'alias', {
         get: function () {
-            return this.__getName();
+            return 'less-than';
         }
     });
 
@@ -110,3 +110,5 @@ Object.assign(abv, function () {
         LessThanValidator: LessThanValidator
     };
 }());
+
+abv.registry(abv.LessThanValidator);
