@@ -178,7 +178,7 @@ Object.assign(abv, function () {
 
     var LanguageValidator = function (data, options, lang, internal) {
         abv.AbstractValidator.call(this, data, options,{
-            message: 'length:{"min":3,"max":255}'
+            message: 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
         this.message = this.__options.message || 'This value is not a valid language.';

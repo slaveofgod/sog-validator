@@ -84,7 +84,9 @@ Object.assign(abv, function () {
     /**
      * @name abv.LengthValidator#maxMessage
      * @type {String}
-     * @description The message that will be shown if the underlying value's length is more than the max option. Default: 'This value is too long. It should have %%limit%% characters or less.'.
+     * @description
+     * The message that will be shown if the underlying value's length is more than the max option.
+     * Default: 'This value is too long. It should have %%limit%% characters or less.'.
      * You can use the following parameters in this message:
      * <table>
      *     <tr>
@@ -105,7 +107,8 @@ Object.assign(abv, function () {
     /**
      * @name abv.LengthValidator#min
      * @type {Integer}
-     * @description This option is the "min" length value. Validation will fail if the given value's length is less than this min value.
+     * @description
+     * This option is the "min" length value. Validation will fail if the given value's length is less than this min value.
      * This option is required when the max option is not defined.
      * It is important to notice that NULL values and empty strings are considered valid no matter if the constraint required a minimum length. Validators are triggered only if the value is not blank.
      */
@@ -113,7 +116,9 @@ Object.assign(abv, function () {
     /**
      * @name abv.LengthValidator#minMessage
      * @type {String}
-     * @description The message that will be shown if the underlying value's length is less than the min option. Default: 'This value is too short. It should have %%limit%% characters or more.'.
+     * @description
+     * The message that will be shown if the underlying value's length is less than the min option.
+     * Default: 'This value is too short. It should have %%limit%% characters or more.'.
      * You can use the following parameters in this message:
      * <table>
      *     <tr>
@@ -141,12 +146,12 @@ Object.assign(abv, function () {
         abv.AbstractValidator.call(this, data, options,{
             allowEmptyString: 'type:{"type":"bool"}',
             charset: 'length:{"min":2,"max":10}',
-            charsetMessage: 'length:{"min":3,"max":255}',
-            exactMessage: 'length:{"min":3,"max":255}',
+            charsetMessage: 'type:{"type":"string"}|length:{"min":3,"max":255}',
+            exactMessage: 'type:{"type":"string"}|length:{"min":3,"max":255}',
             max: 'type:{"type":"integer"}',
-            maxMessage: 'length:{"min":3,"max":255}',
+            maxMessage: 'type:{"type":"string"}|length:{"min":3,"max":255}',
             min: 'type:{"type":"integer"}',
-            minMessage: 'length:{"min":3,"max":255}',
+            minMessage: 'type:{"type":"string"}|length:{"min":3,"max":255}',
             normalize: 'type:{"type":"bool"}'
         }, lang, internal);
 

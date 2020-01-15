@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision a109146
+ * Bob Validator Library v2.0 revision d3673da
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"a109146", config:{}, common:{}, validators:{}, registry:function(validator) {
+var abv = {version:"2.0", revision:"d3673da", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, "en", true);
   var alias = __validator.alias;
@@ -8565,7 +8565,7 @@ Object.assign(abv, function() {
 }());
 Object.assign(abv, function() {
   var NotBlankValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.allowNull = !this.__options.allowNull || false === this.__options.allowNull ? false : true;
     this.message = this.__options.message || "This value should not be blank.";
     this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
@@ -8608,7 +8608,7 @@ Object.assign(abv, function() {
 abv.registry(abv.NotBlankValidator);
 Object.assign(abv, function() {
   var BlankValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value should be blank.";
     this.name = "BlankValidator";
   };
@@ -8630,7 +8630,7 @@ Object.assign(abv, function() {
 abv.registry(abv.BlankValidator);
 Object.assign(abv, function() {
   var IsNullValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value should be null.";
     this.name = "IsNullValidator";
   };
@@ -8652,7 +8652,7 @@ Object.assign(abv, function() {
 abv.registry(abv.IsNullValidator);
 Object.assign(abv, function() {
   var NotNullValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value should not be null.";
     this.name = "NotNullValidator";
   };
@@ -8678,7 +8678,7 @@ Object.assign(abv, function() {
 abv.registry(abv.NotNullValidator);
 Object.assign(abv, function() {
   var IsTrueValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value should be true.";
     this.name = "IsTrueValidator";
   };
@@ -8700,7 +8700,7 @@ Object.assign(abv, function() {
 abv.registry(abv.IsTrueValidator);
 Object.assign(abv, function() {
   var IsFalseValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value should be false.";
     this.name = "IsFalseValidator";
   };
@@ -8722,7 +8722,7 @@ Object.assign(abv, function() {
 abv.registry(abv.IsFalseValidator);
 Object.assign(abv, function() {
   var TypeValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {type:'type:{"type":["string","array"],"any":true}', message:'length:{"min":3,"max":255}', any:'type:{"type":"boolean"}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {type:'type:{"type":["string","array"],"any":true}', message:'type:{"type":"string"}|length:{"min":3,"max":255}', any:'type:{"type":"boolean"}'}, lang, internal);
     this.type = this.__options.type || "string";
     this.message = this.__options.message || "This value should be of type %%type%%.";
     this.any = true === this.__options.any;
@@ -8779,7 +8779,7 @@ Object.assign(abv, function() {
 abv.registry(abv.TypeValidator);
 Object.assign(abv, function() {
   var EmailValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', mode:'length:{"min":2,"max":20}', normalize:'type:{"type":"bool"}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', mode:'length:{"min":2,"max":20}', normalize:'type:{"type":"bool"}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid email address.";
     this.mode = ["loose", "strict", "html5"].includes(this.__options.mode) ? this.__options.mode : "html5";
     this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
@@ -8843,7 +8843,7 @@ Object.assign(abv, function() {
 abv.registry(abv.EmailValidator);
 Object.assign(abv, function() {
   var LengthValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {allowEmptyString:'type:{"type":"bool"}', charset:'length:{"min":2,"max":10}', charsetMessage:'length:{"min":3,"max":255}', exactMessage:'length:{"min":3,"max":255}', max:'type:{"type":"integer"}', maxMessage:'length:{"min":3,"max":255}', min:'type:{"type":"integer"}', minMessage:'length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {allowEmptyString:'type:{"type":"bool"}', charset:'length:{"min":2,"max":10}', charsetMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', exactMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', max:'type:{"type":"integer"}', maxMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', min:'type:{"type":"integer"}', minMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}'}, lang, internal);
     this.allowEmptyString = !this.__options.allowEmptyString || false === this.__options.allowEmptyString ? false : true;
     this.exactMessage = this.__options.exactMessage || "This value should have exactly %%limit%% characters.";
     this.max = this.__options.max;
@@ -8903,7 +8903,7 @@ Object.assign(abv, function() {
 abv.registry(abv.LengthValidator);
 Object.assign(abv, function() {
   var UrlValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}', protocols:'type:{"type":["string","array"],"any":true}', relativeProtocol:'type:{"type":"bool"}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}', protocols:'type:{"type":["string","array"],"any":true}', relativeProtocol:'type:{"type":"bool"}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid URL.";
     this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
     this.protocols = this.__options.protocols || ["http", "https", "ftp"];
@@ -8966,7 +8966,7 @@ Object.assign(abv, function() {
 abv.registry(abv.UrlValidator);
 Object.assign(abv, function() {
   var RegexValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {match:'type:{"type": "bool"}', message:'length:{"min":3,"max":255}', pattern:"required", normalize:'type:{"type": "bool"}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {match:'type:{"type": "bool"}', message:'type:{"type":"string"}|length:{"min":3,"max":255}', pattern:"required", normalize:'type:{"type": "bool"}'}, lang, internal);
     this.match = false === this.__options.match ? false : true;
     this.message = this.__options.message || "This value is not valid.";
     this.pattern = this.__options.pattern;
@@ -9016,7 +9016,7 @@ Object.assign(abv, function() {
 abv.registry(abv.RegexValidator);
 Object.assign(abv, function() {
   var IpValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}', version:'length:{"min":1,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}', version:'length:{"min":1,"max":255}'}, lang, internal);
     this.V4 = "4";
     this.V6 = "6";
     this.ALL = "all";
@@ -9120,7 +9120,7 @@ Object.assign(abv, function() {
 abv.registry(abv.IpValidator);
 Object.assign(abv, function() {
   var JsonValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value should be valid JSON.";
     this.name = "JsonValidator";
   };
@@ -9162,7 +9162,7 @@ Object.assign(abv, function() {
 abv.registry(abv.JsonValidator);
 Object.assign(abv, function() {
   var UuidValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}', versions:'type:{"type":"array"}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}', versions:'type:{"type":"array"}'}, lang, internal);
     this.V1_MAC1 = 1;
     this.V2_DCE = 2;
     this.V3_MD5 = 3;
@@ -9310,7 +9310,7 @@ Object.assign(abv, function() {
 abv.registry(abv.UuidValidator);
 Object.assign(abv, function() {
   var EqualToValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', value:"required"}, lang, internal);
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:"required"}, lang, internal);
     this.message = this.__options.message || "This value should be equal to %%compared_value%%.";
     this.name = "EqualToValidator";
   };
@@ -9329,7 +9329,7 @@ Object.assign(abv, function() {
 abv.registry(abv.EqualToValidator);
 Object.assign(abv, function() {
   var NotEqualToValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', value:"required"}, lang, internal);
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:"required"}, lang, internal);
     this.message = this.__options.message || "This value should not be equal to %%compared_value%%.";
     this.name = "NotEqualToValidator";
   };
@@ -9348,7 +9348,7 @@ Object.assign(abv, function() {
 abv.registry(abv.NotEqualToValidator);
 Object.assign(abv, function() {
   var IdenticalToValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', value:"required"}, lang, internal);
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:"required"}, lang, internal);
     this.message = this.__options.message || "This value should be identical to %%compared_value_type%% %%compared_value%%.";
     this.name = "IdenticalToValidator";
   };
@@ -9367,7 +9367,7 @@ Object.assign(abv, function() {
 abv.registry(abv.IdenticalToValidator);
 Object.assign(abv, function() {
   var NotIdenticalToValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', value:"required"}, lang, internal);
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:"required"}, lang, internal);
     this.message = this.__options.message || "This value should not be identical to %%compared_value_type%% %%compared_value%%.";
     this.name = "NotIdenticalToValidator";
   };
@@ -9386,7 +9386,7 @@ Object.assign(abv, function() {
 abv.registry(abv.NotIdenticalToValidator);
 Object.assign(abv, function() {
   var LessThanValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
     this.message = this.__options.message || "This value should be less than %%compared_value%%.";
     this.name = "LessThanValidator";
   };
@@ -9405,7 +9405,7 @@ Object.assign(abv, function() {
 abv.registry(abv.LessThanValidator);
 Object.assign(abv, function() {
   var LessThanOrEqualValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
     this.message = this.__options.message || "This value should be less than or equal to %%compared_value%%.";
     this.name = "LessThanOrEqualValidator";
   };
@@ -9424,7 +9424,7 @@ Object.assign(abv, function() {
 abv.registry(abv.LessThanOrEqualValidator);
 Object.assign(abv, function() {
   var GreaterThanValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
     this.message = this.__options.message || "This value should be greater than %%compared_value%%.";
     this.name = "GreaterThanValidator";
   };
@@ -9443,7 +9443,7 @@ Object.assign(abv, function() {
 abv.registry(abv.GreaterThanValidator);
 Object.assign(abv, function() {
   var GreaterThanOrEqualValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
     this.message = this.__options.message || "This value should be greater than or equal to %%compared_value%%.";
     this.name = "GreaterThanOrEqualValidator";
   };
@@ -9462,7 +9462,7 @@ Object.assign(abv, function() {
 abv.registry(abv.GreaterThanOrEqualValidator);
 Object.assign(abv, function() {
   var RangeValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {invalidMessage:'length:{"min":3,"max":255}', max:'required|type:{"type":["numeric","date-string"],"any":true}', maxMessage:'length:{"min":3,"max":255}', min:'required|type:{"type":["numeric","date-string"],"any":true}', minMessage:'length:{"min":3,"max":255}', notInRangeMessage:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {invalidMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', max:'required|type:{"type":["numeric","date-string"],"any":true}', maxMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', min:'required|type:{"type":["numeric","date-string"],"any":true}', minMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', notInRangeMessage:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.invalidMessage = this.__options.invalidMessage || "This value should be a valid number.";
     this.max = this.__options.max;
     this.maxMessage = this.__options.maxMessage || "This value should be %%limit%% or less.";
@@ -9526,7 +9526,7 @@ Object.assign(abv, function() {
 abv.registry(abv.RangeValidator);
 Object.assign(abv, function() {
   var DivisibleByValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
     this.message = this.__options.message || "This value should be a multiple of %%compared_value%%.";
     this.name = "DivisibleByValidator";
   };
@@ -9552,7 +9552,7 @@ Object.assign(abv, function() {
 abv.registry(abv.DivisibleByValidator);
 Object.assign(abv, function() {
   var UniqueValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This collection should contain only unique elements.";
     this.__repeated = [];
     this.name = "UniqueValidator";
@@ -9600,7 +9600,7 @@ Object.assign(abv, function() {
 abv.registry(abv.UniqueValidator);
 Object.assign(abv, function() {
   var PositiveValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.value = 0;
     this.message = this.__options.message || "This value should be positive.";
     this.name = "PositiveValidator";
@@ -9620,7 +9620,7 @@ Object.assign(abv, function() {
 abv.registry(abv.PositiveValidator);
 Object.assign(abv, function() {
   var PositiveOrZeroValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.value = 0;
     this.message = this.__options.message || "This value should be either positive or zero.";
     this.name = "PositiveOrZeroValidator";
@@ -9640,7 +9640,7 @@ Object.assign(abv, function() {
 abv.registry(abv.PositiveOrZeroValidator);
 Object.assign(abv, function() {
   var NegativeValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.value = 0;
     this.message = this.__options.message || "This value should be negative.";
     this.name = "NegativeValidator";
@@ -9660,7 +9660,7 @@ Object.assign(abv, function() {
 abv.registry(abv.NegativeValidator);
 Object.assign(abv, function() {
   var NegativeOrZeroValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.value = 0;
     this.message = this.__options.message || "This value should be either negative or zero.";
     this.name = "NegativeOrZeroValidator";
@@ -9680,7 +9680,7 @@ Object.assign(abv, function() {
 abv.registry(abv.NegativeOrZeroValidator);
 Object.assign(abv, function() {
   var DateValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid date.";
     this.format = this.__options.format || "YYYY-MM-DD";
     this.name = "DateValidator";
@@ -9721,7 +9721,7 @@ Object.assign(abv, function() {
 abv.registry(abv.DateValidator);
 Object.assign(abv, function() {
   var DateTimeValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}', format:'type:{"type":"string"}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', format:'type:{"type":"string"}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid datetime.";
     this.format = this.__options.format || "YYYY-MM-DD HH:mm:ss";
     this.name = "DateTimeValidator";
@@ -9767,7 +9767,7 @@ Object.assign(abv, function() {
 abv.registry(abv.DateTimeValidator);
 Object.assign(abv, function() {
   var TimeValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid time.";
     this.format = this.__options.format || "HH:mm:ss";
     this.name = "TimeValidator";
@@ -9808,7 +9808,7 @@ Object.assign(abv, function() {
 abv.registry(abv.TimeValidator);
 Object.assign(abv, function() {
   var TimezoneValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid timezone.";
     this.name = "TimezoneValidator";
   };
@@ -9849,7 +9849,7 @@ Object.assign(abv, function() {
 abv.registry(abv.TimezoneValidator);
 Object.assign(abv, function() {
   var ChoiceValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {callback:'type:{"type":["string","array","callable"],"any":true}', choices:'type:{"type":"array"}', max:'type:{"type":"numeric"}', maxMessage:'length:{"min":3,"max":255}', min:'type:{"type":"numeric"}', minMessage:'length:{"min":3,"max":255}', multiple:'type:{"type":"bool"}', multipleMessage:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {callback:'type:{"type":["string","array","callable"],"any":true}', choices:'type:{"type":"array"}', max:'type:{"type":"numeric"}', maxMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', min:'type:{"type":"numeric"}', minMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', multiple:'type:{"type":"bool"}', multipleMessage:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.callback = this.__options.callback;
     this.choices = this.__options.choices;
     this.max = this.__options.max;
@@ -9928,7 +9928,7 @@ Object.assign(abv, function() {
 abv.registry(abv.ChoiceValidator);
 Object.assign(abv, function() {
   var LanguageValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid language.";
     this.name = "LanguageValidator";
   };
@@ -9969,7 +9969,7 @@ Object.assign(abv, function() {
 abv.registry(abv.LanguageValidator);
 Object.assign(abv, function() {
   var LocaleValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid locale.";
     this.__locales = {"eu":"Basque", "hr_BA":"Croatian (Bosnia & Herzegovina)", "en_CM":"English (Cameroon)", "en_BI":"English (Burundi)", "rw_RW":"Kinyarwanda (Rwanda)", "ast":"Asturian", "en_SZ":"English (Swaziland)", "he_IL":"Hebrew (Israel)", "ar":"Uzbek (Arabic)", "Arabicuz_Arab":"Uzbek (Arabic)", "en_PN":"English (Pitcairn Islands)", "as":"Assamese", "en_NF":"English (Norfolk Island)", "ks_IN":"Kashmiri (India)", "rwk_TZ":"Rwa (Tanzania)", "zh_Hant_TW":"Chinese (Traditional, Taiwan)", "en_CN":"English (China)", 
     "gsw_LI":"Swiss German (Liechtenstein)", "ta_IN":"Tamil (India)", "th_TH":"Thai (Thailand)", "es_EA":"Spanish (Ceuta & Melilla)", "fr_GF":"French (French Guiana)", "ar_001":"Arabic (World)", "en_RW":"English (Rwanda)", "tr_TR":"Turkish (Turkey)", "de_CH":"German (Switzerland)", "ee_TG":"Ewe (Togo)", "en_NG":"English (Nigeria)", "fr_TG":"French (Togo)", "az":"Azerbaijani", "fr_SC":"French (Seychelles)", "es_HN":"Spanish (Honduras)", "en_AG":"English (Antigua & Barbuda)", "ru_KZ":"Russian (Kazakhstan)", 
@@ -10050,7 +10050,7 @@ Object.assign(abv, function() {
 abv.registry(abv.LocaleValidator);
 Object.assign(abv, function() {
   var CountryValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid country.";
     this.__countries = {"AF":"Afghanistan", "AX":"Aland Islands", "AL":"Albania", "DZ":"Algeria", "AS":"American Samoa", "AD":"Andorra", "AO":"Angola", "AI":"Anguilla", "AQ":"Antarctica", "AG":"Antigua And Barbuda", "AR":"Argentina", "AM":"Armenia", "AW":"Aruba", "AU":"Australia", "AT":"Austria", "AZ":"Azerbaijan", "BS":"Bahamas", "BH":"Bahrain", "BD":"Bangladesh", "BB":"Barbados", "BY":"Belarus", "BE":"Belgium", "BZ":"Belize", "BJ":"Benin", "BM":"Bermuda", "BT":"Bhutan", "BO":"Bolivia", "BA":"Bosnia And Herzegovina", 
     "BW":"Botswana", "BV":"Bouvet Island", "BR":"Brazil", "IO":"British Indian Ocean Territory", "BN":"Brunei Darussalam", "BG":"Bulgaria", "BF":"Burkina Faso", "BI":"Burundi", "KH":"Cambodia", "CM":"Cameroon", "CA":"Canada", "CV":"Cape Verde", "KY":"Cayman Islands", "CF":"Central African Republic", "TD":"Chad", "CL":"Chile", "CN":"China", "CX":"Christmas Island", "CC":"Cocos (Keeling) Islands", "CO":"Colombia", "KM":"Comoros", "CG":"Congo", "CD":"Congo, Democratic Republic", "CK":"Cook Islands", 
@@ -10098,6 +10098,133 @@ Object.assign(abv, function() {
   return {CountryValidator:CountryValidator};
 }());
 abv.registry(abv.CountryValidator);
+Object.assign(abv, function() {
+  var BicValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {iban:'type:{"type":"string"}|length:{"min":3,"max":255}', ibanMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.BIC_COUNTRY_TO_IBAN_COUNTRY_MAP = {"GF":"FR", "PF":"FR", "TF":"FR", "GP":"FR", "MQ":"FR", "YT":"FR", "NC":"FR", "RE":"FR", "PM":"FR", "WF":"FR", "JE":"GB", "IM":"GB", "GG":"GB", "VG":"GB"};
+    this.iban = this.__options.iban || null;
+    this.ibanMessage = this.__options.ibanMessage || "This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.";
+    this.message = this.__options.message || "This is not a valid Business Identifier Code (BIC).";
+    this.name = "BicValidator";
+  };
+  BicValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  BicValidator.prototype.constructor = BicValidator;
+  Object.defineProperty(BicValidator.prototype, "alias", {get:function() {
+    return "bic";
+  }});
+  Object.assign(BicValidator.prototype, {__validate:function() {
+    var canonicalize = this.data.split(" ").join("");
+    if (false === [8, 11].includes(canonicalize.length)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (false === abv.isType("alnum", canonicalize)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (false === abv.isType("alpha", canonicalize.substr(0, 4))) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (null !== abv.isValidWithErrorMessage(canonicalize.substr(4, 2), "country", true)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (canonicalize.toUpperCase() !== canonicalize) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (null === this.iban) {
+      return;
+    }
+    var ibanCountryCode = this.iban.substr(0, 2);
+    if (true === abv.isType("alpha", ibanCountryCode) && this.__bicAndIbanCountriesMatch(canonicalize.substr(4, 2), ibanCountryCode)) {
+      this.__setErrorMessage(this.ibanMessage, this.__ibanMessageParameters());
+      return;
+    }
+  }, __bicAndIbanCountriesMatch:function(bicCountryCode, ibanCountryCode) {
+    return ibanCountryCode === bicCountryCode || ibanCountryCode === (this.BIC_COUNTRY_TO_IBAN_COUNTRY_MAP[bicCountryCode] || null);
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }, __ibanMessageParameters:function() {
+    return {"iban":this.iban};
+  }});
+  return {BicValidator:BicValidator};
+}());
+abv.registry(abv.BicValidator);
+Object.assign(abv, function() {
+  var CardSchemeValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', schemes:'required|type:{"type":["string","array"],"any":true}'}, lang, internal);
+    this.__schemes = {"AMEX":[/^3[47][0-9]{13}$/], "CHINA_UNIONPAY":[/^62[0-9]{14,17}$/], "DINERS":[/^3(?:0[0-5]|[68][0-9])[0-9]{11}$/], "DISCOVER":[/^6011[0-9]{12}$/, /^64[4-9][0-9]{13}$/, /^65[0-9]{14}$/, /^622(12[6-9]|1[3-9][0-9]|[2-8][0-9][0-9]|91[0-9]|92[0-5])[0-9]{10}$/], "INSTAPAYMENT":[/^63[7-9][0-9]{13}$/], "JCB":[/^(?:2131|1800|35[0-9]{3})[0-9]{11}$/], "LASER":[/^(6304|670[69]|6771)[0-9]{12,15}$/], "MAESTRO":[/^(6759[0-9]{2})[0-9]{6,13}$/, /^(50[0-9]{4})[0-9]{6,13}$/, /^5[6-9][0-9]{10,17}$/, 
+    /^6[0-9]{11,18}$/], "MASTERCARD":[/^5[1-5][0-9]{14}$/, /^2(22[1-9][0-9]{12}|2[3-9][0-9]{13}|[3-6][0-9]{14}|7[0-1][0-9]{13}|720[0-9]{12})$/], "MIR":[/^220[0-4][0-9]{12}$/], "UATP":[/^1[0-9]{14}$/], "VISA":[/^4([0-9]{12}|[0-9]{15}|[0-9]{18})$/]};
+    this.message = this.__options.message || "Unsupported card type or invalid card number.";
+    this.schemes = "string" === typeof this.__options.schemes ? [this.__options.schemes] : this.__options.schemes;
+    this.name = "CardSchemeValidator";
+  };
+  CardSchemeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  CardSchemeValidator.prototype.constructor = CardSchemeValidator;
+  Object.defineProperty(CardSchemeValidator.prototype, "alias", {get:function() {
+    return "card-scheme";
+  }});
+  Object.assign(CardSchemeValidator.prototype, {__validate:function() {
+    if (false === abv.isType("numeric", this.data)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    for (var i = 0; i < this.schemes.length; i++) {
+      if ("undefined" === typeof this.__schemes[this.schemes[i]]) {
+        continue;
+      }
+      for (var j = 0; j < this.__schemes[this.schemes[i]].length; j++) {
+        if (true === this.__schemes[this.schemes[i]][j].test(this.data)) {
+          return;
+        }
+      }
+    }
+    this.__setErrorMessage(this.message, this.__messageParameters());
+    return;
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {CardSchemeValidator:CardSchemeValidator};
+}());
+abv.registry(abv.CardSchemeValidator);
 
 
 return abv;

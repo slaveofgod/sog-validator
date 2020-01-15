@@ -80,3 +80,5 @@
 ../src/framework/validator/language-validator.js
 ../src/framework/validator/locale-validator.js
 ../src/framework/validator/country-validator.js
+../src/framework/validator/bic-validator.js
+../src/framework/validator/card-scheme-validator.js

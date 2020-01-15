@@ -23,7 +23,9 @@ Object.assign(abv, function () {
     /**
      * @name abv.IsFalseValidator#message
      * @type {String}
-     * @description This message is shown if the underlying data is not false. Default: "This value should be false."
+     * @description
+     * This message is shown if the underlying data is not false.
+     * Default: "This value should be false."
      * You can use the following parameters in this message:
      * <table>
      *     <thead>
@@ -43,7 +45,7 @@ Object.assign(abv, function () {
 
     var IsFalseValidator = function (data, options, lang, internal) {
         abv.AbstractValidator.call(this, data, options,{
-            message: 'length:{"min":3,"max":255}'
+            message: 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
         this.message = this.__options.message || 'This value should be false.';

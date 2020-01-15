@@ -132,12 +132,12 @@ Object.assign(abv, function () {
 
     var RangeValidator = function (data, options, lang, internal) {
         abv.AbstractValidator.call(this, data, options,{
-            invalidMessage: 'length:{"min":3,"max":255}',
+            invalidMessage: 'type:{"type":"string"}|length:{"min":3,"max":255}',
             max: 'required|type:{"type":["numeric","date-string"],"any":true}',
-            maxMessage: 'length:{"min":3,"max":255}',
+            maxMessage: 'type:{"type":"string"}|length:{"min":3,"max":255}',
             min: 'required|type:{"type":["numeric","date-string"],"any":true}',
-            minMessage: 'length:{"min":3,"max":255}',
-            notInRangeMessage: 'length:{"min":3,"max":255}'
+            minMessage: 'type:{"type":"string"}|length:{"min":3,"max":255}',
+            notInRangeMessage: 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
         this.invalidMessage = this.__options.invalidMessage || 'This value should be a valid number.';

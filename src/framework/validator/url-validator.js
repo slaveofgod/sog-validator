@@ -23,7 +23,9 @@ Object.assign(abv, function () {
     /**
      * @name abv.UrlValidator#message
      * @type {String}
-     * @description This message is shown if the URL is invalid. Default: "This value is not a valid URL."
+     * @description
+     * This message is shown if the URL is invalid.
+     * Default: "This value is not a valid URL."
      * You can use the following parameters in this message:
      * <table>
      *     <thead>
@@ -44,7 +46,9 @@ Object.assign(abv, function () {
     /**
      * @name abv.UrlValidator#normalize
      * @type {Boolean}
-     * @description Normalizer string before validate (trim, etc.). Default: false.
+     * @description
+     * Normalizer string before validate (trim, etc.).
+     * Default: false.
      */
 
     /**
@@ -67,7 +71,7 @@ Object.assign(abv, function () {
 
     var UrlValidator = function (data, options, lang, internal) {
         abv.AbstractValidator.call(this, data, options,{
-            message: 'length:{"min":3,"max":255}',
+            message: 'type:{"type":"string"}|length:{"min":3,"max":255}',
             normalize: 'type:{"type":"bool"}',
             protocols: 'type:{"type":["string","array"],"any":true}',
             relativeProtocol: 'type:{"type":"bool"}'

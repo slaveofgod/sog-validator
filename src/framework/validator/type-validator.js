@@ -23,7 +23,8 @@ Object.assign(abv, function () {
     /**
      * @name abv.TypeValidator#type
      * @type {String|Array}
-     * @description This required option defines the type or collection of types allowed for the given value.
+     * @description
+     * This required option defines the type or collection of types allowed for the given value.
      * The following types are available:
      * <ul>
      *     <li><b>array</b> - Finds whether a variable is an array</li>
@@ -64,7 +65,9 @@ Object.assign(abv, function () {
     /**
      * @name abv.TypeValidator#message
      * @type {String}
-     * @description The message if the underlying data is not of the given type. Default: "This value should be of type %%type%%."
+     * @description
+     * The message if the underlying data is not of the given type.
+     * Default: "This value should be of type %%type%%."
      * You can use the following parameters in this message:
      * <table>
      *     <thead>
@@ -89,7 +92,7 @@ Object.assign(abv, function () {
     var TypeValidator = function (data, options, lang, internal) {
         abv.AbstractValidator.call(this, data, options,{
             type: 'type:{"type":["string","array"],"any":true}',
-            message: 'length:{"min":3,"max":255}',
+            message: 'type:{"type":"string"}|length:{"min":3,"max":255}',
             any: 'type:{"type":"boolean"}'
         }, lang, internal);
 

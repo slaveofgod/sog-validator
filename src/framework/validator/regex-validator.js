@@ -70,7 +70,7 @@ Object.assign(abv, function () {
     var RegexValidator = function (data, options, lang, internal) {
         abv.AbstractValidator.call(this, data, options,{
             match: 'type:{"type": "bool"}',
-            message: 'length:{"min":3,"max":255}',
+            message: 'type:{"type":"string"}|length:{"min":3,"max":255}',
             pattern: 'required',
             normalize: 'type:{"type": "bool"}'
         }, lang, internal);

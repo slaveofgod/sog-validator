@@ -184,11 +184,11 @@ Object.assign(abv, function () {
             callback: 'type:{"type":["string","array","callable"],"any":true}',
             choices: 'type:{"type":"array"}',
             max: 'type:{"type":"numeric"}',
-            maxMessage: 'length:{"min":3,"max":255}',
+            maxMessage: 'type:{"type":"string"}|length:{"min":3,"max":255}',
             min: 'type:{"type":"numeric"}',
-            minMessage: 'length:{"min":3,"max":255}',
+            minMessage: 'type:{"type":"string"}|length:{"min":3,"max":255}',
             multiple: 'type:{"type":"bool"}',
-            multipleMessage: 'length:{"min":3,"max":255}'
+            multipleMessage: 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
         this.callback = this.__options.callback;

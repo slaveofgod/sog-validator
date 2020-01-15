@@ -23,7 +23,9 @@ Object.assign(abv, function () {
     /**
      * @name abv.EmailValidator#mode
      * @type {String}
-     * @description This option is optional and defines the pattern the email address is validated against. Default to 'html5'
+     * @description
+     * This option is optional and defines the pattern the email address is validated against.
+     * Default to 'html5'
      * Valid values are:
      * <ul>
      *     <li><b>loose</b> - A simple regular expression. Allows all values with an "@" symbol in, and a "." in the second host part of the email address.</li>
@@ -35,13 +37,17 @@ Object.assign(abv, function () {
     /**
      * @name abv.EmailValidator#normalize
      * @type {Boolean}
-     * @description Normalizer string before validate (trim, etc.). Default: false
+     * @description
+     * Normalizer string before validate (trim, etc.).
+     * Default: false
      */
 
     /**
      * @name abv.EmailValidator#message
      * @type {String}
-     * @description This message is shown if the underlying data is not a valid email address. Default: "This value is not a valid email address."
+     * @description
+     * This message is shown if the underlying data is not a valid email address.
+     * Default: "This value is not a valid email address."
      * You can use the following parameters in this message:
      * <table>
      *     <thead>
@@ -61,7 +67,7 @@ Object.assign(abv, function () {
 
     var EmailValidator = function (data, options, lang, internal) {
         abv.AbstractValidator.call(this, data, options,{
-            message: 'length:{"min":3,"max":255}',
+            message: 'type:{"type":"string"}|length:{"min":3,"max":255}',
             mode: 'length:{"min":2,"max":20}',
             normalize: 'type:{"type":"bool"}'
         }, lang, internal);

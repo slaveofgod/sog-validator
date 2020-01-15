@@ -31,14 +31,16 @@ Object.assign(abv, function () {
     /**
      * @name abv.NotBlankValidator#normalize
      * @type {Boolean}
-     * @description Normalizer string before validate (trim, etc.).
+     * @description
+     * Normalizer string before validate (trim, etc.).
      * Default: false
      */
 
     /**
      * @name abv.NotBlankValidator#message
      * @type {String}
-     * @description This is the message that will be shown if the value is blank.
+     * @description
+     * This is the message that will be shown if the value is blank.
      * Default: "This value should not be blank."
      * You can use the following parameters in this message:
      * <table>
@@ -59,7 +61,7 @@ Object.assign(abv, function () {
 
     var NotBlankValidator = function (data, options, lang, internal) {
         abv.AbstractValidator.call(this, data, options,{
-            message: 'length:{"min":3,"max":255}'
+            message: 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
         this.allowNull = (!this.__options.allowNull || false === this.__options.allowNull) ? false : true;

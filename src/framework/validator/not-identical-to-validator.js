@@ -25,7 +25,8 @@ Object.assign(abv, function () {
     /**
      * @name abv.NotIdenticalToValidator#message
      * @type {String}
-     * @description This is the message that will be shown if the value is identical.
+     * @description
+     * This is the message that will be shown if the value is identical.
      * Default: "This value should not be identical to %%compared_value_type%% %%compared_value%%."
      * You can use the following parameters in this message:
      * <table>
@@ -60,7 +61,7 @@ Object.assign(abv, function () {
 
     var NotIdenticalToValidator = function (data, options, lang, internal) {
         abv.AbstractComparisonValidator.call(this, data, options,{
-            message: 'length:{"min":3,"max":255}',
+            message: 'type:{"type":"string"}|length:{"min":3,"max":255}',
             value: 'required'
         }, lang, internal);
 

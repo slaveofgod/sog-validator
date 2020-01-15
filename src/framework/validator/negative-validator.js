@@ -55,7 +55,7 @@ Object.assign(abv, function () {
 
     var NegativeValidator = function (data, options, lang, internal) {
         abv.AbstractComparisonValidator.call(this, data, options,{
-            message: 'length:{"min":3,"max":255}'
+            message: 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
         this.value = 0;

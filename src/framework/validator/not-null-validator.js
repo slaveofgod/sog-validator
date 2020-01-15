@@ -23,7 +23,9 @@ Object.assign(abv, function () {
     /**
      * @name abv.NotNullValidator#message
      * @type {String}
-     * @description This is the message that will be shown if the value is null. Default: "This value should not be null."
+     * @description
+     * This is the message that will be shown if the value is null.
+     * Default: "This value should not be null."
      * You can use the following parameters in this message:
      * <table>
      *     <thead>
@@ -43,7 +45,7 @@ Object.assign(abv, function () {
 
     var NotNullValidator = function (data, options, lang, internal) {
         abv.AbstractValidator.call(this, data, options,{
-            message: 'length:{"min":3,"max":255}'
+            message: 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
         this.message = this.__options.message || 'This value should not be null.';

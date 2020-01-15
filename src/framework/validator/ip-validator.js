@@ -46,7 +46,9 @@ Object.assign(abv, function () {
     /**
      * @name abv.IpValidator#normalize
      * @type {Boolean}
-     * @description Normalizer string before validate (trim, etc.). Default: false.
+     * @description
+     * Normalizer string before validate (trim, etc.).
+     * Default: false.
      */
 
     /**
@@ -84,7 +86,7 @@ Object.assign(abv, function () {
 
     var IpValidator = function (data, options, lang, internal) {
         abv.AbstractValidator.call(this, data, options,{
-            message: 'length:{"min":3,"max":255}',
+            message: 'type:{"type":"string"}|length:{"min":3,"max":255}',
             normalize: 'type:{"type":"bool"}',
             version: 'length:{"min":1,"max":255}'
         }, lang, internal);

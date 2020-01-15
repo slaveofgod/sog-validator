@@ -87,7 +87,7 @@ Object.assign(abv, function () {
 
     var UuidValidator = function (data, options, lang, internal) {
         abv.AbstractValidator.call(this, data, options,{
-            message: 'length:{"min":3,"max":255}',
+            message: 'type:{"type":"string"}|length:{"min":3,"max":255}',
             normalize: 'type:{"type":"bool"}',
             versions: 'type:{"type":"array"}',
         }, lang, internal);

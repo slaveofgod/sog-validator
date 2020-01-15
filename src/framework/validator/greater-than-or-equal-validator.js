@@ -24,7 +24,8 @@ Object.assign(abv, function () {
     /**
      * @name abv.GreaterThanOrEqualValidator#message
      * @type {String}
-     * @description This is the message that will be shown if the value is not greater than or equal to the comparison value.
+     * @description
+     * This is the message that will be shown if the value is not greater than or equal to the comparison value.
      * Default: "This value should be greater than or equal to %%compared_value%%."
      * You can use the following parameters in this message:
      * <table>
@@ -59,7 +60,7 @@ Object.assign(abv, function () {
 
     var GreaterThanOrEqualValidator = function (data, options, lang, internal) {
         abv.AbstractComparisonValidator.call(this, data, options,{
-            message: 'length:{"min":3,"max":255}',
+            message: 'type:{"type":"string"}|length:{"min":3,"max":255}',
             value: 'required|type:{"type":["scalar","date"],"any":true}'
         }, lang, internal);
 
