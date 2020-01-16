@@ -42,7 +42,7 @@ Object.assign(abv, function () {
      *         </tr>
      *         <tr>
      *             <td>%%compared_value_type%%</td>
-     *             <td>TThe expected value type</td>
+     *             <td>The expected value type</td>
      *         </tr>
      *         <tr>
      *             <td>%%value%%</td>

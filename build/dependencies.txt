@@ -90,3 +90,4 @@
 ../src/framework/validator/iban-validator.js
 ../src/framework/validator/isbn-validator.js
 ../src/framework/validator/issn-validator.js
+../src/framework/validator/count-validator.js

@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision 0618962
+ * Bob Validator Library v2.0 revision 9c72b6d
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"0618962", config:{}, common:{}, validators:{}, registry:function(validator) {
+var abv = {version:"2.0", revision:"9c72b6d", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, "en", true);
   var alias = __validator.alias;
@@ -10796,6 +10796,60 @@ Object.assign(abv, function() {
   return {IssnValidator:IssnValidator};
 }());
 abv.registry(abv.IssnValidator);
+Object.assign(abv, function() {
+  var CountValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {exactMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', max:'type:{"type":"numeric"}', maxMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', min:'type:{"type":"numeric"}', minMessage:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.exactMessage = this.__options.exactMessage || "This collection should contain exactly %%limit%% elements.";
+    this.max = this.__options.max || null;
+    this.maxMessage = this.__options.maxMessage || "This collection should contain %%limit%% elements or less.";
+    this.min = this.__options.min || null;
+    this.minMessage = this.__options.minMessage || "This collection should contain %%limit%% elements or more.";
+    this.name = "CountValidator";
+  };
+  CountValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  CountValidator.prototype.constructor = CountValidator;
+  Object.defineProperty(CountValidator.prototype, "alias", {get:function() {
+    return "count";
+  }});
+  Object.assign(CountValidator.prototype, {__validate:function() {
+    var count = this.data.length;
+    if (null !== this.max && count > this.max) {
+      var __message = this.min == this.max ? this.exactMessage : this.maxMessage;
+      var __messageParameters = this.min == this.max ? this.__exactMessageParameters() : this.__maxMessageParameters();
+      this.__setErrorMessage(__message, __messageParameters);
+      return;
+    }
+    if (null !== this.min && count < this.min) {
+      var __message = this.min == this.max ? this.exactMessage : this.maxMessage;
+      var __messageParameters = this.min == this.max ? this.__exactMessageParameters() : this.__minMessageParameters();
+      this.__setErrorMessage(__message, __messageParameters);
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    if (null === this.min && null === this.max) {
+      throw new Error('Either option "min" or "max" must be given');
+    }
+  }, __minMessageParameters:function() {
+    return {"count":this.data.length, "limit":this.min};
+  }, __maxMessageParameters:function() {
+    return {"count":this.data.length, "limit":this.max};
+  }, __exactMessageParameters:function() {
+    return {"count":this.data.length, "limit":this.max};
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {CountValidator:CountValidator};
+}());
+abv.registry(abv.CountValidator);
 
 
 return abv;
