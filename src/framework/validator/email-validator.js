@@ -14,7 +14,7 @@ Object.assign(abv, function () {
      * @example
      * var validator = new abv.EmailValidator(data, {data: 'loose'});
      * if (false === validator.isValid()) {
-     *      validator.messages().first();
+     *      validator.errors().first();
      * }
      */
 

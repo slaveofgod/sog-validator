@@ -93,6 +93,14 @@
     <h1>abv.AllValidator</h1>
     <p class="extends">Extends: <a href="abv.AbstractValidator.html">abv.AbstractValidator</a></p>
     <p>Validates that a value is valid according to list of validation rules.</p>
+        <pre><code class="javascript">var rules = 'required|email';
+var data = 'alexey.bob@gmail.com'
+var validator = new abv.AllValidator(data, rules, {
+     lang: 'en'
+});
+if (false === validator.isValid()) {
+     validator.errors().first();
+}</code></pre>
 
     <!-- summary -->
     <h1>Summary</h1>
@@ -131,10 +139,10 @@
     <h3>Methods</h3>
     <table class="properties">
     <tr>
-        <td><a href="#isValid">isValid</a></td><td>Check if data valid</td>
+        <td><a href="#errors">errors</a></td><td>Return error errors</td>
     </tr>
     <tr>
-        <td><a href="#messages">messages</a></td><td>Return error messages</td>
+        <td><a href="#isValid">isValid</a></td><td>Check if data valid</td>
     </tr>
     </table>
 
@@ -154,6 +162,14 @@
     <div id="AllValidator">
     <h3 class="methodname">AllValidator(data, rules, options) <a class="font-icon" href="#AllValidator">&#58216;</a></h3>
     <p>Create a new Validator.</p>
+    <pre><code class="javascript">var rules = 'required|email';
+var data = 'alexey.bob@gmail.com'
+var validator = new abv.AllValidator(data, rules, {
+     lang: 'en'
+});
+if (false === validator.isValid()) {
+     validator.errors().first();
+}</code></pre>
 
     <h4>Parameters</h4>
     <table>
@@ -202,6 +218,14 @@
 
     <!--inherited methods-->
     <h2>Methods</h2>
+        <div id="errors">
+    <h3 class="methodname">errors() <a class="font-icon" href="#errors">&#58216;</a></h3>
+    <p>Return error errors</p>
+
+
+    <h4>Returns</h4>
+    <a href="abv.Error.html">abv.Error</a> Error messages
+</div>
         <div id="isValid">
     <h3 class="methodname">isValid() <a class="font-icon" href="#isValid">&#58216;</a></h3>
     <p>Check if data valid</p>
@@ -209,14 +233,6 @@
 
     <h4>Returns</h4>
     <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a> Validation status
-</div>
-        <div id="messages">
-    <h3 class="methodname">messages() <a class="font-icon" href="#messages">&#58216;</a></h3>
-    <p>Return error messages</p>
-
-
-    <h4>Returns</h4>
-    <a href="abv.Error.html">abv.Error</a> Error messages
 </div>
 
     <!--inherited events-->

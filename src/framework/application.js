@@ -36,7 +36,7 @@ Object.assign(abv, function () {
      * });
      *
      * if (false === form['name'].isValid()) {
-     *   form['name'].messages().first();
+     *   form['name'].errors().first();
      * }
      *
      * // Run validation
@@ -127,7 +127,7 @@ Object.assign(abv, function () {
          * );
          *
          * if (false === validator.isValid()) {
-         *     validator.messages().first();
+         *     validator.errors().first();
          * }
          * @returns {Object} Validator object
          */

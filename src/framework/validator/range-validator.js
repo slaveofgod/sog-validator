@@ -14,7 +14,7 @@ Object.assign(abv, function () {
      * @example
      * var validator = new abv.RangeValidator('1991-12-17T03:24:00', {"min":"1990-12-17T03:24:00","max":"1995-12-17T03:24:00"});
      * if (false === validator.isValid()) {
-     *      validator.messages().first();
+     *      validator.errors().first();
      * }
      */
 

@@ -279,7 +279,7 @@ var abv = {
             rules
         );
 
-        return (true === validator.isValid()) ? null : validator.messages().first();
+        return (true === validator.isValid()) ? null : validator.errors().first();
     }
 };
 

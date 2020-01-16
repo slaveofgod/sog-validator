@@ -16,7 +16,7 @@ Object.assign(abv, function () {
      * @example
      * var validator = new abv.TimezoneValidator(data);
      * if (false === validator.isValid()) {
-     *      validator.messages().first();
+     *      validator.errors().first();
      * }
      */
 

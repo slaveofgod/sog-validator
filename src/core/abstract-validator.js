@@ -65,7 +65,7 @@ Object.assign(abv, (function () {
             this.__beforeValidate();
 
             if (
-                false === this.__hasMessages()
+                false === this.__hasErrors()
                 && false === this.__skip
             ) {
                 this.__validate();
@@ -73,7 +73,7 @@ Object.assign(abv, (function () {
 
             this.__afterValidate();
 
-            return (false === this.__hasMessages()) ? true: false;
+            return (false === this.__hasErrors()) ? true: false;
         },
 
         /**
@@ -83,17 +83,17 @@ Object.assign(abv, (function () {
          * @description Check if data valid
          * @returns {Boolean} Validation status
          */
-        __hasMessages: function () {
+        __hasErrors: function () {
             return this.__error.has();
         },
 
         /**
          * @function
-         * @name abv.AbstractValidator#messages
-         * @description Return error messages
+         * @name abv.AbstractValidator#errors
+         * @description Return error errors
          * @returns {abv.Error} Error messages
          */
-        messages: function () {
+        errors: function () {
             return this.__error;
         },
 

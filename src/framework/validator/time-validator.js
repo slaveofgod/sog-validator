@@ -14,7 +14,7 @@ Object.assign(abv, function () {
      * @example
      * var validator = new abv.TimeValidator(data);
      * if (false === validator.isValid()) {
-     *      validator.messages().first();
+     *      validator.errors().first();
      * }
      */
 

@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision e7ba8a8
+ * Bob Validator Library v2.0 revision 0618962
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"e7ba8a8", config:{}, common:{}, validators:{}, registry:function(validator) {
+var abv = {version:"2.0", revision:"0618962", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, "en", true);
   var alias = __validator.alias;
@@ -153,7 +153,7 @@ var abv = {version:"2.0", revision:"e7ba8a8", config:{}, common:{}, validators:{
 }, isValidWithErrorMessage:function(data, rules, internal) {
   var engine = new abv.Application({internal:internal});
   var validator = engine.makeSingle(data, rules);
-  return true === validator.isValid() ? null : validator.messages().first();
+  return true === validator.isValid() ? null : validator.errors().first();
 }};
 if (typeof exports !== "undefined") {
   exports.abv = abv;
@@ -179,14 +179,14 @@ if (typeof exports !== "undefined") {
   };
   Object.assign(AbstractValidator.prototype, {isValid:function() {
     this.__beforeValidate();
-    if (false === this.__hasMessages() && false === this.__skip) {
+    if (false === this.__hasErrors() && false === this.__skip) {
       this.__validate();
     }
     this.__afterValidate();
-    return false === this.__hasMessages() ? true : false;
-  }, __hasMessages:function() {
+    return false === this.__hasErrors() ? true : false;
+  }, __hasErrors:function() {
     return this.__error.has();
-  }, messages:function() {
+  }, errors:function() {
     return this.__error;
   }, __setErrorMessage:function(message, parameters) {
     this.__error.add(message, parameters);
@@ -8602,7 +8602,7 @@ Object.assign(abv, function() {
         continue;
       }
       if (false === this.__validatorCollection[key].isValid()) {
-        this.__setErrorMessage(this.__validatorCollection[key].messages().first());
+        this.__setErrorMessage(this.__validatorCollection[key].errors().first());
         break;
       }
     }

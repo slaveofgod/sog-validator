@@ -10,6 +10,15 @@ Object.assign(abv, function () {
      * @param {*} data The data which needs to be validated.
      * @param {Object} rules Validation rules.
      * @param {Object} options The setting options.
+     * @example
+     * var rules = 'required|email';
+     * var data = 'alexey.bob@gmail.com'
+     * var validator = new abv.AllValidator(data, rules, {
+     *      lang: 'en'
+     * });
+     * if (false === validator.isValid()) {
+     *      validator.errors().first();
+     * }
      */
 
     // PROPERTIES
@@ -87,7 +96,7 @@ Object.assign(abv, function () {
                 if (!this.__validatorCollection.hasOwnProperty(key)) continue;
 
                 if (false === this.__validatorCollection[key].isValid()) {
-                    this.__setErrorMessage(this.__validatorCollection[key].messages().first());
+                    this.__setErrorMessage(this.__validatorCollection[key].errors().first());
                     break ;
                 }
             }

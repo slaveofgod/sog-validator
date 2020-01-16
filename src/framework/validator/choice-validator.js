@@ -25,7 +25,7 @@ Object.assign(abv, function () {
      *     }
      * });
      * if (false === validator.isValid()) {
-     *      validator.messages().first();
+     *      validator.errors().first();
      * }
      */
 

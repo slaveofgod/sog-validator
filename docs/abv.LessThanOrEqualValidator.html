@@ -95,7 +95,7 @@
     <p>Validates that a value is less than or equal to another value, defined in the options.</p>
         <pre><code class="javascript">var validator = new abv.LessThanOrEqualValidator(data, {"value": "the value to compare to"});
 if (false === validator.isValid()) {
-     validator.messages().first();
+     validator.errors().first();
 }</code></pre>
 
     <!-- summary -->
@@ -132,10 +132,10 @@ if (false === validator.isValid()) {
     <h3>Methods</h3>
     <table class="properties">
     <tr>
-        <td><a href="#isValid">isValid</a></td><td>Check if data valid</td>
+        <td><a href="#errors">errors</a></td><td>Return error errors</td>
     </tr>
     <tr>
-        <td><a href="#messages">messages</a></td><td>Return error messages</td>
+        <td><a href="#isValid">isValid</a></td><td>Check if data valid</td>
     </tr>
     </table>
 
@@ -157,7 +157,7 @@ if (false === validator.isValid()) {
     <p>Create a new Validator.</p>
     <pre><code class="javascript">var validator = new abv.LessThanOrEqualValidator(data, {"value": "the value to compare to"});
 if (false === validator.isValid()) {
-     validator.messages().first();
+     validator.errors().first();
 }</code></pre>
 
     <h4>Parameters</h4>
@@ -222,6 +222,14 @@ You can use the following parameters in this message:
 
     <!--inherited methods-->
     <h2>Methods</h2>
+        <div id="errors">
+    <h3 class="methodname">errors() <a class="font-icon" href="#errors">&#58216;</a></h3>
+    <p>Return error errors</p>
+
+
+    <h4>Returns</h4>
+    <a href="abv.Error.html">abv.Error</a> Error messages
+</div>
         <div id="isValid">
     <h3 class="methodname">isValid() <a class="font-icon" href="#isValid">&#58216;</a></h3>
     <p>Check if data valid</p>
@@ -229,14 +237,6 @@ You can use the following parameters in this message:
 
     <h4>Returns</h4>
     <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a> Validation status
-</div>
-        <div id="messages">
-    <h3 class="methodname">messages() <a class="font-icon" href="#messages">&#58216;</a></h3>
-    <p>Return error messages</p>
-
-
-    <h4>Returns</h4>
-    <a href="abv.Error.html">abv.Error</a> Error messages
 </div>
 
     <!--inherited events-->

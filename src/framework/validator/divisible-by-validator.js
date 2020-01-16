@@ -14,7 +14,7 @@ Object.assign(abv, function () {
      * @example
      * var validator = new abv.DivisibleByValidator(data, {"value": "the value to compare to"});
      * if (false === validator.isValid()) {
-     *      validator.messages().first();
+     *      validator.errors().first();
      * }
      */
 

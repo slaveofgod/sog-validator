@@ -120,7 +120,7 @@ let form = validationEngine.make({
 });
 
 if (false === form['name'].isValid()) {
-  form['name'].messages().first();
+  form['name'].errors().first();
 }
 
 // Run validation
@@ -201,7 +201,7 @@ let form = validationEngine.make({
 });
 
 if (false === form['name'].isValid()) {
-  form['name'].messages().first();
+  form['name'].errors().first();
 }
 
 // Run validation
@@ -261,7 +261,7 @@ validator = validationEngine.makeSingle(
 );
 
 if (false === validator.isValid()) {
-    validator.messages().first();
+    validator.errors().first();
 }</code></pre>
 
     <h4>Parameters</h4>
