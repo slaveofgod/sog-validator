@@ -174,7 +174,7 @@ Object.assign(abv, function () {
 
         /**
          * @private
-         * @name abv.EmailValidator#__bicAndIbanCountriesMatch
+         * @name abv.BicValidator#__bicAndIbanCountriesMatch
          * @description Match BIC and IBAN countries
          * @param {String} bicCountryCode BIC country code
          * @param {String} ibanCountryCode IBAN country code
@@ -187,7 +187,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.EmailValidator#__beforeValidate
+         * @name abv.BicValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {

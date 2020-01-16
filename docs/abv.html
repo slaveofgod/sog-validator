@@ -46,6 +46,7 @@
         <li id="nav-abv.CardSchemeValidator"><a href="abv.CardSchemeValidator.html">CardSchemeValidator</a></li>
         <li id="nav-abv.ChoiceValidator"><a href="abv.ChoiceValidator.html">ChoiceValidator</a></li>
         <li id="nav-abv.CountryValidator"><a href="abv.CountryValidator.html">CountryValidator</a></li>
+        <li id="nav-abv.CurrencyValidator"><a href="abv.CurrencyValidator.html">CurrencyValidator</a></li>
         <li id="nav-abv.DateTimeValidator"><a href="abv.DateTimeValidator.html">DateTimeValidator</a></li>
         <li id="nav-abv.DateValidator"><a href="abv.DateValidator.html">DateValidator</a></li>
         <li id="nav-abv.DivisibleByValidator"><a href="abv.DivisibleByValidator.html">DivisibleByValidator</a></li>
@@ -54,10 +55,13 @@
         <li id="nav-abv.ErrorCollection"><a href="abv.ErrorCollection.html">ErrorCollection</a></li>
         <li id="nav-abv.GreaterThanOrEqualValidator"><a href="abv.GreaterThanOrEqualValidator.html">GreaterThanOrEqualValidator</a></li>
         <li id="nav-abv.GreaterThanValidator"><a href="abv.GreaterThanValidator.html">GreaterThanValidator</a></li>
+        <li id="nav-abv.IbanValidator"><a href="abv.IbanValidator.html">IbanValidator</a></li>
         <li id="nav-abv.IdenticalToValidator"><a href="abv.IdenticalToValidator.html">IdenticalToValidator</a></li>
         <li id="nav-abv.IpValidator"><a href="abv.IpValidator.html">IpValidator</a></li>
+        <li id="nav-abv.IsbnValidator"><a href="abv.IsbnValidator.html">IsbnValidator</a></li>
         <li id="nav-abv.IsFalseValidator"><a href="abv.IsFalseValidator.html">IsFalseValidator</a></li>
         <li id="nav-abv.IsNullValidator"><a href="abv.IsNullValidator.html">IsNullValidator</a></li>
+        <li id="nav-abv.IssnValidator"><a href="abv.IssnValidator.html">IssnValidator</a></li>
         <li id="nav-abv.IsTrueValidator"><a href="abv.IsTrueValidator.html">IsTrueValidator</a></li>
         <li id="nav-abv.JsonValidator"><a href="abv.JsonValidator.html">JsonValidator</a></li>
         <li id="nav-abv.LanguageValidator"><a href="abv.LanguageValidator.html">LanguageValidator</a></li>
@@ -65,6 +69,7 @@
         <li id="nav-abv.LessThanOrEqualValidator"><a href="abv.LessThanOrEqualValidator.html">LessThanOrEqualValidator</a></li>
         <li id="nav-abv.LessThanValidator"><a href="abv.LessThanValidator.html">LessThanValidator</a></li>
         <li id="nav-abv.LocaleValidator"><a href="abv.LocaleValidator.html">LocaleValidator</a></li>
+        <li id="nav-abv.LuhnValidator"><a href="abv.LuhnValidator.html">LuhnValidator</a></li>
         <li id="nav-abv.NegativeOrZeroValidator"><a href="abv.NegativeOrZeroValidator.html">NegativeOrZeroValidator</a></li>
         <li id="nav-abv.NegativeValidator"><a href="abv.NegativeValidator.html">NegativeValidator</a></li>
         <li id="nav-abv.NotBlankValidator"><a href="abv.NotBlankValidator.html">NotBlankValidator</a></li>
@@ -100,6 +105,9 @@
     <h3>Static Methods</h3>
     <table class="properties">
     <tr>
+        <td><a href="#array_sum">array_sum</a></td><td>Calculate the sum of values in an array</td>
+    </tr>
+    <tr>
         <td><a href="#getType">getType</a></td><td>Get data type</td>
     </tr>
     <tr>
@@ -116,6 +124,9 @@
     </tr>
     <tr>
         <td><a href="#registry">registry</a></td><td>Register validator</td>
+    </tr>
+    <tr>
+        <td><a href="#str_split">str_split</a></td><td>Convert a string to an array</td>
     </tr>
     </table>
 
@@ -134,6 +145,20 @@
 
     <!--static methods-->
     <h2>Static Methods</h2>
+        <div id="array_sum">
+    <h3 class="methodname">array_sum(arr) <a class="font-icon" href="#array_sum">&#58216;</a></h3>
+    <p>Calculate the sum of values in an array</p>
+
+    <h4>Parameters</h4>
+    <table>
+        <tr>
+            <td>arr</td><td><a href="array.html">array</a></td><td>The input array.</td>
+        </tr>
+    </table>
+
+    <h4>Returns</h4>
+    <a href="numeric.html">numeric</a> 
+</div>
         <div id="getType">
     <h3 class="methodname">getType(data) <a class="font-icon" href="#getType">&#58216;</a></h3>
     <p>Get data type</p>
@@ -239,6 +264,23 @@
         </tr>
     </table>
 
+</div>
+        <div id="str_split">
+    <h3 class="methodname">str_split(str, split_length) <a class="font-icon" href="#str_split">&#58216;</a></h3>
+    <p>Convert a string to an array</p>
+
+    <h4>Parameters</h4>
+    <table>
+        <tr>
+            <td>str</td><td><a href="string.html">string</a></td><td>The input string.</td>
+        </tr>
+        <tr>
+            <td>split_length</td><td><a href="integer.html">integer</a></td><td>Maximum length of the chunk.</td>
+        </tr>
+    </table>
+
+    <h4>Returns</h4>
+    <a href="array.html">array</a> 
 </div>
 
 

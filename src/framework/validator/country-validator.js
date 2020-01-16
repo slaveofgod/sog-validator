@@ -81,7 +81,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.EmailValidator#__beforeValidate
+         * @name abv.CountryValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {

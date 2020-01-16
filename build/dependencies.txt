@@ -13,6 +13,8 @@
 ../src/framework/helper/info/getenv.js
 ../src/framework/helper/info/ini_get.js
 ../src/framework/helper/strings/setlocale.js
+../src/framework/helper/strings/str_split.js
+../src/framework/helper/strings/ord.js
 ../src/framework/helper/ctype/ctype_alnum.js
 ../src/framework/helper/ctype/ctype_alpha.js
 ../src/framework/helper/ctype/ctype_cntrl.js
@@ -42,6 +44,7 @@
 ../src/framework/helper/var/is_string.js
 ../src/framework/helper/var/is_unicode.js
 ../src/framework/helper/var/is_iterable.js
+../src/framework/helper/array/array_sum.js
 ../src/framework/validator/all-validator.js
 ../src/framework/validator/not-blank-validator.js
 ../src/framework/validator/blank-validator.js
@@ -82,3 +85,8 @@
 ../src/framework/validator/country-validator.js
 ../src/framework/validator/bic-validator.js
 ../src/framework/validator/card-scheme-validator.js
+../src/framework/validator/currency-validator.js
+../src/framework/validator/luhn-validator.js
+../src/framework/validator/iban-validator.js
+../src/framework/validator/isbn-validator.js
+../src/framework/validator/issn-validator.js
