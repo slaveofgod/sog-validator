@@ -6,12 +6,12 @@ Object.assign(abv, function () {
      * @name abv.TimezoneValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * Validates that a value is a valid timezone identifier (e.g. Europe/Paris).
-     * {@link https://en.wikipedia.org/wiki/List_of_tz_database_time_zones|List of tz database time zones}.
+     * <p>Validates that a value is a valid timezone identifier (e.g. Europe/Paris).</p>
+     * <p>{@link https://en.wikipedia.org/wiki/List_of_tz_database_time_zones|List of tz database time zones}.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.TimezoneValidator(data);
@@ -26,9 +26,9 @@ Object.assign(abv, function () {
      * @name abv.TimezoneValidator#message
      * @type {String}
      * @description
-     * This message is shown if the underlying data is not a valid timezone identifier.
-     * Default: "This value is not a valid timezone."
-     * You can use the following parameters in this message:
+     * <p>This message is shown if the underlying data is not a valid timezone identifier.</p>
+     * <p>Default: "<code class="notranslate">This value is not a valid timezone.</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -38,7 +38,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>

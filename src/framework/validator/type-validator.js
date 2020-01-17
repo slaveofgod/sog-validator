@@ -5,11 +5,13 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.TypeValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value is of a specific data type.
+     * @classdesc
+     * Validates that a value is of a specific data type.</p>
+     * For example, if a variable should be an array, you can use this constraint with the <code class="notranslate">array</code> type option to validate this.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.TypeValidator(data, {type: 'array'});
@@ -24,7 +26,7 @@ Object.assign(abv, function () {
      * @name abv.TypeValidator#type
      * @type {String|Array}
      * @description
-     * This required option defines the type or collection of types allowed for the given value.
+     * This required option defines the type or collection of types allowed for the given value.</p>
      * The following types are available:
      * <ul>
      *     <li><b>array</b> - Finds whether a variable is an array</li>
@@ -51,24 +53,24 @@ Object.assign(abv, function () {
      *     <li><b>space</b> - Check for whitespace character(s)</li>
      *     <li><b>upper</b> - Check for uppercase character(s)</li>
      *     <li><b>xdigit</b> - Check for character(s) representing a hexadecimal digit</li>
-     * </b></li>
+     * </ul>
      */
 
     /**
      * @name abv.TypeValidator#any
      * @type {Boolean}
      * @description
-     * If true, one of data type needs to be valid, otherwise passed data should be valid for all types.
-     * Default: false
+     * If <code class="notranslate">true</code>, one of data type needs to be valid, otherwise passed data should be valid for all types.</p>
+     * Default: <code class="notranslate">false</code>
      */
 
     /**
      * @name abv.TypeValidator#message
      * @type {String}
      * @description
-     * The message if the underlying data is not of the given type.
-     * Default: "This value should be of type %%type%%."
-     * You can use the following parameters in this message:
+     * The message if the underlying data is not of the given type.</p>
+     * <p>Default: "<code class="notranslate">This value should be of type %%type%%.</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -78,11 +80,11 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%type%%</td>
+     *             <td><code class="notranslate">%%type%%</code></td>
      *             <td>The expected type</td>
      *         </tr>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>

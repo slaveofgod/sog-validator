@@ -5,11 +5,13 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.EmailValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value is a valid email address. The underlying value is cast to a string before being validated.
+     * @classdesc
+     * Validates that a value is a valid email address.</p>
+     * The underlying value is cast to a string before being validated.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>"
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.EmailValidator(data, {data: 'loose'});
@@ -47,8 +49,8 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * This message is shown if the underlying data is not a valid email address.
-     * Default: "This value is not a valid email address."
-     * You can use the following parameters in this message:
+     * <p>Default: "This value is not a valid email address."
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -58,7 +60,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>

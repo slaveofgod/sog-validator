@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.CountValidator(data, {"min": 10, "max": 20});
@@ -24,9 +24,9 @@ Object.assign(abv, function () {
      * @name abv.CountValidator#exactMessage
      * @type {String}
      * @description
-     * The message that will be shown if min and max values are equal and the underlying collection elements count is not exactly this value.
-     * Default: "This collection should contain exactly %%limit%% elements."
-     * You can use the following parameters in this message:
+     * <p>The message that will be shown if min and max values are equal and the underlying collection elements count is not exactly this value.</p>
+     * <p>Default: "<code class="notranslate">This collection should contain exactly %%limit%% elements.</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -36,11 +36,11 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%count%%</td>
+     *             <td><code class="notranslate">%%count%%</code></td>
      *             <td>The current collection size</td>
      *         </tr>
      *         <tr>
-     *             <td>%%limit%%</td>
+     *             <td><code class="notranslate">%%limit%%</code></td>
      *             <td>The exact expected collection size</td>
      *         </tr>
      *     </tbody>
@@ -51,17 +51,17 @@ Object.assign(abv, function () {
      * @name abv.CountValidator#max
      * @type {Integer}
      * @description
-     * This option is the "max" count value. Validation will fail if the given collection elements count is greater than this max value.
-     * This option is required when the min option is not defined.
+     * <p>This option is the "max" count value. Validation will fail if the given collection elements count is greater than this max value.</p>
+     * <p>This option is required when the min option is not defined.<.p>
      */
 
     /**
      * @name abv.CountValidator#maxMessage
      * @type {String}
      * @description
-     * The message that will be shown if the underlying collection elements count is more than the max option.
-     * Default: "This collection should contain %%limit%% elements or less."
-     * You can use the following parameters in this message:
+     * <p>The message that will be shown if the underlying collection elements count is more than the max option.</p>
+     * <p>Default: "<code class="notranslate">This collection should contain %%limit%% elements or less.</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -71,11 +71,11 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%count%%</td>
+     *             <td><code class="notranslate">%%count%%</code></td>
      *             <td>The current collection size</td>
      *         </tr>
      *         <tr>
-     *             <td>%%limit%%</td>
+     *             <td><code class="notranslate">%%limit%%</code></td>
      *             <td>The upper limit</td>
      *         </tr>
      *     </tbody>
@@ -86,17 +86,17 @@ Object.assign(abv, function () {
      * @name abv.CountValidator#min
      * @type {Integer}
      * @description
-     * This option is the "min" count value. Validation will fail if the given collection elements count is less than this min value.
-     * This option is required when the max option is not defined.
+     * <p>This option is the "min" count value. Validation will fail if the given collection elements count is less than this min value.</p>
+     * <p>This option is required when the max option is not defined.</p>
      */
 
     /**
      * @name abv.CountValidator#minMessage
      * @type {String}
      * @description
-     * The message that will be shown if the underlying collection elements count is less than the min option.
-     * Default: "This collection should contain %%limit%% elements or more."
-     * You can use the following parameters in this message:
+     * The message that will be shown if the underlying collection elements count is less than the min option.</p>
+     * <p>Default: "<code class="notranslate">This collection should contain %%limit%% elements or more.</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -106,11 +106,11 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%count%%</td>
+     *             <td><code class="notranslate">%%count%%</code></td>
      *             <td>The current collection size</td>
      *         </tr>
      *         <tr>
-     *             <td>%%limit%%</td>
+     *             <td><code class="notranslate">%%limit%%</code></td>
      *             <td>The lower limit</td>
      *         </tr>
      *     </tbody>

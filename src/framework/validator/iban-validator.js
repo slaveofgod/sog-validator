@@ -6,12 +6,12 @@ Object.assign(abv, function () {
      * @name abv.IbanValidator
      * @extends abv.AbstractComparisonValidator
      * @classdesc
-     * This constraint is used to ensure that a bank account number has the proper format of an {@link https://en.wikipedia.org/wiki/International_Bank_Account_Number|International Bank Account Number (IBAN)}.
-     * IBAN is an internationally agreed means of identifying bank accounts across national borders with a reduced risk of propagating transcription errors.
+     * <p>This constraint is used to ensure that a bank account number has the proper format of an {@link https://en.wikipedia.org/wiki/International_Bank_Account_Number|International Bank Account Number (IBAN)}.</p>
+     * <p>IBAN is an internationally agreed means of identifying bank accounts across national borders with a reduced risk of propagating transcription errors.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.IbanValidator(data);
@@ -26,9 +26,9 @@ Object.assign(abv, function () {
      * @name abv.IbanValidator#message
      * @type {String}
      * @description
-     * The default message supplied when the value does not pass the IBAN check.
-     * Default: "This is not a valid International Bank Account Number (IBAN)."
-     * You can use the following parameters in this message:
+     * The default message supplied when the value does not pass the IBAN check.</p>
+     * <p>Default: "<code class="notranslate">This is not a valid International Bank Account Number (IBAN).</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -38,7 +38,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>

@@ -5,12 +5,11 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.CountryValidator
      * @extends abv.AbstractValidator
-     * @classdesc
-     * Validates that a value is a valid @link(https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes/ISO 3166-1 alpha-2) country code.
+     * @classdesc Validates that a value is a valid {@link https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes/ISO 3166-1 alpha-2} country code.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.CountryValidator(data);
@@ -25,9 +24,9 @@ Object.assign(abv, function () {
      * @name abv.CountryValidator#message
      * @type {String}
      * @description
-     * This message is shown if the string is not a valid country code.
-     * Default:"This value is not a valid country."
-     * You can use the following parameters in this message:
+     * This message is shown if the string is not a valid country code.</p>
+     * Default:"<code class="notranslate">This value is not a valid country.</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -37,7 +36,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The current (invalid) country code</td>
      *         </tr>
      *     </tbody>

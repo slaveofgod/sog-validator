@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.IssnValidator(data);
@@ -24,18 +24,18 @@ Object.assign(abv, function () {
      * @name abv.IssnValidator#caseSensitive
      * @type {Boolean}
      * @description
-     * The validator will allow ISSN values to end with a lower case 'x' by default.
-     * When switching this to true, the validator requires an upper case 'X'.
-     * Default: false
+     * <p>The validator will allow ISSN values to end with a lower case 'x' by default.</p>
+     * <p>When switching this to true, the validator requires an upper case 'X'.</p>
+     * <p>Default: <code class="notranslate">false</code><.p>
      */
 
     /**
      * @name abv.IssnValidator#message
      * @type {String}
      * @description
-     * The message shown if the given value is not a valid ISSN.
-     * Default: "This value is not a valid ISSN."
-     * You can use the following parameters in this message:
+     * The message shown if the given value is not a valid ISSN.</p>
+     * <p>Default: "<code class="notranslate">This value is not a valid ISSN.</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -45,7 +45,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>
@@ -56,9 +56,9 @@ Object.assign(abv, function () {
      * @name abv.IssnValidator#requireHyphen
      * @type {Boolean}
      * @description
-     * The validator will allow non hyphenated ISSN values by default.
-     * When switching this to true, the validator requires a hyphenated ISSN value.
-     * Default: false
+     * <p>The validator will allow non hyphenated ISSN values by default.</p>
+     * <p>When switching this to true, the validator requires a hyphenated ISSN value.</p>
+     * <p>Default: <code class="notranslate">false</code></p>
      */
 
     var IssnValidator = function (data, options, lang, internal) {

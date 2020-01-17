@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.LengthValidator(data, {min: 10});
@@ -23,31 +23,38 @@ Object.assign(abv, function () {
     /**
      * @name abv.LengthValidator#allowEmptyString
      * @type {Boolean}
-     * @description If set to true, empty strings are considered valid. The default false value considers empty strings not valid. Default: false.
+     * @description
+     * If set to true, empty strings are considered valid.</p>
+     * The default false value considers empty strings not valid.</p>
+     * Default: <code class="notranslate">false</code>.
      */
 
     // /**
     //  * @name abv.LengthValidator#charset
     //  * @type {String}
-    //  * @description The charset to be used when computing value's length. Default: 'UTF-8'.
+    //  * @description
+    //  * The charset to be used when computing value's length.</p>
+    //  * <p>Default: "<code class="notranslate">UTF-8</code>".
     //  */
     //
     // /**
     //  * @name abv.LengthValidator#charsetMessage
     //  * @type {String}
-    //  * @description The message that will be shown if the value is not using the given charset. Default: 'This value does not match the expected %%charset%% charset.'.
-    //  * You can use the following parameters in this message:
+    //  * @description
+    //  * The message that will be shown if the value is not using the given charset.
+    //  * <p>Default: "This value does not match the expected %%charset%% charset.".
+    //  * <p>You can use the following parameters in this message:</p>
     //  * <table>
     //  *     <tr>
     //  *         <td><b>Parameter</b></td>
     //  *         <td><b>Description</b></td>
     //  *     </tr>
     //  *     <tr>
-    //  *         <td>%%charset%%</td>
+    //  *         <td><code class="notranslate">%%charset%%</code></td>
     //  *         <td>The expected charset</td>
     //  *     </tr>
     //  *     <tr>
-    //  *         <td>%%value%%</td>
+    //  *         <td><code class="notranslate">%%value%%</code></td>
     //  *         <td>The current (invalid) value</td>
     //  *     </tr>
     //  * </table>
@@ -56,19 +63,21 @@ Object.assign(abv, function () {
     /**
      * @name abv.LengthValidator#exactMessage
      * @type {String}
-     * @description The message that will be shown if min and max values are equal and the underlying value's length is not exactly this value. Default: 'This value should have exactly %%limit%% characters.'.
-     * You can use the following parameters in this message:
+     * @description
+     * The message that will be shown if min and max values are equal and the underlying value's length is not exactly this value.</p>
+     * <p>Default: "<code class="notranslate">This value should have exactly %%limit%% characters.</code>".</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <tr>
      *         <td><b>Parameter</b></td>
      *         <td><b>Description</b></td>
      *     </tr>
      *     <tr>
-     *         <td>%%limit%%</td>
+     *         <td><code class="notranslate">%%limit%%</code></td>
      *         <td>The exact expected length</td>
      *     </tr>
      *     <tr>
-     *         <td>%%value%%</td>
+     *         <td><code class="notranslate">%%value%%</code></td>
      *         <td>The current (invalid) value</td>
      *     </tr>
      * </table>
@@ -85,20 +94,20 @@ Object.assign(abv, function () {
      * @name abv.LengthValidator#maxMessage
      * @type {String}
      * @description
-     * The message that will be shown if the underlying value's length is more than the max option.
-     * Default: 'This value is too long. It should have %%limit%% characters or less.'.
-     * You can use the following parameters in this message:
+     * The message that will be shown if the underlying value's length is more than the max option.</p>
+     * <p>Default: "This value is too long. It should have %%limit%% characters or less.".
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <tr>
      *         <td><b>Parameter</b></td>
      *         <td><b>Description</b></td>
      *     </tr>
      *     <tr>
-     *         <td>%%limit%%</td>
+     *         <td><code class="notranslate">%%limit%%</code></td>
      *         <td>The expected maximum length</td>
      *     </tr>
      *     <tr>
-     *         <td>%%value%%</td>
+     *         <td><code class="notranslate">%%value%%</code></td>
      *         <td>The current (invalid) value</td>
      *     </tr>
      * </table>
@@ -117,20 +126,20 @@ Object.assign(abv, function () {
      * @name abv.LengthValidator#minMessage
      * @type {String}
      * @description
-     * The message that will be shown if the underlying value's length is less than the min option.
-     * Default: 'This value is too short. It should have %%limit%% characters or more.'.
-     * You can use the following parameters in this message:
+     * The message that will be shown if the underlying value's length is less than the min option.</p>
+     * <p>Default: "<code class="notranslate">This value is too short. It should have %%limit%% characters or more.</code>".</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <tr>
      *         <td><b>Parameter</b></td>
      *         <td><b>Description</b></td>
      *     </tr>
      *     <tr>
-     *         <td>%%limit%%</td>
+     *         <td><code class="notranslate">%%limit%%</code></td>
      *         <td>The expected minimum length</td>
      *     </tr>
      *     <tr>
-     *         <td>%%value%%</td>
+     *         <td><code class="notranslate">%%value%%</code></td>
      *         <td>The current (invalid) value</td>
      *     </tr>
      * </table>

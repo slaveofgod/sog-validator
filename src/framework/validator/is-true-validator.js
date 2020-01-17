@@ -5,11 +5,13 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.IsTrueValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value is true. Specifically, this checks if the value is exactly <code class="notranslate">true</code>, exactly the integer <code class="notranslate">1</code>, or exactly the string <code class="notranslate">"1"</code>.
+     * @classdesc
+     * <p>Validates that a value is true.</p>
+     * <p>Specifically, this checks if the value is exactly <code class="notranslate">true</code>, exactly the integer <code class="notranslate">1</code>, or exactly the string <code class="notranslate">"1"</code>.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.IsTrueValidator(data);
@@ -24,9 +26,9 @@ Object.assign(abv, function () {
      * @name abv.IsTrueValidator#message
      * @type {String}
      * @description
-     * This message is shown if the underlying data is not true.
-     * Default: "This value should be true."
-     * You can use the following parameters in this message:
+     * <p>This message is shown if the underlying data is not true.</p>
+     * <p>Default: "<code class="notranslate">This value should be true.</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -36,7 +38,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>

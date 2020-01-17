@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.NotNullValidator(data);
@@ -24,9 +24,9 @@ Object.assign(abv, function () {
      * @name abv.NotNullValidator#message
      * @type {String}
      * @description
-     * This is the message that will be shown if the value is null.
-     * Default: "This value should not be null."
-     * You can use the following parameters in this message:
+     * <p>This is the message that will be shown if the value is null.</p>
+     * <p>Default: "<code class="notranslate">This value should not be null.</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -36,7 +36,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>

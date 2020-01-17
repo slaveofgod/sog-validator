@@ -6,14 +6,14 @@ Object.assign(abv, function () {
      * @name abv.LocaleValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * Validates that a value is a valid locale.
-     * The "value" for each locale is any of the @link(http://userguide.icu-project.org/locale|ICU format locale IDs).
-     * For example, the two letter @link(https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes|ISO 639-1) language code (e.g. fr), or the language code followed by an underscore (_) and the @link(https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes|ISO 3166-1 alpha-2) country code (e.g. fr_FR for French/France).
-     * The given locale values are canonicalized before validating them to avoid issues with wrong uppercase/lowercase values and to remove unneeded elements (e.g. FR-fr.utf8 will be validated as fr_FR).
+     * <p>Validates that a value is a valid locale.</p>
+     * <p>The "value" for each locale is any of the @link(http://userguide.icu-project.org/locale|ICU format locale IDs).</p>
+     * <p>For example, the two letter {@link https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes|ISO 639-1}language code (e.g. fr), or the language code followed by an underscore (_) and the {@link https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes|ISO 3166-1 alpha-2} country code (e.g. fr_FR for French/France).</p>
+     * <p>The given locale values are canonicalized before validating them to avoid issues with wrong uppercase/lowercase values and to remove unneeded elements (e.g. FR-fr.utf8 will be validated as fr_FR).</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.LocaleValidator(data);
@@ -28,9 +28,9 @@ Object.assign(abv, function () {
      * @name abv.LocaleValidator#message
      * @type {String}
      * @description
-     * This message is shown if the string is not a valid locale.
-     * Default: "This value is not a valid locale."
-     * You can use the following parameters in this message:
+     * <p>This message is shown if the string is not a valid locale.</p>
+     * <p>Default: "<code class="notranslate">This value is not a valid locale.</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -40,7 +40,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>

@@ -6,12 +6,12 @@ Object.assign(abv, function () {
      * @name abv.NotIdenticalToValidator
      * @extends abv.AbstractComparisonValidator
      * @classdesc
-     * Validates that a value is not identical to another value, defined in the options.
+     * Validates that a value is not identical to another value, defined in the options.</p>
      * This constraint compares using !==, so 3 and "3" are considered not equal.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.NotIdenticalToValidator(data, {"value": "the value to compare to"});
@@ -26,9 +26,9 @@ Object.assign(abv, function () {
      * @name abv.NotIdenticalToValidator#message
      * @type {String}
      * @description
-     * This is the message that will be shown if the value is identical.
-     * Default: "This value should not be identical to %%compared_value_type%% %%compared_value%%."
-     * You can use the following parameters in this message:
+     * This is the message that will be shown if the value is identical.</p>
+     * <p>Default: "<code class="notranslate">This value should not be identical to %%compared_value_type%% %%compared_value%%.</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -38,15 +38,15 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%compared_value%%</td>
+     *             <td><code class="notranslate">%%compared_value%%</code></td>
      *             <td>The expected value</td>
      *         </tr>
      *         <tr>
-     *             <td>%%compared_value_type%%</td>
+     *             <td><code class="notranslate">%%compared_value_type%%</code></td>
      *             <td>The expected value type</td>
      *         </tr>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>

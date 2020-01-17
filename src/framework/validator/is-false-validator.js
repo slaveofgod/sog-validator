@@ -5,11 +5,13 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.IsFalseValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value is false. Specifically, this checks to see if the value is exactly <code class="notranslate">false</code>, exactly the integer <code class="notranslate">0</code>, or exactly the string <code class="notranslate">"0"</code>.
+     * @classdesc
+     * <p>Validates that a value is false.</p>
+     * <p>Specifically, this checks to see if the value is exactly <code class="notranslate">false</code>, exactly the integer <code class="notranslate">0</code>, or exactly the string <code class="notranslate">"0"</code>.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.IsFalseValidator(data);
@@ -24,9 +26,9 @@ Object.assign(abv, function () {
      * @name abv.IsFalseValidator#message
      * @type {String}
      * @description
-     * This message is shown if the underlying data is not false.
-     * Default: "This value should be false."
-     * You can use the following parameters in this message:
+     * <p>This message is shown if the underlying data is not false.</p>
+     * <p>Default: "<code class="notranslate">This value should be false.</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -36,7 +38,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>

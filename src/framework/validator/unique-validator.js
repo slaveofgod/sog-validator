@@ -6,13 +6,13 @@ Object.assign(abv, function () {
      * @name abv.UniqueValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * Validates that all the elements of the given collection are unique (none of them is present more than once).
-     * Elements are compared strictly, so '7' and 7 are considered different elements (a string and an integer, respectively).
+     * Validates that all the elements of the given collection are unique (none of them is present more than once).</p>
+     * Elements are compared strictly, so '7' and 7 are considered different elements (a string and an integer, respectively).</p>
      * It can be a string or array.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>"
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.UniqueValidator(data);
@@ -28,8 +28,8 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * This is the message that will be shown if at least one element is repeated in the collection.
-     * Default: "This collection should contain only unique elements."
-     * You can use the following parameters in this message:
+     * <p>Default: "This collection should contain only unique elements."
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -39,7 +39,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The repeated value</td>
      *         </tr>
      *     </tbody>

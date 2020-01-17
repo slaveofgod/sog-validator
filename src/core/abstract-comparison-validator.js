@@ -7,8 +7,8 @@ Object.assign(abv, function () {
      * @name abv.AbstractComparisonValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * Abstract base class that implements functionality for validation.
-     * Provides a base class for the validation of property comparisons.
+     * <p>Abstract base class that implements functionality for validation.</p>
+     * <p>Provides a base class for the validation of property comparisons.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

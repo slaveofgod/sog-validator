@@ -6,12 +6,12 @@ Object.assign(abv, function () {
      * @name abv.LuhnValidator
      * @extends abv.AbstractComparisonValidator
      * @classdesc
-     * This constraint is used to ensure that a credit card number passes the {@link https://en.wikipedia.org/wiki/Luhn_algorithm|Luhn algorithm}.
-     * It is useful as a first step to validating a credit card: before communicating with a payment gateway.
+     * <p>This constraint is used to ensure that a credit card number passes the {@link https://en.wikipedia.org/wiki/Luhn_algorithm|Luhn algorithm}.</p>
+     * <p>It is useful as a first step to validating a credit card: before communicating with a payment gateway.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.LuhnValidator(data);
@@ -26,9 +26,9 @@ Object.assign(abv, function () {
      * @name abv.LuhnValidator#message
      * @type {String}
      * @description
-     * The default message supplied when the value does not pass the Luhn check.
-     * Default: "Invalid card number."
-     * You can use the following parameters in this message:
+     * <p>The default message supplied when the value does not pass the Luhn check.</p>
+     * <p>Default: "<code class="notranslate">Invalid card number.</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -38,7 +38,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>

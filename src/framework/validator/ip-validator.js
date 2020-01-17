@@ -5,11 +5,13 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.IpValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value is a valid IP address. By default, this will validate the value as IPv4, but a number of different options exist to validate as IPv6 and many other combinations.
+     * @classdesc
+     * <p>Validates that a value is a valid IP address.</p>
+     * <p>By default, this will validate the value as IPv4, but a number of different options exist to validate as IPv6 and many other combinations.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>"
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.IpValidator(data);
@@ -24,9 +26,9 @@ Object.assign(abv, function () {
      * @name abv.IpValidator#message
      * @type {String}
      * @description
-     * This message is shown if the string is not a valid IP address.
-     * Default: "This is not a valid IP address."
-     * You can use the following parameters in this message:
+     * <p>This message is shown if the string is not a valid IP address.</p>
+     * <p>Default: "<code class="notranslate">This is not a valid IP address.</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -36,7 +38,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>
@@ -55,9 +57,8 @@ Object.assign(abv, function () {
      * @name abv.IpValidator#version
      * @type {String}
      * @description
-     * This determines exactly how the IP address is validated and can take one of a variety of different values.
-     * Default: "4".
-     * <br />
+     * <p>This determines exactly how the IP address is validated and can take one of a variety of different values.</p>
+     * <p>Default: "4".</p>
      * <b>All ranges</b>
      * <ul>
      *     <li><b>4</b> - Validates for IPv4 addresses</li>

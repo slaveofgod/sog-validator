@@ -6,13 +6,13 @@ Object.assign(abv, function () {
      * @name abv.UuidValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * Validates that a value is a valid {@link https://en.wikipedia.org/wiki/Universally_unique_identifier|Universally unique identifier (UUID)} per {@link https://tools.ietf.org/html/rfc4122|RFC 4122}.
-     * By default, this will validate the format according to the RFC's guidelines, but this can be relaxed to accept non-standard UUIDs that other systems (like PostgreSQL) accept.
+     * Validates that a value is a valid {@link https://en.wikipedia.org/wiki/Universally_unique_identifier|Universally unique identifier (UUID)} per {@link https://tools.ietf.org/html/rfc4122|RFC 4122}.</p>
+     * By default, this will validate the format according to the RFC's guidelines, but this can be relaxed to accept non-standard UUIDs that other systems (like PostgreSQL) accept.</p>
      * UUID versions can also be restricted using a whitelist.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>"
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.UuidValidator(data);
@@ -28,8 +28,8 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * This message is shown if the string is not a valid UUID.
-     * Default: "This is not a valid UUID."
-     * You can use the following parameters in this message:
+     * <p>Default: "This is not a valid UUID."
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -39,7 +39,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>
@@ -59,7 +59,7 @@ Object.assign(abv, function () {
      * If this option is set to true the constraint will check if the UUID is formatted per the RFC's input format rules: 216fff40-98d9-11e3-a5e2-0800200c9a66.
      * Default: true.
      * Setting this to false will allow alternate input formats like:
-     * <br />
+     * </p>
      * <ul>
      *     <li><b>216f-ff40-98d9-11e3-a5e2-0800-200c-9a66</b></li>
      *     <li><b>{216fff40-98d9-11e3-a5e2-0800200c9a66}</b></li>
@@ -75,7 +75,7 @@ Object.assign(abv, function () {
      * Valid versions are 1 - 5.
      * Default: [1,2,3,4,5].
      * The following PHP constants can also be used:
-     * <br />
+     * </p>
      * <ul>
      *     <li><b>1</b> - Date-Time and MAC address</li>
      *     <li><b>2</b> - Date-Time and MAC address, DCE security version</li>

@@ -6,13 +6,13 @@ Object.assign(abv, function () {
      * @name abv.BicValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * This constraint is used to ensure that a value has the proper format of a {@link https://en.wikipedia.org/wiki/Business_Identifier_Code|Business Identifier Code (BIC)}.
-     * BIC is an internationally agreed means to uniquely identify both financial and non-financial institutions.
+     * This constraint is used to ensure that a value has the proper format of a {@link https://en.wikipedia.org/wiki/Business_Identifier_Code|Business Identifier Code (BIC)}.</p>
+     * BIC is an internationally agreed means to uniquely identify both financial and non-financial institutions.</p>
      * You may also check that the BIC is associated with a given IBAN.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.BicValidator(data);
@@ -27,17 +27,17 @@ Object.assign(abv, function () {
      * @name abv.BicValidator#iban
      * @type {String}
      * @description
-     * An IBAN value to validate that the BIC is associated with it.
-     * Default: null
+     * An IBAN value to validate that the BIC is associated with it.</p>
+     * Default: <code class="notranslate">null</code>
      */
 
     /**
      * @name abv.BicValidator#ibanMessage
      * @type {String}
      * @description
-     * The default message supplied when the value does not pass the combined BIC/IBAN check.
-     * Default: "This Business Identifier Code (BIC) is not associated with IBAN %%iban%%."
-     * You can use the following parameters in this message:
+     * The default message supplied when the value does not pass the combined BIC/IBAN check.</p>
+     * <p>Default: "<code class="notranslate">This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -47,7 +47,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%iban%%</td>
+     *             <td><code class="notranslate">%%iban%%</code></td>
      *             <td>The current IBAN value</td>
      *         </tr>
      *     </tbody>
@@ -58,9 +58,9 @@ Object.assign(abv, function () {
      * @name abv.BicValidator#message
      * @type {String}
      * @description
-     * The default message supplied when the value does not pass the BIC check.
-     * Default: "This is not a valid Business Identifier Code (BIC)."
-     * You can use the following parameters in this message:
+     * The default message supplied when the value does not pass the BIC check.</p>
+     * <p>Default: "<code class="notranslate">This is not a valid Business Identifier Code (BIC).</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -70,7 +70,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The current (invalid) BIC value</td>
      *         </tr>
      *     </tbody>

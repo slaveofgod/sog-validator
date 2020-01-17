@@ -48,7 +48,9 @@ Object.assign(abv, function () {
     /**
      * @name abv.Application#lang
      * @type {String}
-     * @description The language used by the application. Defaults to 'en' ({@link https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes|List of ISO 639-1 codes}).
+     * @description
+     * <p>The language used by the application.</p>
+     * <p>Defaults to 'en' ({@link https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes|List of ISO 639-1 codes}).</p>
      * @example
      * // Set the language for the application
      * this.app.lang = 'en';

@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.NotBlankValidator(data);
@@ -24,25 +24,25 @@ Object.assign(abv, function () {
      * @name abv.NotBlankValidator#allowNull
      * @type {Boolean}
      * @description
-     * If set to <code class="notranslate">true</code>, <code class="notranslate">null</code> values are considered valid and won't trigger a constraint violation.
-     * Default: false
+     * If set to <code class="notranslate">true</code>, <code class="notranslate">null</code> values are considered valid and won't trigger a constraint violation.</p>
+     * Default: <code class="notranslate">false</code>
      */
 
     /**
      * @name abv.NotBlankValidator#normalize
      * @type {Boolean}
      * @description
-     * Normalizer string before validate (trim, etc.).
-     * Default: false
+     * Normalizer string before validate (trim, etc.).</p>
+     * Default: <code class="notranslate">false</code>
      */
 
     /**
      * @name abv.NotBlankValidator#message
      * @type {String}
      * @description
-     * This is the message that will be shown if the value is blank.
-     * Default: "This value should not be blank."
-     * You can use the following parameters in this message:
+     * This is the message that will be shown if the value is blank.</p>
+     * <p>Default: "<code class="notranslate">This value should not be blank.</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -52,7 +52,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>

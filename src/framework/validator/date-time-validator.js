@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>"
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.DateTimeValidator(data);
@@ -25,8 +25,8 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * This message is shown if the underlying data is not a valid datetime.
-     * Default: "This value is not a valid datetime."
-     * You can use the following parameters in this message:
+     * <p>Default: "This value is not a valid datetime."
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -36,7 +36,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>
@@ -48,7 +48,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * This option allows to validate a custom date format. See DateTime::createFromFormat() for formatting options.
-     * Default: "YYYY-MM-DD HH:mm:ss"
+     * <p>Default: "YYYY-MM-DD HH:mm:ss"
      * @description
      * <h2>Year, month, and day tokens</h2>
      * <i>Tokens are case-sensitive.</i>

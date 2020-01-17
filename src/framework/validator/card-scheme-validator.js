@@ -6,12 +6,12 @@ Object.assign(abv, function () {
      * @name abv.CardSchemeValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * This constraint ensures that a credit card number is valid for a given credit card company.
+     * This constraint ensures that a credit card number is valid for a given credit card company.</p>
      * It can be used to validate the number before trying to initiate a payment through a payment gateway.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>"
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.CardSchemeValidator(data);
@@ -27,8 +27,8 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The message shown when the value does not pass the CardScheme check.
-     * Default: "Unsupported card type or invalid card number."
-     * You can use the following parameters in this message:
+     * <p>Default: "Unsupported card type or invalid card number."
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -38,7 +38,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>
@@ -50,7 +50,7 @@ Object.assign(abv, function () {
      * @type {String|Array}
      * @description
      * This option is required and represents the name of the number scheme used to validate the credit card number, it can either be a string or an array.
-     * <br />
+     * </p>
      * Valid values are:
      * <ul>
      *     <li><b>AMEX</b></li>

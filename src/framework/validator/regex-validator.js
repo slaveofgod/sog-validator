@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.RegexValidator(data, {pattern: 'regular expression'});
@@ -33,9 +33,9 @@ Object.assign(abv, function () {
      * @name abv.RegexValidator#message
      * @type {String}
      * @description
-     * This is the message that will be shown if this validator fails.
-     * Default: "This value is not valid."
-     * You can use the following parameters in this message:
+     * This is the message that will be shown if this validator fails.</p>
+     * <p>Default: "<code class="notranslate">This value is not valid.</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -45,7 +45,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>
@@ -64,7 +64,9 @@ Object.assign(abv, function () {
     /**
      * @name abv.RegexValidator#normalize
      * @type {Boolean}
-     * @description Normalizer string before validate (trim, etc.). Default: false
+     * @description
+     * Normalizer string before validate (trim, etc.).</p>
+     * Default: <code class="notranslate">false</code>
      */
 
     var RegexValidator = function (data, options, lang, internal) {

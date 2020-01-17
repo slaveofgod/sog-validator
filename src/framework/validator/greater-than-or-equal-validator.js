@@ -5,12 +5,11 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.GreaterThanOrEqualValidator
      * @extends abv.AbstractComparisonValidator
-     * @classdesc
-     * Validates that a value is greater than or equal to another value, defined in the options.
+     * @classdesc Validates that a value is greater than or equal to another value, defined in the options.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: 'en'.
+     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.GreaterThanOrEqualValidator(data, {"value": "the value to compare to"});
@@ -25,9 +24,9 @@ Object.assign(abv, function () {
      * @name abv.GreaterThanOrEqualValidator#message
      * @type {String}
      * @description
-     * This is the message that will be shown if the value is not greater than or equal to the comparison value.
-     * Default: "This value should be greater than or equal to %%compared_value%%."
-     * You can use the following parameters in this message:
+     * <p>This is the message that will be shown if the value is not greater than or equal to the comparison value.</p>
+     * <p>Default: "<code class="notranslate">This value should be greater than or equal to %%compared_value%%.</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
      *         <tr>
@@ -37,15 +36,15 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td>%%compared_value%%</td>
+     *             <td><code class="notranslate">%%compared_value%%</code></td>
      *             <td>The expected value</td>
      *         </tr>
      *         <tr>
-     *             <td>%%compared_value_type%%</td>
+     *             <td><code class="notranslate">%%compared_value_type%%</code></td>
      *             <td>The expected value type</td>
      *         </tr>
      *         <tr>
-     *             <td>%%value%%</td>
+     *             <td><code class="notranslate">%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>
