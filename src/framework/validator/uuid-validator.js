@@ -73,7 +73,7 @@ Object.assign(abv, function () {
      * @description
      * This option can be used to only allow specific {@link https://en.wikipedia.org/wiki/Universally_unique_identifier#Variants_and_versions|UUID versions}.
      * Valid versions are 1 - 5.
-     * Default: "[1,2,3,4,5]".
+     * Default: [1,2,3,4,5].
      * The following PHP constants can also be used:
      * <br />
      * <ul>
