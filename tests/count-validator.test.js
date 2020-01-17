@@ -65,7 +65,7 @@ describe('count', () => {
         });
 
         test('Array', () => {
-            expect(abv.isValidWithErrorMessage([], 'count:{"min":1}')).toBe("This collection should contain 1 elements or less.");
+            expect(abv.isValidWithErrorMessage([], 'count:{"min":1}')).toBe("This collection should contain 1 element or less.");
         });
 
         test('Object', () => {

@@ -11,6 +11,7 @@ Object.assign(abv, (function () {
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options
      * @param {String} lang Language of error messages.
+     * @param {Boolean} lang Language of error messages.
      * @constructor
      */
 
@@ -36,7 +37,7 @@ Object.assign(abv, (function () {
         this.lang = lang || 'en';
 
         this.__options = options || {};
-        this.__error = new abv.ErrorCollection({"lang": lang});
+        this.__errorService = new abv.ErrorHandler({"lang": lang, "internal": internal});
         this.__internal = (true === internal);
         this.__moment = abv.moment;
         this.__name = null;
@@ -84,7 +85,7 @@ Object.assign(abv, (function () {
          * @returns {Boolean} Validation status
          */
         __hasErrors: function () {
-            return this.__error.has();
+            return this.__errorService.has();
         },
 
         /**
@@ -94,7 +95,7 @@ Object.assign(abv, (function () {
          * @returns {abv.Error} Error messages
          */
         errors: function () {
-            return this.__error;
+            return this.__errorService;
         },
 
         /**
@@ -106,7 +107,7 @@ Object.assign(abv, (function () {
          * @description Set error message
          */
         __setErrorMessage: function (message, parameters) {
-            this.__error.add(message, parameters);
+            this.__errorService.add(message, parameters);
         },
 
         /**

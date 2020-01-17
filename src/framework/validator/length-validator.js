@@ -206,7 +206,7 @@ Object.assign(abv, function () {
             ) {
                 this.__setErrorMessage(
                     (this.min == this.max ? this.exactMessage : this.maxMessage),
-                    (this.min == this.max ? this.exact__messageParameters() : this.max__messageParameters())
+                    (this.min == this.max ? this.__exactMessageParameters() : this.__maxMessageParameters())
                 );
                 return ;
             }
@@ -217,7 +217,7 @@ Object.assign(abv, function () {
             ) {
                 this.__setErrorMessage(
                     (this.min == this.max ? this.exactMessage : this.minMessage),
-                    (this.min == this.max ? this.exact__messageParameters() : this.min__messageParameters())
+                    (this.min == this.max ? this.__exactMessageParameters() : this.__minMessageParameters())
                 );
                 return ;
             }
@@ -255,11 +255,11 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LengthValidator#exact__messageParameters
+         * @name abv.LengthValidator#__exactMessageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
-        exact__messageParameters: function () {
+        __exactMessageParameters: function () {
             return {
                 'value': this.data,
                 'limit': this.min
@@ -269,11 +269,11 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LengthValidator#max__messageParameters
+         * @name abv.LengthValidator#__maxMessageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
-        max__messageParameters: function () {
+        __maxMessageParameters: function () {
             return {
                 'value': this.data,
                 'limit': this.max
@@ -283,11 +283,11 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LengthValidator#min__messageParameters
+         * @name abv.LengthValidator#__minMessageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
-        min__messageParameters: function () {
+        __minMessageParameters: function () {
             return {
                 'value': this.data,
                 'limit': this.min
