@@ -8,8 +8,8 @@ Object.assign(abv, (function () {
      * @classdesc Handles translation. Responsible for the translation. Can also handle plural forms.
      * @property {String} lang The current language. This parameter is required.
      * @example
-     * var translator = new abv.I18n('en');
-     * var translatedMessage = translator.getText(message);
+     * var translator = new abv.I18n(language);
+     * var translatedMessage = translator.getText(message, parameters);
      */
 
     // PROPERTIES

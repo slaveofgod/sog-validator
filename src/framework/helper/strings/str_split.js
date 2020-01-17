@@ -1,10 +1,6 @@
-/**
- *  Convert a string to an array
- *  @param  {string}    str             The input string.
- *  @param  {integer}   split_length    Maximum length of the chunk.
- *  @return {array}
- */
 abv.str_split = function (str, split_length) {
+    //Convert a string to an array
+
     if(split_length == null){
         split_length = 1;
     }
