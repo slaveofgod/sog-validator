@@ -1,4 +1,4 @@
-abv.I18nResource['vi'] = [
+abv.I18nHandler.add('vi', [
     {
         "@id": "1",
         "source": "This value should be false.",
@@ -449,4 +449,4 @@ abv.I18nResource['vi'] = [
         "source": "This password has been leaked in a data breach, it must not be used. Please use another password.",
         "target": "Mật khẩu này đã bị rò rỉ dữ liệu, không được sử dụng nữa. Xin vui lòng sử dụng mật khẩu khác."
     }
-];
+]);

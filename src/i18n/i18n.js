@@ -1,5 +1,3 @@
-abv.I18nResource = [];
-
 Object.assign(abv, (function () {
 
     /**
@@ -35,14 +33,14 @@ Object.assign(abv, (function () {
     Object.assign(I18n.prototype, {
         /**
          * @function
-         * @name abv.I18n#getText
+         * @name abv.I18n#translate
          * @description Returns the translation.
          * @param {String} message The message which need to be translated
          * @param {Object} parameters The message parameters
          * @returns {String} Translated and processed message
          */
-        getText: function (message, parameters) {
-            var translation = this.__find(message);
+        translate: function (message, parameters) {
+            var translation = abv.I18nHandler.get(this.lang, message);
             if (null === translation) {
                 translation = message;
             }
@@ -61,51 +59,7 @@ Object.assign(abv, (function () {
                 }
             }
 
-            return this.__prepare(translation, parameters);
-        },
-
-        /**
-         * @private
-         * @function
-         * @name abv.I18n#__find
-         * @description Translate message
-         * @param {String} message Message text
-         * @returns {String|Null} Translated message
-         */
-        __find: function (message) {
-            var resource = abv.I18nResource[this.lang];
-
-            for (var i = 0; i < resource.length; i ++) {
-                if (
-                    message === resource[i]['source']
-                    || resource[i]['source'].includes(message)
-                ) {
-                    return resource[i]['target'];
-                }
-            }
-
-            return null;
-        },
-
-        /**
-         * @private
-         * @function
-         * @name abv.I18n#__prepare
-         * @description Prepare message
-         * @param {String} message Message text
-         * @param {Object} parameters Message parameters
-         * @returns {String} Processed message
-         */
-        __prepare: function (message, parameters) {
-            parameters = parameters || {};
-
-            for (var key in parameters) {
-                if (!parameters.hasOwnProperty(key)) continue;
-
-                message = message.replace("%%" + key + "%%", parameters[key]);
-            }
-
-            return message;
+            return abv.I18nHandler.prepare(translation, parameters);
         }
     });
 

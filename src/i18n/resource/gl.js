@@ -1,4 +1,4 @@
-abv.I18nResource['gl'] = [
+abv.I18nHandler.add('gl', [
     {
         "@id": "1",
         "source": "This value should be false.",
@@ -409,4 +409,4 @@ abv.I18nResource['gl'] = [
         "source": "This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.",
         "target": "Este Código de identificación bancaria (BIC) non está asociado co IBAN %%iban%%."
     }
-];
+]);

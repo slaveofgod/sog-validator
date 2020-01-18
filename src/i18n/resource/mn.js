@@ -1,4 +1,4 @@
-abv.I18nResource['mn'] = [
+abv.I18nHandler.add('mn', [
     {
         "@id": "1",
         "source": "This value should be false.",
@@ -179,4 +179,4 @@ abv.I18nResource['mn'] = [
         "source": "This value is not a valid language.",
         "target": "Энэ утга үнэн зөв хэл биш байна ."
     }
-];
+]);

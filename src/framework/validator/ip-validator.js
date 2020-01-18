@@ -11,7 +11,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>"
+     * @param {String} lang The language used by the application. Default: "<code>en</code>"
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.IpValidator(data);
@@ -27,7 +27,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * <p>This message is shown if the string is not a valid IP address.</p>
-     * <p>Default: "<code class="notranslate">This is not a valid IP address.</code>"</p>
+     * <p>Default: "<code>This is not a valid IP address.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -38,7 +38,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%value%%</code></td>
+     *             <td><code>%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>

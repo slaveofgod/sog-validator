@@ -1,4 +1,4 @@
-abv.I18nResource['lt'] = [
+abv.I18nHandler.add('lt', [
     {
         "@id": "1",
         "source": "This value should be false.",
@@ -454,4 +454,4 @@ abv.I18nResource['lt'] = [
         "source": "This value should be between %%min%% and %%max%%.",
         "target": "Ši reikšmė turi būti tarp %%min%% ir %%max%%."
     }
-];
+]);

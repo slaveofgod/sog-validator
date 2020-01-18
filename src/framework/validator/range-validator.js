@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.RangeValidator('1991-12-17T03:24:00', {"min":"1990-12-17T03:24:00","max":"1995-12-17T03:24:00"});
@@ -25,7 +25,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The message that will be shown if the underlying value is not a number.</p>
-     * <p>Default: "<code class="notranslate">This value should be a valid number.</code>"</p>
+     * <p>Default: "<code>This value should be a valid number.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -36,7 +36,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%value%%</code></td>
+     *             <td><code>%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>
@@ -55,7 +55,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The message that will be shown if the underlying value is more than the max option.</p>
-     * <p>Default: "<code class="notranslate">This value should be %%limit%% or less.</code>"</p>
+     * <p>Default: "<code>This value should be %%limit%% or less.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <tr>
@@ -63,11 +63,11 @@ Object.assign(abv, function () {
      *         <td><b>Description</b></td>
      *     </tr>
      *     <tr>
-     *         <td><code class="notranslate">%%limit%%</code></td>
+     *         <td><code>%%limit%%</code></td>
      *         <td>The upper limit</td>
      *     </tr>
      *     <tr>
-     *         <td><code class="notranslate">%%value%%</code></td>
+     *         <td><code>%%value%%</code></td>
      *         <td>The current (invalid) value</td>
      *     </tr>
      * </table>
@@ -85,7 +85,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The message that will be shown if the underlying value is less than the min option.</p>
-     * <p>Default: "<code class="notranslate">This value should be %%limit%% or more.</code>"</p>
+     * <p>Default: "<code>This value should be %%limit%% or more.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <tr>
@@ -93,11 +93,11 @@ Object.assign(abv, function () {
      *         <td><b>Description</b></td>
      *     </tr>
      *     <tr>
-     *         <td><code class="notranslate">%%limit%%</code></td>
+     *         <td><code>%%limit%%</code></td>
      *         <td>The lower limit</td>
      *     </tr>
      *     <tr>
-     *         <td><code class="notranslate">%%value%%</code></td>
+     *         <td><code>%%value%%</code></td>
      *         <td>The current (invalid) value</td>
      *     </tr>
      * </table>
@@ -108,7 +108,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The message that will be shown if the underlying value is less than the min option or greater than the max option.</p>
-     * <p>Default: "<code class="notranslate">This value should be between %%min%% and %%max%%.</code>"</p>
+     * <p>Default: "<code>This value should be between %%min%% and %%max%%.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <tr>
@@ -116,15 +116,15 @@ Object.assign(abv, function () {
      *         <td><b>Description</b></td>
      *     </tr>
      *     <tr>
-     *         <td><code class="notranslate">%%max%%</code></td>
+     *         <td><code>%%max%%</code></td>
      *         <td>The upper limit</td>
      *     </tr>
      *     <tr>
-     *         <td><code class="notranslate">%%min%%</code></td>
+     *         <td><code>%%min%%</code></td>
      *         <td>The lower limit</td>
      *     </tr>
      *     <tr>
-     *         <td><code class="notranslate">%%value%%</code></td>
+     *         <td><code>%%value%%</code></td>
      *         <td>The current (invalid) value</td>
      *     </tr>
      * </table>

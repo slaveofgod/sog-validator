@@ -5,11 +5,11 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.BlankValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value is blank - meaning equal to an empty string or <code class="notranslate">null</code>.
+     * @classdesc Validates that a value is blank - meaning equal to an empty string or <code>null</code>.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.BlankValidator(data);
@@ -25,7 +25,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * <p>This is the message that will be shown if the value is not blank.</p>
-     * <p>Default: "<code class="notranslate">This value should be blank.</code>"</p>
+     * <p>Default: "<code>This value should be blank.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -36,7 +36,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%value%%</code></td>
+     *             <td><code>%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>

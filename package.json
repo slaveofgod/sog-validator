@@ -28,7 +28,7 @@
     "url": "https://github.com/alexeybob/bob-validator.git"
   },
   "eslintConfig": {
-    "extends": "@playcanvas/eslint-config"
+    "extends": "<rootDir>/eslint-config.js"
   },
   "eslintIgnore": [
     "src/polyfill/*"
@@ -47,7 +47,6 @@
   "dependencies": {},
   "devDependencies": {
     "@pixi/jsdoc-template": "^2.5.1",
-    "@playcanvas/eslint-config": "^1.0.0",
     "chai": "^4.2.0",
     "eslint": "^6.3.0",
     "fs-extra": "^8.1.0",
@@ -60,8 +59,8 @@
     "preprocessor": "^1.4.0",
     "sinon": "^5.1.1",
     "tsd-jsdoc": "^2.4.0",
-    "typescript": "^3.5.3",
-    "uglify-js": "^3.7.3",
+    "typescript": "^3.7.5",
+    "uglify-js": "^3.7.5",
     "watch": "^1.0.2"
   },
   "scripts": {

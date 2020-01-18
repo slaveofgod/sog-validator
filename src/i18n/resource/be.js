@@ -1,4 +1,4 @@
-abv.I18nResource['be'] = [
+abv.I18nHandler.add('be', [
     {
         "@id": "1",
         "source": "This value should be false.",
@@ -449,4 +449,4 @@ abv.I18nResource['be'] = [
         "source": "This password has been leaked in a data breach, it must not be used. Please use another password.",
         "target": "Гэты пароль быў выкрадзены ў выніку ўзлому дадзеных, таму яго нельга выкарыстоўваць. Калі ласка, выкарыстоўвайце іншы пароль."
     }
-];
+]);

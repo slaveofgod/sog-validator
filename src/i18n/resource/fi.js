@@ -1,4 +1,4 @@
-abv.I18nResource['fi'] = [
+abv.I18nHandler.add('fi', [
     {
         "@id": "1",
         "source": "This value should be false.",
@@ -454,4 +454,4 @@ abv.I18nResource['fi'] = [
         "source": "This value should be between %%min%% and %%max%%.",
         "target": "Arvon tulisi olla välillä %%min%% - %%max%%."
     }
-];
+]);

@@ -1,4 +1,4 @@
-abv.I18nResource['hu'] = [
+abv.I18nHandler.add('hu', [
     {
         "@id": "1",
         "source": "This value should be false.",
@@ -454,4 +454,4 @@ abv.I18nResource['hu'] = [
         "source": "This value should be between %%min%% and %%max%%.",
         "target": "Ennek az értéknek %%min%% és %%max%% között kell lennie."
     }
-];
+]);

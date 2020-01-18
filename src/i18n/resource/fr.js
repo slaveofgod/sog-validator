@@ -1,4 +1,4 @@
-abv.I18nResource['fr'] = [
+abv.I18nHandler.add('fr', [
     {
         "@id": "1",
         "source": "This value should be false.",
@@ -459,4 +459,4 @@ abv.I18nResource['fr'] = [
         "source": "This value is not a valid hostname.",
         "target": "Cette valeur n'est pas un nom d'hôte valide."
     }
-];
+]);

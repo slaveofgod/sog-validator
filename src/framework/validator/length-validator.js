@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.LengthValidator(data, {min: 10});
@@ -26,7 +26,7 @@ Object.assign(abv, function () {
      * @description
      * If set to true, empty strings are considered valid.</p>
      * The default false value considers empty strings not valid.</p>
-     * Default: <code class="notranslate">false</code>.
+     * Default: <code>false</code>.
      */
 
     // /**
@@ -34,7 +34,7 @@ Object.assign(abv, function () {
     //  * @type {String}
     //  * @description
     //  * The charset to be used when computing value's length.</p>
-    //  * <p>Default: "<code class="notranslate">UTF-8</code>".
+    //  * <p>Default: "<code>UTF-8</code>".
     //  */
     //
     // /**
@@ -50,11 +50,11 @@ Object.assign(abv, function () {
     //  *         <td><b>Description</b></td>
     //  *     </tr>
     //  *     <tr>
-    //  *         <td><code class="notranslate">%%charset%%</code></td>
+    //  *         <td><code>%%charset%%</code></td>
     //  *         <td>The expected charset</td>
     //  *     </tr>
     //  *     <tr>
-    //  *         <td><code class="notranslate">%%value%%</code></td>
+    //  *         <td><code>%%value%%</code></td>
     //  *         <td>The current (invalid) value</td>
     //  *     </tr>
     //  * </table>
@@ -65,7 +65,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The message that will be shown if min and max values are equal and the underlying value's length is not exactly this value.</p>
-     * <p>Default: "<code class="notranslate">This value should have exactly %%limit%% characters.</code>".</p>
+     * <p>Default: "<code>This value should have exactly %%limit%% characters.</code>".</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <tr>
@@ -73,11 +73,11 @@ Object.assign(abv, function () {
      *         <td><b>Description</b></td>
      *     </tr>
      *     <tr>
-     *         <td><code class="notranslate">%%limit%%</code></td>
+     *         <td><code>%%limit%%</code></td>
      *         <td>The exact expected length</td>
      *     </tr>
      *     <tr>
-     *         <td><code class="notranslate">%%value%%</code></td>
+     *         <td><code>%%value%%</code></td>
      *         <td>The current (invalid) value</td>
      *     </tr>
      * </table>
@@ -103,11 +103,11 @@ Object.assign(abv, function () {
      *         <td><b>Description</b></td>
      *     </tr>
      *     <tr>
-     *         <td><code class="notranslate">%%limit%%</code></td>
+     *         <td><code>%%limit%%</code></td>
      *         <td>The expected maximum length</td>
      *     </tr>
      *     <tr>
-     *         <td><code class="notranslate">%%value%%</code></td>
+     *         <td><code>%%value%%</code></td>
      *         <td>The current (invalid) value</td>
      *     </tr>
      * </table>
@@ -127,7 +127,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The message that will be shown if the underlying value's length is less than the min option.</p>
-     * <p>Default: "<code class="notranslate">This value is too short. It should have %%limit%% characters or more.</code>".</p>
+     * <p>Default: "<code>This value is too short. It should have %%limit%% characters or more.</code>".</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <tr>
@@ -135,11 +135,11 @@ Object.assign(abv, function () {
      *         <td><b>Description</b></td>
      *     </tr>
      *     <tr>
-     *         <td><code class="notranslate">%%limit%%</code></td>
+     *         <td><code>%%limit%%</code></td>
      *         <td>The expected minimum length</td>
      *     </tr>
      *     <tr>
-     *         <td><code class="notranslate">%%value%%</code></td>
+     *         <td><code>%%value%%</code></td>
      *         <td>The current (invalid) value</td>
      *     </tr>
      * </table>

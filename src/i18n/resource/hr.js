@@ -1,4 +1,4 @@
-abv.I18nResource['hr'] = [
+abv.I18nHandler.add('hr', [
     {
         "@id": "1",
         "source": "This value should be false.",
@@ -449,4 +449,4 @@ abv.I18nResource['hr'] = [
         "source": "This password has been leaked in a data breach, it must not be used. Please use another password.",
         "target": "Ova lozinka je procurila u nekom od sigurnosnih propusta, te je potrebno koristiti drugu lozinku."
     }
-];
+]);

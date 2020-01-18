@@ -8,11 +8,11 @@ Object.assign(abv, function () {
      * @description Create a new Application.
      * @param {Object} options
      * @example
-     * if ('' !== data && null !== data) {
-     * // validation will fail
-     * }
+     * var validationEngine = new abv.Application({
+     *     lang: 'en'
+     * });
      *
-     * let form = validationEngine.make({
+     * var form = validationEngine.make({
      *   name: 'required',
      *   name: 'required',
      *   email: 'required|email',
@@ -38,9 +38,6 @@ Object.assign(abv, function () {
      * if (false === form['name'].isValid()) {
      *   form['name'].errors().first();
      * }
-     *
-     * // Run validation
-     * app.validate()
      */
 
     // PROPERTIES
@@ -119,7 +116,7 @@ Object.assign(abv, function () {
          * @param {*} data The data which needs to be validated
          * @param {String} rules The validation rules
          * @example
-         * let validationEngine = new abv.Application({
+         * var validationEngine = new abv.Application({
          *     lang: 'en'
          * });
          *

@@ -1,4 +1,4 @@
-abv.I18nResource['zh_TW'] = [
+abv.I18nHandler.add('zh_TW', [
     {
         "@id": "1",
         "source": "This value should be false.",
@@ -454,4 +454,4 @@ abv.I18nResource['zh_TW'] = [
         "source": "This value should be between %%min%% and %%max%%.",
         "target": "該數值應在 %%min%% 和 %%max%% 之間。"
     }
-];
+]);

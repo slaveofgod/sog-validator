@@ -2,6 +2,7 @@
 ../src/core/abstract-validator.js
 ../src/core/abstract-comparison-validator.js
 ../src/handler/error-handler.js
+../src/handler/i18n-handler.js
 ../src/framework/application.js
 ../src/framework/helper/moment/moment.js
 ../src/framework/helper/moment/moment-timezone.js

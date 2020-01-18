@@ -63,11 +63,7 @@ Object.assign(abv, function () {
             var message = this.__messages[pos];
 
             if ('undefined' !== typeof message) {
-                // if (false === this.__internal) {
-                    return this.__translator.getText(message.message, message.parameters);
-                // } else {
-                //     return message.message;
-                // }
+                return this.__translator.translate(message.message, message.parameters);
             }
 
             return null;

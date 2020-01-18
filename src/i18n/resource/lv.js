@@ -1,4 +1,4 @@
-abv.I18nResource['lv'] = [
+abv.I18nHandler.add('lv', [
     {
         "@id": "1",
         "source": "This value should be false.",
@@ -414,4 +414,4 @@ abv.I18nResource['lv'] = [
         "source": "This value should be valid JSON.",
         "target": "Šai vērtībai jābūt derīgam JSON."
     }
-];
+]);

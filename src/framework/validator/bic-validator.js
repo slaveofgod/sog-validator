@@ -12,7 +12,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.BicValidator(data);
@@ -28,7 +28,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * An IBAN value to validate that the BIC is associated with it.</p>
-     * Default: <code class="notranslate">null</code>
+     * Default: <code>null</code>
      */
 
     /**
@@ -36,7 +36,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The default message supplied when the value does not pass the combined BIC/IBAN check.</p>
-     * <p>Default: "<code class="notranslate">This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.</code>"</p>
+     * <p>Default: "<code>This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -47,7 +47,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%iban%%</code></td>
+     *             <td><code>%%iban%%</code></td>
      *             <td>The current IBAN value</td>
      *         </tr>
      *     </tbody>
@@ -59,7 +59,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The default message supplied when the value does not pass the BIC check.</p>
-     * <p>Default: "<code class="notranslate">This is not a valid Business Identifier Code (BIC).</code>"</p>
+     * <p>Default: "<code>This is not a valid Business Identifier Code (BIC).</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -70,7 +70,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%value%%</code></td>
+     *             <td><code>%%value%%</code></td>
      *             <td>The current (invalid) BIC value</td>
      *         </tr>
      *     </tbody>

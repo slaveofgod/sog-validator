@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.IsbnValidator(data);
@@ -25,7 +25,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The message that will be shown if the type option is null and the given value does not pass any of the ISBN checks.</p>
-     * <p>Default: "<code class="notranslate">This value is neither a valid ISBN-10 nor a valid ISBN-13.</code>"</p>
+     * <p>Default: "<code>This value is neither a valid ISBN-10 nor a valid ISBN-13.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -36,7 +36,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%value%%</code></td>
+     *             <td><code>%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>
@@ -48,7 +48,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The message that will be shown if the type option is isbn10 and the given value does not pass the ISBN-10 check.</p>
-     * <p>Default: "<code class="notranslate">This value is not a valid ISBN-10.</code>"</p>
+     * <p>Default: "<code>This value is not a valid ISBN-10.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -59,7 +59,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%value%%</code></td>
+     *             <td><code>%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>
@@ -71,7 +71,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The message that will be shown if the type option is isbn13 and the given value does not pass the ISBN-13 check.</p>
-     * <p>Default: "<code class="notranslate">This value is not a valid ISBN-13.</code>"</p>
+     * <p>Default: "<code>This value is not a valid ISBN-13.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -82,7 +82,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%value%%</code></td>
+     *             <td><code>%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>
@@ -94,7 +94,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The message that will be shown if the value is not valid. If not null, this message has priority over all the other messages.
-     * Default: <code class="notranslate">null</code>
+     * Default: <code>null</code>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -105,7 +105,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%value%%</code></td>
+     *             <td><code>%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>
@@ -117,7 +117,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The type of ISBN to validate against. Valid values are isbn10, isbn13 and null to accept any kind of ISBN.
-     * Default: <code class="notranslate">null</code>
+     * Default: <code>null</code>
      */
 
     var IsbnValidator = function (data, options, lang, internal) {

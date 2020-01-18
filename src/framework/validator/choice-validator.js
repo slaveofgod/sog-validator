@@ -5,11 +5,11 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.ChoiceValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value is blank - meaning equal to an empty string or <code class="notranslate">null</code>.
+     * @classdesc Validates that a value is blank - meaning equal to an empty string or <code>null</code>.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.ChoiceValidator(["Liam", "Noah", "William", "James"], {
@@ -58,7 +58,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * This is the validation error message that's displayed when the user chooses too many options per the max option.</p>
-     * <p>Default: "<code class="notranslate">You must select at most {{ limit }} choices.</code>"</p>
+     * <p>Default: "<code>You must select at most {{ limit }} choices.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -69,15 +69,15 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%limit%%</code></td>
+     *             <td><code>%%limit%%</code></td>
      *             <td>Max count of selected options</td>
      *         </tr>
      *         <tr>
-     *             <td><code class="notranslate">%%choices%%</code></td>
+     *             <td><code>%%choices%%</code></td>
      *             <td>A comma-separated list of available choices</td>
      *         </tr>
      *         <tr>
-     *             <td><code class="notranslate">%%value%%</code></td>
+     *             <td><code>%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>
@@ -89,7 +89,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * This is the message that you will receive if the multiple option is set to false and the underlying value is not in the valid array of choices.</p>
-     * <p>Default: "<code class="notranslate">The value you selected is not a valid choice.</code>"</p>
+     * <p>Default: "<code>The value you selected is not a valid choice.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -100,7 +100,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%value%%</code></td>
+     *             <td><code>%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>
@@ -120,7 +120,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * This is the validation error message that's displayed when the user chooses too few choices per the min option.</p>
-     * <p>Default: "<code class="notranslate">You must select at least {{ limit }} choices.</code>"</p>
+     * <p>Default: "<code>You must select at least {{ limit }} choices.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -131,15 +131,15 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%limit%%</code></td>
+     *             <td><code>%%limit%%</code></td>
      *             <td>Min count of selected options</td>
      *         </tr>
      *         <tr>
-     *             <td><code class="notranslate">%%choices%%</code></td>
+     *             <td><code>%%choices%%</code></td>
      *             <td>A comma-separated list of available choices</td>
      *         </tr>
      *         <tr>
-     *             <td><code class="notranslate">%%value%%</code></td>
+     *             <td><code>%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>
@@ -153,7 +153,7 @@ Object.assign(abv, function () {
      * If this option is true, the input value is expected to be an array instead of a single, scalar value.
      * The constraint will check that each value of the input array can be found in the array of valid choices.
      * If even one of the input values cannot be found, the validation will fail.
-     * Default: <code class="notranslate">false</code>
+     * Default: <code>false</code>
      */
 
     /**
@@ -161,7 +161,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * This is the message that you will receive if the multiple option is set to true and one of the values on the underlying array being checked is not in the array of valid choices.</p>
-     * <p>Default: "<code class="notranslate">One or more of the given values is invalid.</code>"</p>
+     * <p>Default: "<code>One or more of the given values is invalid.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -172,7 +172,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%value%%</code></td>
+     *             <td><code>%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>

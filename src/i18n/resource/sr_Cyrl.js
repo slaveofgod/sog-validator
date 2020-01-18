@@ -1,4 +1,4 @@
-abv.I18nResource['sr_Cyrl'] = [
+abv.I18nHandler.add('sr_Cyrl', [
     {
         "@id": "1",
         "source": "This value should be false.",
@@ -454,4 +454,4 @@ abv.I18nResource['sr_Cyrl'] = [
         "source": "This value should be between %%min%% and %%max%%.",
         "target": "Ова вредност треба да буде између %%min%% и %%max%%."
     }
-];
+]);

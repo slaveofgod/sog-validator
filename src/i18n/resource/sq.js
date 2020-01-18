@@ -1,4 +1,4 @@
-abv.I18nResource['sq'] = [
+abv.I18nHandler.add('sq', [
     {
         "@id": "1",
         "source": "This value should be false.",
@@ -409,4 +409,4 @@ abv.I18nResource['sq'] = [
         "source": "This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.",
         "target": "Ky Kod Identifikues i Biznesit (BIC) nuk është i lidhur me IBAN %%iban%%."
     }
-];
+]);

@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.CountValidator(data, {"min": 10, "max": 20});
@@ -25,7 +25,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * <p>The message that will be shown if min and max values are equal and the underlying collection elements count is not exactly this value.</p>
-     * <p>Default: "<code class="notranslate">This collection should contain exactly %%limit%% elements.</code>"</p>
+     * <p>Default: "<code>This collection should contain exactly %%limit%% elements.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -36,11 +36,11 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%count%%</code></td>
+     *             <td><code>%%count%%</code></td>
      *             <td>The current collection size</td>
      *         </tr>
      *         <tr>
-     *             <td><code class="notranslate">%%limit%%</code></td>
+     *             <td><code>%%limit%%</code></td>
      *             <td>The exact expected collection size</td>
      *         </tr>
      *     </tbody>
@@ -60,7 +60,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * <p>The message that will be shown if the underlying collection elements count is more than the max option.</p>
-     * <p>Default: "<code class="notranslate">This collection should contain %%limit%% elements or less.</code>"</p>
+     * <p>Default: "<code>This collection should contain %%limit%% elements or less.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -71,11 +71,11 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%count%%</code></td>
+     *             <td><code>%%count%%</code></td>
      *             <td>The current collection size</td>
      *         </tr>
      *         <tr>
-     *             <td><code class="notranslate">%%limit%%</code></td>
+     *             <td><code>%%limit%%</code></td>
      *             <td>The upper limit</td>
      *         </tr>
      *     </tbody>
@@ -95,7 +95,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The message that will be shown if the underlying collection elements count is less than the min option.</p>
-     * <p>Default: "<code class="notranslate">This collection should contain %%limit%% elements or more.</code>"</p>
+     * <p>Default: "<code>This collection should contain %%limit%% elements or more.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -106,11 +106,11 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%count%%</code></td>
+     *             <td><code>%%count%%</code></td>
      *             <td>The current collection size</td>
      *         </tr>
      *         <tr>
-     *             <td><code class="notranslate">%%limit%%</code></td>
+     *             <td><code>%%limit%%</code></td>
      *             <td>The lower limit</td>
      *         </tr>
      *     </tbody>

@@ -1,4 +1,4 @@
-abv.I18nResource['hy'] = [
+abv.I18nHandler.add('hy', [
     {
         "@id": "1",
         "source": "This value should be false.",
@@ -454,4 +454,4 @@ abv.I18nResource['hy'] = [
         "source": "This value should be between %%min%% and %%max%%.",
         "target": "Այս արժեքը պետք է լինի միջև %%min%% և %%max%%."
     }
-];
+]);

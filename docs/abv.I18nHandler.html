@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: EmailValidator</title>
+    <title>Namespace: I18nHandler</title>
     
     
     
@@ -2294,7 +2294,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="abv.EmailValidator.html">Class: EmailValidator</h1>
+        <h1 class="page-title" data-filename="abv.I18nHandler.html">Namespace: I18nHandler</h1>
         
 
 
@@ -2303,11 +2303,8 @@
     
 <header>
     <div class="header content-size">
-        <h2><span class="ancestors"><a href="abv.html">abv</a>.</span>EmailValidator
+        <h2><span class="ancestors"><a href="abv.html">abv</a>.</span>I18nHandler
         </h2>
-        
-            <div class="class-description">Validates that a value is a valid email address.</p>
-The underlying value is cast to a string before being validated.</div>
         
     </div>
 </header>  
@@ -2319,14 +2316,65 @@ The underlying value is cast to a string before being validated.</div>
 
         
             
+                <div class="description">I18n handler</div>
+            
+
+            
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+
+            
+        
+        </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl class="list-methods">
+            
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="EmailValidator">
-            <a class="share-icon" href="#EmailValidator"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="add">
+            <a class="share-icon" href="#add"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                new abv.EmailValidator
+                add
             </span>
-            <span class="signature">(data, options, lang, internal)</span>
+            <span class="signature">(lang, messages)</span>
             
             
             
@@ -2342,7 +2390,7 @@ The underlying value is cast to a string before being validated.</div>
     
     
     <div class="description">
-        Create a new Validator.
+        Add new message or messages to global collection for specific language.
     </div>
     
 
@@ -2373,52 +2421,6 @@ The underlying value is cast to a string before being validated.</div>
 	
         <tr>
             
-                <td class="name"><code>data</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                The data which needs to be validated.</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                The setting options</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
                 <td class="name"><code>lang</code></td>
             
             
@@ -2435,20 +2437,20 @@ The underlying value is cast to a string before being validated.</div>
             
             <td class="description last">
                 
-                The language used by the application. Default: "<code>en</code>"</td>
+                The current language</td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>internal</code></td>
+                <td class="name"><code>messages</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Boolean</span>
+<span class="param-type">Array</span>
 
 
             
@@ -2458,7 +2460,7 @@ The underlying value is cast to a string before being validated.</div>
             
             <td class="description last">
                 
-                If this parameter is true, it means, that validation called from core.</td>
+                Message or messages</td>
         </tr>
 	
 	
@@ -2505,104 +2507,20 @@ The underlying value is cast to a string before being validated.</div>
         
 
     
-    <pre class="prettyprint"><code>var validator = new abv.EmailValidator(data, {data: 'loose'});
-if (false === validator.isValid()) {
-     validator.errors().first();
-}</code></pre>
+    <pre class="prettyprint"><code>abv.I18nHandler.add('fr', [{
+    "source": "The value you selected is not a valid choice.",
+    "target": "Cette valeur doit être l'un des choix proposés."
+}]);
+
+// The first part of the message: "You must select at least %%limit%% choice." - this is the singular form
+// The second part of the message: "You must select at least %%limit%% choices." - this is the plural form
+// The form depends on value of "%%limit%%". If value "1", "0" or "-1" - singular form, otherwise - plural form
+abv.I18nHandler.add('fr', [{
+    "source": "You must select at least %%limit%% choice.|You must select at least %%limit%% choices.",
+    "target": "Vous devez sélectionner au moins %%limit%% choix.|Vous devez sélectionner au moins %%limit%% choix."
+}]);</code></pre>
     
 
-    
-</dd>
-
-        
-        </div>
-    
-    
-    
-        <h3 class="subsection-title">Extends</h3>
-        
-        <ul>
-            <li><a href="abv.AbstractValidator.html">abv.AbstractValidator</a></li>
-        </ul>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-        <h3 class="subsection-title">Members</h3>
-        
-        <dl class="list-members">
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="message">
-            <a class="share-icon" href="#message"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">message</span>
-            <span class="type-signature type">String</span>
-            
-            
-            
-            
-        </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        This message is shown if the underlying data is not a valid email address.
-<p>Default: "This value is not a valid email address."
-<p>You can use the following parameters in this message:</p>
-<table>
-    <thead>
-        <tr>
-            <th>Parameter</th>
-            <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>%%value%%</code></td>
-            <td>The current (invalid) value</td>
-        </tr>
-    </tbody>
-</table>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
     
 </dd>
 
@@ -2610,132 +2528,14 @@ if (false === validator.isValid()) {
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="mode">
-            <a class="share-icon" href="#mode"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">mode</span>
-            <span class="type-signature type">String</span>
-            
-            
-            
-            
-        </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        This option is optional and defines the pattern the email address is validated against.
-Default to 'html5'
-Valid values are:
-<ul>
-    <li><b>loose</b> - A simple regular expression. Allows all values with an "@" symbol in, and a "." in the second host part of the email address.</li>
-    <!--li><b>strict</b> - Uses the egulias/email-validator library to perform an RFC compliant validation. You will need to install that library to use this mode.</li-->
-    <li><b>html5</b> - This matches the pattern used for the <a target="_blank" href="https://www.w3.org/TR/html5/sec-forms.html#email-state-typeemail">HTML5 email input element</a>.</li>
-</ul>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="normalize">
-            <a class="share-icon" href="#normalize"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">normalize</span>
-            <span class="type-signature type">Boolean</span>
-            
-            
-            
-            
-        </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        Normalizer string before validate (trim, etc.).
-Default: false
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        </dl>
-    
-    
-    
-        <h3 class="subsection-title">Methods</h3>
-        
-        <dl class="list-methods">
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="errors">
-            <a class="share-icon" href="#errors"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="get">
+            <a class="share-icon" href="#get"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                errors
+                get
             </span>
-            <span class="signature">()</span><span class="type-signature">abv.Error</span>
+            <span class="signature">(lang, sourceMessage)</span><span class="type-signature">String | Null</span>
             
             
-            
-                <span class="access-signature inherited"><a href="abv.AbstractValidator.html#errors">inherited</a></span>
             
             
         </h4>
@@ -2749,7 +2549,7 @@ Default: false
     
     
     <div class="description">
-        Return error errors
+        Get translated message for specific language by origin message.
     </div>
     
 
@@ -2757,6 +2557,74 @@ Default: false
     
     
     
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>lang</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                The current language</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>sourceMessage</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                The source message</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -2810,11 +2678,14 @@ Default: false
             
             <td class="type">
             
-                        abv.Error
+                        String
+                         | 
+                    
+                        Null
                         
                     
             </td>
-            <td class="description last">Error messages</td>
+            <td class="description last">The translated message</td>
         </tr>
     
     </tbody>
@@ -2829,19 +2700,15 @@ Default: false
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="isValid">
-            <a class="share-icon" href="#isValid"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="prepare">
+            <a class="share-icon" href="#prepare"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                isValid
+                prepare
             </span>
-            <span class="signature">()</span><span class="type-signature">Boolean</span>
+            <span class="signature">(message, parameters)</span><span class="type-signature">String</span>
             
             
             
-                <span class="access-signature inherited"><a href="abv.AbstractValidator.html#isValid">inherited</a></span>
-            
-            
-                <span class="access-signature overrides"><a href="abv.AbstractValidator.html#isValid">overrides</a></span>
             
         </h4>
     
@@ -2854,7 +2721,7 @@ Default: false
     
     
     <div class="description">
-        Check if data valid
+        Prepare message
     </div>
     
 
@@ -2862,6 +2729,74 @@ Default: false
     
     
     
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                Message text</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>parameters</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                Message parameters</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -2915,11 +2850,11 @@ Default: false
             
             <td class="type">
             
-                        Boolean
+                        String
                         
                     
             </td>
-            <td class="description last">Validation status</td>
+            <td class="description last">Processed message</td>
         </tr>
     
     </tbody>

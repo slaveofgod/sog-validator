@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.LessThanOrEqualValidator(data, {"value": "the value to compare to"});
@@ -25,7 +25,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * <p>This is the message that will be shown if the value is not less than or equal to the comparison value.</p>
-     * <p>Default: "<code class="notranslate">This value should be less than or equal to %%compared_value%%.</code>"</p>
+     * <p>Default: "<code>This value should be less than or equal to %%compared_value%%.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -36,15 +36,15 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%compared_value%%</code></td>
+     *             <td><code>%%compared_value%%</code></td>
      *             <td>The expected value</td>
      *         </tr>
      *         <tr>
-     *             <td><code class="notranslate">%%compared_value_type%%</code></td>
+     *             <td><code>%%compared_value_type%%</code></td>
      *             <td>The expected value type</td>
      *         </tr>
      *         <tr>
-     *             <td><code class="notranslate">%%value%%</code></td>
+     *             <td><code>%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>

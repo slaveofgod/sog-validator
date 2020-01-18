@@ -1,4 +1,4 @@
-abv.I18nResource['el'] = [
+abv.I18nHandler.add('el', [
     {
         "@id": "1",
         "source": "This value should be false.",
@@ -409,4 +409,4 @@ abv.I18nResource['el'] = [
         "source": "This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.",
         "target": "Αυτός ο κωδικός BIC δεν σχετίζεται με το IBAN %%iban%%."
     }
-];
+]);

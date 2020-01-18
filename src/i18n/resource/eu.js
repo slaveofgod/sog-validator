@@ -1,4 +1,4 @@
-abv.I18nResource['eu'] = [
+abv.I18nHandler.add('eu', [
     {
         "@id": "1",
         "source": "This value should be false.",
@@ -409,4 +409,4 @@ abv.I18nResource['eu'] = [
         "source": "This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.",
         "target": "Banku Identifikazioko Kode hau ez dago lotuta %%IBAN%% IBAN-rekin."
     }
-];
+]);

@@ -1,4 +1,4 @@
-abv.I18nResource['nn'] = [
+abv.I18nHandler.add('nn', [
     {
         "@id": "1",
         "source": "This value should be false.",
@@ -274,4 +274,4 @@ abv.I18nResource['nn'] = [
         "source": "Unsupported card type or invalid card number.",
         "target": "Korttypen er ikkje støtta, eller kortnummeret er ugyldig."
     }
-];
+]);

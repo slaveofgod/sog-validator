@@ -1,4 +1,4 @@
-abv.I18nResource['cy'] = [
+abv.I18nHandler.add('cy', [
     {
         "@id": "1",
         "source": "This value should be false.",
@@ -409,4 +409,4 @@ abv.I18nResource['cy'] = [
         "source": "This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.",
         "target": "Nid yw'r Cod Adnabod Busnes (BIC) hwn yn gysylltiedig ag IBAN %%iban%%."
     }
-];
+]);

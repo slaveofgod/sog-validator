@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.UrlValidator(data);
@@ -25,7 +25,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * This message is shown if the URL is invalid.</p>
-     * <p>Default: "<code class="notranslate">This value is not a valid URL.</code>"</p>
+     * <p>Default: "<code>This value is not a valid URL.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -36,7 +36,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%value%%</code></td>
+     *             <td><code>%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>
@@ -48,7 +48,7 @@ Object.assign(abv, function () {
      * @type {Boolean}
      * @description
      * Normalizer string before validate (trim, etc.).
-     * Default: <code class="notranslate">false</code>.
+     * Default: <code>false</code>.
      */
 
     /**
@@ -57,7 +57,7 @@ Object.assign(abv, function () {
      * @description
      * The protocols considered to be valid for the URL.
      * For example, if you also consider the ftp:// type URLs to be valid, redefine the protocols array, listing http, https, and also ftp.
-     * Default: <code class="notranslate">['http', 'https', 'ftp']</code>
+     * Default: <code>['http', 'https', 'ftp']</code>
      */
 
     /**
@@ -66,7 +66,7 @@ Object.assign(abv, function () {
      * @description
      * If true, the protocol is considered optional when validating the syntax of the given URL.
      * This means that both http:// and https:// are valid but also relative URLs that contain no protocol (e.g. //example.com).
-     * Default: <code class="notranslate">false</code>.
+     * Default: <code>false</code>.
      */
 
     var UrlValidator = function (data, options, lang, internal) {

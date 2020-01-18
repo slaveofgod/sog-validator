@@ -7,11 +7,11 @@ Object.assign(abv, function () {
      * @extends abv.AbstractValidator
      * @classdesc
      * Validates that a value is of a specific data type.</p>
-     * For example, if a variable should be an array, you can use this constraint with the <code class="notranslate">array</code> type option to validate this.
+     * For example, if a variable should be an array, you can use this constraint with the <code>array</code> type option to validate this.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.TypeValidator(data, {type: 'array'});
@@ -60,8 +60,8 @@ Object.assign(abv, function () {
      * @name abv.TypeValidator#any
      * @type {Boolean}
      * @description
-     * If <code class="notranslate">true</code>, one of data type needs to be valid, otherwise passed data should be valid for all types.</p>
-     * Default: <code class="notranslate">false</code>
+     * If <code>true</code>, one of data type needs to be valid, otherwise passed data should be valid for all types.</p>
+     * Default: <code>false</code>
      */
 
     /**
@@ -69,7 +69,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The message if the underlying data is not of the given type.</p>
-     * <p>Default: "<code class="notranslate">This value should be of type %%type%%.</code>"</p>
+     * <p>Default: "<code>This value should be of type %%type%%.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -80,11 +80,11 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%type%%</code></td>
+     *             <td><code>%%type%%</code></td>
      *             <td>The expected type</td>
      *         </tr>
      *         <tr>
-     *             <td><code class="notranslate">%%value%%</code></td>
+     *             <td><code>%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>

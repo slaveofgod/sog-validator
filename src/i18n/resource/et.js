@@ -1,4 +1,4 @@
-abv.I18nResource['et'] = [
+abv.I18nHandler.add('et', [
     {
         "@id": "1",
         "source": "This value should be false.",
@@ -359,4 +359,4 @@ abv.I18nResource['et'] = [
         "source": "The image is square (%%width%%x%%height%%px). Square images are not allowed.",
         "target": "Pilt on ruudukujuline (%%width%%x%%height%%px). Ruudukujulised pildid pole lubatud."
     }
-];
+]);

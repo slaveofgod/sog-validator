@@ -11,7 +11,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.LuhnValidator(data);
@@ -27,7 +27,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * <p>The default message supplied when the value does not pass the Luhn check.</p>
-     * <p>Default: "<code class="notranslate">Invalid card number.</code>"</p>
+     * <p>Default: "<code>Invalid card number.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -38,7 +38,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%value%%</code></td>
+     *             <td><code>%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>

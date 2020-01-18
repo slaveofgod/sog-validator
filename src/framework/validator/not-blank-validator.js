@@ -5,11 +5,11 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.NotBlankValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value is not blank - meaning not equal to a blank string, a blank array, <code class="notranslate">false</code> or <code class="notranslate">null</code> (null behavior is configurable).
+     * @classdesc Validates that a value is not blank - meaning not equal to a blank string, a blank array, <code>false</code> or <code>null</code> (null behavior is configurable).
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.NotBlankValidator(data);
@@ -24,8 +24,8 @@ Object.assign(abv, function () {
      * @name abv.NotBlankValidator#allowNull
      * @type {Boolean}
      * @description
-     * If set to <code class="notranslate">true</code>, <code class="notranslate">null</code> values are considered valid and won't trigger a constraint violation.</p>
-     * Default: <code class="notranslate">false</code>
+     * If set to <code>true</code>, <code>null</code> values are considered valid and won't trigger a constraint violation.</p>
+     * Default: <code>false</code>
      */
 
     /**
@@ -33,7 +33,7 @@ Object.assign(abv, function () {
      * @type {Boolean}
      * @description
      * Normalizer string before validate (trim, etc.).</p>
-     * Default: <code class="notranslate">false</code>
+     * Default: <code>false</code>
      */
 
     /**
@@ -41,7 +41,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * This is the message that will be shown if the value is blank.</p>
-     * <p>Default: "<code class="notranslate">This value should not be blank.</code>"</p>
+     * <p>Default: "<code>This value should not be blank.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -52,7 +52,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%value%%</code></td>
+     *             <td><code>%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>

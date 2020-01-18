@@ -9,7 +9,7 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
-     * @param {String} lang The language used by the application. Default: "<code class="notranslate">en</code>".
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.IssnValidator(data);
@@ -26,7 +26,7 @@ Object.assign(abv, function () {
      * @description
      * <p>The validator will allow ISSN values to end with a lower case 'x' by default.</p>
      * <p>When switching this to true, the validator requires an upper case 'X'.</p>
-     * <p>Default: <code class="notranslate">false</code><.p>
+     * <p>Default: <code>false</code><.p>
      */
 
     /**
@@ -34,7 +34,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * The message shown if the given value is not a valid ISSN.</p>
-     * <p>Default: "<code class="notranslate">This value is not a valid ISSN.</code>"</p>
+     * <p>Default: "<code>This value is not a valid ISSN.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -45,7 +45,7 @@ Object.assign(abv, function () {
      *     </thead>
      *     <tbody>
      *         <tr>
-     *             <td><code class="notranslate">%%value%%</code></td>
+     *             <td><code>%%value%%</code></td>
      *             <td>The current (invalid) value</td>
      *         </tr>
      *     </tbody>
@@ -58,7 +58,7 @@ Object.assign(abv, function () {
      * @description
      * <p>The validator will allow non hyphenated ISSN values by default.</p>
      * <p>When switching this to true, the validator requires a hyphenated ISSN value.</p>
-     * <p>Default: <code class="notranslate">false</code></p>
+     * <p>Default: <code>false</code></p>
      */
 
     var IssnValidator = function (data, options, lang, internal) {

@@ -1,4 +1,4 @@
-abv.I18nResource['zh_CN'] = [
+abv.I18nHandler.add('zh_CN', [
     {
         "@id": "1",
         "source": "This value should be false.",
@@ -414,4 +414,4 @@ abv.I18nResource['zh_CN'] = [
         "source": "This value should be valid JSON.",
         "target": "该值应该是有效的JSON。"
     }
-];
+]);
