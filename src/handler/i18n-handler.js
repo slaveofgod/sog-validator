@@ -28,23 +28,19 @@ abv.I18nHandler = {
      * }]);
      */
     add: function (lang, messages) {
+        var validationEngine = new abv.Application();
+        var form = validationEngine.make({
+            lang: 'required|language',
+            messages: 'required|type:{"type":"iterable"}',
+        }, {
+            lang: lang,
+            messages: messages,
+        });
 
-
-
-
-
-        // var validationEngine = new abv.Application();
-        // var form = validationEngine.make({
-        //     lang: 'require|language',
-        //     messages: 'require|type:{"type":"iterable"}',
-        // }, {
-        //     lang: lang,
-        //     messages: messages,
-        // });
-        //
-        // if (false === form.isValid()) {
-        //
-        // }
+        var error = form.isValidWithErrorMessage();
+        if (null !== error) {
+            throw new Error(error);
+        }
 
 
         for (var i = 0; i < messages.length; i ++) {

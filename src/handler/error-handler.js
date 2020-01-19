@@ -16,6 +16,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description Language of messages.
      */
+
     var ErrorHandler = function (options) {
         this.lang = options.lang || 'en';
 

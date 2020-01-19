@@ -35,8 +35,8 @@ Object.assign(abv, function () {
      *   homepage: 'https://github.com/alexeybob/bob-validator'
      * });
      *
-     * if (false === form['name'].isValid()) {
-     *   form['name'].errors().first();
+     * if (false === form.get('name').isValid()) {
+     *   form.get('name').errors().first();
      * }
      */
 
@@ -92,18 +92,18 @@ Object.assign(abv, function () {
          * @description Create validators for all the fields
          * @param {Object} rules The validation rules
          * @param {Object} data The data which needs to be validated
-         * @returns {Object} List of validators
+         * @returns {abv.ValidatorHandler}
          */
         make: function (rules, data) {
-            var validators = {};
+            var validators = new abv.ValidatorHandler();
 
             for (var key in rules) {
                 if (!rules.hasOwnProperty(key)) continue;
 
-                validators[key] = new abv.AllValidator(data[key], rules[key], {
+                validators.add(key, new abv.AllValidator(data[key], rules[key], {
                     lang: this.lang,
                     internal: this.internal
-                });
+                }));
             }
 
             return validators;

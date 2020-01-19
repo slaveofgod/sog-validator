@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision e78e0ca
+ * Bob Validator Library v2.0 revision ef61a73
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"e78e0ca", config:{}, common:{}, validators:{}, registry:function(validator) {
+var abv = {version:"2.0", revision:"ef61a73", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, "en", true);
   var alias = __validator.alias;
@@ -262,6 +262,27 @@ Object.assign(abv, function() {
   return {AbstractComparisonValidator:AbstractComparisonValidator};
 }());
 Object.assign(abv, function() {
+  var I18n = function(lang) {
+    this.lang = lang || "en";
+  };
+  Object.assign(I18n.prototype, {translate:function(message, parameters) {
+    var translation = abv.I18nHandler.get(this.lang, message);
+    if (null === translation) {
+      translation = message;
+    }
+    if (translation.includes("|")) {
+      var translations = translation.split("|");
+      if (0 === parameters.limit || 1 === parameters.limit || -1 === parameters.limit) {
+        translation = translations[0];
+      } else {
+        translation = translations[1];
+      }
+    }
+    return abv.I18nHandler.prepare(translation, parameters);
+  }});
+  return {I18n:I18n};
+}());
+Object.assign(abv, function() {
   var ErrorHandler = function(options) {
     this.lang = options.lang || "en";
     this.__translator = new abv.I18n(this.lang);
@@ -289,6 +310,12 @@ Object.assign(abv, function() {
 }());
 abv.I18nResource = [];
 abv.I18nHandler = {add:function(lang, messages) {
+  var validationEngine = new abv.Application;
+  var form = validationEngine.make({lang:"required|language", messages:'required|type:{"type":"iterable"}'}, {lang:lang, messages:messages});
+  var error = form.isValidWithErrorMessage();
+  if (null !== error) {
+    throw new Error(error);
+  }
   for (var i = 0; i < messages.length; i++) {
     var message = messages[i];
     if ("undefined" === typeof abv.I18nResource[lang]) {
@@ -315,6 +342,37 @@ abv.I18nHandler = {add:function(lang, messages) {
   return message;
 }};
 Object.assign(abv, function() {
+  var ValidatorHandler = function(options) {
+    this.__validators = [];
+    this.name = "ValidatorHandler";
+  };
+  Object.assign(ValidatorHandler.prototype, {add:function(key, validator) {
+    this.__validators.push({key:key, validator:validator});
+  }, get:function(key) {
+    for (var i = 0; i < this.__validators.length; i++) {
+      if (key === this.__validators[i].key) {
+        return this.__validators[i].validator;
+      }
+    }
+    return null;
+  }, isValid:function() {
+    for (var i = 0; i < this.__validators.length; i++) {
+      if (false === this.__validators[i].validator.isValid()) {
+        return false;
+      }
+    }
+    return true;
+  }, isValidWithErrorMessage:function() {
+    for (var i = 0; i < this.__validators.length; i++) {
+      if (false === this.__validators[i].validator.isValid()) {
+        return this.__validators[i].validator.errors().first();
+      }
+    }
+    return null;
+  }});
+  return {ValidatorHandler:ValidatorHandler};
+}());
+Object.assign(abv, function() {
   var Application = function(options) {
     options = options || {};
     this.lang = options.lang || "en";
@@ -327,12 +385,12 @@ Object.assign(abv, function() {
     return "Application";
   }});
   Object.assign(Application.prototype, {make:function(rules, data) {
-    var validators = {};
+    var validators = new abv.ValidatorHandler;
     for (var key in rules) {
       if (!rules.hasOwnProperty(key)) {
         continue;
       }
-      validators[key] = new abv.AllValidator(data[key], rules[key], {lang:this.lang, internal:this.internal});
+      validators.add(key, new abv.AllValidator(data[key], rules[key], {lang:this.lang, internal:this.internal}));
     }
     return validators;
   }, makeSingle:function(data, rules) {
@@ -8588,29 +8646,2294 @@ abv.array_sum = function(arr) {
   return sum;
 };
 Object.assign(abv, function() {
-  var I18n = function(lang) {
-    this.lang = lang || "en";
-    if ("undefined" === typeof abv.I18nResource[this.lang]) {
-      throw new Error('Current language "' + this.lang + '" does not supported');
-    }
+  var AllValidator = function(data, rules, options) {
+    abv.AbstractValidator.call(this, data, options, null, options && options["lang"] ? options["lang"] : null, options && true === options["internal"]);
+    this.rules = rules;
+    this.__validatorCollection = [];
+    this.name = "AllValidator";
+    this.__configure();
   };
-  Object.assign(I18n.prototype, {translate:function(message, parameters) {
-    var translation = abv.I18nHandler.get(this.lang, message);
-    if (null === translation) {
-      translation = message;
+  AllValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  AllValidator.prototype.constructor = AllValidator;
+  Object.defineProperty(AllValidator.prototype, "alias", {get:function() {
+    return "all";
+  }});
+  Object.assign(AllValidator.prototype, {__configure:function() {
+    var validationRules = this.rules;
+    if ("string" === typeof this.rules) {
+      var validationRules = abv.__parseRulesFromJsonFormat(this.rules);
     }
-    if (translation.includes("|")) {
-      var translations = translation.split("|");
-      if (0 === parameters.limit || 1 === parameters.limit || -1 === parameters.limit) {
-        translation = translations[0];
-      } else {
-        translation = translations[1];
+    for (var key in validationRules) {
+      if (!validationRules.hasOwnProperty(key)) {
+        continue;
+      }
+      this.add(key, validationRules[key]);
+    }
+  }, add:function(name, options) {
+    var validator = abv.makeValidator(this.data, name, options, this.lang, this.__internal);
+    this.__validatorCollection.push(validator);
+  }, __validate:function() {
+    for (var key in this.__validatorCollection) {
+      if (!this.__validatorCollection.hasOwnProperty(key)) {
+        continue;
+      }
+      if (false === this.__validatorCollection[key].isValid()) {
+        this.__setErrorMessage(this.__validatorCollection[key].errors().first());
+        break;
       }
     }
-    return abv.I18nHandler.prepare(translation, parameters);
   }});
-  return {I18n:I18n};
+  return {AllValidator:AllValidator};
 }());
+Object.assign(abv, function() {
+  var NotBlankValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.allowNull = !this.__options.allowNull || false === this.__options.allowNull ? false : true;
+    this.message = this.__options.message || "This value should not be blank.";
+    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
+    this.name = "NotBlankValidator";
+  };
+  NotBlankValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  NotBlankValidator.prototype.constructor = NotBlankValidator;
+  Object.defineProperty(NotBlankValidator.prototype, "alias", {get:function() {
+    return "not-blank";
+  }});
+  Object.assign(NotBlankValidator.prototype, {__validate:function() {
+    if ("string" === typeof this.data && true === this.normalize) {
+      this.__normalize();
+    }
+    if ("undefined" === typeof this.data) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (("undefined" === typeof this.data || null === this.data) && false === this.allowNull) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (false === this.data) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if ("" === this.data) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (true === Array.isArray(this.data) && 0 === this.data.length) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {NotBlankValidator:NotBlankValidator};
+}());
+abv.registry(abv.NotBlankValidator);
+Object.assign(abv, function() {
+  var BlankValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.message = this.__options.message || "This value should be blank.";
+    this.name = "BlankValidator";
+  };
+  BlankValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  BlankValidator.prototype.constructor = BlankValidator;
+  Object.defineProperty(BlankValidator.prototype, "alias", {get:function() {
+    return "blank";
+  }});
+  Object.assign(BlankValidator.prototype, {__validate:function() {
+    if ("" !== this.data && null !== this.data) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {BlankValidator:BlankValidator};
+}());
+abv.registry(abv.BlankValidator);
+Object.assign(abv, function() {
+  var IsNullValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.message = this.__options.message || "This value should be null.";
+    this.name = "IsNullValidator";
+  };
+  IsNullValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  IsNullValidator.prototype.constructor = IsNullValidator;
+  Object.defineProperty(IsNullValidator.prototype, "alias", {get:function() {
+    return ["is-null", "null"];
+  }});
+  Object.assign(IsNullValidator.prototype, {__validate:function() {
+    if (null !== this.data) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {IsNullValidator:IsNullValidator};
+}());
+abv.registry(abv.IsNullValidator);
+Object.assign(abv, function() {
+  var NotNullValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.message = this.__options.message || "This value should not be null.";
+    this.name = "NotNullValidator";
+  };
+  NotNullValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  NotNullValidator.prototype.constructor = NotNullValidator;
+  Object.defineProperty(NotNullValidator.prototype, "alias", {get:function() {
+    return ["not-null", "required"];
+  }});
+  Object.assign(NotNullValidator.prototype, {__validate:function() {
+    if ("undefined" === typeof this.data) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (null === this.data) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {NotNullValidator:NotNullValidator};
+}());
+abv.registry(abv.NotNullValidator);
+Object.assign(abv, function() {
+  var IsTrueValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.message = this.__options.message || "This value should be true.";
+    this.name = "IsTrueValidator";
+  };
+  IsTrueValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  IsTrueValidator.prototype.constructor = IsTrueValidator;
+  Object.defineProperty(IsTrueValidator.prototype, "alias", {get:function() {
+    return ["is-true", "true"];
+  }});
+  Object.assign(IsTrueValidator.prototype, {__validate:function() {
+    if (true !== this.data && 1 !== this.data && "1" !== this.data) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {IsTrueValidator:IsTrueValidator};
+}());
+abv.registry(abv.IsTrueValidator);
+Object.assign(abv, function() {
+  var IsFalseValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.message = this.__options.message || "This value should be false.";
+    this.name = "IsFalseValidator";
+  };
+  IsFalseValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  IsFalseValidator.prototype.constructor = IsFalseValidator;
+  Object.defineProperty(IsFalseValidator.prototype, "alias", {get:function() {
+    return ["is-false", "false"];
+  }});
+  Object.assign(IsFalseValidator.prototype, {__validate:function() {
+    if (false !== this.data && 0 !== this.data && "0" !== this.data) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {IsFalseValidator:IsFalseValidator};
+}());
+abv.registry(abv.IsFalseValidator);
+Object.assign(abv, function() {
+  var TypeValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {type:'type:{"type":["string","array"],"any":true}', message:'type:{"type":"string"}|length:{"min":3,"max":255}', any:'type:{"type":"boolean"}'}, lang, internal);
+    this.type = this.__options.type || "string";
+    this.message = this.__options.message || "This value should be of type %%type%%.";
+    this.any = true === this.__options.any;
+    this.name = "TypeValidator";
+    this.__invalidType = null;
+  };
+  TypeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  TypeValidator.prototype.constructor = TypeValidator;
+  Object.defineProperty(TypeValidator.prototype, "alias", {get:function() {
+    return "type";
+  }});
+  Object.assign(TypeValidator.prototype, {__validate:function() {
+    if ("undefined" === typeof this.data) {
+      return;
+    }
+    var types = this.type;
+    if ("string" === typeof this.type) {
+      types = [this.type];
+    }
+    if (true === this.any) {
+      this.__validateAnyTypes(types);
+    } else {
+      this.__validateAllTypes(types);
+    }
+  }, __validateAllTypes:function(types) {
+    for (var key in types) {
+      if (!types.hasOwnProperty(key)) {
+        continue;
+      }
+      if (false === abv.isType(types[key], this.data)) {
+        this.__invalidType = types[key];
+        this.__setErrorMessage(this.message, this.__messageParameters());
+        return;
+      }
+    }
+    return;
+  }, __validateAnyTypes:function(types) {
+    for (var key in types) {
+      if (!types.hasOwnProperty(key)) {
+        continue;
+      }
+      if (true === abv.isType(types[key], this.data)) {
+        return;
+      }
+    }
+    this.__invalidType = types[key];
+    this.__setErrorMessage(this.message, this.__messageParameters());
+    return;
+  }, __messageParameters:function() {
+    return {"type":this.__invalidType, "value":this.data};
+  }});
+  return {TypeValidator:TypeValidator};
+}());
+abv.registry(abv.TypeValidator);
+Object.assign(abv, function() {
+  var EmailValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', mode:'length:{"min":2,"max":20}', normalize:'type:{"type":"bool"}'}, lang, internal);
+    this.message = this.__options.message || "This value is not a valid email address.";
+    this.mode = ["loose", "strict", "html5"].includes(this.__options.mode) ? this.__options.mode : "html5";
+    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
+    this.__patternLoose = /^.+@\S+\.\S+$/;
+    this.__patternHtml5 = /^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+    this.name = "EmailValidator";
+  };
+  EmailValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  EmailValidator.prototype.constructor = EmailValidator;
+  Object.defineProperty(EmailValidator.prototype, "alias", {get:function() {
+    return "email";
+  }});
+  Object.assign(EmailValidator.prototype, {__validate:function() {
+    if (true === this.normalize) {
+      this.__normalize();
+    }
+    if (true === this.__isEmptyData()) {
+      return;
+    }
+    switch(this.mode) {
+      case "loose":
+        if (false === this.__patternLoose.test(this.data)) {
+          this.__setErrorMessage(this.message, this.__messageParameters());
+          return;
+        }
+        break;
+      case "strict":
+        this.__setErrorMessage(this.message, this.__messageParameters());
+        return;
+        break;
+      case "html5":
+        if (false === this.__patternHtml5.test(this.data)) {
+          this.__setErrorMessage(this.message, this.__messageParameters());
+          return;
+        }
+        break;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {EmailValidator:EmailValidator};
+}());
+abv.registry(abv.EmailValidator);
+Object.assign(abv, function() {
+  var LengthValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {allowEmptyString:'type:{"type":"bool"}', charset:'length:{"min":2,"max":10}', charsetMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', exactMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', max:'type:{"type":"integer"}', maxMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', min:'type:{"type":"integer"}', minMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}'}, lang, internal);
+    this.allowEmptyString = !this.__options.allowEmptyString || false === this.__options.allowEmptyString ? false : true;
+    this.exactMessage = this.__options.exactMessage || "This value should have exactly %%limit%% characters.";
+    this.max = this.__options.max;
+    this.maxMessage = this.__options.maxMessage || "This value is too long. It should have %%limit%% characters or less.";
+    this.min = this.__options.min;
+    this.minMessage = this.__options.minMessage || "This value is too short. It should have %%limit%% characters or more.";
+    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
+    this.name = "LengthValidator";
+  };
+  LengthValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  LengthValidator.prototype.constructor = LengthValidator;
+  Object.defineProperty(LengthValidator.prototype, "alias", {get:function() {
+    return "length";
+  }});
+  Object.assign(LengthValidator.prototype, {__validate:function() {
+    if (true === this.normalize) {
+      this.__normalize();
+    }
+    if ("undefined" === typeof this.data || null === this.data || "" === this.data && true === this.allowEmptyString) {
+      return;
+    }
+    var length = this.data.length;
+    if (this.max && length > this.max) {
+      this.__setErrorMessage(this.min == this.max ? this.exactMessage : this.maxMessage, this.min == this.max ? this.__exactMessageParameters() : this.__maxMessageParameters());
+      return;
+    }
+    if (this.min && length < this.min) {
+      this.__setErrorMessage(this.min == this.max ? this.exactMessage : this.minMessage, this.min == this.max ? this.__exactMessageParameters() : this.__minMessageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (!this.min && !this.max) {
+      throw new Error('Either option "min" or "max" must be given for constraint');
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __exactMessageParameters:function() {
+    return {"value":this.data, "limit":this.min};
+  }, __maxMessageParameters:function() {
+    return {"value":this.data, "limit":this.max};
+  }, __minMessageParameters:function() {
+    return {"value":this.data, "limit":this.min};
+  }});
+  return {LengthValidator:LengthValidator};
+}());
+abv.registry(abv.LengthValidator);
+Object.assign(abv, function() {
+  var UrlValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}', protocols:'type:{"type":["string","array"],"any":true}', relativeProtocol:'type:{"type":"bool"}'}, lang, internal);
+    this.message = this.__options.message || "This value is not a valid URL.";
+    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
+    this.protocols = this.__options.protocols || ["http", "https", "ftp"];
+    this.relativeProtocol = !this.__options.relativeProtocol || false === this.__options.relativeProtocol ? false : true;
+    this.name = "UrlValidator";
+    this.__pattern = "^((((%s):(?:\\/\\/)?)(?:[\\-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9\\.\\-]+|(?:www\\.|[\\-;:&=\\+\\$,\\w]+@)[A-Za-z0-9\\.\\-]+)((?:\\/[\\+~%\\/\\.\\w\\-_]*)?\\??(?:[\\-\\+=&;%@\\.\\w_]*)#?(?:[\\.\\!\\/\\\\\\w]*))?)$";
+    this.__configure();
+  };
+  UrlValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  UrlValidator.prototype.constructor = UrlValidator;
+  Object.defineProperty(UrlValidator.prototype, "alias", {get:function() {
+    return "url";
+  }});
+  Object.assign(UrlValidator.prototype, {__configure:function() {
+    if ("string" === typeof this.protocols) {
+      this.protocols = [this.protocols];
+    }
+    this.__pattern = true === this.relativeProtocol ? this.__pattern.replace("(%s):", "(?:(%s):)?") : this.__pattern;
+    this.__pattern = this.__pattern.replace("%s", this.protocols.join("|"));
+  }, __validate:function() {
+    if (true === this.normalize) {
+      this.__normalize();
+    }
+    if (true === this.__isEmptyData()) {
+      return;
+    }
+    var pattern = new RegExp(this.__pattern);
+    if (false === pattern.test(this.data)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.protocols, 'type:{"type":"array"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {UrlValidator:UrlValidator};
+}());
+abv.registry(abv.UrlValidator);
+Object.assign(abv, function() {
+  var RegexValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {match:'type:{"type": "bool"}', message:'type:{"type":"string"}|length:{"min":3,"max":255}', pattern:"required", normalize:'type:{"type": "bool"}'}, lang, internal);
+    this.match = false === this.__options.match ? false : true;
+    this.message = this.__options.message || "This value is not valid.";
+    this.pattern = this.__options.pattern;
+    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
+    this.name = "RegexValidator";
+  };
+  RegexValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  RegexValidator.prototype.constructor = RegexValidator;
+  Object.defineProperty(RegexValidator.prototype, "alias", {get:function() {
+    return "regex";
+  }});
+  Object.assign(RegexValidator.prototype, {__validate:function() {
+    if (true === this.normalize) {
+      this.__normalize();
+    }
+    if (true === this.__isEmptyData()) {
+      return;
+    }
+    var regexp = new RegExp(this.pattern);
+    if (this.match !== regexp.test(this.data)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {RegexValidator:RegexValidator};
+}());
+abv.registry(abv.RegexValidator);
+Object.assign(abv, function() {
+  var IpValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}', version:'length:{"min":1,"max":255}'}, lang, internal);
+    this.V4 = "4";
+    this.V6 = "6";
+    this.ALL = "all";
+    this.V4_NO_PRIV = "4_no_priv";
+    this.V6_NO_PRIV = "6_no_priv";
+    this.ALL_NO_PRIV = "all_no_priv";
+    this.V4_NO_RES = "4_no_res";
+    this.V6_NO_RES = "6_no_res";
+    this.ALL_NO_RES = "all_no_res";
+    this.V4_ONLY_PUBLIC = "4_public";
+    this.V6_ONLY_PUBLIC = "6_public";
+    this.ALL_ONLY_PUBLIC = "all_public";
+    this.FILTER_VALIDATE_IP = 275;
+    this.FILTER_FLAG_IPV4 = 1048576;
+    this.FILTER_FLAG_IPV6 = 2097152;
+    this.FILTER_FLAG_NO_PRIV_RANGE = 8388608;
+    this.FILTER_FLAG_NO_RES_RANGE = 4194304;
+    this.message = this.__options.message || "This is not a valid IP address.";
+    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
+    this.version = [this.V4, this.V6, this.ALL, this.V4_NO_PRIV, this.V6_NO_PRIV, this.ALL_NO_PRIV, this.V4_NO_RES, this.V6_NO_RES, this.ALL_NO_RES, this.V4_ONLY_PUBLIC, this.V6_ONLY_PUBLIC, this.ALL_ONLY_PUBLIC].includes(this.__options.mode) ? this.__options.mode : "4";
+    this.name = "IpValidator";
+  };
+  IpValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  IpValidator.prototype.constructor = IpValidator;
+  Object.defineProperty(IpValidator.prototype, "alias", {get:function() {
+    return "ip";
+  }});
+  Object.assign(IpValidator.prototype, {__validate:function() {
+    if (true === this.normalize) {
+      this.__normalize();
+    }
+    if (true === this.__isEmptyData()) {
+      return;
+    }
+    var flag = null;
+    switch(this.version) {
+      case this.V4:
+        flag = this.FILTER_FLAG_IPV4;
+        break;
+      case this.V6:
+        flag = this.FILTER_FLAG_IPV6;
+        break;
+      case this.V4_NO_PRIV:
+        flag = this.FILTER_FLAG_IPV4 | this.FILTER_FLAG_NO_PRIV_RANGE;
+        break;
+      case this.V6_NO_PRIV:
+        flag = this.FILTER_FLAG_IPV6 | this.FILTER_FLAG_NO_PRIV_RANGE;
+        break;
+      case this.ALL_NO_PRIV:
+        flag = this.FILTER_FLAG_NO_PRIV_RANGE;
+        break;
+      case this.V4_NO_RES:
+        flag = this.FILTER_FLAG_IPV4 | this.FILTER_FLAG_NO_RES_RANGE;
+        break;
+      case this.V6_NO_RES:
+        flag = this.FILTER_FLAG_IPV6 | this.FILTER_FLAG_NO_RES_RANGE;
+        break;
+      case this.ALL_NO_RES:
+        flag = this.FILTER_FLAG_NO_RES_RANGE;
+        break;
+      case this.V4_ONLY_PUBLIC:
+        flag = this.FILTER_FLAG_IPV4 | this.FILTER_FLAG_NO_PRIV_RANGE | this.FILTER_FLAG_NO_RES_RANGE;
+        break;
+      case this.V6_ONLY_PUBLIC:
+        flag = this.FILTER_FLAG_IPV6 | this.FILTER_FLAG_NO_PRIV_RANGE | this.FILTER_FLAG_NO_RES_RANGE;
+        break;
+      case this.ALL_ONLY_PUBLIC:
+        flag = this.FILTER_FLAG_NO_PRIV_RANGE | this.FILTER_FLAG_NO_RES_RANGE;
+        break;
+      default:
+        flag = null;
+        break;
+    }
+    if (!abv.filter_var(this.data, this.FILTER_VALIDATE_IP, flag)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {IpValidator:IpValidator};
+}());
+abv.registry(abv.IpValidator);
+Object.assign(abv, function() {
+  var JsonValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.message = this.__options.message || "This value should be valid JSON.";
+    this.name = "JsonValidator";
+  };
+  JsonValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  JsonValidator.prototype.constructor = JsonValidator;
+  Object.defineProperty(JsonValidator.prototype, "alias", {get:function() {
+    return "json";
+  }});
+  Object.assign(JsonValidator.prototype, {__validate:function() {
+    try {
+      JSON.parse(this.data);
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {JsonValidator:JsonValidator};
+}());
+abv.registry(abv.JsonValidator);
+Object.assign(abv, function() {
+  var UuidValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}', versions:'type:{"type":"array"}'}, lang, internal);
+    this.V1_MAC1 = 1;
+    this.V2_DCE = 2;
+    this.V3_MD5 = 3;
+    this.V4_RANDOM = 4;
+    this.V5_SHA1 = 5;
+    this.__versions = [this.V1_MAC1, this.V2_DCE, this.V3_MD5, this.V4_RANDOM, this.V5_SHA1];
+    this.STRICT_LENGTH = 36;
+    this.STRICT_FIRST_HYPHEN_POSITION = 8;
+    this.STRICT_LAST_HYPHEN_POSITION = 23;
+    this.STRICT_VERSION_POSITION = 14;
+    this.STRICT_VARIANT_POSITION = 19;
+    this.LOOSE_MAX_LENGTH = 39;
+    this.LOOSE_FIRST_HYPHEN_POSITION = 4;
+    this.message = this.__options.message || "This is not a valid UUID.";
+    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
+    this.strict = false === this.__options.strict ? false : true;
+    this.versions = this.__checkVersions() ? this.__options.versions : this.__versions;
+    this.name = "UuidValidator";
+  };
+  UuidValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  UuidValidator.prototype.constructor = UuidValidator;
+  Object.defineProperty(UuidValidator.prototype, "alias", {get:function() {
+    return "uuid";
+  }});
+  Object.assign(UuidValidator.prototype, {__validate:function() {
+    if (true === this.normalize) {
+      this.__normalize();
+    }
+    if (true === this.__isEmptyData()) {
+      return;
+    }
+    if (true === this.strict) {
+      this.__validateStrict();
+    } else {
+      this.__validateLoose();
+    }
+  }, __validateLoose:function() {
+    var trimmed = this.data.replace(/[|]|{|}/g, "");
+    var h = this.LOOSE_FIRST_HYPHEN_POSITION;
+    var l = this.LOOSE_MAX_LENGTH;
+    for (var i = 0; i < l; ++i) {
+      if ("undefined" === typeof trimmed[i]) {
+        this.__setErrorMessage(this.message, this.__messageParameters());
+        return;
+      }
+      if ("-" === trimmed[i]) {
+        if (i !== h) {
+          this.__setErrorMessage(this.message, this.__messageParameters());
+          return;
+        }
+        h += 5;
+        continue;
+      }
+      if (i === h) {
+        h += 4;
+        --l;
+      }
+      if (false === abv.isType("xdigit", trimmed[i])) {
+        this.__setErrorMessage(this.message, this.__messageParameters());
+        return;
+      }
+    }
+    if ("undefined" !== typeof trimmed[i]) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __validateStrict:function() {
+    var h = this.STRICT_FIRST_HYPHEN_POSITION;
+    for (var i = 0; i < this.STRICT_LENGTH; ++i) {
+      if ("undefined" === typeof this.data[i]) {
+        this.__setErrorMessage(this.message, this.__messageParameters());
+        return;
+      }
+      if ("-" === this.data[i]) {
+        if (i !== h) {
+          this.__setErrorMessage(this.message, this.__messageParameters());
+          return;
+        }
+        if (h < this.STRICT_LAST_HYPHEN_POSITION) {
+          h += 5;
+        }
+        continue;
+      }
+      if (false === abv.isType("xdigit", this.data[i])) {
+        this.__setErrorMessage(this.message, this.__messageParameters());
+        return;
+      }
+      if (i === h) {
+        this.__setErrorMessage(this.message, this.__messageParameters());
+        return;
+      }
+    }
+    if ("undefined" !== typeof this.data[i]) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (false === this.versions.includes(parseInt(this.data[this.STRICT_VERSION_POSITION]))) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (8 !== (abv.hexdec(this.data[this.STRICT_VARIANT_POSITION]) & 12)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __checkVersions:function() {
+    var versions = this.__options.versions;
+    if (!versions || 0 === versions.length) {
+      return false;
+    }
+    if (true === abv.isType("array", versions)) {
+      for (var key in versions) {
+        if (!versions.hasOwnProperty(key)) {
+          continue;
+        }
+        if (false === this.__versions.includes(versions[key])) {
+          throw new Error('Invalid version: "' + versions[key] + '"');
+        }
+      }
+      return true;
+    }
+    return false;
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {UuidValidator:UuidValidator};
+}());
+abv.registry(abv.UuidValidator);
+Object.assign(abv, function() {
+  var EqualToValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:"required"}, lang, internal);
+    this.message = this.__options.message || "This value should be equal to %%compared_value%%.";
+    this.name = "EqualToValidator";
+  };
+  EqualToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  EqualToValidator.prototype.constructor = EqualToValidator;
+  Object.defineProperty(EqualToValidator.prototype, "alias", {get:function() {
+    return "equal-to";
+  }});
+  Object.assign(EqualToValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value == comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {EqualToValidator:EqualToValidator};
+}());
+abv.registry(abv.EqualToValidator);
+Object.assign(abv, function() {
+  var NotEqualToValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:"required"}, lang, internal);
+    this.message = this.__options.message || "This value should not be equal to %%compared_value%%.";
+    this.name = "NotEqualToValidator";
+  };
+  NotEqualToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  NotEqualToValidator.prototype.constructor = NotEqualToValidator;
+  Object.defineProperty(NotEqualToValidator.prototype, "alias", {get:function() {
+    return "not-equal-to";
+  }});
+  Object.assign(NotEqualToValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value != comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {NotEqualToValidator:NotEqualToValidator};
+}());
+abv.registry(abv.NotEqualToValidator);
+Object.assign(abv, function() {
+  var IdenticalToValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:"required"}, lang, internal);
+    this.message = this.__options.message || "This value should be identical to %%compared_value_type%% %%compared_value%%.";
+    this.name = "IdenticalToValidator";
+  };
+  IdenticalToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  IdenticalToValidator.prototype.constructor = IdenticalToValidator;
+  Object.defineProperty(IdenticalToValidator.prototype, "alias", {get:function() {
+    return "identical-to";
+  }});
+  Object.assign(IdenticalToValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value === comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {IdenticalToValidator:IdenticalToValidator};
+}());
+abv.registry(abv.IdenticalToValidator);
+Object.assign(abv, function() {
+  var NotIdenticalToValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:"required"}, lang, internal);
+    this.message = this.__options.message || "This value should not be identical to %%compared_value_type%% %%compared_value%%.";
+    this.name = "NotIdenticalToValidator";
+  };
+  NotIdenticalToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  NotIdenticalToValidator.prototype.constructor = NotIdenticalToValidator;
+  Object.defineProperty(NotIdenticalToValidator.prototype, "alias", {get:function() {
+    return "not-identical-to";
+  }});
+  Object.assign(NotIdenticalToValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value !== comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {NotIdenticalToValidator:NotIdenticalToValidator};
+}());
+abv.registry(abv.NotIdenticalToValidator);
+Object.assign(abv, function() {
+  var LessThanValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+    this.message = this.__options.message || "This value should be less than %%compared_value%%.";
+    this.name = "LessThanValidator";
+  };
+  LessThanValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  LessThanValidator.prototype.constructor = LessThanValidator;
+  Object.defineProperty(LessThanValidator.prototype, "alias", {get:function() {
+    return "less-than";
+  }});
+  Object.assign(LessThanValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value < comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {LessThanValidator:LessThanValidator};
+}());
+abv.registry(abv.LessThanValidator);
+Object.assign(abv, function() {
+  var LessThanOrEqualValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+    this.message = this.__options.message || "This value should be less than or equal to %%compared_value%%.";
+    this.name = "LessThanOrEqualValidator";
+  };
+  LessThanOrEqualValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  LessThanOrEqualValidator.prototype.constructor = LessThanOrEqualValidator;
+  Object.defineProperty(LessThanOrEqualValidator.prototype, "alias", {get:function() {
+    return "less-than-or-equal";
+  }});
+  Object.assign(LessThanOrEqualValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value <= comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {LessThanOrEqualValidator:LessThanOrEqualValidator};
+}());
+abv.registry(abv.LessThanOrEqualValidator);
+Object.assign(abv, function() {
+  var GreaterThanValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+    this.message = this.__options.message || "This value should be greater than %%compared_value%%.";
+    this.name = "GreaterThanValidator";
+  };
+  GreaterThanValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  GreaterThanValidator.prototype.constructor = GreaterThanValidator;
+  Object.defineProperty(GreaterThanValidator.prototype, "alias", {get:function() {
+    return "greater-than";
+  }});
+  Object.assign(GreaterThanValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value > comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {GreaterThanValidator:GreaterThanValidator};
+}());
+abv.registry(abv.GreaterThanValidator);
+Object.assign(abv, function() {
+  var GreaterThanOrEqualValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+    this.message = this.__options.message || "This value should be greater than or equal to %%compared_value%%.";
+    this.name = "GreaterThanOrEqualValidator";
+  };
+  GreaterThanOrEqualValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  GreaterThanOrEqualValidator.prototype.constructor = GreaterThanOrEqualValidator;
+  Object.defineProperty(GreaterThanOrEqualValidator.prototype, "alias", {get:function() {
+    return "greater-than-or-equal";
+  }});
+  Object.assign(GreaterThanOrEqualValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value >= comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {GreaterThanOrEqualValidator:GreaterThanOrEqualValidator};
+}());
+abv.registry(abv.GreaterThanOrEqualValidator);
+Object.assign(abv, function() {
+  var RangeValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {invalidMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', max:'required|type:{"type":["numeric","date-string"],"any":true}', maxMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', min:'required|type:{"type":["numeric","date-string"],"any":true}', minMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', notInRangeMessage:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.invalidMessage = this.__options.invalidMessage || "This value should be a valid number.";
+    this.max = this.__options.max;
+    this.maxMessage = this.__options.maxMessage || "This value should be %%limit%% or less.";
+    this.min = this.__options.min;
+    this.minMessage = this.__options.minMessage || "This value should be %%limit%% or more.";
+    this.notInRangeMessage = this.__options.notInRangeMessage || "This value should be between %%min%% and %%max%%.";
+    this.name = "RangeValidator";
+  };
+  RangeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  RangeValidator.prototype.constructor = RangeValidator;
+  Object.defineProperty(RangeValidator.prototype, "alias", {get:function() {
+    return "range";
+  }});
+  Object.assign(RangeValidator.prototype, {__validate:function() {
+    var hasLowerLimit = null !== this.min;
+    var hasUpperLimit = null !== this.max;
+    if (hasLowerLimit && hasUpperLimit && (this.data < this.min || this.data > this.max)) {
+      this.__setErrorMessage(this.notInRangeMessage, this.__notInRangeMessageParameters());
+      return;
+    }
+    if (hasUpperLimit && this.data > this.max) {
+      this.__setErrorMessage(this.maxMessage, this.__maxMessageParameters());
+      return;
+    }
+    if (hasLowerLimit && this.data < this.min) {
+      this.__setErrorMessage(this.minMessage, this.__minMessageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    if (false === abv.isType("numeric", this.data) && false === abv.isType("date-string", this.data)) {
+      this.__setErrorMessage(this.invalidMessage, this.__invalidMessageParameters());
+      return;
+    }
+    if (false === abv.isType("numeric", this.data) && true === abv.isType("date-string", this.data)) {
+      var date = new Date(this.data);
+      this.data = date.getTime();
+    }
+    if (false === abv.isType("numeric", this.min) && true === abv.isType("date-string", this.min)) {
+      var date = new Date(this.min);
+      this.min = date.getTime();
+    }
+    if (false === abv.isType("numeric", this.max) && true === abv.isType("date-string", this.max)) {
+      var date = new Date(this.max);
+      this.max = date.getTime();
+    }
+  }, __invalidMessageParameters:function() {
+    return {"value":this.data};
+  }, __notInRangeMessageParameters:function() {
+    return {"max":this.max, "min":this.min, "value":this.data};
+  }, __maxMessageParameters:function() {
+    return {"limit":this.max, "value":this.data};
+  }, __minMessageParameters:function() {
+    return {"limit":this.min, "value":this.data};
+  }});
+  return {RangeValidator:RangeValidator};
+}());
+abv.registry(abv.RangeValidator);
+Object.assign(abv, function() {
+  var DivisibleByValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+    this.message = this.__options.message || "This value should be a multiple of %%compared_value%%.";
+    this.name = "DivisibleByValidator";
+  };
+  DivisibleByValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  DivisibleByValidator.prototype.constructor = DivisibleByValidator;
+  Object.defineProperty(DivisibleByValidator.prototype, "alias", {get:function() {
+    return "divisible-by";
+  }});
+  Object.assign(DivisibleByValidator.prototype, {__compareValues:function(value, comparedValue) {
+    if (abv.isType("integer", value) && abv.isType("integer", comparedValue)) {
+      return 0 === value % comparedValue;
+    }
+    var remainder = abv.fmod(value, comparedValue);
+    if (true === remainder) {
+      return true;
+    }
+    return abv.sprintf("%.12e", comparedValue) === abv.sprintf("%.12e", remainder);
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {DivisibleByValidator:DivisibleByValidator};
+}());
+abv.registry(abv.DivisibleByValidator);
+Object.assign(abv, function() {
+  var UniqueValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.message = this.__options.message || "This collection should contain only unique elements.";
+    this.__repeated = [];
+    this.name = "UniqueValidator";
+  };
+  UniqueValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  UniqueValidator.prototype.constructor = UniqueValidator;
+  Object.defineProperty(UniqueValidator.prototype, "alias", {get:function() {
+    return "unique";
+  }});
+  Object.assign(UniqueValidator.prototype, {__validate:function() {
+    if (true === abv.isType("string", this.data) || true === abv.isType("array", this.data)) {
+      this.__validateArray();
+    }
+    if (this.__repeated.length > 0) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __validateArray:function() {
+    var counter = {};
+    for (var i = 0; i < this.data.length; i++) {
+      var key = typeof this.data[i] + " '" + this.data[i] + "'";
+      if ("undefined" === typeof counter[key]) {
+        counter[key] = 0;
+      }
+      counter[key]++;
+      if (false === this.__repeated.includes(key) && counter[key] > 1) {
+        this.__repeated.push(key);
+      }
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":JSON.stringify(this.__repeated)};
+  }});
+  return {UniqueValidator:UniqueValidator};
+}());
+abv.registry(abv.UniqueValidator);
+Object.assign(abv, function() {
+  var PositiveValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.value = 0;
+    this.message = this.__options.message || "This value should be positive.";
+    this.name = "PositiveValidator";
+  };
+  PositiveValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  PositiveValidator.prototype.constructor = PositiveValidator;
+  Object.defineProperty(PositiveValidator.prototype, "alias", {get:function() {
+    return "positive";
+  }});
+  Object.assign(PositiveValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value > comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {PositiveValidator:PositiveValidator};
+}());
+abv.registry(abv.PositiveValidator);
+Object.assign(abv, function() {
+  var PositiveOrZeroValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.value = 0;
+    this.message = this.__options.message || "This value should be either positive or zero.";
+    this.name = "PositiveOrZeroValidator";
+  };
+  PositiveOrZeroValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  PositiveOrZeroValidator.prototype.constructor = PositiveOrZeroValidator;
+  Object.defineProperty(PositiveOrZeroValidator.prototype, "alias", {get:function() {
+    return "positive-or-zero";
+  }});
+  Object.assign(PositiveOrZeroValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value >= comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {PositiveOrZeroValidator:PositiveOrZeroValidator};
+}());
+abv.registry(abv.PositiveOrZeroValidator);
+Object.assign(abv, function() {
+  var NegativeValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.value = 0;
+    this.message = this.__options.message || "This value should be negative.";
+    this.name = "NegativeValidator";
+  };
+  NegativeValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  NegativeValidator.prototype.constructor = NegativeValidator;
+  Object.defineProperty(NegativeValidator.prototype, "alias", {get:function() {
+    return "negative";
+  }});
+  Object.assign(NegativeValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value < comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {NegativeValidator:NegativeValidator};
+}());
+abv.registry(abv.NegativeValidator);
+Object.assign(abv, function() {
+  var NegativeOrZeroValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.value = 0;
+    this.message = this.__options.message || "This value should be either negative or zero.";
+    this.name = "NegativeOrZeroValidator";
+  };
+  NegativeOrZeroValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  NegativeOrZeroValidator.prototype.constructor = NegativeOrZeroValidator;
+  Object.defineProperty(NegativeOrZeroValidator.prototype, "alias", {get:function() {
+    return "negative-or-zero";
+  }});
+  Object.assign(NegativeOrZeroValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value <= comparedValue;
+  }, __messageParameters:function() {
+    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+  }});
+  return {NegativeOrZeroValidator:NegativeOrZeroValidator};
+}());
+abv.registry(abv.NegativeOrZeroValidator);
+Object.assign(abv, function() {
+  var DateValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.message = this.__options.message || "This value is not a valid date.";
+    this.format = this.__options.format || "YYYY-MM-DD";
+    this.name = "DateValidator";
+  };
+  DateValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  DateValidator.prototype.constructor = DateValidator;
+  Object.defineProperty(DateValidator.prototype, "alias", {get:function() {
+    return "date";
+  }});
+  Object.assign(DateValidator.prototype, {__validate:function() {
+    if (this.data !== this.__moment(this.data, this.format).format(this.format)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {DateValidator:DateValidator};
+}());
+abv.registry(abv.DateValidator);
+Object.assign(abv, function() {
+  var DateTimeValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', format:'type:{"type":"string"}'}, lang, internal);
+    this.message = this.__options.message || "This value is not a valid datetime.";
+    this.format = this.__options.format || "YYYY-MM-DD HH:mm:ss";
+    this.name = "DateTimeValidator";
+  };
+  DateTimeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  DateTimeValidator.prototype.constructor = DateTimeValidator;
+  Object.defineProperty(DateTimeValidator.prototype, "alias", {get:function() {
+    return "date-time";
+  }});
+  Object.assign(DateTimeValidator.prototype, {__validate:function() {
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"date-string"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    if (this.data !== this.__moment(this.data, this.format).format(this.format)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {DateTimeValidator:DateTimeValidator};
+}());
+abv.registry(abv.DateTimeValidator);
+Object.assign(abv, function() {
+  var TimeValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.message = this.__options.message || "This value is not a valid time.";
+    this.format = this.__options.format || "HH:mm:ss";
+    this.name = "TimeValidator";
+  };
+  TimeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  TimeValidator.prototype.constructor = TimeValidator;
+  Object.defineProperty(TimeValidator.prototype, "alias", {get:function() {
+    return "time";
+  }});
+  Object.assign(TimeValidator.prototype, {__validate:function() {
+    if (this.data !== this.__moment(this.data, this.format).format(this.format)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {TimeValidator:TimeValidator};
+}());
+abv.registry(abv.TimeValidator);
+Object.assign(abv, function() {
+  var TimezoneValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.message = this.__options.message || "This value is not a valid timezone.";
+    this.name = "TimezoneValidator";
+  };
+  TimezoneValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  TimezoneValidator.prototype.constructor = TimezoneValidator;
+  Object.defineProperty(TimezoneValidator.prototype, "alias", {get:function() {
+    return "timezone";
+  }});
+  Object.assign(TimezoneValidator.prototype, {__validate:function() {
+    var zone = this.__moment.tz.zone(this.data);
+    if (null === zone) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {TimezoneValidator:TimezoneValidator};
+}());
+abv.registry(abv.TimezoneValidator);
+Object.assign(abv, function() {
+  var ChoiceValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {callback:'type:{"type":["string","array","callable"],"any":true}', choices:'type:{"type":"array"}', max:'type:{"type":"numeric"}', maxMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', min:'type:{"type":"numeric"}', minMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', multiple:'type:{"type":"bool"}', multipleMessage:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.callback = this.__options.callback;
+    this.choices = this.__options.choices;
+    this.max = this.__options.max;
+    this.maxMessage = this.__options.maxMessage || "You must select at most %%limit%% choices.";
+    this.message = this.__options.message || "The value you selected is not a valid choice.";
+    this.min = this.__options.min;
+    this.minMessage = this.__options.minMessage || "You must select at least %%limit%% choices.";
+    this.multiple = true === this.__options.multiple;
+    this.multipleMessage = this.__options.multipleMessage || "One or more of the given values is invalid.";
+    this.__currentInvalidDataItem = null;
+    this.name = "ChoiceValidator";
+  };
+  ChoiceValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  ChoiceValidator.prototype.constructor = ChoiceValidator;
+  Object.defineProperty(ChoiceValidator.prototype, "alias", {get:function() {
+    return "choice";
+  }});
+  Object.assign(ChoiceValidator.prototype, {__validate:function() {
+    if (true === this.multiple) {
+      for (var key in this.value) {
+        if (!this.value.hasOwnProperty(key)) {
+          continue;
+        }
+        if (false === this.choices.includes(this.value[key])) {
+          this.__currentInvalidDataItem = this.value[key];
+          this.__setErrorMessage(this.multipleMessage, this.__multipleMessageParameters());
+          return;
+        }
+      }
+      var count = this.data.length;
+      if (this.min && count < this.min) {
+        this.__setErrorMessage(this.minMessage, this.__minMessageParameters());
+        return;
+      }
+      if (this.max && count > this.max) {
+        this.__setErrorMessage(this.maxMessage, this.__maxMessageParameters());
+        return;
+      }
+    } else {
+      if (false === this.choices.includes(this.data)) {
+        this.__setErrorMessage(this.message, this.__messageParameters());
+        return;
+      }
+    }
+  }, __beforeValidate:function() {
+    if (false === abv.isType("array", this.choices) && "undefined" === typeof this.callback) {
+      throw new Error('Either "choices" or "callback" must be specified on constraint Choice');
+    }
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    if (true === this.multiple && false === abv.isType("array", this.data)) {
+      this.__setErrorMessage(abv.sprintf("Expected argument of type '%s', '%s' given", "Array", abv.getType(this.data)));
+      this.__skip = true;
+      return;
+    }
+    if (this.callback) {
+      try {
+        this.choices = this.callback.call();
+      } catch (e) {
+        throw new Error("The Choice constraint expects a valid callback");
+      }
+    }
+  }, __multipleMessageParameters:function() {
+    return {"value":this.__currentInvalidDataItem};
+  }, __minMessageParameters:function() {
+    return {"limit":this.min, "choices":JSON.stringify(this.choices), "value":JSON.stringify(this.data)};
+  }, __maxMessageParameters:function() {
+    return {"limit":this.max, "choices":JSON.stringify(this.choices), "value":JSON.stringify(this.data)};
+  }, __messageParameters:function() {
+    return {"value":JSON.stringify(this.data)};
+  }});
+  return {ChoiceValidator:ChoiceValidator};
+}());
+abv.registry(abv.ChoiceValidator);
+Object.assign(abv, function() {
+  var LanguageValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.message = this.__options.message || "This value is not a valid language.";
+    this.__languages = ["aa", "ab", "ace", "ach", "ada", "ady", "ae", "aeb", "af", "afh", "agq", "ain", "ak", "akk", "akz", "ale", "aln", "alt", "am", "an", "ang", "anp", "ar", "arc", "arn", "aro", "arp", "arq", "ars", "arw", "ary", "arz", "as", "asa", "ase", "ast", "av", "avk", "awa", "ay", "az", "ba", "bal", "ban", "bar", "bas", "bax", "bbc", "bbj", "be", "bej", "bem", "bew", "bez", "bfd", "bfq", "bg", "bgn", "bho", "bi", "bik", "bin", "bjn", "bkm", "bla", "bm", "bn", "bo", "bpy", "bqi", "br", 
+    "bra", "brh", "brx", "bs", "bss", "bua", "bug", "bum", "byn", "byv", "ca", "cad", "car", "cay", "cch", "ccp", "ce", "ceb", "cgg", "ch", "chb", "chg", "chk", "chm", "chn", "cho", "chp", "chr", "chy", "cic", "ckb", "co", "cop", "cps", "cr", "crh", "crs", "cs", "csb", "cu", "cv", "cy", "da", "dak", "dar", "dav", "de", "del", "den", "dgr", "din", "dje", "doi", "dsb", "dtp", "dua", "dum", "dv", "dyo", "dyu", "dz", "dzg", "ebu", "ee", "efi", "egl", "egy", "eka", "el", "elx", "en", "enm", "eo", "es", 
+    "esu", "et", "eu", "ewo", "ext", "fa", "fan", "fat", "ff", "fi", "fil", "fit", "fj", "fo", "fon", "fr", "frc", "frm", "fro", "frp", "frr", "frs", "fur", "fy", "ga", "gaa", "gag", "gan", "gay", "gba", "gbz", "gd", "gez", "gil", "gl", "glk", "gmh", "gn", "goh", "gom", "gon", "gor", "got", "grb", "grc", "gsw", "gu", "guc", "gur", "guz", "gv", "gwi", "ha", "hai", "hak", "haw", "he", "hi", "hif", "hil", "hit", "hmn", "ho", "hr", "hsb", "hsn", "ht", "hu", "hup", "hy", "hz", "ia", "iba", "ibb", "id", 
+    "ie", "ig", "ii", "ik", "ilo", "inh", "io", "is", "it", "iu", "izh", "ja", "jam", "jbo", "jgo", "jmc", "jpr", "jrb", "jut", "jv", "ka", "kaa", "kab", "kac", "kaj", "kam", "kaw", "kbd", "kbl", "kcg", "kde", "kea", "ken", "kfo", "kg", "kgp", "kha", "kho", "khq", "khw", "ki", "kiu", "kj", "kk", "kkj", "kl", "kln", "km", "kmb", "kn", "ko", "koi", "kok", "kos", "kpe", "kr", "krc", "kri", "krj", "krl", "kru", "ks", "ksb", "ksf", "ksh", "ku", "kum", "kut", "kv", "kw", "ky", "la", "lad", "lag", "lah", 
+    "lam", "lb", "lez", "lfn", "lg", "li", "lij", "liv", "lkt", "lmo", "ln", "lo", "lol", "lou", "loz", "lrc", "lt", "ltg", "lu", "lua", "lui", "lun", "luo", "lus", "luy", "lv", "lzh", "lzz", "mad", "maf", "mag", "mai", "mak", "man", "mas", "mde", "mdf", "mdr", "men", "mer", "mfe", "mg", "mga", "mgh", "mgo", "mh", "mi", "mic", "min", "mk", "ml", "mn", "mnc", "mni", "moh", "mos", "mr", "mrj", "ms", "mt", "mua", "mus", "mwl", "mwr", "mwv", "my", "mye", "myv", "mzn", "na", "nan", "nap", "naq", "nb", 
+    "nd", "nds", "ne", "new", "ng", "nia", "niu", "njo", "nl", "nmg", "nn", "nnh", "no", "nog", "non", "nov", "nqo", "nr", "nso", "nus", "nv", "nwc", "ny", "nym", "nyn", "nyo", "nzi", "oc", "oj", "om", "or", "os", "osa", "ota", "pa", "pag", "pal", "pam", "pap", "pau", "pcd", "pcm", "pdc", "pdt", "peo", "pfl", "phn", "pi", "pl", "pms", "pnt", "pon", "prg", "pro", "ps", "pt", "qu", "quc", "qug", "raj", "rap", "rar", "rgn", "rif", "rm", "rn", "ro", "rof", "rom", "rtm", "ru", "rue", "rug", "rup", "rw", 
+    "rwk", "sa", "sad", "sah", "sam", "saq", "sas", "sat", "saz", "sba", "sbp", "sc", "scn", "sco", "sd", "sdc", "sdh", "se", "see", "seh", "sei", "sel", "ses", "sg", "sga", "sgs", "sh", "shi", "shn", "shu", "si", "sid", "sk", "sl", "sli", "sly", "sm", "sma", "smj", "smn", "sms", "sn", "snk", "so", "sog", "sq", "sr", "srn", "srr", "ss", "ssy", "st", "stq", "su", "suk", "sus", "sux", "sv", "sw", "swb", "syc", "syr", "szl", "ta", "tcy", "te", "tem", "teo", "ter", "tet", "tg", "th", "ti", "tig", "tiv", 
+    "tk", "tkl", "tkr", "tl", "tlh", "tli", "tly", "tmh", "tn", "to", "tog", "tpi", "tr", "tru", "trv", "ts", "tsd", "tsi", "tt", "ttt", "tum", "tvl", "tw", "twq", "ty", "tyv", "tzm", "udm", "ug", "uga", "uk", "umb", "ur", "uz", "vai", "ve", "vec", "vep", "vi", "vls", "vmf", "vo", "vot", "vro", "vun", "wa", "wae", "wal", "war", "was", "wbp", "wo", "wuu", "xal", "xh", "xmf", "xog", "yao", "yap", "yav", "ybb", "yi", "yo", "yrl", "yue", "za", "zap", "zbl", "zea", "zen", "zgh", "zh", "zu", "zun", "zza"];
+    this.name = "LanguageValidator";
+  };
+  LanguageValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  LanguageValidator.prototype.constructor = LanguageValidator;
+  Object.defineProperty(LanguageValidator.prototype, "alias", {get:function() {
+    return "language";
+  }});
+  Object.assign(LanguageValidator.prototype, {__validate:function() {
+    var language = this.data.toLowerCase().split(/[-_]/);
+    if (false === this.__languages.includes(language[0])) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {LanguageValidator:LanguageValidator};
+}());
+abv.registry(abv.LanguageValidator);
+Object.assign(abv, function() {
+  var LocaleValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.message = this.__options.message || "This value is not a valid locale.";
+    this.__locales = {"eu":"Basque", "hr_BA":"Croatian (Bosnia & Herzegovina)", "en_CM":"English (Cameroon)", "en_BI":"English (Burundi)", "rw_RW":"Kinyarwanda (Rwanda)", "ast":"Asturian", "en_SZ":"English (Swaziland)", "he_IL":"Hebrew (Israel)", "ar":"Uzbek (Arabic)", "Arabicuz_Arab":"Uzbek (Arabic)", "en_PN":"English (Pitcairn Islands)", "as":"Assamese", "en_NF":"English (Norfolk Island)", "ks_IN":"Kashmiri (India)", "rwk_TZ":"Rwa (Tanzania)", "zh_Hant_TW":"Chinese (Traditional, Taiwan)", "en_CN":"English (China)", 
+    "gsw_LI":"Swiss German (Liechtenstein)", "ta_IN":"Tamil (India)", "th_TH":"Thai (Thailand)", "es_EA":"Spanish (Ceuta & Melilla)", "fr_GF":"French (French Guiana)", "ar_001":"Arabic (World)", "en_RW":"English (Rwanda)", "tr_TR":"Turkish (Turkey)", "de_CH":"German (Switzerland)", "ee_TG":"Ewe (Togo)", "en_NG":"English (Nigeria)", "fr_TG":"French (Togo)", "az":"Azerbaijani", "fr_SC":"French (Seychelles)", "es_HN":"Spanish (Honduras)", "en_AG":"English (Antigua & Barbuda)", "ru_KZ":"Russian (Kazakhstan)", 
+    "gsw":"Swiss German", "dyo":"Jola-Fonyi", "so_ET":"Somali (Ethiopia)", "zh_Hant_MO":"Chinese (Traditional, Macau [China])", "de_BE":"German (Belgium)", "nus_SS":"Nuer (South Sudan)", "km_KH":"Khmer (Cambodia)", "my_MM":"Burmese (Myanmar [Burma])", "mgh_MZ":"Makhuwa-Meetto (Mozambique)", "ee_GH":"Ewe (Ghana)", "es_EC":"Spanish (Ecuador)", "kw_GB":"Cornish (United Kingdom)", "rm_CH":"Romansh (Switzerland)", "en_ME":"English (Montenegro)", "nyn":"Nyankole", "mk_MK":"Macedonian (Macedonia)", "bs_Cyrl_BA":"Bosnian (Cyrillic, Bosnia & Herzegovina)", 
+    "ar_MR":"Arabic (Mauritania)", "en_BM":"English (Bermuda)", "ms_Arab":"Malay (Arabic)", "en_AI":"English (Anguilla)", "gl_ES":"Galician (Spain)", "en_PR":"English (Puerto Rico)", "ff_CM":"Fulah (Cameroon)", "ne_IN":"Nepali (India)", "or_IN":"Oriya (India)", "khq_ML":"Koyra Chiini (Mali)", "en_MG":"English (Madagascar)", "pt_TL":"Portuguese (Timor-Leste)", "en_LC":"English (St. Lucia)", "ta_SG":"Tamil (Singapore)", "iu_CA":"Inuktitut (Canada)", "jmc_TZ":"Machame (Tanzania)", "om_ET":"Oromo (Ethiopia)", 
+    "lv_LV":"Latvian (Latvia)", "es_US":"Spanish (United States)", "en_PT":"English (Portugal)", "vai_Latn_LR":"Vai (Latin, Liberia)", "yue_HK":"Cantonese (Hong Kong [China])", "en_NL":"English (Netherlands)", "to_TO":"Tongan (Tonga)", "cgg_UG":"Chiga (Uganda)", "ta":"Tamil", "en_MH":"English (Marshall Islands)", "zu_ZA":"Zulu (South Africa)", "shi_Latn_MA":"Tachelhit (Latin, Morocco)", "brx_IN":"Bodo (India)", "ar_KM":"Arabic (Comoros)", "en_AL":"English (Albania)", "te":"Telugu", "chr_US":"Cherokee (United States)", 
+    "yo_BJ":"Yoruba (Benin)", "fr_VU":"French (Vanuatu)", "pa":"Punjabi", "tg":"Tajik", "kea":"Kabuverdianu", "ksh_DE":"Colognian (Germany)", "sw_CD":"Swahili (Congo - Kinshasa)", "te_IN":"Telugu (India)", "fr_RE":"French (R\u00e9union)", "th":"Thai", "ur_IN":"Urdu (India)", "yo_NG":"Yoruba (Nigeria)", "ti":"Tigrinya", "guz_KE":"Gusii (Kenya)", "tk":"Turkmen", "kl_GL":"Kalaallisut (Greenland)", "ksf_CM":"Bafia (Cameroon)", "mua_CM":"Mundang (Cameroon)", "lag_TZ":"Langi (Tanzania)", "lb":"Luxembourgish", 
+    "fr_TN":"French (Tunisia)", "es_PA":"Spanish (Panama)", "pl_PL":"Polish (Poland)", "to":"Tongan", "hi_IN":"Hindi (India)", "dje_NE":"Zarma (Niger)", "es_GQ":"Spanish (Equatorial Guinea)", "en_BR":"English (Brazil)", "kok_IN":"Konkani (India)", "pl":"Polish", "fr_GN":"French (Guinea)", "bem":"Bemba", "ha":"Hausa", "ckb":"Central Kurdish", "lg":"Ganda", "tr":"Turkish", "en_PW":"English (Palau)", "en_NO":"English (Norway)", "nyn_UG":"Nyankole (Uganda)", "sr_Latn_RS":"Serbian (Latin, Serbia)", "gsw_FR":"Swiss German (France)", 
+    "pa_Guru":"Punjabi (Gurmukhi)", "he":"Hebrew", "sn_ZW":"Shona (Zimbabwe)", "qu_BO":"Quechua (Bolivia)", "lu_CD":"Luba-Katanga (Congo - Kinshasa)", "mgo_CM":"Meta\u02bc (Cameroon)", "ps_AF":"Pashto (Afghanistan)", "en_BS":"English (Bahamas)", "da":"Danish", "ps":"Pashto", "ln":"Lingala", "pt":"Portuguese", "hi":"Hindi", "lo":"Lao", "ebu":"Embu", "de":"German", "gu_IN":"Gujarati (India)", "seh":"Sena", "en_CX":"English (Christmas Island)", "en_ZM":"English (Zambia)", "fr_HT":"French (Haiti)", "fr_GP":"French (Guadeloupe)", 
+    "lt":"Lithuanian", "lu":"Luba-Katanga", "ln_CD":"Lingala (Congo - Kinshasa)", "vai_Latn":"Vai (Latin)", "el_GR":"Greek (Greece)", "lv":"Latvian", "en_KE":"English (Kenya)", "sbp":"Sangu", "hr":"Croatian", "en_CY":"English (Cyprus)", "es_GT":"Spanish (Guatemala)", "twq_NE":"Tasawaq (Niger)", "zh_Hant_HK":"Chinese (Traditional, Hong Kong [China])", "kln_KE":"Kalenjin (Kenya)", "fr_GQ":"French (Equatorial Guinea)", "chr":"Cherokee", "hu":"Hungarian", "es_UY":"Spanish (Uruguay)", "fr_CA":"French (Canada)", 
+    "ms_BN":"Malay (Brunei)", "en_NR":"English (Nauru)", "mer":"Meru", "shi":"Tachelhit", "es_PE":"Spanish (Peru)", "fr_SN":"French (Senegal)", "bez":"Bena", "sw_TZ":"Swahili (Tanzania)", "wae_CH":"Walser (Switzerland)", "kkj":"Kako", "hy":"Armenian", "teo_KE":"Teso (Kenya)", "en_CZ":"English (Czech Republic)", "dz_BT":"Dzongkha (Bhutan)", "teo":"Teso", "ar_JO":"Arabic (Jordan)", "mer_KE":"Meru (Kenya)", "khq":"Koyra Chiini", "ln_CF":"Lingala (Central African Republic)", "nn_NO":"Norwegian Nynorsk (Norway)", 
+    "en_MO":"English (Macau [China])", "ar_TD":"Arabic (Chad)", "dz":"Dzongkha", "ses":"Koyraboro Senni", "en_BW":"English (Botswana)", "en_AS":"English (American Samoa)", "ar_IL":"Arabic (Israel)", "nnh":"Ngiemboon", "bo_CN":"Tibetan (China)", "teo_UG":"Teso (Uganda)", "hy_AM":"Armenian (Armenia)", "ln_CG":"Lingala (Congo - Brazzaville)", "sr_Latn_BA":"Serbian (Latin, Bosnia & Herzegovina)", "en_MP":"English (Northern Mariana Islands)", "ksb_TZ":"Shambala (Tanzania)", "ar_SA":"Arabic (Saudi Arabia)", 
+    "smn_FI":"Inari Sami (Finland)", "ar_LY":"Arabic (Libya)", "en_AT":"English (Austria)", "so_KE":"Somali (Kenya)", "fr_CD":"French (Congo - Kinshasa)", "af_NA":"Afrikaans (Namibia)", "en_NU":"English (Niue)", "es_PH":"Spanish (Philippines)", "en_KI":"English (Kiribati)", "en_JE":"English (Jersey)", "lkt":"Lakota", "en_AU":"English (Australia)", "fa_IR":"Persian (Iran)", "uz_Latn_UZ":"Uzbek (Latin, Uzbekistan)", "zh_Hans_CN":"Chinese (Simplified, China)", "ewo_CM":"Ewondo (Cameroon)", "fr_PF":"French (French Polynesia)", 
+    "ca_IT":"Catalan (Italy)", "en_BZ":"English (Belize)", "ar_KW":"Arabic (Kuwait)", "pt_GW":"Portuguese (Guinea-Bissau)", "fr_FR":"French (France)", "am_ET":"Amharic (Ethiopia)", "en_VC":"English (St. Vincent & Grenadines)", "fr_DJ":"French (Djibouti)", "fr_CF":"French (Central African Republic)", "es_SV":"Spanish (El Salvador)", "en_MS":"English (Montserrat)", "pt_ST":"Portuguese (S\u00e3o Tom\u00e9 & Pr\u00edncipe)", "ar_SD":"Arabic (Sudan)", "luy_KE":"Luyia (Kenya)", "gd_GB":"Scottish Gaelic (United Kingdom)", 
+    "de_LI":"German (Liechtenstein)", "fr_CG":"French (Congo - Brazzaville)", "ckb_IQ":"Central Kurdish (Iraq)", "zh_Hans_SG":"Chinese (Simplified, Singapore)", "en_MT":"English (Malta)", "ha_NE":"Hausa (Niger)", "ewo":"Ewondo", "af_ZA":"Afrikaans (South Africa)", "os_GE":"Ossetic (Georgia)", "om_KE":"Oromo (Kenya)", "nl_SR":"Dutch (Suriname)", "es_ES":"Spanish (Spain)", "es_DO":"Spanish (Dominican Republic)", "ar_IQ":"Arabic (Iraq)", "fr_CH":"French (Switzerland)", "nnh_CM":"Ngiemboon (Cameroon)", 
+    "es_419":"Spanish (Latin America)", "en_MU":"English (Mauritius)", "en_US_POSIX":"English (United States, Computer)", "yav_CM":"Yangben (Cameroon)", "luo_KE":"Luo (Kenya)", "dua_CM":"Duala (Cameroon)", "et_EE":"Estonian (Estonia)", "en_IE":"English (Ireland)", "ak_GH":"Akan (Ghana)", "rwk":"Rwa", "es_CL":"Spanish (Chile)", "kea_CV":"Kabuverdianu (Cape Verde)", "fr_CI":"French (C\u00f4te d\u2019Ivoire)", "ckb_IR":"Central Kurdish (Iran)", "fr_BE":"French (Belgium)", "se":"Northern Sami", "en_NZ":"English (New Zealand)", 
+    "en_MV":"English (Maldives)", "en_LR":"English (Liberia)", "ha_NG":"Hausa (Nigeria)", "en_KN":"English (St. Kitts & Nevis)", "nb_SJ":"Norwegian Bokm\u00e5l (Svalbard & Jan Mayen)", "sg":"Sango", "sr_Cyrl_RS":"Serbian (Cyrillic, Serbia)", "ru_RU":"Russian (Russia)", "en_ZW":"English (Zimbabwe)", "sv_AX":"Swedish (\u00c5land Islands)", "si":"Sinhala", "ga_IE":"Irish (Ireland)", "en_VG":"English (British Virgin Islands)", "ff_MR":"Fulah (Mauritania)", "sk":"Slovak", "ky_KG":"Kyrgyz (Kyrgyzstan)", 
+    "agq_CM":"Aghem (Cameroon)", "mzn":"Mazanderani", "fr_BF":"French (Burkina Faso)", "sl":"Slovenian", "en_MW":"English (Malawi)", "mr_IN":"Marathi (India)", "az_Latn":"Azerbaijani (Latin)", "en_LS":"English (Lesotho)", "de_AT":"German (Austria)", "ka":"Georgian", "naq_NA":"Nama (Namibia)", "sn":"Shona", "sr_Latn_ME":"Serbian (Latin, Montenegro)", "fr_NC":"French (New Caledonia)", "so":"Somali", "is_IS":"Icelandic (Iceland)", "twq":"Tasawaq", "ig_NG":"Igbo (Nigeria)", "sq":"Albanian", "fo_FO":"Faroese (Faroe Islands)", 
+    "sr":"Serbian", "tzm":"Central Atlas Tamazight", "ga":"Irish", "om":"Oromo", "en_LT":"English (Lithuania)", "bas_CM":"Basaa (Cameroon)", "se_NO":"Northern Sami (Norway)", "ki":"Kikuyu", "nl_BE":"Dutch (Belgium)", "ar_QA":"Arabic (Qatar)", "gd":"Scottish Gaelic", "sv":"Swedish", "kk":"Kazakh", "sw":"Swahili", "es_CO":"Spanish (Colombia)", "az_Latn_AZ":"Azerbaijani (Latin, Azerbaijan)", "rn_BI":"Rundi (Burundi)", "or":"Oriya", "kl":"Kalaallisut", "ca":"Catalan", "en_VI":"English (U.S. Virgin Islands)", 
+    "km":"Khmer", "os":"Ossetic", "en_MY":"English (Malaysia)", "kn":"Kannada", "en_LU":"English (Luxembourg)", "fr_SY":"French (Syria)", "ar_TN":"Arabic (Tunisia)", "en_JM":"English (Jamaica)", "fr_PM":"French (St. Pierre & Miquelon)", "ko":"Korean", "fr_NE":"French (Niger)", "ce":"Chechen", "fr_MA":"French (Morocco)", "gl":"Galician", "ru_MD":"Russian (Moldova)", "saq_KE":"Samburu (Kenya)", "ks":"Kashmiri", "fr_CM":"French (Cameroon)", "lb_LU":"Luxembourgish (Luxembourg)", "gv_IM":"Manx (Isle of Man)", 
+    "fr_BI":"French (Burundi)", "en_LV":"English (Latvia)", "en_KR":"English (South Korea)", "es_NI":"Spanish (Nicaragua)", "en_GB":"English (United Kingdom)", "kw":"Cornish", "nl_SX":"Dutch (Sint Maarten)", "dav_KE":"Taita (Kenya)", "tr_CY":"Turkish (Cyprus)", "ky":"Kyrgyz", "en_UG":"English (Uganda)", "en_TC":"English (Turks & Caicos Islands)", "ar_EG":"Arabic (Egypt)", "fr_BJ":"French (Benin)", "gu":"Gujarati", "es_PR":"Spanish (Puerto Rico)", "fr_RW":"French (Rwanda)", "sr_Cyrl_BA":"Serbian (Cyrillic, Bosnia & Herzegovina)", 
+    "lrc_IQ":"Northern Luri (Iraq)", "gv":"Manx", "fr_MC":"French (Monaco)", "cs":"Czech", "bez_TZ":"Bena (Tanzania)", "es_CR":"Spanish (Costa Rica)", "asa_TZ":"Asu (Tanzania)", "ar_EH":"Arabic (Western Sahara)", "fo_DK":"Faroese (Denmark)", "ms_Arab_BN":"Malay (Arabic, Brunei)", "en_JP":"English (Japan)", "sbp_TZ":"Sangu (Tanzania)", "en_IL":"English (Israel)", "lt_LT":"Lithuanian (Lithuania)", "mfe":"Morisyen", "en_GD":"English (Grenada)", "cy":"Welsh", "ug_CN":"Uyghur (China)", "ca_FR":"Catalan (France)", 
+    "es_BO":"Spanish (Bolivia)", "fr_BL":"French (St. Barth\u00e9lemy)", "bn_IN":"Bengali (India)", "uz_Cyrl_UZ":"Uzbek (Cyrillic, Uzbekistan)", "lrc_IR":"Northern Luri (Iran)", "az_Cyrl":"Azerbaijani (Cyrillic)", "en_IM":"English (Isle of Man)", "sw_KE":"Swahili (Kenya)", "en_SB":"English (Solomon Islands)", "pa_Arab":"Punjabi (Arabic)", "ur_PK":"Urdu (Pakistan)", "haw_US":"Hawaiian (United States)", "ar_SO":"Arabic (Somalia)", "en_IN":"English (India)", "fil":"Filipino", "fr_MF":"French (St. Martin)", 
+    "en_WS":"English (Samoa)", "es_CU":"Spanish (Cuba)", "ja_JP":"Japanese (Japan)", "fy_NL":"Western Frisian (Netherlands)", "en_SC":"English (Seychelles)", "en_IO":"English (British Indian Ocean Territory)", "pt_PT":"Portuguese (Portugal)", "en_HK":"English (Hong Kong [China])", "en_GG":"English (Guernsey)", "fr_MG":"French (Madagascar)", "de_LU":"German (Luxembourg)", "tzm_MA":"Central Atlas Tamazight (Morocco)", "en_SD":"English (Sudan)", "shi_Tfng":"Tachelhit (Tifinagh)", "ln_AO":"Lingala (Angola)", 
+    "as_IN":"Assamese (India)", "en_GH":"English (Ghana)", "ms_MY":"Malay (Malaysia)", "ro_RO":"Romanian (Romania)", "jgo_CM":"Ngomba (Cameroon)", "dua":"Duala", "en_UM":"English (U.S. Outlying Islands)", "en_SE":"English (Sweden)", "kn_IN":"Kannada (India)", "en_KY":"English (Cayman Islands)", "vun_TZ":"Vunjo (Tanzania)", "kln":"Kalenjin", "lrc":"Northern Luri", "en_GI":"English (Gibraltar)", "ca_ES":"Catalan (Spain)", "rof":"Rombo", "pt_CV":"Portuguese (Cape Verde)", "kok":"Konkani", "pt_BR":"Portuguese (Brazil)", 
+    "ar_DJ":"Arabic (Djibouti)", "yi_001":"Yiddish (World)", "fi_FI":"Finnish (Finland)", "zh":"Chinese", "es_PY":"Spanish (Paraguay)", "ar_SS":"Arabic (South Sudan)", "mua":"Mundang", "sr_Cyrl_ME":"Serbian (Cyrillic, Montenegro)", "vai_Vaii_LR":"Vai (Vai, Liberia)", "en_001":"English (World)", "nl_NL":"Dutch (Netherlands)", "en_TK":"English (Tokelau)", "si_LK":"Sinhala (Sri Lanka)", "en_SG":"English (Singapore)", "sv_SE":"Swedish (Sweden)", "fr_DZ":"French (Algeria)", "ca_AD":"Catalan (Andorra)", 
+    "pt_AO":"Portuguese (Angola)", "vi":"Vietnamese", "xog_UG":"Soga (Uganda)", "xog":"Soga", "en_IS":"English (Iceland)", "nb":"Norwegian Bokm\u00e5l", "seh_MZ":"Sena (Mozambique)", "ars":"Najdi Arabic", "es_AR":"Spanish (Argentina)", "sk_SK":"Slovak (Slovakia)", "en_SH":"English (St. Helena)", "ti_ER":"Tigrinya (Eritrea)", "nd":"North Ndebele", "az_Cyrl_AZ":"Azerbaijani (Cyrillic, Azerbaijan)", "zu":"Zulu", "ne":"Nepali", "nd_ZW":"North Ndebele (Zimbabwe)", "el_CY":"Greek (Cyprus)", "en_IT":"English (Italy)", 
+    "nl_BQ":"Dutch (Caribbean Netherlands)", "da_GL":"Danish (Greenland)", "ja":"Japanese", "rm":"Romansh", "fr_ML":"French (Mali)", "rn":"Rundi", "en_VU":"English (Vanuatu)", "rof_TZ":"Rombo (Tanzania)", "ro":"Romanian", "ebu_KE":"Embu (Kenya)", "ru_KG":"Russian (Kyrgyzstan)", "en_SI":"English (Slovenia)", "sg_CF":"Sango (Central African Republic)", "mfe_MU":"Morisyen (Mauritius)", "nl":"Dutch", "brx":"Bodo", "bs_Latn":"Bosnian (Latin)", "fa":"Standard Moroccan Tamazight (Morocco)", "Persianzgh_MA":"Standard Moroccan Tamazight (Morocco)", 
+    "en_GM":"English (Gambia)", "shi_Latn":"Tachelhit (Latin)", "en_FI":"English (Finland)", "nn":"Norwegian", "Nynorsken_EE":"English (Estonia)", "ru":"Russian", "yue":"Cantonese", "kam_KE":"Kamba (Kenya)", "fur":"Friulian", "vai_Vaii":"Vai (Vai)", "ar_ER":"Arabic (Eritrea)", "rw":"Kinyarwanda", "ti_ET":"Tigrinya (Ethiopia)", "ff":"Fulah", "luo":"Luo", "fa_AF":"Persian (Afghanistan)", "nl_CW":"Dutch (Cura\u00e7ao)", "en_HR":"English (Croatia)", "en_FJ":"English (Fiji)", "fi":"Finnish", "pt_MO":"Portuguese (Macau [China])", 
+    "be":"Belarusian", "en_US":"English (United States)", "en_TO":"English (Tonga)", "en_SK":"English (Slovakia)", "bg":"Bulgarian", "ru_BY":"Russian (Belarus)", "it_IT":"Italian (Italy)", "ml_IN":"Malayalam (India)", "gsw_CH":"Swiss German (Switzerland)", "qu_EC":"Quechua (Ecuador)", "fo":"Faroese", "sv_FI":"Swedish (Finland)", "en_FK":"English (Falkland Islands)", "nus":"Nuer", "ta_LK":"Tamil (Sri Lanka)", "vun":"Vunjo", "sr_Latn":"Serbian (Latin)", "es_BZ":"Spanish (Belize)", "fr":"French", "en_SL":"English (Sierra Leone)", 
+    "bm":"Bambara", "ar_BH":"Arabic (Bahrain)", "guz":"Gusii", "bn":"Bengali", "bo":"Tibetan", "ar_SY":"Arabic (Syria)", "lo_LA":"Lao (Laos)", "ne_NP":"Nepali (Nepal)", "uz_Latn":"Uzbek (Latin)", "be_BY":"Belarusian (Belarus)", "es_IC":"Spanish (Canary Islands)", "sr_Latn_XK":"Serbian (Latin, Kosovo)", "ar_MA":"Arabic (Morocco)", "pa_Guru_IN":"Punjabi (Gurmukhi, India)", "br":"Breton", "luy":"Luyia", "kde_TZ":"Makonde (Tanzania)", "bs":"Bosnian", "fy":"Western Frisian", "fur_IT":"Friulian (Italy)", 
+    "hu_HU":"Hungarian (Hungary)", "ar_AE":"Arabic (United Arab Emirates)", "en_HU":"English (Hungary)", "sah_RU":"Sakha (Russia)", "zh_Hans":"Chinese (Simplified)", "en_FM":"English (Micronesia)", "sq_AL":"Albanian (Albania)", "ko_KP":"Korean (North Korea)", "en_150":"English (Europe)", "en_DE":"English (Germany)", "ce_RU":"Chechen (Russia)", "en_CA":"English (Canada)", "hsb_DE":"Upper Sorbian (Germany)", "fr_MQ":"French (Martinique)", "en_TR":"English (Turkey)", "ro_MD":"Romanian (Moldova)", "es_VE":"Spanish (Venezuela)", 
+    "tg_TJ":"Tajik (Tajikistan)", "fr_WF":"French (Wallis & Futuna)", "mt_MT":"Maltese (Malta)", "kab":"Kabyle", "nmg_CM":"Kwasio (Cameroon)", "ms_SG":"Malay (Singapore)", "en_GR":"English (Greece)", "ru_UA":"Russian (Ukraine)", "fr_MR":"French (Mauritania)", "zh_Hans_MO":"Chinese (Simplified, Macau [China])", "ff_GN":"Fulah (Guinea)", "bs_Cyrl":"Bosnian (Cyrillic)", "sw_UG":"Swahili (Uganda)", "ko_KR":"Korean (South Korea)", "en_DG":"English (Diego Garcia)", "bo_IN":"Tibetan (India)", "en_CC":"English (Cocos [Keeling] Islands)", 
+    "shi_Tfng_MA":"Tachelhit (Tifinagh, Morocco)", "lag":"Langi", "it_SM":"Italian (San Marino)", "os_RU":"Ossetic (Russia)", "en_TT":"English (Trinidad & Tobago)", "ms_Arab_MY":"Malay (Arabic, Malaysia)", "sq_MK":"Albanian (Macedonia)", "bem_ZM":"Bemba (Zambia)", "kde":"Makonde", "ar_OM":"Arabic (Oman)", "kk_KZ":"Kazakh (Kazakhstan)", "cgg":"Chiga", "bas":"Basaa", "kam":"Kamba", "wae":"Walser", "es_MX":"Spanish (Mexico)", "sah":"Sakha", "zh_Hant":"Chinese (Traditional)", "en_GU":"English (Guam)", 
+    "fr_MU":"French (Mauritius)", "fr_KM":"French (Comoros)", "ar_LB":"Arabic (Lebanon)", "en_BA":"English (Bosnia & Herzegovina)", "en_TV":"English (Tuvalu)", "sr_Cyrl":"Serbian (Cyrillic)", "mzn_IR":"Mazanderani (Iran)", "dje":"Zarma", "kab_DZ":"Kabyle (Algeria)", "fil_PH":"Filipino (Philippines)", "se_SE":"Northern Sami (Sweden)", "vai":"Vai", "hr_HR":"Croatian (Croatia)", "bs_Latn_BA":"Bosnian (Latin, Bosnia & Herzegovina)", "nl_AW":"Dutch (Aruba)", "dav":"Taita", "so_SO":"Somali (Somalia)", 
+    "ar_PS":"Arabic (Palestinian Territories)", "en_FR":"English (France)", "uz_Cyrl":"Uzbek (Cyrillic)", "ff_SN":"Fulah (Senegal)", "en_BB":"English (Barbados)", "ki_KE":"Kikuyu (Kenya)", "en_TW":"English (Taiwan)", "naq":"Nama", "en_SS":"English (South Sudan)", "mg_MG":"Malagasy (Madagascar)", "mas_KE":"Masai (Kenya)", "en_RO":"English (Romania)", "en_PG":"English (Papua New Guinea)", "mgh":"Makhuwa-Meetto", "dyo_SN":"Jola-Fonyi (Senegal)", "mas":"Masai", "agq":"Aghem", "bn_BD":"Bengali (Bangladesh)", 
+    "haw":"Hawaiian", "yi":"Yiddish", "nb_NO":"Norwegian Bokm\u00e5l (Norway)", "da_DK":"Danish (Denmark)", "en_DK":"English (Denmark)", "saq":"Samburu", "ug":"Uyghur", "cy_GB":"Welsh (United Kingdom)", "fr_YT":"French (Mayotte)", "jmc":"Machame", "ses_ML":"Koyraboro Senni (Mali)", "en_PH":"English (Philippines)", "de_DE":"German (Germany)", "ar_YE":"Arabic (Yemen)", "bm_ML":"Bambara (Mali)", "yo":"Yoruba", "lkt_US":"Lakota (United States)", "uz_Arab_AF":"Uzbek (Arabic, Afghanistan)", "jgo":"Ngomba", 
+    "sl_SI":"Slovenian (Slovenia)", "uk":"Ukrainian", "en_CH":"English (Switzerland)", "asa":"Asu", "lg_UG":"Ganda (Uganda)", "qu_PE":"Quechua (Peru)", "mgo":"Meta\u02bc", "id_ID":"Indonesian (Indonesia)", "en_NA":"English (Namibia)", "en_GY":"English (Guyana)", "zgh":"Standard Moroccan", "Tamazightpt_MZ":"Portuguese (Mozambique)", "fr_LU":"French (Luxembourg)", "ta_MY":"Tamil (Malaysia)", "mas_TZ":"Masai (Tanzania)", "en_DM":"English (Dominica)", "dsb":"Lower Sorbian", "mg":"Malagasy", "en_BE":"English (Belgium)", 
+    "ur":"Urdu", "fr_GA":"French (Gabon)", "ka_GE":"Georgian (Georgia)", "nmg":"Kwasio", "en_TZ":"English (Tanzania)", "eu_ES":"Basque (Spain)", "ar_DZ":"Arabic (Algeria)", "id":"Indonesian", "so_DJ":"Somali (Djibouti)", "hsb":"Upper Sorbian", "yav":"Yangben", "mk":"Macedonian", "pa_Arab_PK":"Punjabi (Arabic, Pakistan)", "ml":"Malayalam", "en_ER":"English (Eritrea)", "ig":"Igbo", "se_FI":"Northern Sami (Finland)", "mn":"Mongolian", "ksb":"Shambala", "uz":"Uzbek", "vi_VN":"Vietnamese (Vietnam)", "ii":"Sichuan Yi", 
+    "qu":"Quechua", "en_PK":"English (Pakistan)", "ee":"Ewe", "ast_ES":"Asturian (Spain)", "mr":"Marathi", "ms":"Malay", "en_ES":"English (Spain)", "ha_GH":"Hausa (Ghana)", "it_CH":"Italian (Switzerland)", "sq_XK":"Albanian (Kosovo)", "mt":"Maltese", "en_CK":"English (Cook Islands)", "br_FR":"Breton (France)", "tk_TM":"Turkmen (Turkmenistan)", "sr_Cyrl_XK":"Serbian (Cyrillic, Kosovo)", "ksf":"Bafia", "en_SX":"English (Sint Maarten)", "bg_BG":"Bulgarian (Bulgaria)", "en_PL":"English (Poland)", "af":"Afrikaans", 
+    "el":"Greek", "cs_CZ":"Czech (Czech Republic)", "fr_TD":"French (Chad)", "zh_Hans_HK":"Chinese (Simplified, Hong Kong [China])", "is":"Icelandic", "ksh":"Colognian", "my":"Burmese", "mn_MN":"Mongolian (Mongolia)", "en":"English", "it":"Italian", "dsb_DE":"Lower Sorbian (Germany)", "ii_CN":"Sichuan Yi (China)", "smn":"Inari Sami", "iu":"Inuktitut", "eo":"Esperanto", "en_ZA":"English (South Africa)", "en_AD":"English (Andorra)", "ak":"Akan", "en_RU":"English (Russia)", "kkj_CM":"Kako (Cameroon)", 
+    "am":"Amharic", "es":"Spanish", "et":"Estonian", "uk_UA":"Ukrainian (Ukraine)"};
+    this.name = "LocaleValidator";
+  };
+  LocaleValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  LocaleValidator.prototype.constructor = LocaleValidator;
+  Object.defineProperty(LocaleValidator.prototype, "alias", {get:function() {
+    return "locale";
+  }});
+  Object.assign(LocaleValidator.prototype, {__validate:function() {
+    if ("undefined" === typeof this.__locales[this.data]) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {LocaleValidator:LocaleValidator};
+}());
+abv.registry(abv.LocaleValidator);
+Object.assign(abv, function() {
+  var CountryValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.message = this.__options.message || "This value is not a valid country.";
+    this.__countries = {"AF":"Afghanistan", "AX":"Aland Islands", "AL":"Albania", "DZ":"Algeria", "AS":"American Samoa", "AD":"Andorra", "AO":"Angola", "AI":"Anguilla", "AQ":"Antarctica", "AG":"Antigua And Barbuda", "AR":"Argentina", "AM":"Armenia", "AW":"Aruba", "AU":"Australia", "AT":"Austria", "AZ":"Azerbaijan", "BS":"Bahamas", "BH":"Bahrain", "BD":"Bangladesh", "BB":"Barbados", "BY":"Belarus", "BE":"Belgium", "BZ":"Belize", "BJ":"Benin", "BM":"Bermuda", "BT":"Bhutan", "BO":"Bolivia", "BA":"Bosnia And Herzegovina", 
+    "BW":"Botswana", "BV":"Bouvet Island", "BR":"Brazil", "IO":"British Indian Ocean Territory", "BN":"Brunei Darussalam", "BG":"Bulgaria", "BF":"Burkina Faso", "BI":"Burundi", "KH":"Cambodia", "CM":"Cameroon", "CA":"Canada", "CV":"Cape Verde", "KY":"Cayman Islands", "CF":"Central African Republic", "TD":"Chad", "CL":"Chile", "CN":"China", "CX":"Christmas Island", "CC":"Cocos (Keeling) Islands", "CO":"Colombia", "KM":"Comoros", "CG":"Congo", "CD":"Congo, Democratic Republic", "CK":"Cook Islands", 
+    "CR":"Costa Rica", "CI":'Cote D"Ivoire', "HR":"Croatia", "CU":"Cuba", "CY":"Cyprus", "CZ":"Czech Republic", "DK":"Denmark", "DJ":"Djibouti", "DM":"Dominica", "DO":"Dominican Republic", "EC":"Ecuador", "EG":"Egypt", "SV":"El Salvador", "GQ":"Equatorial Guinea", "ER":"Eritrea", "EE":"Estonia", "ET":"Ethiopia", "FK":"Falkland Islands (Malvinas)", "FO":"Faroe Islands", "FJ":"Fiji", "FI":"Finland", "FR":"France", "GF":"French Guiana", "PF":"French Polynesia", "TF":"French Southern Territories", "GA":"Gabon", 
+    "GM":"Gambia", "GE":"Georgia", "DE":"Germany", "GH":"Ghana", "GI":"Gibraltar", "GR":"Greece", "GL":"Greenland", "GD":"Grenada", "GP":"Guadeloupe", "GU":"Guam", "GT":"Guatemala", "GG":"Guernsey", "GN":"Guinea", "GW":"Guinea-Bissau", "GY":"Guyana", "HT":"Haiti", "HM":"Heard Island & Mcdonald Islands", "VA":"Holy See (Vatican City State)", "HN":"Honduras", "HK":"Hong Kong", "HU":"Hungary", "IS":"Iceland", "IN":"India", "ID":"Indonesia", "IR":"Iran, Islamic Republic Of", "IQ":"Iraq", "IE":"Ireland", 
+    "IM":"Isle Of Man", "IL":"Israel", "IT":"Italy", "JM":"Jamaica", "JP":"Japan", "JE":"Jersey", "JO":"Jordan", "KZ":"Kazakhstan", "KE":"Kenya", "KI":"Kiribati", "KR":"Korea", "KW":"Kuwait", "KG":"Kyrgyzstan", "LA":'Lao People"s Democratic Republic', "LV":"Latvia", "LB":"Lebanon", "LS":"Lesotho", "LR":"Liberia", "LY":"Libyan Arab Jamahiriya", "LI":"Liechtenstein", "LT":"Lithuania", "LU":"Luxembourg", "MO":"Macao", "MK":"Macedonia", "MG":"Madagascar", "MW":"Malawi", "MY":"Malaysia", "MV":"Maldives", 
+    "ML":"Mali", "MT":"Malta", "MH":"Marshall Islands", "MQ":"Martinique", "MR":"Mauritania", "MU":"Mauritius", "YT":"Mayotte", "MX":"Mexico", "FM":"Micronesia, Federated States Of", "MD":"Moldova", "MC":"Monaco", "MN":"Mongolia", "ME":"Montenegro", "MS":"Montserrat", "MA":"Morocco", "MZ":"Mozambique", "MM":"Myanmar", "NA":"Namibia", "NR":"Nauru", "NP":"Nepal", "NL":"Netherlands", "AN":"Netherlands Antilles", "NC":"New Caledonia", "NZ":"New Zealand", "NI":"Nicaragua", "NE":"Niger", "NG":"Nigeria", 
+    "NU":"Niue", "NF":"Norfolk Island", "MP":"Northern Mariana Islands", "NO":"Norway", "OM":"Oman", "PK":"Pakistan", "PW":"Palau", "PS":"Palestinian Territory, Occupied", "PA":"Panama", "PG":"Papua New Guinea", "PY":"Paraguay", "PE":"Peru", "PH":"Philippines", "PN":"Pitcairn", "PL":"Poland", "PT":"Portugal", "PR":"Puerto Rico", "QA":"Qatar", "RE":"Reunion", "RO":"Romania", "RU":"Russian Federation", "RW":"Rwanda", "BL":"Saint Barthelemy", "SH":"Saint Helena", "KN":"Saint Kitts And Nevis", "LC":"Saint Lucia", 
+    "MF":"Saint Martin", "PM":"Saint Pierre And Miquelon", "VC":"Saint Vincent And Grenadines", "WS":"Samoa", "SM":"San Marino", "ST":"Sao Tome And Principe", "SA":"Saudi Arabia", "SN":"Senegal", "RS":"Serbia", "SC":"Seychelles", "SL":"Sierra Leone", "SG":"Singapore", "SK":"Slovakia", "SI":"Slovenia", "SB":"Solomon Islands", "SO":"Somalia", "ZA":"South Africa", "GS":"South Georgia And Sandwich Isl.", "ES":"Spain", "LK":"Sri Lanka", "SD":"Sudan", "SR":"Suriname", "SJ":"Svalbard And Jan Mayen", "SZ":"Swaziland", 
+    "SE":"Sweden", "CH":"Switzerland", "SY":"Syrian Arab Republic", "TW":"Taiwan", "TJ":"Tajikistan", "TZ":"Tanzania", "TH":"Thailand", "TL":"Timor-Leste", "TG":"Togo", "TK":"Tokelau", "TO":"Tonga", "TT":"Trinidad And Tobago", "TN":"Tunisia", "TR":"Turkey", "TM":"Turkmenistan", "TC":"Turks And Caicos Islands", "TV":"Tuvalu", "UG":"Uganda", "UA":"Ukraine", "AE":"United Arab Emirates", "GB":"United Kingdom", "US":"United States", "UM":"United States Outlying Islands", "UY":"Uruguay", "UZ":"Uzbekistan", 
+    "VU":"Vanuatu", "VE":"Venezuela", "VN":"Vietnam", "VG":"Virgin Islands, British", "VI":"Virgin Islands, U.S.", "WF":"Wallis And Futuna", "EH":"Western Sahara", "YE":"Yemen", "ZM":"Zambia", "ZW":"Zimbabwe"};
+    this.name = "CountryValidator";
+  };
+  CountryValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  CountryValidator.prototype.constructor = CountryValidator;
+  Object.defineProperty(CountryValidator.prototype, "alias", {get:function() {
+    return "country";
+  }});
+  Object.assign(CountryValidator.prototype, {__validate:function() {
+    if ("undefined" === typeof this.__countries[this.data]) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {CountryValidator:CountryValidator};
+}());
+abv.registry(abv.CountryValidator);
+Object.assign(abv, function() {
+  var BicValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {iban:'type:{"type":"string"}|length:{"min":3,"max":255}', ibanMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.BIC_COUNTRY_TO_IBAN_COUNTRY_MAP = {"GF":"FR", "PF":"FR", "TF":"FR", "GP":"FR", "MQ":"FR", "YT":"FR", "NC":"FR", "RE":"FR", "PM":"FR", "WF":"FR", "JE":"GB", "IM":"GB", "GG":"GB", "VG":"GB"};
+    this.iban = this.__options.iban || null;
+    this.ibanMessage = this.__options.ibanMessage || "This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.";
+    this.message = this.__options.message || "This is not a valid Business Identifier Code (BIC).";
+    this.name = "BicValidator";
+  };
+  BicValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  BicValidator.prototype.constructor = BicValidator;
+  Object.defineProperty(BicValidator.prototype, "alias", {get:function() {
+    return "bic";
+  }});
+  Object.assign(BicValidator.prototype, {__validate:function() {
+    var canonicalize = this.data.split(" ").join("");
+    if (false === [8, 11].includes(canonicalize.length)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (false === abv.isType("alnum", canonicalize)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (false === abv.isType("alpha", canonicalize.substr(0, 4))) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (null !== abv.isValidWithErrorMessage(canonicalize.substr(4, 2), "country", true)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (canonicalize.toUpperCase() !== canonicalize) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (null === this.iban) {
+      return;
+    }
+    var ibanCountryCode = this.iban.substr(0, 2);
+    if (true === abv.isType("alpha", ibanCountryCode) && this.__bicAndIbanCountriesMatch(canonicalize.substr(4, 2), ibanCountryCode)) {
+      this.__setErrorMessage(this.ibanMessage, this.__ibanMessageParameters());
+      return;
+    }
+  }, __bicAndIbanCountriesMatch:function(bicCountryCode, ibanCountryCode) {
+    return ibanCountryCode === bicCountryCode || ibanCountryCode === (this.BIC_COUNTRY_TO_IBAN_COUNTRY_MAP[bicCountryCode] || null);
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }, __ibanMessageParameters:function() {
+    return {"iban":this.iban};
+  }});
+  return {BicValidator:BicValidator};
+}());
+abv.registry(abv.BicValidator);
+Object.assign(abv, function() {
+  var CardSchemeValidator = function(data, options, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', schemes:'required|type:{"type":["string","array"],"any":true}'}, lang, internal);
+    this.__schemes = {"AMEX":[/^3[47][0-9]{13}$/], "CHINA_UNIONPAY":[/^62[0-9]{14,17}$/], "DINERS":[/^3(?:0[0-5]|[68][0-9])[0-9]{11}$/], "DISCOVER":[/^6011[0-9]{12}$/, /^64[4-9][0-9]{13}$/, /^65[0-9]{14}$/, /^622(12[6-9]|1[3-9][0-9]|[2-8][0-9][0-9]|91[0-9]|92[0-5])[0-9]{10}$/], "INSTAPAYMENT":[/^63[7-9][0-9]{13}$/], "JCB":[/^(?:2131|1800|35[0-9]{3})[0-9]{11}$/], "LASER":[/^(6304|670[69]|6771)[0-9]{12,15}$/], "MAESTRO":[/^(6759[0-9]{2})[0-9]{6,13}$/, /^(50[0-9]{4})[0-9]{6,13}$/, /^5[6-9][0-9]{10,17}$/, 
+    /^6[0-9]{11,18}$/], "MASTERCARD":[/^5[1-5][0-9]{14}$/, /^2(22[1-9][0-9]{12}|2[3-9][0-9]{13}|[3-6][0-9]{14}|7[0-1][0-9]{13}|720[0-9]{12})$/], "MIR":[/^220[0-4][0-9]{12}$/], "UATP":[/^1[0-9]{14}$/], "VISA":[/^4([0-9]{12}|[0-9]{15}|[0-9]{18})$/]};
+    this.message = this.__options.message || "Unsupported card type or invalid card number.";
+    this.schemes = "string" === typeof this.__options.schemes ? [this.__options.schemes] : this.__options.schemes;
+    this.name = "CardSchemeValidator";
+  };
+  CardSchemeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  CardSchemeValidator.prototype.constructor = CardSchemeValidator;
+  Object.defineProperty(CardSchemeValidator.prototype, "alias", {get:function() {
+    return "card-scheme";
+  }});
+  Object.assign(CardSchemeValidator.prototype, {__validate:function() {
+    if (false === abv.isType("numeric", this.data)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    for (var i = 0; i < this.schemes.length; i++) {
+      if ("undefined" === typeof this.__schemes[this.schemes[i]]) {
+        continue;
+      }
+      for (var j = 0; j < this.__schemes[this.schemes[i]].length; j++) {
+        if (true === this.__schemes[this.schemes[i]][j].test(this.data)) {
+          return;
+        }
+      }
+    }
+    this.__setErrorMessage(this.message, this.__messageParameters());
+    return;
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {CardSchemeValidator:CardSchemeValidator};
+}());
+abv.registry(abv.CardSchemeValidator);
+Object.assign(abv, function() {
+  var CurrencyValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.message = this.__options.message || "This value is not a valid currency.";
+    this.__currencies = [{"Alphabetic_Code":"AFN", "Currency":"Afghani", "Entity":"AFGHANISTAN", "Minor_Unit":2, "Numeric_Code":"971", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"\u00c5LAND ISLANDS", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ALL", "Currency":"Lek", "Entity":"ALBANIA", "Minor_Unit":2, "Numeric_Code":"008", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"DZD", "Currency":"Algerian Dinar", "Entity":"ALGERIA", "Minor_Unit":2, "Numeric_Code":"012", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"AMERICAN SAMOA", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"ANDORRA", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AOA", 
+    "Currency":"Kwanza", "Entity":"ANGOLA", "Minor_Unit":2, "Numeric_Code":"973", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XCD", "Currency":"East Caribbean Dollar", "Entity":"ANGUILLA", "Minor_Unit":2, "Numeric_Code":"951", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":null, "Currency":"No universal currency", "Entity":"ANTARCTICA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XCD", 
+    "Currency":"East Caribbean Dollar", "Entity":"ANTIGUA AND BARBUDA", "Minor_Unit":2, "Numeric_Code":"951", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ARS", "Currency":"Argentine Peso", "Entity":"ARGENTINA", "Minor_Unit":2, "Numeric_Code":"032", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AMD", "Currency":"Armenian Dram", "Entity":"ARMENIA", "Minor_Unit":2, "Numeric_Code":"051", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AWG", 
+    "Currency":"Aruban Florin", "Entity":"ARUBA", "Minor_Unit":2, "Numeric_Code":"533", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AUD", "Currency":"Australian Dollar", "Entity":"AUSTRALIA", "Minor_Unit":2, "Numeric_Code":"036", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"AUSTRIA", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AZN", "Currency":"Azerbaijan Manat", 
+    "Entity":"AZERBAIJAN", "Minor_Unit":2, "Numeric_Code":"944", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BSD", "Currency":"Bahamian Dollar", "Entity":"BAHAMAS (THE)", "Minor_Unit":2, "Numeric_Code":"044", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BHD", "Currency":"Bahraini Dinar", "Entity":"BAHRAIN", "Minor_Unit":3, "Numeric_Code":"048", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BDT", "Currency":"Taka", 
+    "Entity":"BANGLADESH", "Minor_Unit":2, "Numeric_Code":"050", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BBD", "Currency":"Barbados Dollar", "Entity":"BARBADOS", "Minor_Unit":2, "Numeric_Code":"052", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BYN", "Currency":"Belarusian Ruble", "Entity":"BELARUS", "Minor_Unit":2, "Numeric_Code":"933", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"BELGIUM", 
+    "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BZD", "Currency":"Belize Dollar", "Entity":"BELIZE", "Minor_Unit":2, "Numeric_Code":"084", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XOF", "Currency":"CFA Franc BCEAO", "Entity":"BENIN", "Minor_Unit":0, "Numeric_Code":"952", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BMD", "Currency":"Bermudian Dollar", "Entity":"BERMUDA", 
+    "Minor_Unit":2, "Numeric_Code":"060", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"INR", "Currency":"Indian Rupee", "Entity":"BHUTAN", "Minor_Unit":2, "Numeric_Code":"356", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BTN", "Currency":"Ngultrum", "Entity":"BHUTAN", "Minor_Unit":2, "Numeric_Code":"064", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BOB", "Currency":"Boliviano", "Entity":"BOLIVIA (PLURINATIONAL STATE OF)", 
+    "Minor_Unit":2, "Numeric_Code":"068", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BOV", "Currency":"Mvdol", "Entity":"BOLIVIA (PLURINATIONAL STATE OF)", "Minor_Unit":2, "Numeric_Code":"984", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"BONAIRE, SINT EUSTATIUS AND SABA", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BAM", "Currency":"Convertible Mark", 
+    "Entity":"BOSNIA AND HERZEGOVINA", "Minor_Unit":2, "Numeric_Code":"977", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BWP", "Currency":"Pula", "Entity":"BOTSWANA", "Minor_Unit":2, "Numeric_Code":"072", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NOK", "Currency":"Norwegian Krone", "Entity":"BOUVET ISLAND", "Minor_Unit":2, "Numeric_Code":"578", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BRL", "Currency":"Brazilian Real", 
+    "Entity":"BRAZIL", "Minor_Unit":2, "Numeric_Code":"986", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"BRITISH INDIAN OCEAN TERRITORY (THE)", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BND", "Currency":"Brunei Dollar", "Entity":"BRUNEI DARUSSALAM", "Minor_Unit":2, "Numeric_Code":"096", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BGN", 
+    "Currency":"Bulgarian Lev", "Entity":"BULGARIA", "Minor_Unit":2, "Numeric_Code":"975", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XOF", "Currency":"CFA Franc BCEAO", "Entity":"BURKINA FASO", "Minor_Unit":0, "Numeric_Code":"952", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BIF", "Currency":"Burundi Franc", "Entity":"BURUNDI", "Minor_Unit":0, "Numeric_Code":"108", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CVE", 
+    "Currency":"Cabo Verde Escudo", "Entity":"CABO VERDE", "Minor_Unit":2, "Numeric_Code":"132", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"KHR", "Currency":"Riel", "Entity":"CAMBODIA", "Minor_Unit":2, "Numeric_Code":"116", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XAF", "Currency":"CFA Franc BEAC", "Entity":"CAMEROON", "Minor_Unit":0, "Numeric_Code":"950", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CAD", "Currency":"Canadian Dollar", 
+    "Entity":"CANADA", "Minor_Unit":2, "Numeric_Code":"124", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"KYD", "Currency":"Cayman Islands Dollar", "Entity":"CAYMAN ISLANDS (THE)", "Minor_Unit":2, "Numeric_Code":"136", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XAF", "Currency":"CFA Franc BEAC", "Entity":"CENTRAL AFRICAN REPUBLIC (THE)", "Minor_Unit":0, "Numeric_Code":"950", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XAF", 
+    "Currency":"CFA Franc BEAC", "Entity":"CHAD", "Minor_Unit":0, "Numeric_Code":"950", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CLP", "Currency":"Chilean Peso", "Entity":"CHILE", "Minor_Unit":0, "Numeric_Code":"152", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CLF", "Currency":"Unidad de Fomento", "Entity":"CHILE", "Minor_Unit":4, "Numeric_Code":"990", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CNY", "Currency":"Yuan Renminbi", 
+    "Entity":"CHINA", "Minor_Unit":2, "Numeric_Code":"156", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AUD", "Currency":"Australian Dollar", "Entity":"CHRISTMAS ISLAND", "Minor_Unit":2, "Numeric_Code":"036", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AUD", "Currency":"Australian Dollar", "Entity":"COCOS (KEELING) ISLANDS (THE)", "Minor_Unit":2, "Numeric_Code":"036", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"COP", 
+    "Currency":"Colombian Peso", "Entity":"COLOMBIA", "Minor_Unit":2, "Numeric_Code":"170", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"COU", "Currency":"Unidad de Valor Real", "Entity":"COLOMBIA", "Minor_Unit":2, "Numeric_Code":"970", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"KMF", "Currency":"Comorian Franc", "Entity":"COMOROS (THE)", "Minor_Unit":0, "Numeric_Code":"174", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CDF", 
+    "Currency":"Congolese Franc", "Entity":"CONGO (THE DEMOCRATIC REPUBLIC OF THE)", "Minor_Unit":2, "Numeric_Code":"976", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XAF", "Currency":"CFA Franc BEAC", "Entity":"CONGO (THE)", "Minor_Unit":0, "Numeric_Code":"950", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NZD", "Currency":"New Zealand Dollar", "Entity":"COOK ISLANDS (THE)", "Minor_Unit":2, "Numeric_Code":"554", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"CRC", "Currency":"Costa Rican Colon", "Entity":"COSTA RICA", "Minor_Unit":2, "Numeric_Code":"188", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XOF", "Currency":"CFA Franc BCEAO", "Entity":"C\u00d4TE D'IVOIRE", "Minor_Unit":0, "Numeric_Code":"952", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"HRK", "Currency":"Kuna", "Entity":"CROATIA", "Minor_Unit":2, "Numeric_Code":"191", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"CUP", "Currency":"Cuban Peso", "Entity":"CUBA", "Minor_Unit":2, "Numeric_Code":"192", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CUC", "Currency":"Peso Convertible", "Entity":"CUBA", "Minor_Unit":2, "Numeric_Code":"931", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ANG", "Currency":"Netherlands Antillean Guilder", "Entity":"CURA\u00c7AO", "Minor_Unit":2, "Numeric_Code":"532", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"CYPRUS", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CZK", "Currency":"Czech Koruna", "Entity":"CZECHIA", "Minor_Unit":2, "Numeric_Code":"203", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"DKK", "Currency":"Danish Krone", "Entity":"DENMARK", "Minor_Unit":2, "Numeric_Code":"208", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"DJF", 
+    "Currency":"Djibouti Franc", "Entity":"DJIBOUTI", "Minor_Unit":0, "Numeric_Code":"262", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XCD", "Currency":"East Caribbean Dollar", "Entity":"DOMINICA", "Minor_Unit":2, "Numeric_Code":"951", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"DOP", "Currency":"Dominican Peso", "Entity":"DOMINICAN REPUBLIC (THE)", "Minor_Unit":2, "Numeric_Code":"214", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"ECUADOR", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EGP", "Currency":"Egyptian Pound", "Entity":"EGYPT", "Minor_Unit":2, "Numeric_Code":"818", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SVC", "Currency":"El Salvador Colon", "Entity":"EL SALVADOR", "Minor_Unit":2, "Numeric_Code":"222", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"EL SALVADOR", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XAF", "Currency":"CFA Franc BEAC", "Entity":"EQUATORIAL GUINEA", "Minor_Unit":0, "Numeric_Code":"950", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ERN", "Currency":"Nakfa", "Entity":"ERITREA", "Minor_Unit":2, "Numeric_Code":"232", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"ESTONIA", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ETB", "Currency":"Ethiopian Birr", "Entity":"ETHIOPIA", "Minor_Unit":2, "Numeric_Code":"230", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"EUROPEAN UNION", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"FKP", 
+    "Currency":"Falkland Islands Pound", "Entity":"FALKLAND ISLANDS (THE) [MALVINAS]", "Minor_Unit":2, "Numeric_Code":"238", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"DKK", "Currency":"Danish Krone", "Entity":"FAROE ISLANDS (THE)", "Minor_Unit":2, "Numeric_Code":"208", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"FJD", "Currency":"Fiji Dollar", "Entity":"FIJI", "Minor_Unit":2, "Numeric_Code":"242", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"FINLAND", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"FRANCE", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"FRENCH GUIANA", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XPF", 
+    "Currency":"CFP Franc", "Entity":"FRENCH POLYNESIA", "Minor_Unit":0, "Numeric_Code":"953", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"FRENCH SOUTHERN TERRITORIES (THE)", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XAF", "Currency":"CFA Franc BEAC", "Entity":"GABON", "Minor_Unit":0, "Numeric_Code":"950", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GMD", 
+    "Currency":"Dalasi", "Entity":"GAMBIA (THE)", "Minor_Unit":2, "Numeric_Code":"270", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GEL", "Currency":"Lari", "Entity":"GEORGIA", "Minor_Unit":2, "Numeric_Code":"981", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"GERMANY", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GHS", "Currency":"Ghana Cedi", 
+    "Entity":"GHANA", "Minor_Unit":2, "Numeric_Code":"936", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GIP", "Currency":"Gibraltar Pound", "Entity":"GIBRALTAR", "Minor_Unit":2, "Numeric_Code":"292", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"GREECE", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"DKK", "Currency":"Danish Krone", "Entity":"GREENLAND", 
+    "Minor_Unit":2, "Numeric_Code":"208", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XCD", "Currency":"East Caribbean Dollar", "Entity":"GRENADA", "Minor_Unit":2, "Numeric_Code":"951", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"GUADELOUPE", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"GUAM", "Minor_Unit":2, 
+    "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GTQ", "Currency":"Quetzal", "Entity":"GUATEMALA", "Minor_Unit":2, "Numeric_Code":"320", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GBP", "Currency":"Pound Sterling", "Entity":"GUERNSEY", "Minor_Unit":2, "Numeric_Code":"826", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GNF", "Currency":"Guinean Franc", "Entity":"GUINEA", "Minor_Unit":0, "Numeric_Code":"324", 
+    "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XOF", "Currency":"CFA Franc BCEAO", "Entity":"GUINEA-BISSAU", "Minor_Unit":0, "Numeric_Code":"952", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GYD", "Currency":"Guyana Dollar", "Entity":"GUYANA", "Minor_Unit":2, "Numeric_Code":"328", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"HTG", "Currency":"Gourde", "Entity":"HAITI", "Minor_Unit":2, "Numeric_Code":"332", "Withdrawal_Date":null, 
+    "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"HAITI", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AUD", "Currency":"Australian Dollar", "Entity":"HEARD ISLAND AND McDONALD ISLANDS", "Minor_Unit":2, "Numeric_Code":"036", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"HOLY SEE (THE)", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, 
+    "Withdrawal_Interval":null}, {"Alphabetic_Code":"HNL", "Currency":"Lempira", "Entity":"HONDURAS", "Minor_Unit":2, "Numeric_Code":"340", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"HKD", "Currency":"Hong Kong Dollar", "Entity":"HONG KONG", "Minor_Unit":2, "Numeric_Code":"344", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"HUF", "Currency":"Forint", "Entity":"HUNGARY", "Minor_Unit":2, "Numeric_Code":"348", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"ISK", "Currency":"Iceland Krona", "Entity":"ICELAND", "Minor_Unit":0, "Numeric_Code":"352", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"INR", "Currency":"Indian Rupee", "Entity":"INDIA", "Minor_Unit":2, "Numeric_Code":"356", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"IDR", "Currency":"Rupiah", "Entity":"INDONESIA", "Minor_Unit":2, "Numeric_Code":"360", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XDR", 
+    "Currency":"SDR (Special Drawing Right)", "Entity":"INTERNATIONAL MONETARY FUND (IMF)", "Minor_Unit":null, "Numeric_Code":"960", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"IRR", "Currency":"Iranian Rial", "Entity":"IRAN (ISLAMIC REPUBLIC OF)", "Minor_Unit":2, "Numeric_Code":"364", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"IQD", "Currency":"Iraqi Dinar", "Entity":"IRAQ", "Minor_Unit":3, "Numeric_Code":"368", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"IRELAND", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GBP", "Currency":"Pound Sterling", "Entity":"ISLE OF MAN", "Minor_Unit":2, "Numeric_Code":"826", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ILS", "Currency":"New Israeli Sheqel", "Entity":"ISRAEL", "Minor_Unit":2, "Numeric_Code":"376", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", 
+    "Currency":"Euro", "Entity":"ITALY", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"JMD", "Currency":"Jamaican Dollar", "Entity":"JAMAICA", "Minor_Unit":2, "Numeric_Code":"388", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"JPY", "Currency":"Yen", "Entity":"JAPAN", "Minor_Unit":0, "Numeric_Code":"392", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GBP", "Currency":"Pound Sterling", 
+    "Entity":"JERSEY", "Minor_Unit":2, "Numeric_Code":"826", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"JOD", "Currency":"Jordanian Dinar", "Entity":"JORDAN", "Minor_Unit":3, "Numeric_Code":"400", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"KZT", "Currency":"Tenge", "Entity":"KAZAKHSTAN", "Minor_Unit":2, "Numeric_Code":"398", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"KES", "Currency":"Kenyan Shilling", "Entity":"KENYA", 
+    "Minor_Unit":2, "Numeric_Code":"404", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AUD", "Currency":"Australian Dollar", "Entity":"KIRIBATI", "Minor_Unit":2, "Numeric_Code":"036", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"KPW", "Currency":"North Korean Won", "Entity":"KOREA (THE DEMOCRATIC PEOPLE\u2019S REPUBLIC OF)", "Minor_Unit":2, "Numeric_Code":"408", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"KRW", "Currency":"Won", 
+    "Entity":"KOREA (THE REPUBLIC OF)", "Minor_Unit":0, "Numeric_Code":"410", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"KWD", "Currency":"Kuwaiti Dinar", "Entity":"KUWAIT", "Minor_Unit":3, "Numeric_Code":"414", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"KGS", "Currency":"Som", "Entity":"KYRGYZSTAN", "Minor_Unit":2, "Numeric_Code":"417", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"LAK", "Currency":"Lao Kip", 
+    "Entity":"LAO PEOPLE\u2019S DEMOCRATIC REPUBLIC (THE)", "Minor_Unit":2, "Numeric_Code":"418", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"LATVIA", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"LBP", "Currency":"Lebanese Pound", "Entity":"LEBANON", "Minor_Unit":2, "Numeric_Code":"422", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"LSL", "Currency":"Loti", 
+    "Entity":"LESOTHO", "Minor_Unit":2, "Numeric_Code":"426", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZAR", "Currency":"Rand", "Entity":"LESOTHO", "Minor_Unit":2, "Numeric_Code":"710", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"LRD", "Currency":"Liberian Dollar", "Entity":"LIBERIA", "Minor_Unit":2, "Numeric_Code":"430", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"LYD", "Currency":"Libyan Dinar", "Entity":"LIBYA", 
+    "Minor_Unit":3, "Numeric_Code":"434", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CHF", "Currency":"Swiss Franc", "Entity":"LIECHTENSTEIN", "Minor_Unit":2, "Numeric_Code":"756", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"LITHUANIA", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"LUXEMBOURG", "Minor_Unit":2, 
+    "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MOP", "Currency":"Pataca", "Entity":"MACAO", "Minor_Unit":2, "Numeric_Code":"446", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MKD", "Currency":"Denar", "Entity":"MACEDONIA (THE FORMER YUGOSLAV REPUBLIC OF)", "Minor_Unit":2, "Numeric_Code":"807", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MGA", "Currency":"Malagasy Ariary", "Entity":"MADAGASCAR", 
+    "Minor_Unit":2, "Numeric_Code":"969", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MWK", "Currency":"Malawi Kwacha", "Entity":"MALAWI", "Minor_Unit":2, "Numeric_Code":"454", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MYR", "Currency":"Malaysian Ringgit", "Entity":"MALAYSIA", "Minor_Unit":2, "Numeric_Code":"458", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MVR", "Currency":"Rufiyaa", "Entity":"MALDIVES", "Minor_Unit":2, 
+    "Numeric_Code":"462", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XOF", "Currency":"CFA Franc BCEAO", "Entity":"MALI", "Minor_Unit":0, "Numeric_Code":"952", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"MALTA", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"MARSHALL ISLANDS (THE)", "Minor_Unit":2, "Numeric_Code":"840", 
+    "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"MARTINIQUE", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MRO", "Currency":"Ouguiya", "Entity":"MAURITANIA", "Minor_Unit":2, "Numeric_Code":"478", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MUR", "Currency":"Mauritius Rupee", "Entity":"MAURITIUS", "Minor_Unit":2, "Numeric_Code":"480", "Withdrawal_Date":null, 
+    "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"MAYOTTE", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XUA", "Currency":"ADB Unit of Account", "Entity":"MEMBER COUNTRIES OF THE AFRICAN DEVELOPMENT BANK GROUP", "Minor_Unit":null, "Numeric_Code":"965", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MXN", "Currency":"Mexican Peso", "Entity":"MEXICO", "Minor_Unit":2, "Numeric_Code":"484", 
+    "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MXV", "Currency":"Mexican Unidad de Inversion (UDI)", "Entity":"MEXICO", "Minor_Unit":2, "Numeric_Code":"979", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"MICRONESIA (FEDERATED STATES OF)", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MDL", "Currency":"Moldovan Leu", "Entity":"MOLDOVA (THE REPUBLIC OF)", 
+    "Minor_Unit":2, "Numeric_Code":"498", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"MONACO", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MNT", "Currency":"Tugrik", "Entity":"MONGOLIA", "Minor_Unit":2, "Numeric_Code":"496", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"MONTENEGRO", "Minor_Unit":2, "Numeric_Code":"978", 
+    "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XCD", "Currency":"East Caribbean Dollar", "Entity":"MONTSERRAT", "Minor_Unit":2, "Numeric_Code":"951", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MAD", "Currency":"Moroccan Dirham", "Entity":"MOROCCO", "Minor_Unit":2, "Numeric_Code":"504", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MZN", "Currency":"Mozambique Metical", "Entity":"MOZAMBIQUE", "Minor_Unit":2, "Numeric_Code":"943", 
+    "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MMK", "Currency":"Kyat", "Entity":"MYANMAR", "Minor_Unit":2, "Numeric_Code":"104", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NAD", "Currency":"Namibia Dollar", "Entity":"NAMIBIA", "Minor_Unit":2, "Numeric_Code":"516", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZAR", "Currency":"Rand", "Entity":"NAMIBIA", "Minor_Unit":2, "Numeric_Code":"710", "Withdrawal_Date":null, 
+    "Withdrawal_Interval":null}, {"Alphabetic_Code":"AUD", "Currency":"Australian Dollar", "Entity":"NAURU", "Minor_Unit":2, "Numeric_Code":"036", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NPR", "Currency":"Nepalese Rupee", "Entity":"NEPAL", "Minor_Unit":2, "Numeric_Code":"524", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"NETHERLANDS (THE)", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, 
+    "Withdrawal_Interval":null}, {"Alphabetic_Code":"XPF", "Currency":"CFP Franc", "Entity":"NEW CALEDONIA", "Minor_Unit":0, "Numeric_Code":"953", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NZD", "Currency":"New Zealand Dollar", "Entity":"NEW ZEALAND", "Minor_Unit":2, "Numeric_Code":"554", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NIO", "Currency":"Cordoba Oro", "Entity":"NICARAGUA", "Minor_Unit":2, "Numeric_Code":"558", "Withdrawal_Date":null, 
+    "Withdrawal_Interval":null}, {"Alphabetic_Code":"XOF", "Currency":"CFA Franc BCEAO", "Entity":"NIGER (THE)", "Minor_Unit":0, "Numeric_Code":"952", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NGN", "Currency":"Naira", "Entity":"NIGERIA", "Minor_Unit":2, "Numeric_Code":"566", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NZD", "Currency":"New Zealand Dollar", "Entity":"NIUE", "Minor_Unit":2, "Numeric_Code":"554", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"AUD", "Currency":"Australian Dollar", "Entity":"NORFOLK ISLAND", "Minor_Unit":2, "Numeric_Code":"036", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"NORTHERN MARIANA ISLANDS (THE)", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NOK", "Currency":"Norwegian Krone", "Entity":"NORWAY", "Minor_Unit":2, "Numeric_Code":"578", "Withdrawal_Date":null, 
+    "Withdrawal_Interval":null}, {"Alphabetic_Code":"OMR", "Currency":"Rial Omani", "Entity":"OMAN", "Minor_Unit":3, "Numeric_Code":"512", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"PKR", "Currency":"Pakistan Rupee", "Entity":"PAKISTAN", "Minor_Unit":2, "Numeric_Code":"586", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"PALAU", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":null, "Currency":"No universal currency", "Entity":"PALESTINE, STATE OF", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"PAB", "Currency":"Balboa", "Entity":"PANAMA", "Minor_Unit":2, "Numeric_Code":"590", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"PANAMA", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"PGK", "Currency":"Kina", "Entity":"PAPUA NEW GUINEA", "Minor_Unit":2, "Numeric_Code":"598", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"PYG", "Currency":"Guarani", "Entity":"PARAGUAY", "Minor_Unit":0, "Numeric_Code":"600", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"PEN", "Currency":"Sol", "Entity":"PERU", "Minor_Unit":2, "Numeric_Code":"604", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"PHP", 
+    "Currency":"Philippine Piso", "Entity":"PHILIPPINES (THE)", "Minor_Unit":2, "Numeric_Code":"608", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NZD", "Currency":"New Zealand Dollar", "Entity":"PITCAIRN", "Minor_Unit":2, "Numeric_Code":"554", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"PLN", "Currency":"Zloty", "Entity":"POLAND", "Minor_Unit":2, "Numeric_Code":"985", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", 
+    "Currency":"Euro", "Entity":"PORTUGAL", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"PUERTO RICO", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"QAR", "Currency":"Qatari Rial", "Entity":"QATAR", "Minor_Unit":2, "Numeric_Code":"634", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", 
+    "Entity":"R\u00c9UNION", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"RON", "Currency":"Romanian Leu", "Entity":"ROMANIA", "Minor_Unit":2, "Numeric_Code":"946", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUB", "Currency":"Russian Ruble", "Entity":"RUSSIAN FEDERATION (THE)", "Minor_Unit":2, "Numeric_Code":"643", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"RWF", "Currency":"Rwanda Franc", 
+    "Entity":"RWANDA", "Minor_Unit":0, "Numeric_Code":"646", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"SAINT BARTH\u00c9LEMY", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SHP", "Currency":"Saint Helena Pound", "Entity":"SAINT HELENA, ASCENSION AND TRISTAN DA CUNHA", "Minor_Unit":2, "Numeric_Code":"654", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XCD", 
+    "Currency":"East Caribbean Dollar", "Entity":"SAINT KITTS AND NEVIS", "Minor_Unit":2, "Numeric_Code":"951", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XCD", "Currency":"East Caribbean Dollar", "Entity":"SAINT LUCIA", "Minor_Unit":2, "Numeric_Code":"951", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"SAINT MARTIN (FRENCH PART)", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"SAINT PIERRE AND MIQUELON", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XCD", "Currency":"East Caribbean Dollar", "Entity":"SAINT VINCENT AND THE GRENADINES", "Minor_Unit":2, "Numeric_Code":"951", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"WST", "Currency":"Tala", "Entity":"SAMOA", "Minor_Unit":2, "Numeric_Code":"882", "Withdrawal_Date":null, 
+    "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"SAN MARINO", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"STD", "Currency":"Dobra", "Entity":"SAO TOME AND PRINCIPE", "Minor_Unit":2, "Numeric_Code":"678", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SAR", "Currency":"Saudi Riyal", "Entity":"SAUDI ARABIA", "Minor_Unit":2, "Numeric_Code":"682", "Withdrawal_Date":null, 
+    "Withdrawal_Interval":null}, {"Alphabetic_Code":"XOF", "Currency":"CFA Franc BCEAO", "Entity":"SENEGAL", "Minor_Unit":0, "Numeric_Code":"952", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"RSD", "Currency":"Serbian Dinar", "Entity":"SERBIA", "Minor_Unit":2, "Numeric_Code":"941", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SCR", "Currency":"Seychelles Rupee", "Entity":"SEYCHELLES", "Minor_Unit":2, "Numeric_Code":"690", "Withdrawal_Date":null, 
+    "Withdrawal_Interval":null}, {"Alphabetic_Code":"SLL", "Currency":"Leone", "Entity":"SIERRA LEONE", "Minor_Unit":2, "Numeric_Code":"694", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SGD", "Currency":"Singapore Dollar", "Entity":"SINGAPORE", "Minor_Unit":2, "Numeric_Code":"702", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ANG", "Currency":"Netherlands Antillean Guilder", "Entity":"SINT MAARTEN (DUTCH PART)", "Minor_Unit":2, "Numeric_Code":"532", 
+    "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XSU", "Currency":"Sucre", "Entity":'SISTEMA UNITARIO DE COMPENSACION REGIONAL DE PAGOS "SUCRE"', "Minor_Unit":null, "Numeric_Code":"994", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"SLOVAKIA", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"SLOVENIA", "Minor_Unit":2, 
+    "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SBD", "Currency":"Solomon Islands Dollar", "Entity":"SOLOMON ISLANDS", "Minor_Unit":2, "Numeric_Code":"090", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SOS", "Currency":"Somali Shilling", "Entity":"SOMALIA", "Minor_Unit":2, "Numeric_Code":"706", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZAR", "Currency":"Rand", "Entity":"SOUTH AFRICA", "Minor_Unit":2, 
+    "Numeric_Code":"710", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":null, "Currency":"No universal currency", "Entity":"SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SSP", "Currency":"South Sudanese Pound", "Entity":"SOUTH SUDAN", "Minor_Unit":2, "Numeric_Code":"728", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", 
+    "Entity":"SPAIN", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"LKR", "Currency":"Sri Lanka Rupee", "Entity":"SRI LANKA", "Minor_Unit":2, "Numeric_Code":"144", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SDG", "Currency":"Sudanese Pound", "Entity":"SUDAN (THE)", "Minor_Unit":2, "Numeric_Code":"938", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SRD", "Currency":"Surinam Dollar", 
+    "Entity":"SURINAME", "Minor_Unit":2, "Numeric_Code":"968", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NOK", "Currency":"Norwegian Krone", "Entity":"SVALBARD AND JAN MAYEN", "Minor_Unit":2, "Numeric_Code":"578", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SZL", "Currency":"Lilangeni", "Entity":"SWAZILAND", "Minor_Unit":2, "Numeric_Code":"748", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SEK", "Currency":"Swedish Krona", 
+    "Entity":"SWEDEN", "Minor_Unit":2, "Numeric_Code":"752", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CHF", "Currency":"Swiss Franc", "Entity":"SWITZERLAND", "Minor_Unit":2, "Numeric_Code":"756", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CHE", "Currency":"WIR Euro", "Entity":"SWITZERLAND", "Minor_Unit":2, "Numeric_Code":"947", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CHW", "Currency":"WIR Franc", "Entity":"SWITZERLAND", 
+    "Minor_Unit":2, "Numeric_Code":"948", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SYP", "Currency":"Syrian Pound", "Entity":"SYRIAN ARAB REPUBLIC", "Minor_Unit":2, "Numeric_Code":"760", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"TWD", "Currency":"New Taiwan Dollar", "Entity":"TAIWAN (PROVINCE OF CHINA)", "Minor_Unit":2, "Numeric_Code":"901", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"TJS", "Currency":"Somoni", 
+    "Entity":"TAJIKISTAN", "Minor_Unit":2, "Numeric_Code":"972", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"TZS", "Currency":"Tanzanian Shilling", "Entity":"TANZANIA, UNITED REPUBLIC OF", "Minor_Unit":2, "Numeric_Code":"834", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"THB", "Currency":"Baht", "Entity":"THAILAND", "Minor_Unit":2, "Numeric_Code":"764", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", 
+    "Entity":"TIMOR-LESTE", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XOF", "Currency":"CFA Franc BCEAO", "Entity":"TOGO", "Minor_Unit":0, "Numeric_Code":"952", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NZD", "Currency":"New Zealand Dollar", "Entity":"TOKELAU", "Minor_Unit":2, "Numeric_Code":"554", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"TOP", "Currency":"Pa\u2019anga", 
+    "Entity":"TONGA", "Minor_Unit":2, "Numeric_Code":"776", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"TTD", "Currency":"Trinidad and Tobago Dollar", "Entity":"TRINIDAD AND TOBAGO", "Minor_Unit":2, "Numeric_Code":"780", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"TND", "Currency":"Tunisian Dinar", "Entity":"TUNISIA", "Minor_Unit":3, "Numeric_Code":"788", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"TRY", "Currency":"Turkish Lira", 
+    "Entity":"TURKEY", "Minor_Unit":2, "Numeric_Code":"949", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"TMT", "Currency":"Turkmenistan New Manat", "Entity":"TURKMENISTAN", "Minor_Unit":2, "Numeric_Code":"934", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"TURKS AND CAICOS ISLANDS (THE)", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AUD", 
+    "Currency":"Australian Dollar", "Entity":"TUVALU", "Minor_Unit":2, "Numeric_Code":"036", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"UGX", "Currency":"Uganda Shilling", "Entity":"UGANDA", "Minor_Unit":0, "Numeric_Code":"800", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"UAH", "Currency":"Hryvnia", "Entity":"UKRAINE", "Minor_Unit":2, "Numeric_Code":"980", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AED", "Currency":"UAE Dirham", 
+    "Entity":"UNITED ARAB EMIRATES (THE)", "Minor_Unit":2, "Numeric_Code":"784", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GBP", "Currency":"Pound Sterling", "Entity":"UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND (THE)", "Minor_Unit":2, "Numeric_Code":"826", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"UNITED STATES MINOR OUTLYING ISLANDS (THE)", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, 
+    "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"UNITED STATES OF AMERICA (THE)", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USN", "Currency":"US Dollar (Next day)", "Entity":"UNITED STATES OF AMERICA (THE)", "Minor_Unit":2, "Numeric_Code":"997", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"UYU", "Currency":"Peso Uruguayo", "Entity":"URUGUAY", "Minor_Unit":2, 
+    "Numeric_Code":"858", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"UYI", "Currency":"Uruguay Peso en Unidades Indexadas (URUIURUI)", "Entity":"URUGUAY", "Minor_Unit":0, "Numeric_Code":"940", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"UZS", "Currency":"Uzbekistan Sum", "Entity":"UZBEKISTAN", "Minor_Unit":2, "Numeric_Code":"860", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"VUV", "Currency":"Vatu", "Entity":"VANUATU", 
+    "Minor_Unit":0, "Numeric_Code":"548", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"VEF", "Currency":"Bol\u00edvar", "Entity":"VENEZUELA (BOLIVARIAN REPUBLIC OF)", "Minor_Unit":2, "Numeric_Code":"937", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"VND", "Currency":"Dong", "Entity":"VIET NAM", "Minor_Unit":0, "Numeric_Code":"704", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"VIRGIN ISLANDS (BRITISH)", 
+    "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"VIRGIN ISLANDS (U.S.)", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XPF", "Currency":"CFP Franc", "Entity":"WALLIS AND FUTUNA", "Minor_Unit":0, "Numeric_Code":"953", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MAD", "Currency":"Moroccan Dirham", "Entity":"WESTERN SAHARA", 
+    "Minor_Unit":2, "Numeric_Code":"504", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"YER", "Currency":"Yemeni Rial", "Entity":"YEMEN", "Minor_Unit":2, "Numeric_Code":"886", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZMW", "Currency":"Zambian Kwacha", "Entity":"ZAMBIA", "Minor_Unit":2, "Numeric_Code":"967", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZWL", "Currency":"Zimbabwe Dollar", "Entity":"ZIMBABWE", "Minor_Unit":2, 
+    "Numeric_Code":"932", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XBA", "Currency":"Bond Markets Unit European Composite Unit (EURCO)", "Entity":"ZZ01_Bond Markets Unit European_EURCO", "Minor_Unit":null, "Numeric_Code":"955", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XBB", "Currency":"Bond Markets Unit European Monetary Unit (E.M.U.-6)", "Entity":"ZZ02_Bond Markets Unit European_EMU-6", "Minor_Unit":null, "Numeric_Code":"956", "Withdrawal_Date":null, 
+    "Withdrawal_Interval":null}, {"Alphabetic_Code":"XBC", "Currency":"Bond Markets Unit European Unit of Account 9 (E.U.A.-9)", "Entity":"ZZ03_Bond Markets Unit European_EUA-9", "Minor_Unit":null, "Numeric_Code":"957", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XBD", "Currency":"Bond Markets Unit European Unit of Account 17 (E.U.A.-17)", "Entity":"ZZ04_Bond Markets Unit European_EUA-17", "Minor_Unit":null, "Numeric_Code":"958", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"XTS", "Currency":"Codes specifically reserved for testing purposes", "Entity":"ZZ06_Testing_Code", "Minor_Unit":null, "Numeric_Code":"963", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XXX", "Currency":"The codes assigned for transactions where no currency is involved", "Entity":"ZZ07_No_Currency", "Minor_Unit":null, "Numeric_Code":"999", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XAU", "Currency":"Gold", "Entity":"ZZ08_Gold", 
+    "Minor_Unit":null, "Numeric_Code":"959", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XPD", "Currency":"Palladium", "Entity":"ZZ09_Palladium", "Minor_Unit":null, "Numeric_Code":"964", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XPT", "Currency":"Platinum", "Entity":"ZZ10_Platinum", "Minor_Unit":null, "Numeric_Code":"962", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XAG", "Currency":"Silver", "Entity":"ZZ11_Silver", 
+    "Minor_Unit":null, "Numeric_Code":"961", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AFA", "Currency":"Afghani", "Entity":"AFGHANISTAN", "Minor_Unit":null, "Numeric_Code":"4", "Withdrawal_Date":"2003-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FIM", "Currency":"Markka", "Entity":"\u00c3\u2026LAND ISLANDS", "Minor_Unit":null, "Numeric_Code":"246", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ALK", "Currency":"Old Lek", 
+    "Entity":"ALBANIA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1989-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ADP", "Currency":"Andorran Peseta", "Entity":"ANDORRA", "Minor_Unit":null, "Numeric_Code":"20", "Withdrawal_Date":"2003-07-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ESP", "Currency":"Spanish Peseta", "Entity":"ANDORRA", "Minor_Unit":null, "Numeric_Code":"724", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", 
+    "Currency":"French Franc", "Entity":"ANDORRA", "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"AOK", "Currency":"Kwanza", "Entity":"ANGOLA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1991-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"AON", "Currency":"New Kwanza", "Entity":"ANGOLA", "Minor_Unit":null, "Numeric_Code":"24", "Withdrawal_Date":"2000-02-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"AOR", 
+    "Currency":"Kwanza Reajustado", "Entity":"ANGOLA", "Minor_Unit":null, "Numeric_Code":"982", "Withdrawal_Date":"2000-02-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ARA", "Currency":"Austral", "Entity":"ARGENTINA", "Minor_Unit":null, "Numeric_Code":"32", "Withdrawal_Date":"1992-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ARP", "Currency":"Peso Argentino", "Entity":"ARGENTINA", "Minor_Unit":null, "Numeric_Code":"32", "Withdrawal_Date":"1985-07-06", "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"ARY", "Currency":"Peso", "Entity":"ARGENTINA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1989 to 1990"}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"ARMENIA", "Minor_Unit":null, "Numeric_Code":"810", "Withdrawal_Date":"1994-08-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ATS", "Currency":"Schilling", "Entity":"AUSTRIA", "Minor_Unit":null, "Numeric_Code":"40", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"AYM", "Currency":"Azerbaijan Manat", "Entity":"AZERBAIJAN", "Minor_Unit":null, "Numeric_Code":"945", "Withdrawal_Date":"2005-10-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"AZM", "Currency":"Azerbaijanian Manat", "Entity":"AZERBAIJAN", "Minor_Unit":null, "Numeric_Code":"31", "Withdrawal_Date":"2005-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"AZERBAIJAN", "Minor_Unit":null, "Numeric_Code":"810", "Withdrawal_Date":"1994-08-06", 
+    "Withdrawal_Interval":null}, {"Alphabetic_Code":"BYR", "Currency":"Belarusian Ruble", "Entity":"BELARUS", "Minor_Unit":null, "Numeric_Code":"974", "Withdrawal_Date":"2017-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BYB", "Currency":"Belarusian Ruble", "Entity":"BELARUS", "Minor_Unit":null, "Numeric_Code":"112", "Withdrawal_Date":"2001-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"BELARUS", "Minor_Unit":null, "Numeric_Code":"810", 
+    "Withdrawal_Date":"1994-06-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BEC", "Currency":"Convertible Franc", "Entity":"BELGIUM", "Minor_Unit":null, "Numeric_Code":"993", "Withdrawal_Date":"1990-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BEF", "Currency":"Belgian Franc", "Entity":"BELGIUM", "Minor_Unit":null, "Numeric_Code":"56", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BEL", "Currency":"Financial Franc", "Entity":"BELGIUM", "Minor_Unit":null, 
+    "Numeric_Code":"992", "Withdrawal_Date":"1990-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BOP", "Currency":"Peso boliviano", "Entity":"BOLIVIA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1987-02-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BAD", "Currency":"Dinar", "Entity":"BOSNIA AND HERZEGOVINA", "Minor_Unit":null, "Numeric_Code":"70", "Withdrawal_Date":"1998-07-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BRB", "Currency":"Cruzeiro", "Entity":"BRAZIL", 
+    "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1986-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BRC", "Currency":"Cruzado", "Entity":"BRAZIL", "Minor_Unit":null, "Numeric_Code":"76", "Withdrawal_Date":"1989-02-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BRE", "Currency":"Cruzeiro", "Entity":"BRAZIL", "Minor_Unit":null, "Numeric_Code":"76", "Withdrawal_Date":"1993-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BRN", "Currency":"New Cruzado", "Entity":"BRAZIL", 
+    "Minor_Unit":null, "Numeric_Code":"76", "Withdrawal_Date":"1990-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BRR", "Currency":"Cruzeiro Real", "Entity":"BRAZIL", "Minor_Unit":null, "Numeric_Code":"987", "Withdrawal_Date":"1994-07-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BGJ", "Currency":"Lev A/52", "Entity":"BULGARIA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1989 to 1990"}, {"Alphabetic_Code":"BGK", "Currency":"Lev A/62", 
+    "Entity":"BULGARIA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1989 to 1990"}, {"Alphabetic_Code":"BGL", "Currency":"Lev", "Entity":"BULGARIA", "Minor_Unit":null, "Numeric_Code":"100", "Withdrawal_Date":"2003-11-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BUK", "Currency":"Kyat", "Entity":"BURMA\u00c2", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1990-02-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"HRD", "Currency":"Croatian Dinar", 
+    "Entity":"CROATIA", "Minor_Unit":null, "Numeric_Code":"191", "Withdrawal_Date":"1995-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"HRK", "Currency":"Croatian Kuna", "Entity":"CROATIA", "Minor_Unit":null, "Numeric_Code":"191", "Withdrawal_Date":"2015-06-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"CYP", "Currency":"Cyprus Pound", "Entity":"CYPRUS", "Minor_Unit":null, "Numeric_Code":"196", "Withdrawal_Date":"2008-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"CSJ", 
+    "Currency":"Krona A/53", "Entity":"CZECHOSLOVAKIA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1989 to 1990"}, {"Alphabetic_Code":"CSK", "Currency":"Koruna", "Entity":"CZECHOSLOVAKIA", "Minor_Unit":null, "Numeric_Code":"200", "Withdrawal_Date":"1993-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ECS", "Currency":"Sucre", "Entity":"ECUADOR", "Minor_Unit":null, "Numeric_Code":"218", "Withdrawal_Date":"2000-09-06", "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"ECV", "Currency":"Unidad de Valor Constante (UVC)", "Entity":"ECUADOR", "Minor_Unit":null, "Numeric_Code":"983", "Withdrawal_Date":"2000-09-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"GQE", "Currency":"Ekwele", "Entity":"EQUATORIAL GUINEA", "Minor_Unit":null, "Numeric_Code":"226", "Withdrawal_Date":"1986-06-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"EEK", "Currency":"Kroon", "Entity":"ESTONIA", "Minor_Unit":null, "Numeric_Code":"233", "Withdrawal_Date":"2011-01-06", 
+    "Withdrawal_Interval":null}, {"Alphabetic_Code":"XEU", "Currency":"European Currency Unit (E.C.U)", "Entity":"EUROPEAN MONETARY CO-OPERATION FUND (EMCF)", "Minor_Unit":null, "Numeric_Code":"954", "Withdrawal_Date":"1999-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FIM", "Currency":"Markka", "Entity":"FINLAND", "Minor_Unit":null, "Numeric_Code":"246", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", "Currency":"French Franc", "Entity":"FRANCE", 
+    "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", "Currency":"French Franc", "Entity":"FRENCH  GUIANA", "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", "Currency":"French Franc", "Entity":"FRENCH SOUTHERN TERRITORIES", "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"GEK", 
+    "Currency":"Georgian Coupon", "Entity":"GEORGIA", "Minor_Unit":null, "Numeric_Code":"268", "Withdrawal_Date":"1995-10-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"GEORGIA", "Minor_Unit":null, "Numeric_Code":"810", "Withdrawal_Date":"1994-04-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"DDM", "Currency":"Mark der DDR", "Entity":"GERMAN DEMOCRATIC REPUBLIC", "Minor_Unit":null, "Numeric_Code":"278", "Withdrawal_Date":null, "Withdrawal_Interval":"1990-07 to 1990-09"}, 
+    {"Alphabetic_Code":"DEM", "Currency":"Deutsche Mark", "Entity":"GERMANY", "Minor_Unit":null, "Numeric_Code":"276", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"GHC", "Currency":"Cedi", "Entity":"GHANA", "Minor_Unit":null, "Numeric_Code":"288", "Withdrawal_Date":"2008-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"GHP", "Currency":"Ghana Cedi", "Entity":"GHANA", "Minor_Unit":null, "Numeric_Code":"939", "Withdrawal_Date":"2007-06-06", "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"GRD", "Currency":"Drachma", "Entity":"GREECE", "Minor_Unit":null, "Numeric_Code":"300", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", "Currency":"French Franc", "Entity":"GUADELOUPE", "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"GNE", "Currency":"Syli", "Entity":"GUINEA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1989-12-06", "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"GNS", "Currency":"Syli", "Entity":"GUINEA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1986-02-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"GWE", "Currency":"Guinea Escudo", "Entity":"GUINEA-BISSAU", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1978 to 1981"}, {"Alphabetic_Code":"GWP", "Currency":"Guinea-Bissau Peso", "Entity":"GUINEA-BISSAU", "Minor_Unit":null, "Numeric_Code":"624", "Withdrawal_Date":"1997-05-06", 
+    "Withdrawal_Interval":null}, {"Alphabetic_Code":"ITL", "Currency":"Italian Lira", "Entity":"HOLY SEE (VATICAN CITY STATE)", "Minor_Unit":null, "Numeric_Code":"380", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ISJ", "Currency":"Old Krona", "Entity":"ICELAND", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1989 to 1990"}, {"Alphabetic_Code":"IEP", "Currency":"Irish Pound", "Entity":"IRELAND", "Minor_Unit":null, "Numeric_Code":"372", 
+    "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ILP", "Currency":"Pound", "Entity":"ISRAEL", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1978 to 1981"}, {"Alphabetic_Code":"ILR", "Currency":"Old Shekel", "Entity":"ISRAEL", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1989 to 1990"}, {"Alphabetic_Code":"ITL", "Currency":"Italian Lira", "Entity":"ITALY", "Minor_Unit":null, "Numeric_Code":"380", 
+    "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"KAZAKHSTAN", "Minor_Unit":null, "Numeric_Code":"810", "Withdrawal_Date":"1994-05-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"KYRGYZSTAN", "Minor_Unit":null, "Numeric_Code":"810", "Withdrawal_Date":"1993-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"LAJ", "Currency":"Pathet Lao Kip", "Entity":"LAO", "Minor_Unit":null, 
+    "Numeric_Code":null, "Withdrawal_Date":"1989-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"LVL", "Currency":"Latvian Lats", "Entity":"LATVIA", "Minor_Unit":null, "Numeric_Code":"428", "Withdrawal_Date":"2014-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"LVR", "Currency":"Latvian Ruble", "Entity":"LATVIA", "Minor_Unit":null, "Numeric_Code":"428", "Withdrawal_Date":"1994-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"LSM", "Currency":"Loti", "Entity":"LESOTHO", "Minor_Unit":null, 
+    "Numeric_Code":null, "Withdrawal_Date":"1985-05-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZAL", "Currency":"Financial Rand", "Entity":"LESOTHO", "Minor_Unit":null, "Numeric_Code":"991", "Withdrawal_Date":"1995-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"LTL", "Currency":"Lithuanian Litas", "Entity":"LITHUANIA", "Minor_Unit":null, "Numeric_Code":"440", "Withdrawal_Date":"2014-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"LTT", "Currency":"Talonas", "Entity":"LITHUANIA", 
+    "Minor_Unit":null, "Numeric_Code":"440", "Withdrawal_Date":"1993-07-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"LUC", "Currency":"Luxembourg Convertible Franc", "Entity":"LUXEMBOURG", "Minor_Unit":null, "Numeric_Code":"989", "Withdrawal_Date":"1990-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"LUF", "Currency":"Luxembourg Franc", "Entity":"LUXEMBOURG", "Minor_Unit":null, "Numeric_Code":"442", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"LUL", 
+    "Currency":"Luxembourg Financial Franc", "Entity":"LUXEMBOURG", "Minor_Unit":null, "Numeric_Code":"988", "Withdrawal_Date":"1990-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"MGF", "Currency":"Malagasy Franc", "Entity":"MADAGASCAR", "Minor_Unit":null, "Numeric_Code":"450", "Withdrawal_Date":"2004-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"MWK", "Currency":"Kwacha", "Entity":"MALAWI", "Minor_Unit":null, "Numeric_Code":"454", "Withdrawal_Date":"2016-02-06", "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"MVQ", "Currency":"Maldive Rupee", "Entity":"MALDIVES", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1989-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"MLF", "Currency":"Mali Franc", "Entity":"MALI", "Minor_Unit":null, "Numeric_Code":"466", "Withdrawal_Date":"1984-11-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"MTL", "Currency":"Maltese Lira", "Entity":"MALTA", "Minor_Unit":null, "Numeric_Code":"470", "Withdrawal_Date":"2008-01-06", "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"MTP", "Currency":"Maltese Pound", "Entity":"MALTA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1983-06-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", "Currency":"French Franc", "Entity":"MARTINIQUE", "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", "Currency":"French Franc", "Entity":"MAYOTTE", "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"2002-03-06", 
+    "Withdrawal_Interval":null}, {"Alphabetic_Code":"MXP", "Currency":"Mexican Peso", "Entity":"MEXICO", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1993-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"MOLDOVA, REPUBLIC OF", "Minor_Unit":null, "Numeric_Code":"810", "Withdrawal_Date":"1993-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", "Currency":"French Franc", "Entity":"MONACO", "Minor_Unit":null, "Numeric_Code":"250", 
+    "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"MZE", "Currency":"Mozambique Escudo", "Entity":"MOZAMBIQUE", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1978 to 1981"}, {"Alphabetic_Code":"MZM", "Currency":"Mozambique Metical", "Entity":"MOZAMBIQUE", "Minor_Unit":null, "Numeric_Code":"508", "Withdrawal_Date":"2006-06-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"NLG", "Currency":"Netherlands Guilder", "Entity":"NETHERLANDS", 
+    "Minor_Unit":null, "Numeric_Code":"528", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ANG", "Currency":"Netherlands Antillean Guilder", "Entity":"NETHERLANDS ANTILLES", "Minor_Unit":null, "Numeric_Code":"532", "Withdrawal_Date":"2010-10-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"NIC", "Currency":"Cordoba", "Entity":"NICARAGUA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1990-10-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"PEN", 
+    "Currency":"Nuevo Sol", "Entity":"PERU", "Minor_Unit":null, "Numeric_Code":"604", "Withdrawal_Date":"2015-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"PEH", "Currency":"Sol", "Entity":"PERU", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1989 to 1990"}, {"Alphabetic_Code":"PEI", "Currency":"Inti", "Entity":"PERU", "Minor_Unit":null, "Numeric_Code":"604", "Withdrawal_Date":"1991-07-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"PES", 
+    "Currency":"Sol", "Entity":"PERU", "Minor_Unit":null, "Numeric_Code":"604", "Withdrawal_Date":"1986-02-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"PLZ", "Currency":"Zloty", "Entity":"POLAND", "Minor_Unit":null, "Numeric_Code":"616", "Withdrawal_Date":"1997-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"PTE", "Currency":"Portuguese Escudo", "Entity":"PORTUGAL", "Minor_Unit":null, "Numeric_Code":"620", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", 
+    "Currency":"French Franc", "Entity":"R\u00c3\u2030UNION", "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ROK", "Currency":"Leu A/52", "Entity":"ROMANIA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1989 to 1990"}, {"Alphabetic_Code":"RON", "Currency":"New Romanian Leu", "Entity":"ROMANIA", "Minor_Unit":null, "Numeric_Code":"946", "Withdrawal_Date":"2015-06-06", "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"ROL", "Currency":"Old Leu", "Entity":"ROMANIA", "Minor_Unit":null, "Numeric_Code":"642", "Withdrawal_Date":"2005-06-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"RUSSIAN FEDERATION", "Minor_Unit":null, "Numeric_Code":"810", "Withdrawal_Date":"2004-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", "Currency":"French Franc", "Entity":"SAINT MARTIN", "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"1999-01-06", 
+    "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", "Currency":"French Franc", "Entity":"SAINT PIERRE AND MIQUELON", "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", "Currency":"French Franc", "Entity":"SAINT-BARTH\u00c3\u2030LEMY", "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"1999-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ITL", "Currency":"Italian Lira", "Entity":"SAN MARINO", "Minor_Unit":null, 
+    "Numeric_Code":"380", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"CSD", "Currency":"Serbian Dinar", "Entity":"SERBIA AND MONTENEGRO", "Minor_Unit":null, "Numeric_Code":"891", "Withdrawal_Date":"2006-10-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"SERBIA AND MONTENEGRO", "Minor_Unit":null, "Numeric_Code":"978", "Withdrawal_Date":"2006-10-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"SKK", "Currency":"Slovak Koruna", 
+    "Entity":"SLOVAKIA", "Minor_Unit":null, "Numeric_Code":"703", "Withdrawal_Date":"2009-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"SIT", "Currency":"Tolar", "Entity":"SLOVENIA", "Minor_Unit":null, "Numeric_Code":"705", "Withdrawal_Date":"2007-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZAL", "Currency":"Financial Rand", "Entity":"SOUTH AFRICA", "Minor_Unit":null, "Numeric_Code":"991", "Withdrawal_Date":"1995-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"SDG", 
+    "Currency":"Sudanese Pound", "Entity":"SOUTH SUDAN", "Minor_Unit":null, "Numeric_Code":"938", "Withdrawal_Date":"2012-09-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RHD", "Currency":"Rhodesian Dollar", "Entity":"SOUTHERN RHODESIA\u00c2", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1978 to 1981"}, {"Alphabetic_Code":"ESA", "Currency":"Spanish Peseta", "Entity":"SPAIN", "Minor_Unit":null, "Numeric_Code":"996", "Withdrawal_Date":null, "Withdrawal_Interval":"1978 to 1981"}, 
+    {"Alphabetic_Code":"ESB", "Currency":'"A" Account (convertible Peseta Account)', "Entity":"SPAIN", "Minor_Unit":null, "Numeric_Code":"995", "Withdrawal_Date":"1994-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ESP", "Currency":"Spanish Peseta", "Entity":"SPAIN", "Minor_Unit":null, "Numeric_Code":"724", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"SDD", "Currency":"Sudanese Dinar", "Entity":"SUDAN", "Minor_Unit":null, "Numeric_Code":"736", "Withdrawal_Date":"2007-07-06", 
+    "Withdrawal_Interval":null}, {"Alphabetic_Code":"SDP", "Currency":"Sudanese Pound", "Entity":"SUDAN", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1998-06-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"SRG", "Currency":"Surinam Guilder", "Entity":"SURINAME", "Minor_Unit":null, "Numeric_Code":"740", "Withdrawal_Date":"2003-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"CHC", "Currency":"WIR Franc (for electronic)", "Entity":"SWITZERLAND", "Minor_Unit":null, "Numeric_Code":"948", 
+    "Withdrawal_Date":"2004-11-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"TAJIKISTAN", "Minor_Unit":null, "Numeric_Code":"810", "Withdrawal_Date":"1995-05-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"TJR", "Currency":"Tajik Ruble", "Entity":"TAJIKISTAN", "Minor_Unit":null, "Numeric_Code":"762", "Withdrawal_Date":"2001-04-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"IDR", "Currency":"Rupiah", "Entity":"TIMOR-LESTE", "Minor_Unit":null, 
+    "Numeric_Code":"360", "Withdrawal_Date":"2002-07-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"TPE", "Currency":"Timor Escudo", "Entity":"TIMOR-LESTE", "Minor_Unit":null, "Numeric_Code":"626", "Withdrawal_Date":"2002-11-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"TRL", "Currency":"Old Turkish Lira", "Entity":"TURKEY", "Minor_Unit":null, "Numeric_Code":"792", "Withdrawal_Date":"2005-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"TRY", "Currency":"New Turkish Lira", 
+    "Entity":"TURKEY", "Minor_Unit":null, "Numeric_Code":"949", "Withdrawal_Date":"2009-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"TURKMENISTAN", "Minor_Unit":null, "Numeric_Code":"810", "Withdrawal_Date":"1993-10-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"TMM", "Currency":"Turkmenistan Manat", "Entity":"TURKMENISTAN", "Minor_Unit":null, "Numeric_Code":"795", "Withdrawal_Date":"2009-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"UGS", 
+    "Currency":"Uganda Shilling", "Entity":"UGANDA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1987-05-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"UGW", "Currency":"Old Shilling", "Entity":"UGANDA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1989 to 1990"}, {"Alphabetic_Code":"UAK", "Currency":"Karbovanet", "Entity":"UKRAINE", "Minor_Unit":null, "Numeric_Code":"804", "Withdrawal_Date":"1996-09-06", "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"SUR", "Currency":"Rouble", "Entity":"UNION OF SOVIET SOCIALIST REPUBLICS", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1990-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"USS", "Currency":"US Dollar (Same day)", "Entity":"UNITED STATES", "Minor_Unit":null, "Numeric_Code":"998", "Withdrawal_Date":"2014-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"UYN", "Currency":"Old Uruguay Peso", "Entity":"URUGUAY", "Minor_Unit":null, "Numeric_Code":null, 
+    "Withdrawal_Date":"1989-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"UYP", "Currency":"Uruguayan Peso", "Entity":"URUGUAY", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1993-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"UZBEKISTAN", "Minor_Unit":null, "Numeric_Code":"810", "Withdrawal_Date":"1994-07-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"VEB", "Currency":"Bolivar", "Entity":"VENEZUELA", "Minor_Unit":null, 
+    "Numeric_Code":"862", "Withdrawal_Date":"2008-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"VEF", "Currency":"Bolivar Fuerte", "Entity":"VENEZUELA", "Minor_Unit":null, "Numeric_Code":"937", "Withdrawal_Date":"2011-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"VEF", "Currency":"Bolivar", "Entity":"VENEZUELA (BOLIVARIAN REPUBLIC OF)", "Minor_Unit":null, "Numeric_Code":"937", "Withdrawal_Date":"2016-02-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"VNC", "Currency":"Old Dong", 
+    "Entity":"VIETNAM", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1989 to 1990"}, {"Alphabetic_Code":"YDD", "Currency":"Yemeni Dinar", "Entity":"YEMEN, DEMOCRATIC", "Minor_Unit":null, "Numeric_Code":"720", "Withdrawal_Date":"1991-09-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"YUD", "Currency":"New Yugoslavian Dinar", "Entity":"YUGOSLAVIA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1990-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"YUM", 
+    "Currency":"New Dinar", "Entity":"YUGOSLAVIA", "Minor_Unit":null, "Numeric_Code":"891", "Withdrawal_Date":"2003-07-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"YUN", "Currency":"Yugoslavian Dinar", "Entity":"YUGOSLAVIA", "Minor_Unit":null, "Numeric_Code":"890", "Withdrawal_Date":"1995-11-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZRN", "Currency":"New Zaire", "Entity":"ZAIRE", "Minor_Unit":null, "Numeric_Code":"180", "Withdrawal_Date":"1999-06-06", "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"ZRZ", "Currency":"Zaire", "Entity":"ZAIRE", "Minor_Unit":null, "Numeric_Code":"180", "Withdrawal_Date":"1994-02-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZMK", "Currency":"Zambian Kwacha", "Entity":"ZAMBIA", "Minor_Unit":null, "Numeric_Code":"894", "Withdrawal_Date":"2012-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZWC", "Currency":"Rhodesian Dollar", "Entity":"ZIMBABWE", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1989-12-06", "Withdrawal_Interval":null}, 
+    {"Alphabetic_Code":"ZWD", "Currency":"Zimbabwe Dollar (old)", "Entity":"ZIMBABWE", "Minor_Unit":null, "Numeric_Code":"716", "Withdrawal_Date":"2006-08-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZWD", "Currency":"Zimbabwe Dollar", "Entity":"ZIMBABWE", "Minor_Unit":null, "Numeric_Code":"716", "Withdrawal_Date":"2008-08-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZWN", "Currency":"Zimbabwe Dollar (new)", "Entity":"ZIMBABWE", "Minor_Unit":null, "Numeric_Code":"942", "Withdrawal_Date":"2006-09-06", 
+    "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZWR", "Currency":"Zimbabwe Dollar", "Entity":"ZIMBABWE", "Minor_Unit":null, "Numeric_Code":"935", "Withdrawal_Date":"2009-06-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"XFO", "Currency":"Gold-Franc", "Entity":"ZZ01_Gold-Franc", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"2006-10-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"XRE", "Currency":"RINET Funds Code", "Entity":"ZZ02_RINET Funds Code", "Minor_Unit":null, 
+    "Numeric_Code":null, "Withdrawal_Date":"1999-11-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"XFU", "Currency":"UIC-Franc", "Entity":"ZZ05_UIC-Franc", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"2013-11-06", "Withdrawal_Interval":null}];
+    this.name = "CurrencyValidator";
+  };
+  CurrencyValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  CurrencyValidator.prototype.constructor = CurrencyValidator;
+  Object.defineProperty(CurrencyValidator.prototype, "alias", {get:function() {
+    return "currency";
+  }});
+  Object.assign(CurrencyValidator.prototype, {__validate:function() {
+    for (var i = 0; i < this.__currencies.length; i++) {
+      if (this.__currencies[i].Alphabetic_Code === this.data) {
+        return;
+      }
+    }
+    this.__setErrorMessage(this.message, this.__messageParameters());
+    return;
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {CurrencyValidator:CurrencyValidator};
+}());
+abv.registry(abv.CurrencyValidator);
+Object.assign(abv, function() {
+  var LuhnValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.message = this.__options.message || "Invalid card number.";
+    this.name = "LuhnValidator";
+  };
+  LuhnValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  LuhnValidator.prototype.constructor = LuhnValidator;
+  Object.defineProperty(LuhnValidator.prototype, "alias", {get:function() {
+    return "luhn";
+  }});
+  Object.assign(LuhnValidator.prototype, {__validate:function() {
+    if (false === abv.isType("digit", this.data)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    var checkSum = 0;
+    var length = this.data.length;
+    for (var i = length - 1; i >= 0; i -= 2) {
+      checkSum += this.data[i] * 1;
+    }
+    for (var i = length - 2; i >= 0; i -= 2) {
+      checkSum += abv.array_sum(abv.str_split(this.data[i] * 2));
+    }
+    if (0 === checkSum || 0 !== checkSum % 10) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {LuhnValidator:LuhnValidator};
+}());
+abv.registry(abv.LuhnValidator);
+Object.assign(abv, function() {
+  var IbanValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.message = this.__options.message || "This is not a valid International Bank Account Number (IBAN).";
+    this.__formats = {"AD":/^AD\d{2}\d{4}\d{4}[\dA-Z]{12}$/, "AE":/^AE\d{2}\d{3}\d{16}$/, "AL":/^AL\d{2}\d{8}[\dA-Z]{16}$/, "AO":/^AO\d{2}\d{21}$/, "AT":/^AT\d{2}\d{5}\d{11}$/, "AX":/^FI\d{2}\d{6}\d{7}\d{1}$/, "AZ":/^AZ\d{2}[A-Z]{4}[\dA-Z]{20}$/, "BA":/^BA\d{2}\d{3}\d{3}\d{8}\d{2}$/, "BE":/^BE\d{2}\d{3}\d{7}\d{2}$/, "BF":/^BF\d{2}\d{23}$/, "BG":/^BG\d{2}[A-Z]{4}\d{4}\d{2}[\dA-Z]{8}$/, "BH":/^BH\d{2}[A-Z]{4}[\dA-Z]{14}$/, "BI":/^BI\d{2}\d{12}$/, "BJ":/^BJ\d{2}[A-Z]{1}\d{23}$/, "BY":/^BY\d{2}[\dA-Z]{4}\d{4}[\dA-Z]{16}$/, 
+    "BL":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "BR":/^BR\d{2}\d{8}\d{5}\d{10}[A-Z][\dA-Z]$/, "CG":/^CG\d{2}\d{23}$/, "CH":/^CH\d{2}\d{5}[\dA-Z]{12}$/, "CI":/^CI\d{2}[A-Z]{1}\d{23}$/, "CM":/^CM\d{2}\d{23}$/, "CR":/^CR\d{2}0\d{3}\d{14}$/, "CV":/^CV\d{2}\d{21}$/, "CY":/^CY\d{2}\d{3}\d{5}[\dA-Z]{16}$/, "CZ":/^CZ\d{2}\d{20}$/, "DE":/^DE\d{2}\d{8}\d{10}$/, "DO":/^DO\d{2}[\dA-Z]{4}\d{20}$/, "DK":/^DK\d{2}\d{4}\d{10}$/, "DZ":/^DZ\d{2}\d{20}$/, "EE":/^EE\d{2}\d{2}\d{2}\d{11}\d{1}$/, "ES":/^ES\d{2}\d{4}\d{4}\d{1}\d{1}\d{10}$/, 
+    "FI":/^FI\d{2}\d{6}\d{7}\d{1}$/, "FO":/^FO\d{2}\d{4}\d{9}\d{1}$/, "FR":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "GF":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "GB":/^GB\d{2}[A-Z]{4}\d{6}\d{8}$/, "GE":/^GE\d{2}[A-Z]{2}\d{16}$/, "GI":/^GI\d{2}[A-Z]{4}[\dA-Z]{15}$/, "GL":/^GL\d{2}\d{4}\d{9}\d{1}$/, "GP":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "GR":/^GR\d{2}\d{3}\d{4}[\dA-Z]{16}$/, "GT":/^GT\d{2}[\dA-Z]{4}[\dA-Z]{20}$/, "HR":/^HR\d{2}\d{7}\d{10}$/, "HU":/^HU\d{2}\d{3}\d{4}\d{1}\d{15}\d{1}$/, "IE":/^IE\d{2}[A-Z]{4}\d{6}\d{8}$/, 
+    "IL":/^IL\d{2}\d{3}\d{3}\d{13}$/, "IR":/^IR\d{2}\d{22}$/, "IS":/^IS\d{2}\d{4}\d{2}\d{6}\d{10}$/, "IT":/^IT\d{2}[A-Z]{1}\d{5}\d{5}[\dA-Z]{12}$/, "JO":/^JO\d{2}[A-Z]{4}\d{4}[\dA-Z]{18}$/, "KW":/^KW\d{2}[A-Z]{4}\d{22}$/, "KZ":/^KZ\d{2}\d{3}[\dA-Z]{13}$/, "LB":/^LB\d{2}\d{4}[\dA-Z]{20}$/, "LI":/^LI\d{2}\d{5}[\dA-Z]{12}$/, "LT":/^LT\d{2}\d{5}\d{11}$/, "LU":/^LU\d{2}\d{3}[\dA-Z]{13}$/, "LV":/^LV\d{2}[A-Z]{4}[\dA-Z]{13}$/, "MC":/^MC\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "MD":/^MD\d{2}[\dA-Z]{2}[\dA-Z]{18}$/, 
+    "ME":/^ME\d{2}\d{3}\d{13}\d{2}$/, "MF":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "MG":/^MG\d{2}\d{23}$/, "MK":/^MK\d{2}\d{3}[\dA-Z]{10}\d{2}$/, "ML":/^ML\d{2}[A-Z]{1}\d{23}$/, "MQ":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "MR":/^MR13\d{5}\d{5}\d{11}\d{2}$/, "MT":/^MT\d{2}[A-Z]{4}\d{5}[\dA-Z]{18}$/, "MU":/^MU\d{2}[A-Z]{4}\d{2}\d{2}\d{12}\d{3}[A-Z]{3}$/, "MZ":/^MZ\d{2}\d{21}$/, "NC":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "NL":/^NL\d{2}[A-Z]{4}\d{10}$/, "NO":/^NO\d{2}\d{4}\d{6}\d{1}$/, "PF":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, 
+    "PK":/^PK\d{2}[A-Z]{4}[\dA-Z]{16}$/, "PL":/^PL\d{2}\d{8}\d{16}$/, "PM":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "PS":/^PS\d{2}[A-Z]{4}[\dA-Z]{21}$/, "PT":/^PT\d{2}\d{4}\d{4}\d{11}\d{2}$/, "QA":/^QA\d{2}[A-Z]{4}[\dA-Z]{21}$/, "RE":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "RO":/^RO\d{2}[A-Z]{4}[\dA-Z]{16}$/, "RS":/^RS\d{2}\d{3}\d{13}\d{2}$/, "SA":/^SA\d{2}\d{2}[\dA-Z]{18}$/, "SE":/^SE\d{2}\d{3}\d{16}\d{1}$/, "SI":/^SI\d{2}\d{5}\d{8}\d{2}$/, "SK":/^SK\d{2}\d{4}\d{6}\d{10}$/, "SM":/^SM\d{2}[A-Z]{1}\d{5}\d{5}[\dA-Z]{12}$/, 
+    "SN":/^SN\d{2}[A-Z]{1}\d{23}$/, "TF":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "TL":/^TL\d{2}\d{3}\d{14}\d{2}$/, "TN":/^TN59\d{2}\d{3}\d{13}\d{2}$/, "TR":/^TR\d{2}\d{5}[\dA-Z]{1}[\dA-Z]{16}$/, "UA":/^UA\d{2}\d{6}[\dA-Z]{19}$/, "VA":/^VA\d{2}\d{3}\d{15}$/, "VG":/^VG\d{2}[A-Z]{4}\d{16}$/, "WF":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "XK":/^XK\d{2}\d{4}\d{10}\d{2}$/, "YT":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/};
+    this.name = "IbanValidator";
+  };
+  IbanValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  IbanValidator.prototype.constructor = IbanValidator;
+  Object.defineProperty(IbanValidator.prototype, "alias", {get:function() {
+    return "iban";
+  }});
+  Object.assign(IbanValidator.prototype, {__validate:function() {
+    var canonicalized = this.data.split(" ").join("");
+    if (false === abv.isType("alnum", canonicalized)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    var countryCode = canonicalized.substr(0, 2);
+    if (false === abv.isType("alpha", countryCode)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if ("undefined" === typeof this.__formats[countryCode]) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (false === this.__formats[countryCode].test(canonicalized)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    canonicalized = canonicalized.substr(4) + canonicalized.substr(0, 4);
+    var checkSum = this.__toBigInt(canonicalized);
+    if (1 !== this.__bigModulo97(checkSum)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __toBigInt:function(string) {
+    var chars = abv.str_split(string);
+    var bigInt = "";
+    for (var i = 0; i < chars.length; i++) {
+      if (true === abv.isType("upper", chars[i])) {
+        bigInt += abv.ord(chars[i]) - 55;
+        continue;
+      }
+      bigInt += chars[i];
+    }
+    return bigInt;
+  }, __bigModulo97:function(bigInt) {
+    var parts = abv.str_split(bigInt, 7);
+    var rest = 0;
+    for (var i = 0; i < parts.length; i++) {
+      rest = (rest + parts[i]) % 97;
+    }
+    return rest;
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {IbanValidator:IbanValidator};
+}());
+abv.registry(abv.IbanValidator);
+Object.assign(abv, function() {
+  var IsbnValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {bothIsbnMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', isbn10Message:'type:{"type":"string"}|length:{"min":3,"max":255}', isbn13Message:'type:{"type":"string"}|length:{"min":3,"max":255}', message:'type:{"type":"string"}|length:{"min":3,"max":255}', type:'type:{"type":"string"}'}, lang, internal);
+    this.bothIsbnMessage = this.__options.bothIsbnMessage || "This value is neither a valid ISBN-10 nor a valid ISBN-13.";
+    this.isbn10Message = this.__options.isbn10Message || "This value is not a valid ISBN-10.";
+    this.isbn13Message = this.__options.isbn13Message || "This value is not a valid ISBN-13.";
+    this.message = this.__options.message || null;
+    this.type = this.__options.type || null;
+    this.name = "IsbnValidator";
+  };
+  IsbnValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  IsbnValidator.prototype.constructor = IsbnValidator;
+  Object.defineProperty(IsbnValidator.prototype, "alias", {get:function() {
+    return "isbn";
+  }});
+  Object.assign(IsbnValidator.prototype, {__validate:function() {
+    var canonical = this.data.split("-").join("");
+    if ("isbn10" === this.type) {
+      if (false === this.__validateIsbn10(canonical)) {
+        this.__setErrorMessage(this.__getMessage(this.type), this.__messageParameters());
+        return;
+      }
+    }
+    if ("isbn13" === this.type) {
+      if (false === this.__validateIsbn13(canonical)) {
+        this.__setErrorMessage(this.__getMessage(this.type), this.__messageParameters());
+        return;
+      }
+    }
+    var code = this.__validateIsbn10(canonical);
+    if (false === code) {
+      code = this.__validateIsbn13(canonical);
+      if (false === code) {
+        code = false;
+      }
+    }
+    if (true !== code) {
+      this.__setErrorMessage(this.__getMessage(), this.__messageParameters());
+      return;
+    }
+  }, __validateIsbn10:function(isbn) {
+    var checkSum = 0;
+    var i;
+    for (i = 0; i < 10; ++i) {
+      if ("undefined" === typeof isbn[i]) {
+        return false;
+      }
+      var digit = null;
+      if ("X" === isbn[i]) {
+        digit = 10;
+      } else {
+        if (true === abv.isType("digit", isbn[i])) {
+          digit = isbn[i];
+        } else {
+          return false;
+        }
+      }
+      checkSum += digit * (10 - i);
+    }
+    if ("undefined" !== typeof isbn[i]) {
+      return false;
+    }
+    return 0 === checkSum % 11 ? true : false;
+  }, __validateIsbn13:function(isbn) {
+    if (false === abv.isType("digit", isbn)) {
+      return false;
+    }
+    var length = isbn.length;
+    if (length < 13) {
+      return false;
+    }
+    if (length > 13) {
+      return false;
+    }
+    var checkSum = 0;
+    for (var i = 0; i < 13; i += 2) {
+      checkSum += isbn[i];
+    }
+    for (var i = 1; i < 12; i += 2) {
+      checkSum += isbn[i] * 3;
+    }
+    return 0 === checkSum % 10 ? true : false;
+  }, __getMessage:function(type) {
+    if (null !== this.message) {
+      return this.message;
+    } else {
+      if ("isbn10" === type) {
+        return this.isbn10Message;
+      } else {
+        if ("isbn13" === type) {
+          return this.isbn13Message;
+        }
+      }
+    }
+    return this.bothIsbnMessage;
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {IsbnValidator:IsbnValidator};
+}());
+abv.registry(abv.IsbnValidator);
+Object.assign(abv, function() {
+  var IssnValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {caseSensitive:'type:{"type":"bool"}', message:'type:{"type":"string"}|length:{"min":3,"max":255}', requireHyphen:'type:{"type":"bool"}'}, lang, internal);
+    this.caseSensitive = true === this.__options.caseSensitive;
+    this.message = this.__options.message || "This value is not a valid ISSN.";
+    this.requireHyphen = true === this.__options.requireHyphen;
+    this.name = "IssnValidator";
+  };
+  IssnValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  IssnValidator.prototype.constructor = IssnValidator;
+  Object.defineProperty(IssnValidator.prototype, "alias", {get:function() {
+    return "issn";
+  }});
+  Object.assign(IssnValidator.prototype, {__validate:function() {
+    var canonical = this.data;
+    if ("undefined" !== typeof canonical[4] && "-" === canonical[4]) {
+      canonical = this.data.substr(0, 4);
+      canonical += this.data.substr(5);
+    } else {
+      if (true === this.requireHyphen) {
+        this.__setErrorMessage(this.message, this.__messageParameters());
+        return;
+      }
+    }
+    var length = canonical.length;
+    if (length < 8) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (length > 8) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (false === abv.isType("digit", canonical.substr(0, 7))) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (false === abv.isType("digit", canonical[7]) && "x" !== canonical[7] && "X" !== canonical[7]) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (true === this.caseSensitive && "x" === canonical[7]) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    var checkSum = "X" === canonical[7] || "x" === canonical[7] ? 10 : parseInt(canonical[7]);
+    for (var i = 0; i < 7; ++i) {
+      checkSum += (8 - i) * parseInt(canonical[i]);
+    }
+    if (0 !== checkSum % 11) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {IssnValidator:IssnValidator};
+}());
+abv.registry(abv.IssnValidator);
+Object.assign(abv, function() {
+  var CountValidator = function(data, options, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {exactMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', max:'type:{"type":"numeric"}', maxMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', min:'type:{"type":"numeric"}', minMessage:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.exactMessage = this.__options.exactMessage || "This collection should contain exactly %%limit%% elements.";
+    this.max = this.__options.max || null;
+    this.maxMessage = this.__options.maxMessage || "This collection should contain %%limit%% elements or less.";
+    this.min = this.__options.min || null;
+    this.minMessage = this.__options.minMessage || "This collection should contain %%limit%% elements or more.";
+    this.name = "CountValidator";
+  };
+  CountValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  CountValidator.prototype.constructor = CountValidator;
+  Object.defineProperty(CountValidator.prototype, "alias", {get:function() {
+    return "count";
+  }});
+  Object.assign(CountValidator.prototype, {__validate:function() {
+    var count = this.data.length;
+    if (null !== this.max && count > this.max) {
+      var __message = this.min == this.max ? this.exactMessage : this.maxMessage;
+      var __messageParameters = this.min == this.max ? this.__exactMessageParameters() : this.__maxMessageParameters();
+      this.__setErrorMessage(__message, __messageParameters);
+      return;
+    }
+    if (null !== this.min && count < this.min) {
+      var __message = this.min == this.max ? this.exactMessage : this.maxMessage;
+      var __messageParameters = this.min == this.max ? this.__exactMessageParameters() : this.__minMessageParameters();
+      this.__setErrorMessage(__message, __messageParameters);
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    if (null === this.min && null === this.max) {
+      throw new Error('Either option "min" or "max" must be given');
+    }
+  }, __minMessageParameters:function() {
+    return {"count":this.data.length, "limit":this.min};
+  }, __maxMessageParameters:function() {
+    return {"count":this.data.length, "limit":this.max};
+  }, __exactMessageParameters:function() {
+    return {"count":this.data.length, "limit":this.max};
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {CountValidator:CountValidator};
+}());
+abv.registry(abv.CountValidator);
 abv.I18nHandler.add("af", [{"@id":"1", "source":"This value should be false.", "target":"Hierdie waarde moet vals wees."}, {"@id":"2", "source":"This value should be true.", "target":"Hierdie waarde moet waar wees."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Hierdie waarde moet van die soort {{type}} wees."}, {"@id":"4", "source":"This value should be blank.", "target":"Hierdie waarde moet leeg wees."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Die waarde wat jy gekies het is nie 'n geldige keuse nie."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Jy moet ten minste %%limit%% kies.|Jy moet ten minste %%limit%% keuses kies."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Jy moet by die meeste %%limit%% keuse kies.|Jy moet by die meeste %%limit%% keuses kies."}, {"@id":"8", "source":"One or more of the given values is invalid.", 
 "target":"Een of meer van die gegewe waardes is ongeldig."}, {"@id":"9", "source":"This field was not expected.", "target":"Die veld is nie verwag nie."}, {"@id":"10", "source":"This field is missing.", "target":"Hierdie veld ontbreek."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Hierdie waarde is nie 'n geldige datum nie."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Hierdie waarde is nie 'n geldige datum en tyd nie."}, {"@id":"13", "source":"This value is not a valid email address.", 
@@ -10161,2287 +12484,6 @@ abv.I18nHandler.add("zh_TW", [{"@id":"1", "source":"This value should be false."
 "target":"\u8a72\u96c6\u5408\u61c9\u50c5\u5305\u542b\u552f\u58f9\u5143\u7d20\u3002"}, {"@id":"88", "source":"This value should be positive.", "target":"\u6578\u503c\u61c9\u70ba\u6b63\u6578\u3002"}, {"@id":"89", "source":"This value should be either positive or zero.", "target":"\u6578\u503c\u61c9\u6216\u672a\u6b63\u6578\uff0c\u6216\u70ba\u96f6\u3002"}, {"@id":"90", "source":"This value should be negative.", "target":"\u6578\u503c\u61c9\u70ba\u8ca0\u6578\u3002"}, {"@id":"91", "source":"This value should be either negative or zero.", 
 "target":"\u6578\u503c\u61c9\u6216\u672a\u8ca0\u6578\uff0c\u6216\u70ba\u96f6\u3002"}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"\u7121\u6548\u6642\u5340\u3002"}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"\u4f9d\u64da\u60a8\u7684\u5bc6\u78bc\uff0c\u767c\u751f\u6578\u64da\u6cc4\u9732\uff0c\u8acb\u52ff\u4f7f\u7528\u6539\u5bc6\u78bc\u3002\u8acb\u66f4\u63db\u5bc6\u78bc\u3002"}, {"@id":"94", 
 "source":"This value should be between %%min%% and %%max%%.", "target":"\u8a72\u6578\u503c\u61c9\u5728 %%min%% \u548c %%max%% \u4e4b\u9593\u3002"}]);
-Object.assign(abv, function() {
-  var AllValidator = function(data, rules, options) {
-    abv.AbstractValidator.call(this, data, options, null, options && options["lang"] ? options["lang"] : null, options && true === options["internal"]);
-    this.rules = rules;
-    this.__validatorCollection = [];
-    this.name = "AllValidator";
-    this.__configure();
-  };
-  AllValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  AllValidator.prototype.constructor = AllValidator;
-  Object.defineProperty(AllValidator.prototype, "alias", {get:function() {
-    return "all";
-  }});
-  Object.assign(AllValidator.prototype, {__configure:function() {
-    var validationRules = this.rules;
-    if ("string" === typeof this.rules) {
-      var validationRules = abv.__parseRulesFromJsonFormat(this.rules);
-    }
-    for (var key in validationRules) {
-      if (!validationRules.hasOwnProperty(key)) {
-        continue;
-      }
-      this.add(key, validationRules[key]);
-    }
-  }, add:function(name, options) {
-    var validator = abv.makeValidator(this.data, name, options, this.lang, this.__internal);
-    this.__validatorCollection.push(validator);
-  }, __validate:function() {
-    for (var key in this.__validatorCollection) {
-      if (!this.__validatorCollection.hasOwnProperty(key)) {
-        continue;
-      }
-      if (false === this.__validatorCollection[key].isValid()) {
-        this.__setErrorMessage(this.__validatorCollection[key].errors().first());
-        break;
-      }
-    }
-  }});
-  return {AllValidator:AllValidator};
-}());
-Object.assign(abv, function() {
-  var NotBlankValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.allowNull = !this.__options.allowNull || false === this.__options.allowNull ? false : true;
-    this.message = this.__options.message || "This value should not be blank.";
-    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
-    this.name = "NotBlankValidator";
-  };
-  NotBlankValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  NotBlankValidator.prototype.constructor = NotBlankValidator;
-  Object.defineProperty(NotBlankValidator.prototype, "alias", {get:function() {
-    return "not-blank";
-  }});
-  Object.assign(NotBlankValidator.prototype, {__validate:function() {
-    if ("string" === typeof this.data && true === this.normalize) {
-      this.__normalize();
-    }
-    if ("undefined" === typeof this.data) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    if (("undefined" === typeof this.data || null === this.data) && false === this.allowNull) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    if (false === this.data) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    if ("" === this.data) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    if (true === Array.isArray(this.data) && 0 === this.data.length) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {NotBlankValidator:NotBlankValidator};
-}());
-abv.registry(abv.NotBlankValidator);
-Object.assign(abv, function() {
-  var BlankValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.message = this.__options.message || "This value should be blank.";
-    this.name = "BlankValidator";
-  };
-  BlankValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  BlankValidator.prototype.constructor = BlankValidator;
-  Object.defineProperty(BlankValidator.prototype, "alias", {get:function() {
-    return "blank";
-  }});
-  Object.assign(BlankValidator.prototype, {__validate:function() {
-    if ("" !== this.data && null !== this.data) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {BlankValidator:BlankValidator};
-}());
-abv.registry(abv.BlankValidator);
-Object.assign(abv, function() {
-  var IsNullValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.message = this.__options.message || "This value should be null.";
-    this.name = "IsNullValidator";
-  };
-  IsNullValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  IsNullValidator.prototype.constructor = IsNullValidator;
-  Object.defineProperty(IsNullValidator.prototype, "alias", {get:function() {
-    return ["is-null", "null"];
-  }});
-  Object.assign(IsNullValidator.prototype, {__validate:function() {
-    if (null !== this.data) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {IsNullValidator:IsNullValidator};
-}());
-abv.registry(abv.IsNullValidator);
-Object.assign(abv, function() {
-  var NotNullValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.message = this.__options.message || "This value should not be null.";
-    this.name = "NotNullValidator";
-  };
-  NotNullValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  NotNullValidator.prototype.constructor = NotNullValidator;
-  Object.defineProperty(NotNullValidator.prototype, "alias", {get:function() {
-    return ["not-null", "required"];
-  }});
-  Object.assign(NotNullValidator.prototype, {__validate:function() {
-    if ("undefined" === typeof this.data) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    if (null === this.data) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {NotNullValidator:NotNullValidator};
-}());
-abv.registry(abv.NotNullValidator);
-Object.assign(abv, function() {
-  var IsTrueValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.message = this.__options.message || "This value should be true.";
-    this.name = "IsTrueValidator";
-  };
-  IsTrueValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  IsTrueValidator.prototype.constructor = IsTrueValidator;
-  Object.defineProperty(IsTrueValidator.prototype, "alias", {get:function() {
-    return ["is-true", "true"];
-  }});
-  Object.assign(IsTrueValidator.prototype, {__validate:function() {
-    if (true !== this.data && 1 !== this.data && "1" !== this.data) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {IsTrueValidator:IsTrueValidator};
-}());
-abv.registry(abv.IsTrueValidator);
-Object.assign(abv, function() {
-  var IsFalseValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.message = this.__options.message || "This value should be false.";
-    this.name = "IsFalseValidator";
-  };
-  IsFalseValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  IsFalseValidator.prototype.constructor = IsFalseValidator;
-  Object.defineProperty(IsFalseValidator.prototype, "alias", {get:function() {
-    return ["is-false", "false"];
-  }});
-  Object.assign(IsFalseValidator.prototype, {__validate:function() {
-    if (false !== this.data && 0 !== this.data && "0" !== this.data) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {IsFalseValidator:IsFalseValidator};
-}());
-abv.registry(abv.IsFalseValidator);
-Object.assign(abv, function() {
-  var TypeValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {type:'type:{"type":["string","array"],"any":true}', message:'type:{"type":"string"}|length:{"min":3,"max":255}', any:'type:{"type":"boolean"}'}, lang, internal);
-    this.type = this.__options.type || "string";
-    this.message = this.__options.message || "This value should be of type %%type%%.";
-    this.any = true === this.__options.any;
-    this.name = "TypeValidator";
-    this.__invalidType = null;
-  };
-  TypeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  TypeValidator.prototype.constructor = TypeValidator;
-  Object.defineProperty(TypeValidator.prototype, "alias", {get:function() {
-    return "type";
-  }});
-  Object.assign(TypeValidator.prototype, {__validate:function() {
-    if ("undefined" === typeof this.data) {
-      return;
-    }
-    var types = this.type;
-    if ("string" === typeof this.type) {
-      types = [this.type];
-    }
-    if (true === this.any) {
-      this.__validateAnyTypes(types);
-    } else {
-      this.__validateAllTypes(types);
-    }
-  }, __validateAllTypes:function(types) {
-    for (var key in types) {
-      if (!types.hasOwnProperty(key)) {
-        continue;
-      }
-      if (false === abv.isType(types[key], this.data)) {
-        this.__invalidType = types[key];
-        this.__setErrorMessage(this.message, this.__messageParameters());
-        return;
-      }
-    }
-    return;
-  }, __validateAnyTypes:function(types) {
-    for (var key in types) {
-      if (!types.hasOwnProperty(key)) {
-        continue;
-      }
-      if (true === abv.isType(types[key], this.data)) {
-        return;
-      }
-    }
-    this.__invalidType = types[key];
-    this.__setErrorMessage(this.message, this.__messageParameters());
-    return;
-  }, __messageParameters:function() {
-    return {"type":this.__invalidType, "value":this.data};
-  }});
-  return {TypeValidator:TypeValidator};
-}());
-abv.registry(abv.TypeValidator);
-Object.assign(abv, function() {
-  var EmailValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', mode:'length:{"min":2,"max":20}', normalize:'type:{"type":"bool"}'}, lang, internal);
-    this.message = this.__options.message || "This value is not a valid email address.";
-    this.mode = ["loose", "strict", "html5"].includes(this.__options.mode) ? this.__options.mode : "html5";
-    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
-    this.__patternLoose = /^.+@\S+\.\S+$/;
-    this.__patternHtml5 = /^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
-    this.name = "EmailValidator";
-  };
-  EmailValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  EmailValidator.prototype.constructor = EmailValidator;
-  Object.defineProperty(EmailValidator.prototype, "alias", {get:function() {
-    return "email";
-  }});
-  Object.assign(EmailValidator.prototype, {__validate:function() {
-    if (true === this.normalize) {
-      this.__normalize();
-    }
-    if (true === this.__isEmptyData()) {
-      return;
-    }
-    switch(this.mode) {
-      case "loose":
-        if (false === this.__patternLoose.test(this.data)) {
-          this.__setErrorMessage(this.message, this.__messageParameters());
-          return;
-        }
-        break;
-      case "strict":
-        this.__setErrorMessage(this.message, this.__messageParameters());
-        return;
-        break;
-      case "html5":
-        if (false === this.__patternHtml5.test(this.data)) {
-          this.__setErrorMessage(this.message, this.__messageParameters());
-          return;
-        }
-        break;
-    }
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {EmailValidator:EmailValidator};
-}());
-abv.registry(abv.EmailValidator);
-Object.assign(abv, function() {
-  var LengthValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {allowEmptyString:'type:{"type":"bool"}', charset:'length:{"min":2,"max":10}', charsetMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', exactMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', max:'type:{"type":"integer"}', maxMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', min:'type:{"type":"integer"}', minMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}'}, lang, internal);
-    this.allowEmptyString = !this.__options.allowEmptyString || false === this.__options.allowEmptyString ? false : true;
-    this.exactMessage = this.__options.exactMessage || "This value should have exactly %%limit%% characters.";
-    this.max = this.__options.max;
-    this.maxMessage = this.__options.maxMessage || "This value is too long. It should have %%limit%% characters or less.";
-    this.min = this.__options.min;
-    this.minMessage = this.__options.minMessage || "This value is too short. It should have %%limit%% characters or more.";
-    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
-    this.name = "LengthValidator";
-  };
-  LengthValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  LengthValidator.prototype.constructor = LengthValidator;
-  Object.defineProperty(LengthValidator.prototype, "alias", {get:function() {
-    return "length";
-  }});
-  Object.assign(LengthValidator.prototype, {__validate:function() {
-    if (true === this.normalize) {
-      this.__normalize();
-    }
-    if ("undefined" === typeof this.data || null === this.data || "" === this.data && true === this.allowEmptyString) {
-      return;
-    }
-    var length = this.data.length;
-    if (this.max && length > this.max) {
-      this.__setErrorMessage(this.min == this.max ? this.exactMessage : this.maxMessage, this.min == this.max ? this.__exactMessageParameters() : this.__maxMessageParameters());
-      return;
-    }
-    if (this.min && length < this.min) {
-      this.__setErrorMessage(this.min == this.max ? this.exactMessage : this.minMessage, this.min == this.max ? this.__exactMessageParameters() : this.__minMessageParameters());
-      return;
-    }
-  }, __beforeValidate:function() {
-    if (!this.min && !this.max) {
-      throw new Error('Either option "min" or "max" must be given for constraint');
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __exactMessageParameters:function() {
-    return {"value":this.data, "limit":this.min};
-  }, __maxMessageParameters:function() {
-    return {"value":this.data, "limit":this.max};
-  }, __minMessageParameters:function() {
-    return {"value":this.data, "limit":this.min};
-  }});
-  return {LengthValidator:LengthValidator};
-}());
-abv.registry(abv.LengthValidator);
-Object.assign(abv, function() {
-  var UrlValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}', protocols:'type:{"type":["string","array"],"any":true}', relativeProtocol:'type:{"type":"bool"}'}, lang, internal);
-    this.message = this.__options.message || "This value is not a valid URL.";
-    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
-    this.protocols = this.__options.protocols || ["http", "https", "ftp"];
-    this.relativeProtocol = !this.__options.relativeProtocol || false === this.__options.relativeProtocol ? false : true;
-    this.name = "UrlValidator";
-    this.__pattern = "^((((%s):(?:\\/\\/)?)(?:[\\-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9\\.\\-]+|(?:www\\.|[\\-;:&=\\+\\$,\\w]+@)[A-Za-z0-9\\.\\-]+)((?:\\/[\\+~%\\/\\.\\w\\-_]*)?\\??(?:[\\-\\+=&;%@\\.\\w_]*)#?(?:[\\.\\!\\/\\\\\\w]*))?)$";
-    this.__configure();
-  };
-  UrlValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  UrlValidator.prototype.constructor = UrlValidator;
-  Object.defineProperty(UrlValidator.prototype, "alias", {get:function() {
-    return "url";
-  }});
-  Object.assign(UrlValidator.prototype, {__configure:function() {
-    if ("string" === typeof this.protocols) {
-      this.protocols = [this.protocols];
-    }
-    this.__pattern = true === this.relativeProtocol ? this.__pattern.replace("(%s):", "(?:(%s):)?") : this.__pattern;
-    this.__pattern = this.__pattern.replace("%s", this.protocols.join("|"));
-  }, __validate:function() {
-    if (true === this.normalize) {
-      this.__normalize();
-    }
-    if (true === this.__isEmptyData()) {
-      return;
-    }
-    var pattern = new RegExp(this.__pattern);
-    if (false === pattern.test(this.data)) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.protocols, 'type:{"type":"array"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {UrlValidator:UrlValidator};
-}());
-abv.registry(abv.UrlValidator);
-Object.assign(abv, function() {
-  var RegexValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {match:'type:{"type": "bool"}', message:'type:{"type":"string"}|length:{"min":3,"max":255}', pattern:"required", normalize:'type:{"type": "bool"}'}, lang, internal);
-    this.match = false === this.__options.match ? false : true;
-    this.message = this.__options.message || "This value is not valid.";
-    this.pattern = this.__options.pattern;
-    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
-    this.name = "RegexValidator";
-  };
-  RegexValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  RegexValidator.prototype.constructor = RegexValidator;
-  Object.defineProperty(RegexValidator.prototype, "alias", {get:function() {
-    return "regex";
-  }});
-  Object.assign(RegexValidator.prototype, {__validate:function() {
-    if (true === this.normalize) {
-      this.__normalize();
-    }
-    if (true === this.__isEmptyData()) {
-      return;
-    }
-    var regexp = new RegExp(this.pattern);
-    if (this.match !== regexp.test(this.data)) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {RegexValidator:RegexValidator};
-}());
-abv.registry(abv.RegexValidator);
-Object.assign(abv, function() {
-  var IpValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}', version:'length:{"min":1,"max":255}'}, lang, internal);
-    this.V4 = "4";
-    this.V6 = "6";
-    this.ALL = "all";
-    this.V4_NO_PRIV = "4_no_priv";
-    this.V6_NO_PRIV = "6_no_priv";
-    this.ALL_NO_PRIV = "all_no_priv";
-    this.V4_NO_RES = "4_no_res";
-    this.V6_NO_RES = "6_no_res";
-    this.ALL_NO_RES = "all_no_res";
-    this.V4_ONLY_PUBLIC = "4_public";
-    this.V6_ONLY_PUBLIC = "6_public";
-    this.ALL_ONLY_PUBLIC = "all_public";
-    this.FILTER_VALIDATE_IP = 275;
-    this.FILTER_FLAG_IPV4 = 1048576;
-    this.FILTER_FLAG_IPV6 = 2097152;
-    this.FILTER_FLAG_NO_PRIV_RANGE = 8388608;
-    this.FILTER_FLAG_NO_RES_RANGE = 4194304;
-    this.message = this.__options.message || "This is not a valid IP address.";
-    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
-    this.version = [this.V4, this.V6, this.ALL, this.V4_NO_PRIV, this.V6_NO_PRIV, this.ALL_NO_PRIV, this.V4_NO_RES, this.V6_NO_RES, this.ALL_NO_RES, this.V4_ONLY_PUBLIC, this.V6_ONLY_PUBLIC, this.ALL_ONLY_PUBLIC].includes(this.__options.mode) ? this.__options.mode : "4";
-    this.name = "IpValidator";
-  };
-  IpValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  IpValidator.prototype.constructor = IpValidator;
-  Object.defineProperty(IpValidator.prototype, "alias", {get:function() {
-    return "ip";
-  }});
-  Object.assign(IpValidator.prototype, {__validate:function() {
-    if (true === this.normalize) {
-      this.__normalize();
-    }
-    if (true === this.__isEmptyData()) {
-      return;
-    }
-    var flag = null;
-    switch(this.version) {
-      case this.V4:
-        flag = this.FILTER_FLAG_IPV4;
-        break;
-      case this.V6:
-        flag = this.FILTER_FLAG_IPV6;
-        break;
-      case this.V4_NO_PRIV:
-        flag = this.FILTER_FLAG_IPV4 | this.FILTER_FLAG_NO_PRIV_RANGE;
-        break;
-      case this.V6_NO_PRIV:
-        flag = this.FILTER_FLAG_IPV6 | this.FILTER_FLAG_NO_PRIV_RANGE;
-        break;
-      case this.ALL_NO_PRIV:
-        flag = this.FILTER_FLAG_NO_PRIV_RANGE;
-        break;
-      case this.V4_NO_RES:
-        flag = this.FILTER_FLAG_IPV4 | this.FILTER_FLAG_NO_RES_RANGE;
-        break;
-      case this.V6_NO_RES:
-        flag = this.FILTER_FLAG_IPV6 | this.FILTER_FLAG_NO_RES_RANGE;
-        break;
-      case this.ALL_NO_RES:
-        flag = this.FILTER_FLAG_NO_RES_RANGE;
-        break;
-      case this.V4_ONLY_PUBLIC:
-        flag = this.FILTER_FLAG_IPV4 | this.FILTER_FLAG_NO_PRIV_RANGE | this.FILTER_FLAG_NO_RES_RANGE;
-        break;
-      case this.V6_ONLY_PUBLIC:
-        flag = this.FILTER_FLAG_IPV6 | this.FILTER_FLAG_NO_PRIV_RANGE | this.FILTER_FLAG_NO_RES_RANGE;
-        break;
-      case this.ALL_ONLY_PUBLIC:
-        flag = this.FILTER_FLAG_NO_PRIV_RANGE | this.FILTER_FLAG_NO_RES_RANGE;
-        break;
-      default:
-        flag = null;
-        break;
-    }
-    if (!abv.filter_var(this.data, this.FILTER_VALIDATE_IP, flag)) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {IpValidator:IpValidator};
-}());
-abv.registry(abv.IpValidator);
-Object.assign(abv, function() {
-  var JsonValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.message = this.__options.message || "This value should be valid JSON.";
-    this.name = "JsonValidator";
-  };
-  JsonValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  JsonValidator.prototype.constructor = JsonValidator;
-  Object.defineProperty(JsonValidator.prototype, "alias", {get:function() {
-    return "json";
-  }});
-  Object.assign(JsonValidator.prototype, {__validate:function() {
-    try {
-      JSON.parse(this.data);
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {JsonValidator:JsonValidator};
-}());
-abv.registry(abv.JsonValidator);
-Object.assign(abv, function() {
-  var UuidValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}', versions:'type:{"type":"array"}'}, lang, internal);
-    this.V1_MAC1 = 1;
-    this.V2_DCE = 2;
-    this.V3_MD5 = 3;
-    this.V4_RANDOM = 4;
-    this.V5_SHA1 = 5;
-    this.__versions = [this.V1_MAC1, this.V2_DCE, this.V3_MD5, this.V4_RANDOM, this.V5_SHA1];
-    this.STRICT_LENGTH = 36;
-    this.STRICT_FIRST_HYPHEN_POSITION = 8;
-    this.STRICT_LAST_HYPHEN_POSITION = 23;
-    this.STRICT_VERSION_POSITION = 14;
-    this.STRICT_VARIANT_POSITION = 19;
-    this.LOOSE_MAX_LENGTH = 39;
-    this.LOOSE_FIRST_HYPHEN_POSITION = 4;
-    this.message = this.__options.message || "This is not a valid UUID.";
-    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
-    this.strict = false === this.__options.strict ? false : true;
-    this.versions = this.__checkVersions() ? this.__options.versions : this.__versions;
-    this.name = "UuidValidator";
-  };
-  UuidValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  UuidValidator.prototype.constructor = UuidValidator;
-  Object.defineProperty(UuidValidator.prototype, "alias", {get:function() {
-    return "uuid";
-  }});
-  Object.assign(UuidValidator.prototype, {__validate:function() {
-    if (true === this.normalize) {
-      this.__normalize();
-    }
-    if (true === this.__isEmptyData()) {
-      return;
-    }
-    if (true === this.strict) {
-      this.__validateStrict();
-    } else {
-      this.__validateLoose();
-    }
-  }, __validateLoose:function() {
-    var trimmed = this.data.replace(/[|]|{|}/g, "");
-    var h = this.LOOSE_FIRST_HYPHEN_POSITION;
-    var l = this.LOOSE_MAX_LENGTH;
-    for (var i = 0; i < l; ++i) {
-      if ("undefined" === typeof trimmed[i]) {
-        this.__setErrorMessage(this.message, this.__messageParameters());
-        return;
-      }
-      if ("-" === trimmed[i]) {
-        if (i !== h) {
-          this.__setErrorMessage(this.message, this.__messageParameters());
-          return;
-        }
-        h += 5;
-        continue;
-      }
-      if (i === h) {
-        h += 4;
-        --l;
-      }
-      if (false === abv.isType("xdigit", trimmed[i])) {
-        this.__setErrorMessage(this.message, this.__messageParameters());
-        return;
-      }
-    }
-    if ("undefined" !== typeof trimmed[i]) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __validateStrict:function() {
-    var h = this.STRICT_FIRST_HYPHEN_POSITION;
-    for (var i = 0; i < this.STRICT_LENGTH; ++i) {
-      if ("undefined" === typeof this.data[i]) {
-        this.__setErrorMessage(this.message, this.__messageParameters());
-        return;
-      }
-      if ("-" === this.data[i]) {
-        if (i !== h) {
-          this.__setErrorMessage(this.message, this.__messageParameters());
-          return;
-        }
-        if (h < this.STRICT_LAST_HYPHEN_POSITION) {
-          h += 5;
-        }
-        continue;
-      }
-      if (false === abv.isType("xdigit", this.data[i])) {
-        this.__setErrorMessage(this.message, this.__messageParameters());
-        return;
-      }
-      if (i === h) {
-        this.__setErrorMessage(this.message, this.__messageParameters());
-        return;
-      }
-    }
-    if ("undefined" !== typeof this.data[i]) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    if (false === this.versions.includes(parseInt(this.data[this.STRICT_VERSION_POSITION]))) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    if (8 !== (abv.hexdec(this.data[this.STRICT_VARIANT_POSITION]) & 12)) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __checkVersions:function() {
-    var versions = this.__options.versions;
-    if (!versions || 0 === versions.length) {
-      return false;
-    }
-    if (true === abv.isType("array", versions)) {
-      for (var key in versions) {
-        if (!versions.hasOwnProperty(key)) {
-          continue;
-        }
-        if (false === this.__versions.includes(versions[key])) {
-          throw new Error('Invalid version: "' + versions[key] + '"');
-        }
-      }
-      return true;
-    }
-    return false;
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {UuidValidator:UuidValidator};
-}());
-abv.registry(abv.UuidValidator);
-Object.assign(abv, function() {
-  var EqualToValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:"required"}, lang, internal);
-    this.message = this.__options.message || "This value should be equal to %%compared_value%%.";
-    this.name = "EqualToValidator";
-  };
-  EqualToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
-  EqualToValidator.prototype.constructor = EqualToValidator;
-  Object.defineProperty(EqualToValidator.prototype, "alias", {get:function() {
-    return "equal-to";
-  }});
-  Object.assign(EqualToValidator.prototype, {__compareValues:function(value, comparedValue) {
-    return value == comparedValue;
-  }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
-  }});
-  return {EqualToValidator:EqualToValidator};
-}());
-abv.registry(abv.EqualToValidator);
-Object.assign(abv, function() {
-  var NotEqualToValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:"required"}, lang, internal);
-    this.message = this.__options.message || "This value should not be equal to %%compared_value%%.";
-    this.name = "NotEqualToValidator";
-  };
-  NotEqualToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
-  NotEqualToValidator.prototype.constructor = NotEqualToValidator;
-  Object.defineProperty(NotEqualToValidator.prototype, "alias", {get:function() {
-    return "not-equal-to";
-  }});
-  Object.assign(NotEqualToValidator.prototype, {__compareValues:function(value, comparedValue) {
-    return value != comparedValue;
-  }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
-  }});
-  return {NotEqualToValidator:NotEqualToValidator};
-}());
-abv.registry(abv.NotEqualToValidator);
-Object.assign(abv, function() {
-  var IdenticalToValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:"required"}, lang, internal);
-    this.message = this.__options.message || "This value should be identical to %%compared_value_type%% %%compared_value%%.";
-    this.name = "IdenticalToValidator";
-  };
-  IdenticalToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
-  IdenticalToValidator.prototype.constructor = IdenticalToValidator;
-  Object.defineProperty(IdenticalToValidator.prototype, "alias", {get:function() {
-    return "identical-to";
-  }});
-  Object.assign(IdenticalToValidator.prototype, {__compareValues:function(value, comparedValue) {
-    return value === comparedValue;
-  }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
-  }});
-  return {IdenticalToValidator:IdenticalToValidator};
-}());
-abv.registry(abv.IdenticalToValidator);
-Object.assign(abv, function() {
-  var NotIdenticalToValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:"required"}, lang, internal);
-    this.message = this.__options.message || "This value should not be identical to %%compared_value_type%% %%compared_value%%.";
-    this.name = "NotIdenticalToValidator";
-  };
-  NotIdenticalToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
-  NotIdenticalToValidator.prototype.constructor = NotIdenticalToValidator;
-  Object.defineProperty(NotIdenticalToValidator.prototype, "alias", {get:function() {
-    return "not-identical-to";
-  }});
-  Object.assign(NotIdenticalToValidator.prototype, {__compareValues:function(value, comparedValue) {
-    return value !== comparedValue;
-  }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
-  }});
-  return {NotIdenticalToValidator:NotIdenticalToValidator};
-}());
-abv.registry(abv.NotIdenticalToValidator);
-Object.assign(abv, function() {
-  var LessThanValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
-    this.message = this.__options.message || "This value should be less than %%compared_value%%.";
-    this.name = "LessThanValidator";
-  };
-  LessThanValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
-  LessThanValidator.prototype.constructor = LessThanValidator;
-  Object.defineProperty(LessThanValidator.prototype, "alias", {get:function() {
-    return "less-than";
-  }});
-  Object.assign(LessThanValidator.prototype, {__compareValues:function(value, comparedValue) {
-    return value < comparedValue;
-  }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
-  }});
-  return {LessThanValidator:LessThanValidator};
-}());
-abv.registry(abv.LessThanValidator);
-Object.assign(abv, function() {
-  var LessThanOrEqualValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
-    this.message = this.__options.message || "This value should be less than or equal to %%compared_value%%.";
-    this.name = "LessThanOrEqualValidator";
-  };
-  LessThanOrEqualValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
-  LessThanOrEqualValidator.prototype.constructor = LessThanOrEqualValidator;
-  Object.defineProperty(LessThanOrEqualValidator.prototype, "alias", {get:function() {
-    return "less-than-or-equal";
-  }});
-  Object.assign(LessThanOrEqualValidator.prototype, {__compareValues:function(value, comparedValue) {
-    return value <= comparedValue;
-  }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
-  }});
-  return {LessThanOrEqualValidator:LessThanOrEqualValidator};
-}());
-abv.registry(abv.LessThanOrEqualValidator);
-Object.assign(abv, function() {
-  var GreaterThanValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
-    this.message = this.__options.message || "This value should be greater than %%compared_value%%.";
-    this.name = "GreaterThanValidator";
-  };
-  GreaterThanValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
-  GreaterThanValidator.prototype.constructor = GreaterThanValidator;
-  Object.defineProperty(GreaterThanValidator.prototype, "alias", {get:function() {
-    return "greater-than";
-  }});
-  Object.assign(GreaterThanValidator.prototype, {__compareValues:function(value, comparedValue) {
-    return value > comparedValue;
-  }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
-  }});
-  return {GreaterThanValidator:GreaterThanValidator};
-}());
-abv.registry(abv.GreaterThanValidator);
-Object.assign(abv, function() {
-  var GreaterThanOrEqualValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
-    this.message = this.__options.message || "This value should be greater than or equal to %%compared_value%%.";
-    this.name = "GreaterThanOrEqualValidator";
-  };
-  GreaterThanOrEqualValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
-  GreaterThanOrEqualValidator.prototype.constructor = GreaterThanOrEqualValidator;
-  Object.defineProperty(GreaterThanOrEqualValidator.prototype, "alias", {get:function() {
-    return "greater-than-or-equal";
-  }});
-  Object.assign(GreaterThanOrEqualValidator.prototype, {__compareValues:function(value, comparedValue) {
-    return value >= comparedValue;
-  }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
-  }});
-  return {GreaterThanOrEqualValidator:GreaterThanOrEqualValidator};
-}());
-abv.registry(abv.GreaterThanOrEqualValidator);
-Object.assign(abv, function() {
-  var RangeValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {invalidMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', max:'required|type:{"type":["numeric","date-string"],"any":true}', maxMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', min:'required|type:{"type":["numeric","date-string"],"any":true}', minMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', notInRangeMessage:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.invalidMessage = this.__options.invalidMessage || "This value should be a valid number.";
-    this.max = this.__options.max;
-    this.maxMessage = this.__options.maxMessage || "This value should be %%limit%% or less.";
-    this.min = this.__options.min;
-    this.minMessage = this.__options.minMessage || "This value should be %%limit%% or more.";
-    this.notInRangeMessage = this.__options.notInRangeMessage || "This value should be between %%min%% and %%max%%.";
-    this.name = "RangeValidator";
-  };
-  RangeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  RangeValidator.prototype.constructor = RangeValidator;
-  Object.defineProperty(RangeValidator.prototype, "alias", {get:function() {
-    return "range";
-  }});
-  Object.assign(RangeValidator.prototype, {__validate:function() {
-    var hasLowerLimit = null !== this.min;
-    var hasUpperLimit = null !== this.max;
-    if (hasLowerLimit && hasUpperLimit && (this.data < this.min || this.data > this.max)) {
-      this.__setErrorMessage(this.notInRangeMessage, this.__notInRangeMessageParameters());
-      return;
-    }
-    if (hasUpperLimit && this.data > this.max) {
-      this.__setErrorMessage(this.maxMessage, this.__maxMessageParameters());
-      return;
-    }
-    if (hasLowerLimit && this.data < this.min) {
-      this.__setErrorMessage(this.minMessage, this.__minMessageParameters());
-      return;
-    }
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    if (false === abv.isType("numeric", this.data) && false === abv.isType("date-string", this.data)) {
-      this.__setErrorMessage(this.invalidMessage, this.__invalidMessageParameters());
-      return;
-    }
-    if (false === abv.isType("numeric", this.data) && true === abv.isType("date-string", this.data)) {
-      var date = new Date(this.data);
-      this.data = date.getTime();
-    }
-    if (false === abv.isType("numeric", this.min) && true === abv.isType("date-string", this.min)) {
-      var date = new Date(this.min);
-      this.min = date.getTime();
-    }
-    if (false === abv.isType("numeric", this.max) && true === abv.isType("date-string", this.max)) {
-      var date = new Date(this.max);
-      this.max = date.getTime();
-    }
-  }, __invalidMessageParameters:function() {
-    return {"value":this.data};
-  }, __notInRangeMessageParameters:function() {
-    return {"max":this.max, "min":this.min, "value":this.data};
-  }, __maxMessageParameters:function() {
-    return {"limit":this.max, "value":this.data};
-  }, __minMessageParameters:function() {
-    return {"limit":this.min, "value":this.data};
-  }});
-  return {RangeValidator:RangeValidator};
-}());
-abv.registry(abv.RangeValidator);
-Object.assign(abv, function() {
-  var DivisibleByValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
-    this.message = this.__options.message || "This value should be a multiple of %%compared_value%%.";
-    this.name = "DivisibleByValidator";
-  };
-  DivisibleByValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
-  DivisibleByValidator.prototype.constructor = DivisibleByValidator;
-  Object.defineProperty(DivisibleByValidator.prototype, "alias", {get:function() {
-    return "divisible-by";
-  }});
-  Object.assign(DivisibleByValidator.prototype, {__compareValues:function(value, comparedValue) {
-    if (abv.isType("integer", value) && abv.isType("integer", comparedValue)) {
-      return 0 === value % comparedValue;
-    }
-    var remainder = abv.fmod(value, comparedValue);
-    if (true === remainder) {
-      return true;
-    }
-    return abv.sprintf("%.12e", comparedValue) === abv.sprintf("%.12e", remainder);
-  }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
-  }});
-  return {DivisibleByValidator:DivisibleByValidator};
-}());
-abv.registry(abv.DivisibleByValidator);
-Object.assign(abv, function() {
-  var UniqueValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.message = this.__options.message || "This collection should contain only unique elements.";
-    this.__repeated = [];
-    this.name = "UniqueValidator";
-  };
-  UniqueValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  UniqueValidator.prototype.constructor = UniqueValidator;
-  Object.defineProperty(UniqueValidator.prototype, "alias", {get:function() {
-    return "unique";
-  }});
-  Object.assign(UniqueValidator.prototype, {__validate:function() {
-    if (true === abv.isType("string", this.data) || true === abv.isType("array", this.data)) {
-      this.__validateArray();
-    }
-    if (this.__repeated.length > 0) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __validateArray:function() {
-    var counter = {};
-    for (var i = 0; i < this.data.length; i++) {
-      var key = typeof this.data[i] + " '" + this.data[i] + "'";
-      if ("undefined" === typeof counter[key]) {
-        counter[key] = 0;
-      }
-      counter[key]++;
-      if (false === this.__repeated.includes(key) && counter[key] > 1) {
-        this.__repeated.push(key);
-      }
-    }
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":JSON.stringify(this.__repeated)};
-  }});
-  return {UniqueValidator:UniqueValidator};
-}());
-abv.registry(abv.UniqueValidator);
-Object.assign(abv, function() {
-  var PositiveValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.value = 0;
-    this.message = this.__options.message || "This value should be positive.";
-    this.name = "PositiveValidator";
-  };
-  PositiveValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
-  PositiveValidator.prototype.constructor = PositiveValidator;
-  Object.defineProperty(PositiveValidator.prototype, "alias", {get:function() {
-    return "positive";
-  }});
-  Object.assign(PositiveValidator.prototype, {__compareValues:function(value, comparedValue) {
-    return value > comparedValue;
-  }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
-  }});
-  return {PositiveValidator:PositiveValidator};
-}());
-abv.registry(abv.PositiveValidator);
-Object.assign(abv, function() {
-  var PositiveOrZeroValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.value = 0;
-    this.message = this.__options.message || "This value should be either positive or zero.";
-    this.name = "PositiveOrZeroValidator";
-  };
-  PositiveOrZeroValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
-  PositiveOrZeroValidator.prototype.constructor = PositiveOrZeroValidator;
-  Object.defineProperty(PositiveOrZeroValidator.prototype, "alias", {get:function() {
-    return "positive-or-zero";
-  }});
-  Object.assign(PositiveOrZeroValidator.prototype, {__compareValues:function(value, comparedValue) {
-    return value >= comparedValue;
-  }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
-  }});
-  return {PositiveOrZeroValidator:PositiveOrZeroValidator};
-}());
-abv.registry(abv.PositiveOrZeroValidator);
-Object.assign(abv, function() {
-  var NegativeValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.value = 0;
-    this.message = this.__options.message || "This value should be negative.";
-    this.name = "NegativeValidator";
-  };
-  NegativeValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
-  NegativeValidator.prototype.constructor = NegativeValidator;
-  Object.defineProperty(NegativeValidator.prototype, "alias", {get:function() {
-    return "negative";
-  }});
-  Object.assign(NegativeValidator.prototype, {__compareValues:function(value, comparedValue) {
-    return value < comparedValue;
-  }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
-  }});
-  return {NegativeValidator:NegativeValidator};
-}());
-abv.registry(abv.NegativeValidator);
-Object.assign(abv, function() {
-  var NegativeOrZeroValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.value = 0;
-    this.message = this.__options.message || "This value should be either negative or zero.";
-    this.name = "NegativeOrZeroValidator";
-  };
-  NegativeOrZeroValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
-  NegativeOrZeroValidator.prototype.constructor = NegativeOrZeroValidator;
-  Object.defineProperty(NegativeOrZeroValidator.prototype, "alias", {get:function() {
-    return "negative-or-zero";
-  }});
-  Object.assign(NegativeOrZeroValidator.prototype, {__compareValues:function(value, comparedValue) {
-    return value <= comparedValue;
-  }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
-  }});
-  return {NegativeOrZeroValidator:NegativeOrZeroValidator};
-}());
-abv.registry(abv.NegativeOrZeroValidator);
-Object.assign(abv, function() {
-  var DateValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.message = this.__options.message || "This value is not a valid date.";
-    this.format = this.__options.format || "YYYY-MM-DD";
-    this.name = "DateValidator";
-  };
-  DateValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  DateValidator.prototype.constructor = DateValidator;
-  Object.defineProperty(DateValidator.prototype, "alias", {get:function() {
-    return "date";
-  }});
-  Object.assign(DateValidator.prototype, {__validate:function() {
-    if (this.data !== this.__moment(this.data, this.format).format(this.format)) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {DateValidator:DateValidator};
-}());
-abv.registry(abv.DateValidator);
-Object.assign(abv, function() {
-  var DateTimeValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', format:'type:{"type":"string"}'}, lang, internal);
-    this.message = this.__options.message || "This value is not a valid datetime.";
-    this.format = this.__options.format || "YYYY-MM-DD HH:mm:ss";
-    this.name = "DateTimeValidator";
-  };
-  DateTimeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  DateTimeValidator.prototype.constructor = DateTimeValidator;
-  Object.defineProperty(DateTimeValidator.prototype, "alias", {get:function() {
-    return "date-time";
-  }});
-  Object.assign(DateTimeValidator.prototype, {__validate:function() {
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"date-string"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    if (this.data !== this.__moment(this.data, this.format).format(this.format)) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {DateTimeValidator:DateTimeValidator};
-}());
-abv.registry(abv.DateTimeValidator);
-Object.assign(abv, function() {
-  var TimeValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.message = this.__options.message || "This value is not a valid time.";
-    this.format = this.__options.format || "HH:mm:ss";
-    this.name = "TimeValidator";
-  };
-  TimeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  TimeValidator.prototype.constructor = TimeValidator;
-  Object.defineProperty(TimeValidator.prototype, "alias", {get:function() {
-    return "time";
-  }});
-  Object.assign(TimeValidator.prototype, {__validate:function() {
-    if (this.data !== this.__moment(this.data, this.format).format(this.format)) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {TimeValidator:TimeValidator};
-}());
-abv.registry(abv.TimeValidator);
-Object.assign(abv, function() {
-  var TimezoneValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.message = this.__options.message || "This value is not a valid timezone.";
-    this.name = "TimezoneValidator";
-  };
-  TimezoneValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  TimezoneValidator.prototype.constructor = TimezoneValidator;
-  Object.defineProperty(TimezoneValidator.prototype, "alias", {get:function() {
-    return "timezone";
-  }});
-  Object.assign(TimezoneValidator.prototype, {__validate:function() {
-    var zone = this.__moment.tz.zone(this.data);
-    if (null === zone) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {TimezoneValidator:TimezoneValidator};
-}());
-abv.registry(abv.TimezoneValidator);
-Object.assign(abv, function() {
-  var ChoiceValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {callback:'type:{"type":["string","array","callable"],"any":true}', choices:'type:{"type":"array"}', max:'type:{"type":"numeric"}', maxMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', min:'type:{"type":"numeric"}', minMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', multiple:'type:{"type":"bool"}', multipleMessage:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.callback = this.__options.callback;
-    this.choices = this.__options.choices;
-    this.max = this.__options.max;
-    this.maxMessage = this.__options.maxMessage || "You must select at most %%limit%% choices.";
-    this.message = this.__options.message || "The value you selected is not a valid choice.";
-    this.min = this.__options.min;
-    this.minMessage = this.__options.minMessage || "You must select at least %%limit%% choices.";
-    this.multiple = true === this.__options.multiple;
-    this.multipleMessage = this.__options.multipleMessage || "One or more of the given values is invalid.";
-    this.__currentInvalidDataItem = null;
-    this.name = "ChoiceValidator";
-  };
-  ChoiceValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  ChoiceValidator.prototype.constructor = ChoiceValidator;
-  Object.defineProperty(ChoiceValidator.prototype, "alias", {get:function() {
-    return "choice";
-  }});
-  Object.assign(ChoiceValidator.prototype, {__validate:function() {
-    if (true === this.multiple) {
-      for (var key in this.value) {
-        if (!this.value.hasOwnProperty(key)) {
-          continue;
-        }
-        if (false === this.choices.includes(this.value[key])) {
-          this.__currentInvalidDataItem = this.value[key];
-          this.__setErrorMessage(this.multipleMessage, this.__multipleMessageParameters());
-          return;
-        }
-      }
-      var count = this.data.length;
-      if (this.min && count < this.min) {
-        this.__setErrorMessage(this.minMessage, this.__minMessageParameters());
-        return;
-      }
-      if (this.max && count > this.max) {
-        this.__setErrorMessage(this.maxMessage, this.__maxMessageParameters());
-        return;
-      }
-    } else {
-      if (false === this.choices.includes(this.data)) {
-        this.__setErrorMessage(this.message, this.__messageParameters());
-        return;
-      }
-    }
-  }, __beforeValidate:function() {
-    if (false === abv.isType("array", this.choices) && "undefined" === typeof this.callback) {
-      throw new Error('Either "choices" or "callback" must be specified on constraint Choice');
-    }
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    if (true === this.multiple && false === abv.isType("array", this.data)) {
-      this.__setErrorMessage(abv.sprintf("Expected argument of type '%s', '%s' given", "Array", abv.getType(this.data)));
-      this.__skip = true;
-      return;
-    }
-    if (this.callback) {
-      try {
-        this.choices = this.callback.call();
-      } catch (e) {
-        throw new Error("The Choice constraint expects a valid callback");
-      }
-    }
-  }, __multipleMessageParameters:function() {
-    return {"value":this.__currentInvalidDataItem};
-  }, __minMessageParameters:function() {
-    return {"limit":this.min, "choices":JSON.stringify(this.choices), "value":JSON.stringify(this.data)};
-  }, __maxMessageParameters:function() {
-    return {"limit":this.max, "choices":JSON.stringify(this.choices), "value":JSON.stringify(this.data)};
-  }, __messageParameters:function() {
-    return {"value":JSON.stringify(this.data)};
-  }});
-  return {ChoiceValidator:ChoiceValidator};
-}());
-abv.registry(abv.ChoiceValidator);
-Object.assign(abv, function() {
-  var LanguageValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.message = this.__options.message || "This value is not a valid language.";
-    this.name = "LanguageValidator";
-  };
-  LanguageValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  LanguageValidator.prototype.constructor = LanguageValidator;
-  Object.defineProperty(LanguageValidator.prototype, "alias", {get:function() {
-    return "language";
-  }});
-  Object.assign(LanguageValidator.prototype, {__validate:function() {
-    var locales = this.__moment.locales();
-    if (false === locales.includes(this.data.toLowerCase())) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {LanguageValidator:LanguageValidator};
-}());
-abv.registry(abv.LanguageValidator);
-Object.assign(abv, function() {
-  var LocaleValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.message = this.__options.message || "This value is not a valid locale.";
-    this.__locales = {"eu":"Basque", "hr_BA":"Croatian (Bosnia & Herzegovina)", "en_CM":"English (Cameroon)", "en_BI":"English (Burundi)", "rw_RW":"Kinyarwanda (Rwanda)", "ast":"Asturian", "en_SZ":"English (Swaziland)", "he_IL":"Hebrew (Israel)", "ar":"Uzbek (Arabic)", "Arabicuz_Arab":"Uzbek (Arabic)", "en_PN":"English (Pitcairn Islands)", "as":"Assamese", "en_NF":"English (Norfolk Island)", "ks_IN":"Kashmiri (India)", "rwk_TZ":"Rwa (Tanzania)", "zh_Hant_TW":"Chinese (Traditional, Taiwan)", "en_CN":"English (China)", 
-    "gsw_LI":"Swiss German (Liechtenstein)", "ta_IN":"Tamil (India)", "th_TH":"Thai (Thailand)", "es_EA":"Spanish (Ceuta & Melilla)", "fr_GF":"French (French Guiana)", "ar_001":"Arabic (World)", "en_RW":"English (Rwanda)", "tr_TR":"Turkish (Turkey)", "de_CH":"German (Switzerland)", "ee_TG":"Ewe (Togo)", "en_NG":"English (Nigeria)", "fr_TG":"French (Togo)", "az":"Azerbaijani", "fr_SC":"French (Seychelles)", "es_HN":"Spanish (Honduras)", "en_AG":"English (Antigua & Barbuda)", "ru_KZ":"Russian (Kazakhstan)", 
-    "gsw":"Swiss German", "dyo":"Jola-Fonyi", "so_ET":"Somali (Ethiopia)", "zh_Hant_MO":"Chinese (Traditional, Macau [China])", "de_BE":"German (Belgium)", "nus_SS":"Nuer (South Sudan)", "km_KH":"Khmer (Cambodia)", "my_MM":"Burmese (Myanmar [Burma])", "mgh_MZ":"Makhuwa-Meetto (Mozambique)", "ee_GH":"Ewe (Ghana)", "es_EC":"Spanish (Ecuador)", "kw_GB":"Cornish (United Kingdom)", "rm_CH":"Romansh (Switzerland)", "en_ME":"English (Montenegro)", "nyn":"Nyankole", "mk_MK":"Macedonian (Macedonia)", "bs_Cyrl_BA":"Bosnian (Cyrillic, Bosnia & Herzegovina)", 
-    "ar_MR":"Arabic (Mauritania)", "en_BM":"English (Bermuda)", "ms_Arab":"Malay (Arabic)", "en_AI":"English (Anguilla)", "gl_ES":"Galician (Spain)", "en_PR":"English (Puerto Rico)", "ff_CM":"Fulah (Cameroon)", "ne_IN":"Nepali (India)", "or_IN":"Oriya (India)", "khq_ML":"Koyra Chiini (Mali)", "en_MG":"English (Madagascar)", "pt_TL":"Portuguese (Timor-Leste)", "en_LC":"English (St. Lucia)", "ta_SG":"Tamil (Singapore)", "iu_CA":"Inuktitut (Canada)", "jmc_TZ":"Machame (Tanzania)", "om_ET":"Oromo (Ethiopia)", 
-    "lv_LV":"Latvian (Latvia)", "es_US":"Spanish (United States)", "en_PT":"English (Portugal)", "vai_Latn_LR":"Vai (Latin, Liberia)", "yue_HK":"Cantonese (Hong Kong [China])", "en_NL":"English (Netherlands)", "to_TO":"Tongan (Tonga)", "cgg_UG":"Chiga (Uganda)", "ta":"Tamil", "en_MH":"English (Marshall Islands)", "zu_ZA":"Zulu (South Africa)", "shi_Latn_MA":"Tachelhit (Latin, Morocco)", "brx_IN":"Bodo (India)", "ar_KM":"Arabic (Comoros)", "en_AL":"English (Albania)", "te":"Telugu", "chr_US":"Cherokee (United States)", 
-    "yo_BJ":"Yoruba (Benin)", "fr_VU":"French (Vanuatu)", "pa":"Punjabi", "tg":"Tajik", "kea":"Kabuverdianu", "ksh_DE":"Colognian (Germany)", "sw_CD":"Swahili (Congo - Kinshasa)", "te_IN":"Telugu (India)", "fr_RE":"French (R\u00e9union)", "th":"Thai", "ur_IN":"Urdu (India)", "yo_NG":"Yoruba (Nigeria)", "ti":"Tigrinya", "guz_KE":"Gusii (Kenya)", "tk":"Turkmen", "kl_GL":"Kalaallisut (Greenland)", "ksf_CM":"Bafia (Cameroon)", "mua_CM":"Mundang (Cameroon)", "lag_TZ":"Langi (Tanzania)", "lb":"Luxembourgish", 
-    "fr_TN":"French (Tunisia)", "es_PA":"Spanish (Panama)", "pl_PL":"Polish (Poland)", "to":"Tongan", "hi_IN":"Hindi (India)", "dje_NE":"Zarma (Niger)", "es_GQ":"Spanish (Equatorial Guinea)", "en_BR":"English (Brazil)", "kok_IN":"Konkani (India)", "pl":"Polish", "fr_GN":"French (Guinea)", "bem":"Bemba", "ha":"Hausa", "ckb":"Central Kurdish", "lg":"Ganda", "tr":"Turkish", "en_PW":"English (Palau)", "en_NO":"English (Norway)", "nyn_UG":"Nyankole (Uganda)", "sr_Latn_RS":"Serbian (Latin, Serbia)", "gsw_FR":"Swiss German (France)", 
-    "pa_Guru":"Punjabi (Gurmukhi)", "he":"Hebrew", "sn_ZW":"Shona (Zimbabwe)", "qu_BO":"Quechua (Bolivia)", "lu_CD":"Luba-Katanga (Congo - Kinshasa)", "mgo_CM":"Meta\u02bc (Cameroon)", "ps_AF":"Pashto (Afghanistan)", "en_BS":"English (Bahamas)", "da":"Danish", "ps":"Pashto", "ln":"Lingala", "pt":"Portuguese", "hi":"Hindi", "lo":"Lao", "ebu":"Embu", "de":"German", "gu_IN":"Gujarati (India)", "seh":"Sena", "en_CX":"English (Christmas Island)", "en_ZM":"English (Zambia)", "fr_HT":"French (Haiti)", "fr_GP":"French (Guadeloupe)", 
-    "lt":"Lithuanian", "lu":"Luba-Katanga", "ln_CD":"Lingala (Congo - Kinshasa)", "vai_Latn":"Vai (Latin)", "el_GR":"Greek (Greece)", "lv":"Latvian", "en_KE":"English (Kenya)", "sbp":"Sangu", "hr":"Croatian", "en_CY":"English (Cyprus)", "es_GT":"Spanish (Guatemala)", "twq_NE":"Tasawaq (Niger)", "zh_Hant_HK":"Chinese (Traditional, Hong Kong [China])", "kln_KE":"Kalenjin (Kenya)", "fr_GQ":"French (Equatorial Guinea)", "chr":"Cherokee", "hu":"Hungarian", "es_UY":"Spanish (Uruguay)", "fr_CA":"French (Canada)", 
-    "ms_BN":"Malay (Brunei)", "en_NR":"English (Nauru)", "mer":"Meru", "shi":"Tachelhit", "es_PE":"Spanish (Peru)", "fr_SN":"French (Senegal)", "bez":"Bena", "sw_TZ":"Swahili (Tanzania)", "wae_CH":"Walser (Switzerland)", "kkj":"Kako", "hy":"Armenian", "teo_KE":"Teso (Kenya)", "en_CZ":"English (Czech Republic)", "dz_BT":"Dzongkha (Bhutan)", "teo":"Teso", "ar_JO":"Arabic (Jordan)", "mer_KE":"Meru (Kenya)", "khq":"Koyra Chiini", "ln_CF":"Lingala (Central African Republic)", "nn_NO":"Norwegian Nynorsk (Norway)", 
-    "en_MO":"English (Macau [China])", "ar_TD":"Arabic (Chad)", "dz":"Dzongkha", "ses":"Koyraboro Senni", "en_BW":"English (Botswana)", "en_AS":"English (American Samoa)", "ar_IL":"Arabic (Israel)", "nnh":"Ngiemboon", "bo_CN":"Tibetan (China)", "teo_UG":"Teso (Uganda)", "hy_AM":"Armenian (Armenia)", "ln_CG":"Lingala (Congo - Brazzaville)", "sr_Latn_BA":"Serbian (Latin, Bosnia & Herzegovina)", "en_MP":"English (Northern Mariana Islands)", "ksb_TZ":"Shambala (Tanzania)", "ar_SA":"Arabic (Saudi Arabia)", 
-    "smn_FI":"Inari Sami (Finland)", "ar_LY":"Arabic (Libya)", "en_AT":"English (Austria)", "so_KE":"Somali (Kenya)", "fr_CD":"French (Congo - Kinshasa)", "af_NA":"Afrikaans (Namibia)", "en_NU":"English (Niue)", "es_PH":"Spanish (Philippines)", "en_KI":"English (Kiribati)", "en_JE":"English (Jersey)", "lkt":"Lakota", "en_AU":"English (Australia)", "fa_IR":"Persian (Iran)", "uz_Latn_UZ":"Uzbek (Latin, Uzbekistan)", "zh_Hans_CN":"Chinese (Simplified, China)", "ewo_CM":"Ewondo (Cameroon)", "fr_PF":"French (French Polynesia)", 
-    "ca_IT":"Catalan (Italy)", "en_BZ":"English (Belize)", "ar_KW":"Arabic (Kuwait)", "pt_GW":"Portuguese (Guinea-Bissau)", "fr_FR":"French (France)", "am_ET":"Amharic (Ethiopia)", "en_VC":"English (St. Vincent & Grenadines)", "fr_DJ":"French (Djibouti)", "fr_CF":"French (Central African Republic)", "es_SV":"Spanish (El Salvador)", "en_MS":"English (Montserrat)", "pt_ST":"Portuguese (S\u00e3o Tom\u00e9 & Pr\u00edncipe)", "ar_SD":"Arabic (Sudan)", "luy_KE":"Luyia (Kenya)", "gd_GB":"Scottish Gaelic (United Kingdom)", 
-    "de_LI":"German (Liechtenstein)", "fr_CG":"French (Congo - Brazzaville)", "ckb_IQ":"Central Kurdish (Iraq)", "zh_Hans_SG":"Chinese (Simplified, Singapore)", "en_MT":"English (Malta)", "ha_NE":"Hausa (Niger)", "ewo":"Ewondo", "af_ZA":"Afrikaans (South Africa)", "os_GE":"Ossetic (Georgia)", "om_KE":"Oromo (Kenya)", "nl_SR":"Dutch (Suriname)", "es_ES":"Spanish (Spain)", "es_DO":"Spanish (Dominican Republic)", "ar_IQ":"Arabic (Iraq)", "fr_CH":"French (Switzerland)", "nnh_CM":"Ngiemboon (Cameroon)", 
-    "es_419":"Spanish (Latin America)", "en_MU":"English (Mauritius)", "en_US_POSIX":"English (United States, Computer)", "yav_CM":"Yangben (Cameroon)", "luo_KE":"Luo (Kenya)", "dua_CM":"Duala (Cameroon)", "et_EE":"Estonian (Estonia)", "en_IE":"English (Ireland)", "ak_GH":"Akan (Ghana)", "rwk":"Rwa", "es_CL":"Spanish (Chile)", "kea_CV":"Kabuverdianu (Cape Verde)", "fr_CI":"French (C\u00f4te d\u2019Ivoire)", "ckb_IR":"Central Kurdish (Iran)", "fr_BE":"French (Belgium)", "se":"Northern Sami", "en_NZ":"English (New Zealand)", 
-    "en_MV":"English (Maldives)", "en_LR":"English (Liberia)", "ha_NG":"Hausa (Nigeria)", "en_KN":"English (St. Kitts & Nevis)", "nb_SJ":"Norwegian Bokm\u00e5l (Svalbard & Jan Mayen)", "sg":"Sango", "sr_Cyrl_RS":"Serbian (Cyrillic, Serbia)", "ru_RU":"Russian (Russia)", "en_ZW":"English (Zimbabwe)", "sv_AX":"Swedish (\u00c5land Islands)", "si":"Sinhala", "ga_IE":"Irish (Ireland)", "en_VG":"English (British Virgin Islands)", "ff_MR":"Fulah (Mauritania)", "sk":"Slovak", "ky_KG":"Kyrgyz (Kyrgyzstan)", 
-    "agq_CM":"Aghem (Cameroon)", "mzn":"Mazanderani", "fr_BF":"French (Burkina Faso)", "sl":"Slovenian", "en_MW":"English (Malawi)", "mr_IN":"Marathi (India)", "az_Latn":"Azerbaijani (Latin)", "en_LS":"English (Lesotho)", "de_AT":"German (Austria)", "ka":"Georgian", "naq_NA":"Nama (Namibia)", "sn":"Shona", "sr_Latn_ME":"Serbian (Latin, Montenegro)", "fr_NC":"French (New Caledonia)", "so":"Somali", "is_IS":"Icelandic (Iceland)", "twq":"Tasawaq", "ig_NG":"Igbo (Nigeria)", "sq":"Albanian", "fo_FO":"Faroese (Faroe Islands)", 
-    "sr":"Serbian", "tzm":"Central Atlas Tamazight", "ga":"Irish", "om":"Oromo", "en_LT":"English (Lithuania)", "bas_CM":"Basaa (Cameroon)", "se_NO":"Northern Sami (Norway)", "ki":"Kikuyu", "nl_BE":"Dutch (Belgium)", "ar_QA":"Arabic (Qatar)", "gd":"Scottish Gaelic", "sv":"Swedish", "kk":"Kazakh", "sw":"Swahili", "es_CO":"Spanish (Colombia)", "az_Latn_AZ":"Azerbaijani (Latin, Azerbaijan)", "rn_BI":"Rundi (Burundi)", "or":"Oriya", "kl":"Kalaallisut", "ca":"Catalan", "en_VI":"English (U.S. Virgin Islands)", 
-    "km":"Khmer", "os":"Ossetic", "en_MY":"English (Malaysia)", "kn":"Kannada", "en_LU":"English (Luxembourg)", "fr_SY":"French (Syria)", "ar_TN":"Arabic (Tunisia)", "en_JM":"English (Jamaica)", "fr_PM":"French (St. Pierre & Miquelon)", "ko":"Korean", "fr_NE":"French (Niger)", "ce":"Chechen", "fr_MA":"French (Morocco)", "gl":"Galician", "ru_MD":"Russian (Moldova)", "saq_KE":"Samburu (Kenya)", "ks":"Kashmiri", "fr_CM":"French (Cameroon)", "lb_LU":"Luxembourgish (Luxembourg)", "gv_IM":"Manx (Isle of Man)", 
-    "fr_BI":"French (Burundi)", "en_LV":"English (Latvia)", "en_KR":"English (South Korea)", "es_NI":"Spanish (Nicaragua)", "en_GB":"English (United Kingdom)", "kw":"Cornish", "nl_SX":"Dutch (Sint Maarten)", "dav_KE":"Taita (Kenya)", "tr_CY":"Turkish (Cyprus)", "ky":"Kyrgyz", "en_UG":"English (Uganda)", "en_TC":"English (Turks & Caicos Islands)", "ar_EG":"Arabic (Egypt)", "fr_BJ":"French (Benin)", "gu":"Gujarati", "es_PR":"Spanish (Puerto Rico)", "fr_RW":"French (Rwanda)", "sr_Cyrl_BA":"Serbian (Cyrillic, Bosnia & Herzegovina)", 
-    "lrc_IQ":"Northern Luri (Iraq)", "gv":"Manx", "fr_MC":"French (Monaco)", "cs":"Czech", "bez_TZ":"Bena (Tanzania)", "es_CR":"Spanish (Costa Rica)", "asa_TZ":"Asu (Tanzania)", "ar_EH":"Arabic (Western Sahara)", "fo_DK":"Faroese (Denmark)", "ms_Arab_BN":"Malay (Arabic, Brunei)", "en_JP":"English (Japan)", "sbp_TZ":"Sangu (Tanzania)", "en_IL":"English (Israel)", "lt_LT":"Lithuanian (Lithuania)", "mfe":"Morisyen", "en_GD":"English (Grenada)", "cy":"Welsh", "ug_CN":"Uyghur (China)", "ca_FR":"Catalan (France)", 
-    "es_BO":"Spanish (Bolivia)", "fr_BL":"French (St. Barth\u00e9lemy)", "bn_IN":"Bengali (India)", "uz_Cyrl_UZ":"Uzbek (Cyrillic, Uzbekistan)", "lrc_IR":"Northern Luri (Iran)", "az_Cyrl":"Azerbaijani (Cyrillic)", "en_IM":"English (Isle of Man)", "sw_KE":"Swahili (Kenya)", "en_SB":"English (Solomon Islands)", "pa_Arab":"Punjabi (Arabic)", "ur_PK":"Urdu (Pakistan)", "haw_US":"Hawaiian (United States)", "ar_SO":"Arabic (Somalia)", "en_IN":"English (India)", "fil":"Filipino", "fr_MF":"French (St. Martin)", 
-    "en_WS":"English (Samoa)", "es_CU":"Spanish (Cuba)", "ja_JP":"Japanese (Japan)", "fy_NL":"Western Frisian (Netherlands)", "en_SC":"English (Seychelles)", "en_IO":"English (British Indian Ocean Territory)", "pt_PT":"Portuguese (Portugal)", "en_HK":"English (Hong Kong [China])", "en_GG":"English (Guernsey)", "fr_MG":"French (Madagascar)", "de_LU":"German (Luxembourg)", "tzm_MA":"Central Atlas Tamazight (Morocco)", "en_SD":"English (Sudan)", "shi_Tfng":"Tachelhit (Tifinagh)", "ln_AO":"Lingala (Angola)", 
-    "as_IN":"Assamese (India)", "en_GH":"English (Ghana)", "ms_MY":"Malay (Malaysia)", "ro_RO":"Romanian (Romania)", "jgo_CM":"Ngomba (Cameroon)", "dua":"Duala", "en_UM":"English (U.S. Outlying Islands)", "en_SE":"English (Sweden)", "kn_IN":"Kannada (India)", "en_KY":"English (Cayman Islands)", "vun_TZ":"Vunjo (Tanzania)", "kln":"Kalenjin", "lrc":"Northern Luri", "en_GI":"English (Gibraltar)", "ca_ES":"Catalan (Spain)", "rof":"Rombo", "pt_CV":"Portuguese (Cape Verde)", "kok":"Konkani", "pt_BR":"Portuguese (Brazil)", 
-    "ar_DJ":"Arabic (Djibouti)", "yi_001":"Yiddish (World)", "fi_FI":"Finnish (Finland)", "zh":"Chinese", "es_PY":"Spanish (Paraguay)", "ar_SS":"Arabic (South Sudan)", "mua":"Mundang", "sr_Cyrl_ME":"Serbian (Cyrillic, Montenegro)", "vai_Vaii_LR":"Vai (Vai, Liberia)", "en_001":"English (World)", "nl_NL":"Dutch (Netherlands)", "en_TK":"English (Tokelau)", "si_LK":"Sinhala (Sri Lanka)", "en_SG":"English (Singapore)", "sv_SE":"Swedish (Sweden)", "fr_DZ":"French (Algeria)", "ca_AD":"Catalan (Andorra)", 
-    "pt_AO":"Portuguese (Angola)", "vi":"Vietnamese", "xog_UG":"Soga (Uganda)", "xog":"Soga", "en_IS":"English (Iceland)", "nb":"Norwegian Bokm\u00e5l", "seh_MZ":"Sena (Mozambique)", "ars":"Najdi Arabic", "es_AR":"Spanish (Argentina)", "sk_SK":"Slovak (Slovakia)", "en_SH":"English (St. Helena)", "ti_ER":"Tigrinya (Eritrea)", "nd":"North Ndebele", "az_Cyrl_AZ":"Azerbaijani (Cyrillic, Azerbaijan)", "zu":"Zulu", "ne":"Nepali", "nd_ZW":"North Ndebele (Zimbabwe)", "el_CY":"Greek (Cyprus)", "en_IT":"English (Italy)", 
-    "nl_BQ":"Dutch (Caribbean Netherlands)", "da_GL":"Danish (Greenland)", "ja":"Japanese", "rm":"Romansh", "fr_ML":"French (Mali)", "rn":"Rundi", "en_VU":"English (Vanuatu)", "rof_TZ":"Rombo (Tanzania)", "ro":"Romanian", "ebu_KE":"Embu (Kenya)", "ru_KG":"Russian (Kyrgyzstan)", "en_SI":"English (Slovenia)", "sg_CF":"Sango (Central African Republic)", "mfe_MU":"Morisyen (Mauritius)", "nl":"Dutch", "brx":"Bodo", "bs_Latn":"Bosnian (Latin)", "fa":"Standard Moroccan Tamazight (Morocco)", "Persianzgh_MA":"Standard Moroccan Tamazight (Morocco)", 
-    "en_GM":"English (Gambia)", "shi_Latn":"Tachelhit (Latin)", "en_FI":"English (Finland)", "nn":"Norwegian", "Nynorsken_EE":"English (Estonia)", "ru":"Russian", "yue":"Cantonese", "kam_KE":"Kamba (Kenya)", "fur":"Friulian", "vai_Vaii":"Vai (Vai)", "ar_ER":"Arabic (Eritrea)", "rw":"Kinyarwanda", "ti_ET":"Tigrinya (Ethiopia)", "ff":"Fulah", "luo":"Luo", "fa_AF":"Persian (Afghanistan)", "nl_CW":"Dutch (Cura\u00e7ao)", "en_HR":"English (Croatia)", "en_FJ":"English (Fiji)", "fi":"Finnish", "pt_MO":"Portuguese (Macau [China])", 
-    "be":"Belarusian", "en_US":"English (United States)", "en_TO":"English (Tonga)", "en_SK":"English (Slovakia)", "bg":"Bulgarian", "ru_BY":"Russian (Belarus)", "it_IT":"Italian (Italy)", "ml_IN":"Malayalam (India)", "gsw_CH":"Swiss German (Switzerland)", "qu_EC":"Quechua (Ecuador)", "fo":"Faroese", "sv_FI":"Swedish (Finland)", "en_FK":"English (Falkland Islands)", "nus":"Nuer", "ta_LK":"Tamil (Sri Lanka)", "vun":"Vunjo", "sr_Latn":"Serbian (Latin)", "es_BZ":"Spanish (Belize)", "fr":"French", "en_SL":"English (Sierra Leone)", 
-    "bm":"Bambara", "ar_BH":"Arabic (Bahrain)", "guz":"Gusii", "bn":"Bengali", "bo":"Tibetan", "ar_SY":"Arabic (Syria)", "lo_LA":"Lao (Laos)", "ne_NP":"Nepali (Nepal)", "uz_Latn":"Uzbek (Latin)", "be_BY":"Belarusian (Belarus)", "es_IC":"Spanish (Canary Islands)", "sr_Latn_XK":"Serbian (Latin, Kosovo)", "ar_MA":"Arabic (Morocco)", "pa_Guru_IN":"Punjabi (Gurmukhi, India)", "br":"Breton", "luy":"Luyia", "kde_TZ":"Makonde (Tanzania)", "bs":"Bosnian", "fy":"Western Frisian", "fur_IT":"Friulian (Italy)", 
-    "hu_HU":"Hungarian (Hungary)", "ar_AE":"Arabic (United Arab Emirates)", "en_HU":"English (Hungary)", "sah_RU":"Sakha (Russia)", "zh_Hans":"Chinese (Simplified)", "en_FM":"English (Micronesia)", "sq_AL":"Albanian (Albania)", "ko_KP":"Korean (North Korea)", "en_150":"English (Europe)", "en_DE":"English (Germany)", "ce_RU":"Chechen (Russia)", "en_CA":"English (Canada)", "hsb_DE":"Upper Sorbian (Germany)", "fr_MQ":"French (Martinique)", "en_TR":"English (Turkey)", "ro_MD":"Romanian (Moldova)", "es_VE":"Spanish (Venezuela)", 
-    "tg_TJ":"Tajik (Tajikistan)", "fr_WF":"French (Wallis & Futuna)", "mt_MT":"Maltese (Malta)", "kab":"Kabyle", "nmg_CM":"Kwasio (Cameroon)", "ms_SG":"Malay (Singapore)", "en_GR":"English (Greece)", "ru_UA":"Russian (Ukraine)", "fr_MR":"French (Mauritania)", "zh_Hans_MO":"Chinese (Simplified, Macau [China])", "ff_GN":"Fulah (Guinea)", "bs_Cyrl":"Bosnian (Cyrillic)", "sw_UG":"Swahili (Uganda)", "ko_KR":"Korean (South Korea)", "en_DG":"English (Diego Garcia)", "bo_IN":"Tibetan (India)", "en_CC":"English (Cocos [Keeling] Islands)", 
-    "shi_Tfng_MA":"Tachelhit (Tifinagh, Morocco)", "lag":"Langi", "it_SM":"Italian (San Marino)", "os_RU":"Ossetic (Russia)", "en_TT":"English (Trinidad & Tobago)", "ms_Arab_MY":"Malay (Arabic, Malaysia)", "sq_MK":"Albanian (Macedonia)", "bem_ZM":"Bemba (Zambia)", "kde":"Makonde", "ar_OM":"Arabic (Oman)", "kk_KZ":"Kazakh (Kazakhstan)", "cgg":"Chiga", "bas":"Basaa", "kam":"Kamba", "wae":"Walser", "es_MX":"Spanish (Mexico)", "sah":"Sakha", "zh_Hant":"Chinese (Traditional)", "en_GU":"English (Guam)", 
-    "fr_MU":"French (Mauritius)", "fr_KM":"French (Comoros)", "ar_LB":"Arabic (Lebanon)", "en_BA":"English (Bosnia & Herzegovina)", "en_TV":"English (Tuvalu)", "sr_Cyrl":"Serbian (Cyrillic)", "mzn_IR":"Mazanderani (Iran)", "dje":"Zarma", "kab_DZ":"Kabyle (Algeria)", "fil_PH":"Filipino (Philippines)", "se_SE":"Northern Sami (Sweden)", "vai":"Vai", "hr_HR":"Croatian (Croatia)", "bs_Latn_BA":"Bosnian (Latin, Bosnia & Herzegovina)", "nl_AW":"Dutch (Aruba)", "dav":"Taita", "so_SO":"Somali (Somalia)", 
-    "ar_PS":"Arabic (Palestinian Territories)", "en_FR":"English (France)", "uz_Cyrl":"Uzbek (Cyrillic)", "ff_SN":"Fulah (Senegal)", "en_BB":"English (Barbados)", "ki_KE":"Kikuyu (Kenya)", "en_TW":"English (Taiwan)", "naq":"Nama", "en_SS":"English (South Sudan)", "mg_MG":"Malagasy (Madagascar)", "mas_KE":"Masai (Kenya)", "en_RO":"English (Romania)", "en_PG":"English (Papua New Guinea)", "mgh":"Makhuwa-Meetto", "dyo_SN":"Jola-Fonyi (Senegal)", "mas":"Masai", "agq":"Aghem", "bn_BD":"Bengali (Bangladesh)", 
-    "haw":"Hawaiian", "yi":"Yiddish", "nb_NO":"Norwegian Bokm\u00e5l (Norway)", "da_DK":"Danish (Denmark)", "en_DK":"English (Denmark)", "saq":"Samburu", "ug":"Uyghur", "cy_GB":"Welsh (United Kingdom)", "fr_YT":"French (Mayotte)", "jmc":"Machame", "ses_ML":"Koyraboro Senni (Mali)", "en_PH":"English (Philippines)", "de_DE":"German (Germany)", "ar_YE":"Arabic (Yemen)", "bm_ML":"Bambara (Mali)", "yo":"Yoruba", "lkt_US":"Lakota (United States)", "uz_Arab_AF":"Uzbek (Arabic, Afghanistan)", "jgo":"Ngomba", 
-    "sl_SI":"Slovenian (Slovenia)", "uk":"Ukrainian", "en_CH":"English (Switzerland)", "asa":"Asu", "lg_UG":"Ganda (Uganda)", "qu_PE":"Quechua (Peru)", "mgo":"Meta\u02bc", "id_ID":"Indonesian (Indonesia)", "en_NA":"English (Namibia)", "en_GY":"English (Guyana)", "zgh":"Standard Moroccan", "Tamazightpt_MZ":"Portuguese (Mozambique)", "fr_LU":"French (Luxembourg)", "ta_MY":"Tamil (Malaysia)", "mas_TZ":"Masai (Tanzania)", "en_DM":"English (Dominica)", "dsb":"Lower Sorbian", "mg":"Malagasy", "en_BE":"English (Belgium)", 
-    "ur":"Urdu", "fr_GA":"French (Gabon)", "ka_GE":"Georgian (Georgia)", "nmg":"Kwasio", "en_TZ":"English (Tanzania)", "eu_ES":"Basque (Spain)", "ar_DZ":"Arabic (Algeria)", "id":"Indonesian", "so_DJ":"Somali (Djibouti)", "hsb":"Upper Sorbian", "yav":"Yangben", "mk":"Macedonian", "pa_Arab_PK":"Punjabi (Arabic, Pakistan)", "ml":"Malayalam", "en_ER":"English (Eritrea)", "ig":"Igbo", "se_FI":"Northern Sami (Finland)", "mn":"Mongolian", "ksb":"Shambala", "uz":"Uzbek", "vi_VN":"Vietnamese (Vietnam)", "ii":"Sichuan Yi", 
-    "qu":"Quechua", "en_PK":"English (Pakistan)", "ee":"Ewe", "ast_ES":"Asturian (Spain)", "mr":"Marathi", "ms":"Malay", "en_ES":"English (Spain)", "ha_GH":"Hausa (Ghana)", "it_CH":"Italian (Switzerland)", "sq_XK":"Albanian (Kosovo)", "mt":"Maltese", "en_CK":"English (Cook Islands)", "br_FR":"Breton (France)", "tk_TM":"Turkmen (Turkmenistan)", "sr_Cyrl_XK":"Serbian (Cyrillic, Kosovo)", "ksf":"Bafia", "en_SX":"English (Sint Maarten)", "bg_BG":"Bulgarian (Bulgaria)", "en_PL":"English (Poland)", "af":"Afrikaans", 
-    "el":"Greek", "cs_CZ":"Czech (Czech Republic)", "fr_TD":"French (Chad)", "zh_Hans_HK":"Chinese (Simplified, Hong Kong [China])", "is":"Icelandic", "ksh":"Colognian", "my":"Burmese", "mn_MN":"Mongolian (Mongolia)", "en":"English", "it":"Italian", "dsb_DE":"Lower Sorbian (Germany)", "ii_CN":"Sichuan Yi (China)", "smn":"Inari Sami", "iu":"Inuktitut", "eo":"Esperanto", "en_ZA":"English (South Africa)", "en_AD":"English (Andorra)", "ak":"Akan", "en_RU":"English (Russia)", "kkj_CM":"Kako (Cameroon)", 
-    "am":"Amharic", "es":"Spanish", "et":"Estonian", "uk_UA":"Ukrainian (Ukraine)"};
-    this.name = "LocaleValidator";
-  };
-  LocaleValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  LocaleValidator.prototype.constructor = LocaleValidator;
-  Object.defineProperty(LocaleValidator.prototype, "alias", {get:function() {
-    return "locale";
-  }});
-  Object.assign(LocaleValidator.prototype, {__validate:function() {
-    if ("undefined" === typeof this.__locales[this.data]) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {LocaleValidator:LocaleValidator};
-}());
-abv.registry(abv.LocaleValidator);
-Object.assign(abv, function() {
-  var CountryValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.message = this.__options.message || "This value is not a valid country.";
-    this.__countries = {"AF":"Afghanistan", "AX":"Aland Islands", "AL":"Albania", "DZ":"Algeria", "AS":"American Samoa", "AD":"Andorra", "AO":"Angola", "AI":"Anguilla", "AQ":"Antarctica", "AG":"Antigua And Barbuda", "AR":"Argentina", "AM":"Armenia", "AW":"Aruba", "AU":"Australia", "AT":"Austria", "AZ":"Azerbaijan", "BS":"Bahamas", "BH":"Bahrain", "BD":"Bangladesh", "BB":"Barbados", "BY":"Belarus", "BE":"Belgium", "BZ":"Belize", "BJ":"Benin", "BM":"Bermuda", "BT":"Bhutan", "BO":"Bolivia", "BA":"Bosnia And Herzegovina", 
-    "BW":"Botswana", "BV":"Bouvet Island", "BR":"Brazil", "IO":"British Indian Ocean Territory", "BN":"Brunei Darussalam", "BG":"Bulgaria", "BF":"Burkina Faso", "BI":"Burundi", "KH":"Cambodia", "CM":"Cameroon", "CA":"Canada", "CV":"Cape Verde", "KY":"Cayman Islands", "CF":"Central African Republic", "TD":"Chad", "CL":"Chile", "CN":"China", "CX":"Christmas Island", "CC":"Cocos (Keeling) Islands", "CO":"Colombia", "KM":"Comoros", "CG":"Congo", "CD":"Congo, Democratic Republic", "CK":"Cook Islands", 
-    "CR":"Costa Rica", "CI":'Cote D"Ivoire', "HR":"Croatia", "CU":"Cuba", "CY":"Cyprus", "CZ":"Czech Republic", "DK":"Denmark", "DJ":"Djibouti", "DM":"Dominica", "DO":"Dominican Republic", "EC":"Ecuador", "EG":"Egypt", "SV":"El Salvador", "GQ":"Equatorial Guinea", "ER":"Eritrea", "EE":"Estonia", "ET":"Ethiopia", "FK":"Falkland Islands (Malvinas)", "FO":"Faroe Islands", "FJ":"Fiji", "FI":"Finland", "FR":"France", "GF":"French Guiana", "PF":"French Polynesia", "TF":"French Southern Territories", "GA":"Gabon", 
-    "GM":"Gambia", "GE":"Georgia", "DE":"Germany", "GH":"Ghana", "GI":"Gibraltar", "GR":"Greece", "GL":"Greenland", "GD":"Grenada", "GP":"Guadeloupe", "GU":"Guam", "GT":"Guatemala", "GG":"Guernsey", "GN":"Guinea", "GW":"Guinea-Bissau", "GY":"Guyana", "HT":"Haiti", "HM":"Heard Island & Mcdonald Islands", "VA":"Holy See (Vatican City State)", "HN":"Honduras", "HK":"Hong Kong", "HU":"Hungary", "IS":"Iceland", "IN":"India", "ID":"Indonesia", "IR":"Iran, Islamic Republic Of", "IQ":"Iraq", "IE":"Ireland", 
-    "IM":"Isle Of Man", "IL":"Israel", "IT":"Italy", "JM":"Jamaica", "JP":"Japan", "JE":"Jersey", "JO":"Jordan", "KZ":"Kazakhstan", "KE":"Kenya", "KI":"Kiribati", "KR":"Korea", "KW":"Kuwait", "KG":"Kyrgyzstan", "LA":'Lao People"s Democratic Republic', "LV":"Latvia", "LB":"Lebanon", "LS":"Lesotho", "LR":"Liberia", "LY":"Libyan Arab Jamahiriya", "LI":"Liechtenstein", "LT":"Lithuania", "LU":"Luxembourg", "MO":"Macao", "MK":"Macedonia", "MG":"Madagascar", "MW":"Malawi", "MY":"Malaysia", "MV":"Maldives", 
-    "ML":"Mali", "MT":"Malta", "MH":"Marshall Islands", "MQ":"Martinique", "MR":"Mauritania", "MU":"Mauritius", "YT":"Mayotte", "MX":"Mexico", "FM":"Micronesia, Federated States Of", "MD":"Moldova", "MC":"Monaco", "MN":"Mongolia", "ME":"Montenegro", "MS":"Montserrat", "MA":"Morocco", "MZ":"Mozambique", "MM":"Myanmar", "NA":"Namibia", "NR":"Nauru", "NP":"Nepal", "NL":"Netherlands", "AN":"Netherlands Antilles", "NC":"New Caledonia", "NZ":"New Zealand", "NI":"Nicaragua", "NE":"Niger", "NG":"Nigeria", 
-    "NU":"Niue", "NF":"Norfolk Island", "MP":"Northern Mariana Islands", "NO":"Norway", "OM":"Oman", "PK":"Pakistan", "PW":"Palau", "PS":"Palestinian Territory, Occupied", "PA":"Panama", "PG":"Papua New Guinea", "PY":"Paraguay", "PE":"Peru", "PH":"Philippines", "PN":"Pitcairn", "PL":"Poland", "PT":"Portugal", "PR":"Puerto Rico", "QA":"Qatar", "RE":"Reunion", "RO":"Romania", "RU":"Russian Federation", "RW":"Rwanda", "BL":"Saint Barthelemy", "SH":"Saint Helena", "KN":"Saint Kitts And Nevis", "LC":"Saint Lucia", 
-    "MF":"Saint Martin", "PM":"Saint Pierre And Miquelon", "VC":"Saint Vincent And Grenadines", "WS":"Samoa", "SM":"San Marino", "ST":"Sao Tome And Principe", "SA":"Saudi Arabia", "SN":"Senegal", "RS":"Serbia", "SC":"Seychelles", "SL":"Sierra Leone", "SG":"Singapore", "SK":"Slovakia", "SI":"Slovenia", "SB":"Solomon Islands", "SO":"Somalia", "ZA":"South Africa", "GS":"South Georgia And Sandwich Isl.", "ES":"Spain", "LK":"Sri Lanka", "SD":"Sudan", "SR":"Suriname", "SJ":"Svalbard And Jan Mayen", "SZ":"Swaziland", 
-    "SE":"Sweden", "CH":"Switzerland", "SY":"Syrian Arab Republic", "TW":"Taiwan", "TJ":"Tajikistan", "TZ":"Tanzania", "TH":"Thailand", "TL":"Timor-Leste", "TG":"Togo", "TK":"Tokelau", "TO":"Tonga", "TT":"Trinidad And Tobago", "TN":"Tunisia", "TR":"Turkey", "TM":"Turkmenistan", "TC":"Turks And Caicos Islands", "TV":"Tuvalu", "UG":"Uganda", "UA":"Ukraine", "AE":"United Arab Emirates", "GB":"United Kingdom", "US":"United States", "UM":"United States Outlying Islands", "UY":"Uruguay", "UZ":"Uzbekistan", 
-    "VU":"Vanuatu", "VE":"Venezuela", "VN":"Vietnam", "VG":"Virgin Islands, British", "VI":"Virgin Islands, U.S.", "WF":"Wallis And Futuna", "EH":"Western Sahara", "YE":"Yemen", "ZM":"Zambia", "ZW":"Zimbabwe"};
-    this.name = "CountryValidator";
-  };
-  CountryValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  CountryValidator.prototype.constructor = CountryValidator;
-  Object.defineProperty(CountryValidator.prototype, "alias", {get:function() {
-    return "country";
-  }});
-  Object.assign(CountryValidator.prototype, {__validate:function() {
-    if ("undefined" === typeof this.__countries[this.data]) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {CountryValidator:CountryValidator};
-}());
-abv.registry(abv.CountryValidator);
-Object.assign(abv, function() {
-  var BicValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {iban:'type:{"type":"string"}|length:{"min":3,"max":255}', ibanMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.BIC_COUNTRY_TO_IBAN_COUNTRY_MAP = {"GF":"FR", "PF":"FR", "TF":"FR", "GP":"FR", "MQ":"FR", "YT":"FR", "NC":"FR", "RE":"FR", "PM":"FR", "WF":"FR", "JE":"GB", "IM":"GB", "GG":"GB", "VG":"GB"};
-    this.iban = this.__options.iban || null;
-    this.ibanMessage = this.__options.ibanMessage || "This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.";
-    this.message = this.__options.message || "This is not a valid Business Identifier Code (BIC).";
-    this.name = "BicValidator";
-  };
-  BicValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  BicValidator.prototype.constructor = BicValidator;
-  Object.defineProperty(BicValidator.prototype, "alias", {get:function() {
-    return "bic";
-  }});
-  Object.assign(BicValidator.prototype, {__validate:function() {
-    var canonicalize = this.data.split(" ").join("");
-    if (false === [8, 11].includes(canonicalize.length)) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    if (false === abv.isType("alnum", canonicalize)) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    if (false === abv.isType("alpha", canonicalize.substr(0, 4))) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    if (null !== abv.isValidWithErrorMessage(canonicalize.substr(4, 2), "country", true)) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    if (canonicalize.toUpperCase() !== canonicalize) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    if (null === this.iban) {
-      return;
-    }
-    var ibanCountryCode = this.iban.substr(0, 2);
-    if (true === abv.isType("alpha", ibanCountryCode) && this.__bicAndIbanCountriesMatch(canonicalize.substr(4, 2), ibanCountryCode)) {
-      this.__setErrorMessage(this.ibanMessage, this.__ibanMessageParameters());
-      return;
-    }
-  }, __bicAndIbanCountriesMatch:function(bicCountryCode, ibanCountryCode) {
-    return ibanCountryCode === bicCountryCode || ibanCountryCode === (this.BIC_COUNTRY_TO_IBAN_COUNTRY_MAP[bicCountryCode] || null);
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }, __ibanMessageParameters:function() {
-    return {"iban":this.iban};
-  }});
-  return {BicValidator:BicValidator};
-}());
-abv.registry(abv.BicValidator);
-Object.assign(abv, function() {
-  var CardSchemeValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', schemes:'required|type:{"type":["string","array"],"any":true}'}, lang, internal);
-    this.__schemes = {"AMEX":[/^3[47][0-9]{13}$/], "CHINA_UNIONPAY":[/^62[0-9]{14,17}$/], "DINERS":[/^3(?:0[0-5]|[68][0-9])[0-9]{11}$/], "DISCOVER":[/^6011[0-9]{12}$/, /^64[4-9][0-9]{13}$/, /^65[0-9]{14}$/, /^622(12[6-9]|1[3-9][0-9]|[2-8][0-9][0-9]|91[0-9]|92[0-5])[0-9]{10}$/], "INSTAPAYMENT":[/^63[7-9][0-9]{13}$/], "JCB":[/^(?:2131|1800|35[0-9]{3})[0-9]{11}$/], "LASER":[/^(6304|670[69]|6771)[0-9]{12,15}$/], "MAESTRO":[/^(6759[0-9]{2})[0-9]{6,13}$/, /^(50[0-9]{4})[0-9]{6,13}$/, /^5[6-9][0-9]{10,17}$/, 
-    /^6[0-9]{11,18}$/], "MASTERCARD":[/^5[1-5][0-9]{14}$/, /^2(22[1-9][0-9]{12}|2[3-9][0-9]{13}|[3-6][0-9]{14}|7[0-1][0-9]{13}|720[0-9]{12})$/], "MIR":[/^220[0-4][0-9]{12}$/], "UATP":[/^1[0-9]{14}$/], "VISA":[/^4([0-9]{12}|[0-9]{15}|[0-9]{18})$/]};
-    this.message = this.__options.message || "Unsupported card type or invalid card number.";
-    this.schemes = "string" === typeof this.__options.schemes ? [this.__options.schemes] : this.__options.schemes;
-    this.name = "CardSchemeValidator";
-  };
-  CardSchemeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-  CardSchemeValidator.prototype.constructor = CardSchemeValidator;
-  Object.defineProperty(CardSchemeValidator.prototype, "alias", {get:function() {
-    return "card-scheme";
-  }});
-  Object.assign(CardSchemeValidator.prototype, {__validate:function() {
-    if (false === abv.isType("numeric", this.data)) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    for (var i = 0; i < this.schemes.length; i++) {
-      if ("undefined" === typeof this.__schemes[this.schemes[i]]) {
-        continue;
-      }
-      for (var j = 0; j < this.__schemes[this.schemes[i]].length; j++) {
-        if (true === this.__schemes[this.schemes[i]][j].test(this.data)) {
-          return;
-        }
-      }
-    }
-    this.__setErrorMessage(this.message, this.__messageParameters());
-    return;
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {CardSchemeValidator:CardSchemeValidator};
-}());
-abv.registry(abv.CardSchemeValidator);
-Object.assign(abv, function() {
-  var CurrencyValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.message = this.__options.message || "This value is not a valid currency.";
-    this.__currencies = [{"Alphabetic_Code":"AFN", "Currency":"Afghani", "Entity":"AFGHANISTAN", "Minor_Unit":2, "Numeric_Code":"971", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"\u00c5LAND ISLANDS", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ALL", "Currency":"Lek", "Entity":"ALBANIA", "Minor_Unit":2, "Numeric_Code":"008", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"DZD", "Currency":"Algerian Dinar", "Entity":"ALGERIA", "Minor_Unit":2, "Numeric_Code":"012", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"AMERICAN SAMOA", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"ANDORRA", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AOA", 
-    "Currency":"Kwanza", "Entity":"ANGOLA", "Minor_Unit":2, "Numeric_Code":"973", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XCD", "Currency":"East Caribbean Dollar", "Entity":"ANGUILLA", "Minor_Unit":2, "Numeric_Code":"951", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":null, "Currency":"No universal currency", "Entity":"ANTARCTICA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XCD", 
-    "Currency":"East Caribbean Dollar", "Entity":"ANTIGUA AND BARBUDA", "Minor_Unit":2, "Numeric_Code":"951", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ARS", "Currency":"Argentine Peso", "Entity":"ARGENTINA", "Minor_Unit":2, "Numeric_Code":"032", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AMD", "Currency":"Armenian Dram", "Entity":"ARMENIA", "Minor_Unit":2, "Numeric_Code":"051", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AWG", 
-    "Currency":"Aruban Florin", "Entity":"ARUBA", "Minor_Unit":2, "Numeric_Code":"533", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AUD", "Currency":"Australian Dollar", "Entity":"AUSTRALIA", "Minor_Unit":2, "Numeric_Code":"036", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"AUSTRIA", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AZN", "Currency":"Azerbaijan Manat", 
-    "Entity":"AZERBAIJAN", "Minor_Unit":2, "Numeric_Code":"944", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BSD", "Currency":"Bahamian Dollar", "Entity":"BAHAMAS (THE)", "Minor_Unit":2, "Numeric_Code":"044", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BHD", "Currency":"Bahraini Dinar", "Entity":"BAHRAIN", "Minor_Unit":3, "Numeric_Code":"048", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BDT", "Currency":"Taka", 
-    "Entity":"BANGLADESH", "Minor_Unit":2, "Numeric_Code":"050", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BBD", "Currency":"Barbados Dollar", "Entity":"BARBADOS", "Minor_Unit":2, "Numeric_Code":"052", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BYN", "Currency":"Belarusian Ruble", "Entity":"BELARUS", "Minor_Unit":2, "Numeric_Code":"933", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"BELGIUM", 
-    "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BZD", "Currency":"Belize Dollar", "Entity":"BELIZE", "Minor_Unit":2, "Numeric_Code":"084", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XOF", "Currency":"CFA Franc BCEAO", "Entity":"BENIN", "Minor_Unit":0, "Numeric_Code":"952", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BMD", "Currency":"Bermudian Dollar", "Entity":"BERMUDA", 
-    "Minor_Unit":2, "Numeric_Code":"060", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"INR", "Currency":"Indian Rupee", "Entity":"BHUTAN", "Minor_Unit":2, "Numeric_Code":"356", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BTN", "Currency":"Ngultrum", "Entity":"BHUTAN", "Minor_Unit":2, "Numeric_Code":"064", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BOB", "Currency":"Boliviano", "Entity":"BOLIVIA (PLURINATIONAL STATE OF)", 
-    "Minor_Unit":2, "Numeric_Code":"068", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BOV", "Currency":"Mvdol", "Entity":"BOLIVIA (PLURINATIONAL STATE OF)", "Minor_Unit":2, "Numeric_Code":"984", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"BONAIRE, SINT EUSTATIUS AND SABA", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BAM", "Currency":"Convertible Mark", 
-    "Entity":"BOSNIA AND HERZEGOVINA", "Minor_Unit":2, "Numeric_Code":"977", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BWP", "Currency":"Pula", "Entity":"BOTSWANA", "Minor_Unit":2, "Numeric_Code":"072", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NOK", "Currency":"Norwegian Krone", "Entity":"BOUVET ISLAND", "Minor_Unit":2, "Numeric_Code":"578", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BRL", "Currency":"Brazilian Real", 
-    "Entity":"BRAZIL", "Minor_Unit":2, "Numeric_Code":"986", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"BRITISH INDIAN OCEAN TERRITORY (THE)", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BND", "Currency":"Brunei Dollar", "Entity":"BRUNEI DARUSSALAM", "Minor_Unit":2, "Numeric_Code":"096", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BGN", 
-    "Currency":"Bulgarian Lev", "Entity":"BULGARIA", "Minor_Unit":2, "Numeric_Code":"975", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XOF", "Currency":"CFA Franc BCEAO", "Entity":"BURKINA FASO", "Minor_Unit":0, "Numeric_Code":"952", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"BIF", "Currency":"Burundi Franc", "Entity":"BURUNDI", "Minor_Unit":0, "Numeric_Code":"108", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CVE", 
-    "Currency":"Cabo Verde Escudo", "Entity":"CABO VERDE", "Minor_Unit":2, "Numeric_Code":"132", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"KHR", "Currency":"Riel", "Entity":"CAMBODIA", "Minor_Unit":2, "Numeric_Code":"116", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XAF", "Currency":"CFA Franc BEAC", "Entity":"CAMEROON", "Minor_Unit":0, "Numeric_Code":"950", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CAD", "Currency":"Canadian Dollar", 
-    "Entity":"CANADA", "Minor_Unit":2, "Numeric_Code":"124", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"KYD", "Currency":"Cayman Islands Dollar", "Entity":"CAYMAN ISLANDS (THE)", "Minor_Unit":2, "Numeric_Code":"136", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XAF", "Currency":"CFA Franc BEAC", "Entity":"CENTRAL AFRICAN REPUBLIC (THE)", "Minor_Unit":0, "Numeric_Code":"950", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XAF", 
-    "Currency":"CFA Franc BEAC", "Entity":"CHAD", "Minor_Unit":0, "Numeric_Code":"950", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CLP", "Currency":"Chilean Peso", "Entity":"CHILE", "Minor_Unit":0, "Numeric_Code":"152", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CLF", "Currency":"Unidad de Fomento", "Entity":"CHILE", "Minor_Unit":4, "Numeric_Code":"990", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CNY", "Currency":"Yuan Renminbi", 
-    "Entity":"CHINA", "Minor_Unit":2, "Numeric_Code":"156", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AUD", "Currency":"Australian Dollar", "Entity":"CHRISTMAS ISLAND", "Minor_Unit":2, "Numeric_Code":"036", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AUD", "Currency":"Australian Dollar", "Entity":"COCOS (KEELING) ISLANDS (THE)", "Minor_Unit":2, "Numeric_Code":"036", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"COP", 
-    "Currency":"Colombian Peso", "Entity":"COLOMBIA", "Minor_Unit":2, "Numeric_Code":"170", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"COU", "Currency":"Unidad de Valor Real", "Entity":"COLOMBIA", "Minor_Unit":2, "Numeric_Code":"970", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"KMF", "Currency":"Comorian Franc", "Entity":"COMOROS (THE)", "Minor_Unit":0, "Numeric_Code":"174", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CDF", 
-    "Currency":"Congolese Franc", "Entity":"CONGO (THE DEMOCRATIC REPUBLIC OF THE)", "Minor_Unit":2, "Numeric_Code":"976", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XAF", "Currency":"CFA Franc BEAC", "Entity":"CONGO (THE)", "Minor_Unit":0, "Numeric_Code":"950", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NZD", "Currency":"New Zealand Dollar", "Entity":"COOK ISLANDS (THE)", "Minor_Unit":2, "Numeric_Code":"554", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"CRC", "Currency":"Costa Rican Colon", "Entity":"COSTA RICA", "Minor_Unit":2, "Numeric_Code":"188", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XOF", "Currency":"CFA Franc BCEAO", "Entity":"C\u00d4TE D'IVOIRE", "Minor_Unit":0, "Numeric_Code":"952", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"HRK", "Currency":"Kuna", "Entity":"CROATIA", "Minor_Unit":2, "Numeric_Code":"191", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"CUP", "Currency":"Cuban Peso", "Entity":"CUBA", "Minor_Unit":2, "Numeric_Code":"192", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CUC", "Currency":"Peso Convertible", "Entity":"CUBA", "Minor_Unit":2, "Numeric_Code":"931", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ANG", "Currency":"Netherlands Antillean Guilder", "Entity":"CURA\u00c7AO", "Minor_Unit":2, "Numeric_Code":"532", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"CYPRUS", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CZK", "Currency":"Czech Koruna", "Entity":"CZECHIA", "Minor_Unit":2, "Numeric_Code":"203", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"DKK", "Currency":"Danish Krone", "Entity":"DENMARK", "Minor_Unit":2, "Numeric_Code":"208", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"DJF", 
-    "Currency":"Djibouti Franc", "Entity":"DJIBOUTI", "Minor_Unit":0, "Numeric_Code":"262", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XCD", "Currency":"East Caribbean Dollar", "Entity":"DOMINICA", "Minor_Unit":2, "Numeric_Code":"951", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"DOP", "Currency":"Dominican Peso", "Entity":"DOMINICAN REPUBLIC (THE)", "Minor_Unit":2, "Numeric_Code":"214", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"ECUADOR", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EGP", "Currency":"Egyptian Pound", "Entity":"EGYPT", "Minor_Unit":2, "Numeric_Code":"818", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SVC", "Currency":"El Salvador Colon", "Entity":"EL SALVADOR", "Minor_Unit":2, "Numeric_Code":"222", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"EL SALVADOR", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XAF", "Currency":"CFA Franc BEAC", "Entity":"EQUATORIAL GUINEA", "Minor_Unit":0, "Numeric_Code":"950", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ERN", "Currency":"Nakfa", "Entity":"ERITREA", "Minor_Unit":2, "Numeric_Code":"232", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"ESTONIA", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ETB", "Currency":"Ethiopian Birr", "Entity":"ETHIOPIA", "Minor_Unit":2, "Numeric_Code":"230", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"EUROPEAN UNION", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"FKP", 
-    "Currency":"Falkland Islands Pound", "Entity":"FALKLAND ISLANDS (THE) [MALVINAS]", "Minor_Unit":2, "Numeric_Code":"238", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"DKK", "Currency":"Danish Krone", "Entity":"FAROE ISLANDS (THE)", "Minor_Unit":2, "Numeric_Code":"208", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"FJD", "Currency":"Fiji Dollar", "Entity":"FIJI", "Minor_Unit":2, "Numeric_Code":"242", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"FINLAND", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"FRANCE", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"FRENCH GUIANA", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XPF", 
-    "Currency":"CFP Franc", "Entity":"FRENCH POLYNESIA", "Minor_Unit":0, "Numeric_Code":"953", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"FRENCH SOUTHERN TERRITORIES (THE)", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XAF", "Currency":"CFA Franc BEAC", "Entity":"GABON", "Minor_Unit":0, "Numeric_Code":"950", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GMD", 
-    "Currency":"Dalasi", "Entity":"GAMBIA (THE)", "Minor_Unit":2, "Numeric_Code":"270", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GEL", "Currency":"Lari", "Entity":"GEORGIA", "Minor_Unit":2, "Numeric_Code":"981", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"GERMANY", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GHS", "Currency":"Ghana Cedi", 
-    "Entity":"GHANA", "Minor_Unit":2, "Numeric_Code":"936", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GIP", "Currency":"Gibraltar Pound", "Entity":"GIBRALTAR", "Minor_Unit":2, "Numeric_Code":"292", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"GREECE", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"DKK", "Currency":"Danish Krone", "Entity":"GREENLAND", 
-    "Minor_Unit":2, "Numeric_Code":"208", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XCD", "Currency":"East Caribbean Dollar", "Entity":"GRENADA", "Minor_Unit":2, "Numeric_Code":"951", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"GUADELOUPE", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"GUAM", "Minor_Unit":2, 
-    "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GTQ", "Currency":"Quetzal", "Entity":"GUATEMALA", "Minor_Unit":2, "Numeric_Code":"320", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GBP", "Currency":"Pound Sterling", "Entity":"GUERNSEY", "Minor_Unit":2, "Numeric_Code":"826", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GNF", "Currency":"Guinean Franc", "Entity":"GUINEA", "Minor_Unit":0, "Numeric_Code":"324", 
-    "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XOF", "Currency":"CFA Franc BCEAO", "Entity":"GUINEA-BISSAU", "Minor_Unit":0, "Numeric_Code":"952", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GYD", "Currency":"Guyana Dollar", "Entity":"GUYANA", "Minor_Unit":2, "Numeric_Code":"328", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"HTG", "Currency":"Gourde", "Entity":"HAITI", "Minor_Unit":2, "Numeric_Code":"332", "Withdrawal_Date":null, 
-    "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"HAITI", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AUD", "Currency":"Australian Dollar", "Entity":"HEARD ISLAND AND McDONALD ISLANDS", "Minor_Unit":2, "Numeric_Code":"036", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"HOLY SEE (THE)", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, 
-    "Withdrawal_Interval":null}, {"Alphabetic_Code":"HNL", "Currency":"Lempira", "Entity":"HONDURAS", "Minor_Unit":2, "Numeric_Code":"340", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"HKD", "Currency":"Hong Kong Dollar", "Entity":"HONG KONG", "Minor_Unit":2, "Numeric_Code":"344", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"HUF", "Currency":"Forint", "Entity":"HUNGARY", "Minor_Unit":2, "Numeric_Code":"348", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"ISK", "Currency":"Iceland Krona", "Entity":"ICELAND", "Minor_Unit":0, "Numeric_Code":"352", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"INR", "Currency":"Indian Rupee", "Entity":"INDIA", "Minor_Unit":2, "Numeric_Code":"356", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"IDR", "Currency":"Rupiah", "Entity":"INDONESIA", "Minor_Unit":2, "Numeric_Code":"360", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XDR", 
-    "Currency":"SDR (Special Drawing Right)", "Entity":"INTERNATIONAL MONETARY FUND (IMF)", "Minor_Unit":null, "Numeric_Code":"960", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"IRR", "Currency":"Iranian Rial", "Entity":"IRAN (ISLAMIC REPUBLIC OF)", "Minor_Unit":2, "Numeric_Code":"364", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"IQD", "Currency":"Iraqi Dinar", "Entity":"IRAQ", "Minor_Unit":3, "Numeric_Code":"368", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"IRELAND", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GBP", "Currency":"Pound Sterling", "Entity":"ISLE OF MAN", "Minor_Unit":2, "Numeric_Code":"826", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ILS", "Currency":"New Israeli Sheqel", "Entity":"ISRAEL", "Minor_Unit":2, "Numeric_Code":"376", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", 
-    "Currency":"Euro", "Entity":"ITALY", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"JMD", "Currency":"Jamaican Dollar", "Entity":"JAMAICA", "Minor_Unit":2, "Numeric_Code":"388", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"JPY", "Currency":"Yen", "Entity":"JAPAN", "Minor_Unit":0, "Numeric_Code":"392", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GBP", "Currency":"Pound Sterling", 
-    "Entity":"JERSEY", "Minor_Unit":2, "Numeric_Code":"826", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"JOD", "Currency":"Jordanian Dinar", "Entity":"JORDAN", "Minor_Unit":3, "Numeric_Code":"400", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"KZT", "Currency":"Tenge", "Entity":"KAZAKHSTAN", "Minor_Unit":2, "Numeric_Code":"398", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"KES", "Currency":"Kenyan Shilling", "Entity":"KENYA", 
-    "Minor_Unit":2, "Numeric_Code":"404", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AUD", "Currency":"Australian Dollar", "Entity":"KIRIBATI", "Minor_Unit":2, "Numeric_Code":"036", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"KPW", "Currency":"North Korean Won", "Entity":"KOREA (THE DEMOCRATIC PEOPLE\u2019S REPUBLIC OF)", "Minor_Unit":2, "Numeric_Code":"408", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"KRW", "Currency":"Won", 
-    "Entity":"KOREA (THE REPUBLIC OF)", "Minor_Unit":0, "Numeric_Code":"410", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"KWD", "Currency":"Kuwaiti Dinar", "Entity":"KUWAIT", "Minor_Unit":3, "Numeric_Code":"414", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"KGS", "Currency":"Som", "Entity":"KYRGYZSTAN", "Minor_Unit":2, "Numeric_Code":"417", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"LAK", "Currency":"Lao Kip", 
-    "Entity":"LAO PEOPLE\u2019S DEMOCRATIC REPUBLIC (THE)", "Minor_Unit":2, "Numeric_Code":"418", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"LATVIA", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"LBP", "Currency":"Lebanese Pound", "Entity":"LEBANON", "Minor_Unit":2, "Numeric_Code":"422", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"LSL", "Currency":"Loti", 
-    "Entity":"LESOTHO", "Minor_Unit":2, "Numeric_Code":"426", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZAR", "Currency":"Rand", "Entity":"LESOTHO", "Minor_Unit":2, "Numeric_Code":"710", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"LRD", "Currency":"Liberian Dollar", "Entity":"LIBERIA", "Minor_Unit":2, "Numeric_Code":"430", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"LYD", "Currency":"Libyan Dinar", "Entity":"LIBYA", 
-    "Minor_Unit":3, "Numeric_Code":"434", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CHF", "Currency":"Swiss Franc", "Entity":"LIECHTENSTEIN", "Minor_Unit":2, "Numeric_Code":"756", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"LITHUANIA", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"LUXEMBOURG", "Minor_Unit":2, 
-    "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MOP", "Currency":"Pataca", "Entity":"MACAO", "Minor_Unit":2, "Numeric_Code":"446", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MKD", "Currency":"Denar", "Entity":"MACEDONIA (THE FORMER YUGOSLAV REPUBLIC OF)", "Minor_Unit":2, "Numeric_Code":"807", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MGA", "Currency":"Malagasy Ariary", "Entity":"MADAGASCAR", 
-    "Minor_Unit":2, "Numeric_Code":"969", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MWK", "Currency":"Malawi Kwacha", "Entity":"MALAWI", "Minor_Unit":2, "Numeric_Code":"454", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MYR", "Currency":"Malaysian Ringgit", "Entity":"MALAYSIA", "Minor_Unit":2, "Numeric_Code":"458", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MVR", "Currency":"Rufiyaa", "Entity":"MALDIVES", "Minor_Unit":2, 
-    "Numeric_Code":"462", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XOF", "Currency":"CFA Franc BCEAO", "Entity":"MALI", "Minor_Unit":0, "Numeric_Code":"952", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"MALTA", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"MARSHALL ISLANDS (THE)", "Minor_Unit":2, "Numeric_Code":"840", 
-    "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"MARTINIQUE", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MRO", "Currency":"Ouguiya", "Entity":"MAURITANIA", "Minor_Unit":2, "Numeric_Code":"478", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MUR", "Currency":"Mauritius Rupee", "Entity":"MAURITIUS", "Minor_Unit":2, "Numeric_Code":"480", "Withdrawal_Date":null, 
-    "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"MAYOTTE", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XUA", "Currency":"ADB Unit of Account", "Entity":"MEMBER COUNTRIES OF THE AFRICAN DEVELOPMENT BANK GROUP", "Minor_Unit":null, "Numeric_Code":"965", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MXN", "Currency":"Mexican Peso", "Entity":"MEXICO", "Minor_Unit":2, "Numeric_Code":"484", 
-    "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MXV", "Currency":"Mexican Unidad de Inversion (UDI)", "Entity":"MEXICO", "Minor_Unit":2, "Numeric_Code":"979", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"MICRONESIA (FEDERATED STATES OF)", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MDL", "Currency":"Moldovan Leu", "Entity":"MOLDOVA (THE REPUBLIC OF)", 
-    "Minor_Unit":2, "Numeric_Code":"498", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"MONACO", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MNT", "Currency":"Tugrik", "Entity":"MONGOLIA", "Minor_Unit":2, "Numeric_Code":"496", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"MONTENEGRO", "Minor_Unit":2, "Numeric_Code":"978", 
-    "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XCD", "Currency":"East Caribbean Dollar", "Entity":"MONTSERRAT", "Minor_Unit":2, "Numeric_Code":"951", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MAD", "Currency":"Moroccan Dirham", "Entity":"MOROCCO", "Minor_Unit":2, "Numeric_Code":"504", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MZN", "Currency":"Mozambique Metical", "Entity":"MOZAMBIQUE", "Minor_Unit":2, "Numeric_Code":"943", 
-    "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MMK", "Currency":"Kyat", "Entity":"MYANMAR", "Minor_Unit":2, "Numeric_Code":"104", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NAD", "Currency":"Namibia Dollar", "Entity":"NAMIBIA", "Minor_Unit":2, "Numeric_Code":"516", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZAR", "Currency":"Rand", "Entity":"NAMIBIA", "Minor_Unit":2, "Numeric_Code":"710", "Withdrawal_Date":null, 
-    "Withdrawal_Interval":null}, {"Alphabetic_Code":"AUD", "Currency":"Australian Dollar", "Entity":"NAURU", "Minor_Unit":2, "Numeric_Code":"036", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NPR", "Currency":"Nepalese Rupee", "Entity":"NEPAL", "Minor_Unit":2, "Numeric_Code":"524", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"NETHERLANDS (THE)", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, 
-    "Withdrawal_Interval":null}, {"Alphabetic_Code":"XPF", "Currency":"CFP Franc", "Entity":"NEW CALEDONIA", "Minor_Unit":0, "Numeric_Code":"953", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NZD", "Currency":"New Zealand Dollar", "Entity":"NEW ZEALAND", "Minor_Unit":2, "Numeric_Code":"554", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NIO", "Currency":"Cordoba Oro", "Entity":"NICARAGUA", "Minor_Unit":2, "Numeric_Code":"558", "Withdrawal_Date":null, 
-    "Withdrawal_Interval":null}, {"Alphabetic_Code":"XOF", "Currency":"CFA Franc BCEAO", "Entity":"NIGER (THE)", "Minor_Unit":0, "Numeric_Code":"952", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NGN", "Currency":"Naira", "Entity":"NIGERIA", "Minor_Unit":2, "Numeric_Code":"566", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NZD", "Currency":"New Zealand Dollar", "Entity":"NIUE", "Minor_Unit":2, "Numeric_Code":"554", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"AUD", "Currency":"Australian Dollar", "Entity":"NORFOLK ISLAND", "Minor_Unit":2, "Numeric_Code":"036", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"NORTHERN MARIANA ISLANDS (THE)", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NOK", "Currency":"Norwegian Krone", "Entity":"NORWAY", "Minor_Unit":2, "Numeric_Code":"578", "Withdrawal_Date":null, 
-    "Withdrawal_Interval":null}, {"Alphabetic_Code":"OMR", "Currency":"Rial Omani", "Entity":"OMAN", "Minor_Unit":3, "Numeric_Code":"512", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"PKR", "Currency":"Pakistan Rupee", "Entity":"PAKISTAN", "Minor_Unit":2, "Numeric_Code":"586", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"PALAU", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":null, "Currency":"No universal currency", "Entity":"PALESTINE, STATE OF", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"PAB", "Currency":"Balboa", "Entity":"PANAMA", "Minor_Unit":2, "Numeric_Code":"590", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"PANAMA", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"PGK", "Currency":"Kina", "Entity":"PAPUA NEW GUINEA", "Minor_Unit":2, "Numeric_Code":"598", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"PYG", "Currency":"Guarani", "Entity":"PARAGUAY", "Minor_Unit":0, "Numeric_Code":"600", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"PEN", "Currency":"Sol", "Entity":"PERU", "Minor_Unit":2, "Numeric_Code":"604", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"PHP", 
-    "Currency":"Philippine Piso", "Entity":"PHILIPPINES (THE)", "Minor_Unit":2, "Numeric_Code":"608", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NZD", "Currency":"New Zealand Dollar", "Entity":"PITCAIRN", "Minor_Unit":2, "Numeric_Code":"554", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"PLN", "Currency":"Zloty", "Entity":"POLAND", "Minor_Unit":2, "Numeric_Code":"985", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", 
-    "Currency":"Euro", "Entity":"PORTUGAL", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"PUERTO RICO", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"QAR", "Currency":"Qatari Rial", "Entity":"QATAR", "Minor_Unit":2, "Numeric_Code":"634", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", 
-    "Entity":"R\u00c9UNION", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"RON", "Currency":"Romanian Leu", "Entity":"ROMANIA", "Minor_Unit":2, "Numeric_Code":"946", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUB", "Currency":"Russian Ruble", "Entity":"RUSSIAN FEDERATION (THE)", "Minor_Unit":2, "Numeric_Code":"643", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"RWF", "Currency":"Rwanda Franc", 
-    "Entity":"RWANDA", "Minor_Unit":0, "Numeric_Code":"646", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"SAINT BARTH\u00c9LEMY", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SHP", "Currency":"Saint Helena Pound", "Entity":"SAINT HELENA, ASCENSION AND TRISTAN DA CUNHA", "Minor_Unit":2, "Numeric_Code":"654", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XCD", 
-    "Currency":"East Caribbean Dollar", "Entity":"SAINT KITTS AND NEVIS", "Minor_Unit":2, "Numeric_Code":"951", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XCD", "Currency":"East Caribbean Dollar", "Entity":"SAINT LUCIA", "Minor_Unit":2, "Numeric_Code":"951", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"SAINT MARTIN (FRENCH PART)", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"SAINT PIERRE AND MIQUELON", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XCD", "Currency":"East Caribbean Dollar", "Entity":"SAINT VINCENT AND THE GRENADINES", "Minor_Unit":2, "Numeric_Code":"951", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"WST", "Currency":"Tala", "Entity":"SAMOA", "Minor_Unit":2, "Numeric_Code":"882", "Withdrawal_Date":null, 
-    "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"SAN MARINO", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"STD", "Currency":"Dobra", "Entity":"SAO TOME AND PRINCIPE", "Minor_Unit":2, "Numeric_Code":"678", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SAR", "Currency":"Saudi Riyal", "Entity":"SAUDI ARABIA", "Minor_Unit":2, "Numeric_Code":"682", "Withdrawal_Date":null, 
-    "Withdrawal_Interval":null}, {"Alphabetic_Code":"XOF", "Currency":"CFA Franc BCEAO", "Entity":"SENEGAL", "Minor_Unit":0, "Numeric_Code":"952", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"RSD", "Currency":"Serbian Dinar", "Entity":"SERBIA", "Minor_Unit":2, "Numeric_Code":"941", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SCR", "Currency":"Seychelles Rupee", "Entity":"SEYCHELLES", "Minor_Unit":2, "Numeric_Code":"690", "Withdrawal_Date":null, 
-    "Withdrawal_Interval":null}, {"Alphabetic_Code":"SLL", "Currency":"Leone", "Entity":"SIERRA LEONE", "Minor_Unit":2, "Numeric_Code":"694", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SGD", "Currency":"Singapore Dollar", "Entity":"SINGAPORE", "Minor_Unit":2, "Numeric_Code":"702", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ANG", "Currency":"Netherlands Antillean Guilder", "Entity":"SINT MAARTEN (DUTCH PART)", "Minor_Unit":2, "Numeric_Code":"532", 
-    "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XSU", "Currency":"Sucre", "Entity":'SISTEMA UNITARIO DE COMPENSACION REGIONAL DE PAGOS "SUCRE"', "Minor_Unit":null, "Numeric_Code":"994", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"SLOVAKIA", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"SLOVENIA", "Minor_Unit":2, 
-    "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SBD", "Currency":"Solomon Islands Dollar", "Entity":"SOLOMON ISLANDS", "Minor_Unit":2, "Numeric_Code":"090", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SOS", "Currency":"Somali Shilling", "Entity":"SOMALIA", "Minor_Unit":2, "Numeric_Code":"706", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZAR", "Currency":"Rand", "Entity":"SOUTH AFRICA", "Minor_Unit":2, 
-    "Numeric_Code":"710", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":null, "Currency":"No universal currency", "Entity":"SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SSP", "Currency":"South Sudanese Pound", "Entity":"SOUTH SUDAN", "Minor_Unit":2, "Numeric_Code":"728", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", 
-    "Entity":"SPAIN", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"LKR", "Currency":"Sri Lanka Rupee", "Entity":"SRI LANKA", "Minor_Unit":2, "Numeric_Code":"144", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SDG", "Currency":"Sudanese Pound", "Entity":"SUDAN (THE)", "Minor_Unit":2, "Numeric_Code":"938", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SRD", "Currency":"Surinam Dollar", 
-    "Entity":"SURINAME", "Minor_Unit":2, "Numeric_Code":"968", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NOK", "Currency":"Norwegian Krone", "Entity":"SVALBARD AND JAN MAYEN", "Minor_Unit":2, "Numeric_Code":"578", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SZL", "Currency":"Lilangeni", "Entity":"SWAZILAND", "Minor_Unit":2, "Numeric_Code":"748", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SEK", "Currency":"Swedish Krona", 
-    "Entity":"SWEDEN", "Minor_Unit":2, "Numeric_Code":"752", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CHF", "Currency":"Swiss Franc", "Entity":"SWITZERLAND", "Minor_Unit":2, "Numeric_Code":"756", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CHE", "Currency":"WIR Euro", "Entity":"SWITZERLAND", "Minor_Unit":2, "Numeric_Code":"947", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"CHW", "Currency":"WIR Franc", "Entity":"SWITZERLAND", 
-    "Minor_Unit":2, "Numeric_Code":"948", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"SYP", "Currency":"Syrian Pound", "Entity":"SYRIAN ARAB REPUBLIC", "Minor_Unit":2, "Numeric_Code":"760", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"TWD", "Currency":"New Taiwan Dollar", "Entity":"TAIWAN (PROVINCE OF CHINA)", "Minor_Unit":2, "Numeric_Code":"901", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"TJS", "Currency":"Somoni", 
-    "Entity":"TAJIKISTAN", "Minor_Unit":2, "Numeric_Code":"972", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"TZS", "Currency":"Tanzanian Shilling", "Entity":"TANZANIA, UNITED REPUBLIC OF", "Minor_Unit":2, "Numeric_Code":"834", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"THB", "Currency":"Baht", "Entity":"THAILAND", "Minor_Unit":2, "Numeric_Code":"764", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", 
-    "Entity":"TIMOR-LESTE", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XOF", "Currency":"CFA Franc BCEAO", "Entity":"TOGO", "Minor_Unit":0, "Numeric_Code":"952", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"NZD", "Currency":"New Zealand Dollar", "Entity":"TOKELAU", "Minor_Unit":2, "Numeric_Code":"554", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"TOP", "Currency":"Pa\u2019anga", 
-    "Entity":"TONGA", "Minor_Unit":2, "Numeric_Code":"776", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"TTD", "Currency":"Trinidad and Tobago Dollar", "Entity":"TRINIDAD AND TOBAGO", "Minor_Unit":2, "Numeric_Code":"780", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"TND", "Currency":"Tunisian Dinar", "Entity":"TUNISIA", "Minor_Unit":3, "Numeric_Code":"788", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"TRY", "Currency":"Turkish Lira", 
-    "Entity":"TURKEY", "Minor_Unit":2, "Numeric_Code":"949", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"TMT", "Currency":"Turkmenistan New Manat", "Entity":"TURKMENISTAN", "Minor_Unit":2, "Numeric_Code":"934", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"TURKS AND CAICOS ISLANDS (THE)", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AUD", 
-    "Currency":"Australian Dollar", "Entity":"TUVALU", "Minor_Unit":2, "Numeric_Code":"036", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"UGX", "Currency":"Uganda Shilling", "Entity":"UGANDA", "Minor_Unit":0, "Numeric_Code":"800", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"UAH", "Currency":"Hryvnia", "Entity":"UKRAINE", "Minor_Unit":2, "Numeric_Code":"980", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AED", "Currency":"UAE Dirham", 
-    "Entity":"UNITED ARAB EMIRATES (THE)", "Minor_Unit":2, "Numeric_Code":"784", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"GBP", "Currency":"Pound Sterling", "Entity":"UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND (THE)", "Minor_Unit":2, "Numeric_Code":"826", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"UNITED STATES MINOR OUTLYING ISLANDS (THE)", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, 
-    "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"UNITED STATES OF AMERICA (THE)", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USN", "Currency":"US Dollar (Next day)", "Entity":"UNITED STATES OF AMERICA (THE)", "Minor_Unit":2, "Numeric_Code":"997", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"UYU", "Currency":"Peso Uruguayo", "Entity":"URUGUAY", "Minor_Unit":2, 
-    "Numeric_Code":"858", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"UYI", "Currency":"Uruguay Peso en Unidades Indexadas (URUIURUI)", "Entity":"URUGUAY", "Minor_Unit":0, "Numeric_Code":"940", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"UZS", "Currency":"Uzbekistan Sum", "Entity":"UZBEKISTAN", "Minor_Unit":2, "Numeric_Code":"860", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"VUV", "Currency":"Vatu", "Entity":"VANUATU", 
-    "Minor_Unit":0, "Numeric_Code":"548", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"VEF", "Currency":"Bol\u00edvar", "Entity":"VENEZUELA (BOLIVARIAN REPUBLIC OF)", "Minor_Unit":2, "Numeric_Code":"937", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"VND", "Currency":"Dong", "Entity":"VIET NAM", "Minor_Unit":0, "Numeric_Code":"704", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"VIRGIN ISLANDS (BRITISH)", 
-    "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"VIRGIN ISLANDS (U.S.)", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XPF", "Currency":"CFP Franc", "Entity":"WALLIS AND FUTUNA", "Minor_Unit":0, "Numeric_Code":"953", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"MAD", "Currency":"Moroccan Dirham", "Entity":"WESTERN SAHARA", 
-    "Minor_Unit":2, "Numeric_Code":"504", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"YER", "Currency":"Yemeni Rial", "Entity":"YEMEN", "Minor_Unit":2, "Numeric_Code":"886", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZMW", "Currency":"Zambian Kwacha", "Entity":"ZAMBIA", "Minor_Unit":2, "Numeric_Code":"967", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZWL", "Currency":"Zimbabwe Dollar", "Entity":"ZIMBABWE", "Minor_Unit":2, 
-    "Numeric_Code":"932", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XBA", "Currency":"Bond Markets Unit European Composite Unit (EURCO)", "Entity":"ZZ01_Bond Markets Unit European_EURCO", "Minor_Unit":null, "Numeric_Code":"955", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XBB", "Currency":"Bond Markets Unit European Monetary Unit (E.M.U.-6)", "Entity":"ZZ02_Bond Markets Unit European_EMU-6", "Minor_Unit":null, "Numeric_Code":"956", "Withdrawal_Date":null, 
-    "Withdrawal_Interval":null}, {"Alphabetic_Code":"XBC", "Currency":"Bond Markets Unit European Unit of Account 9 (E.U.A.-9)", "Entity":"ZZ03_Bond Markets Unit European_EUA-9", "Minor_Unit":null, "Numeric_Code":"957", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XBD", "Currency":"Bond Markets Unit European Unit of Account 17 (E.U.A.-17)", "Entity":"ZZ04_Bond Markets Unit European_EUA-17", "Minor_Unit":null, "Numeric_Code":"958", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"XTS", "Currency":"Codes specifically reserved for testing purposes", "Entity":"ZZ06_Testing_Code", "Minor_Unit":null, "Numeric_Code":"963", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XXX", "Currency":"The codes assigned for transactions where no currency is involved", "Entity":"ZZ07_No_Currency", "Minor_Unit":null, "Numeric_Code":"999", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XAU", "Currency":"Gold", "Entity":"ZZ08_Gold", 
-    "Minor_Unit":null, "Numeric_Code":"959", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XPD", "Currency":"Palladium", "Entity":"ZZ09_Palladium", "Minor_Unit":null, "Numeric_Code":"964", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XPT", "Currency":"Platinum", "Entity":"ZZ10_Platinum", "Minor_Unit":null, "Numeric_Code":"962", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"XAG", "Currency":"Silver", "Entity":"ZZ11_Silver", 
-    "Minor_Unit":null, "Numeric_Code":"961", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AFA", "Currency":"Afghani", "Entity":"AFGHANISTAN", "Minor_Unit":null, "Numeric_Code":"4", "Withdrawal_Date":"2003-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FIM", "Currency":"Markka", "Entity":"\u00c3\u2026LAND ISLANDS", "Minor_Unit":null, "Numeric_Code":"246", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ALK", "Currency":"Old Lek", 
-    "Entity":"ALBANIA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1989-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ADP", "Currency":"Andorran Peseta", "Entity":"ANDORRA", "Minor_Unit":null, "Numeric_Code":"20", "Withdrawal_Date":"2003-07-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ESP", "Currency":"Spanish Peseta", "Entity":"ANDORRA", "Minor_Unit":null, "Numeric_Code":"724", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", 
-    "Currency":"French Franc", "Entity":"ANDORRA", "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"AOK", "Currency":"Kwanza", "Entity":"ANGOLA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1991-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"AON", "Currency":"New Kwanza", "Entity":"ANGOLA", "Minor_Unit":null, "Numeric_Code":"24", "Withdrawal_Date":"2000-02-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"AOR", 
-    "Currency":"Kwanza Reajustado", "Entity":"ANGOLA", "Minor_Unit":null, "Numeric_Code":"982", "Withdrawal_Date":"2000-02-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ARA", "Currency":"Austral", "Entity":"ARGENTINA", "Minor_Unit":null, "Numeric_Code":"32", "Withdrawal_Date":"1992-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ARP", "Currency":"Peso Argentino", "Entity":"ARGENTINA", "Minor_Unit":null, "Numeric_Code":"32", "Withdrawal_Date":"1985-07-06", "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"ARY", "Currency":"Peso", "Entity":"ARGENTINA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1989 to 1990"}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"ARMENIA", "Minor_Unit":null, "Numeric_Code":"810", "Withdrawal_Date":"1994-08-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ATS", "Currency":"Schilling", "Entity":"AUSTRIA", "Minor_Unit":null, "Numeric_Code":"40", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"AYM", "Currency":"Azerbaijan Manat", "Entity":"AZERBAIJAN", "Minor_Unit":null, "Numeric_Code":"945", "Withdrawal_Date":"2005-10-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"AZM", "Currency":"Azerbaijanian Manat", "Entity":"AZERBAIJAN", "Minor_Unit":null, "Numeric_Code":"31", "Withdrawal_Date":"2005-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"AZERBAIJAN", "Minor_Unit":null, "Numeric_Code":"810", "Withdrawal_Date":"1994-08-06", 
-    "Withdrawal_Interval":null}, {"Alphabetic_Code":"BYR", "Currency":"Belarusian Ruble", "Entity":"BELARUS", "Minor_Unit":null, "Numeric_Code":"974", "Withdrawal_Date":"2017-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BYB", "Currency":"Belarusian Ruble", "Entity":"BELARUS", "Minor_Unit":null, "Numeric_Code":"112", "Withdrawal_Date":"2001-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"BELARUS", "Minor_Unit":null, "Numeric_Code":"810", 
-    "Withdrawal_Date":"1994-06-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BEC", "Currency":"Convertible Franc", "Entity":"BELGIUM", "Minor_Unit":null, "Numeric_Code":"993", "Withdrawal_Date":"1990-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BEF", "Currency":"Belgian Franc", "Entity":"BELGIUM", "Minor_Unit":null, "Numeric_Code":"56", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BEL", "Currency":"Financial Franc", "Entity":"BELGIUM", "Minor_Unit":null, 
-    "Numeric_Code":"992", "Withdrawal_Date":"1990-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BOP", "Currency":"Peso boliviano", "Entity":"BOLIVIA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1987-02-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BAD", "Currency":"Dinar", "Entity":"BOSNIA AND HERZEGOVINA", "Minor_Unit":null, "Numeric_Code":"70", "Withdrawal_Date":"1998-07-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BRB", "Currency":"Cruzeiro", "Entity":"BRAZIL", 
-    "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1986-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BRC", "Currency":"Cruzado", "Entity":"BRAZIL", "Minor_Unit":null, "Numeric_Code":"76", "Withdrawal_Date":"1989-02-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BRE", "Currency":"Cruzeiro", "Entity":"BRAZIL", "Minor_Unit":null, "Numeric_Code":"76", "Withdrawal_Date":"1993-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BRN", "Currency":"New Cruzado", "Entity":"BRAZIL", 
-    "Minor_Unit":null, "Numeric_Code":"76", "Withdrawal_Date":"1990-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BRR", "Currency":"Cruzeiro Real", "Entity":"BRAZIL", "Minor_Unit":null, "Numeric_Code":"987", "Withdrawal_Date":"1994-07-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BGJ", "Currency":"Lev A/52", "Entity":"BULGARIA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1989 to 1990"}, {"Alphabetic_Code":"BGK", "Currency":"Lev A/62", 
-    "Entity":"BULGARIA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1989 to 1990"}, {"Alphabetic_Code":"BGL", "Currency":"Lev", "Entity":"BULGARIA", "Minor_Unit":null, "Numeric_Code":"100", "Withdrawal_Date":"2003-11-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"BUK", "Currency":"Kyat", "Entity":"BURMA\u00c2", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1990-02-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"HRD", "Currency":"Croatian Dinar", 
-    "Entity":"CROATIA", "Minor_Unit":null, "Numeric_Code":"191", "Withdrawal_Date":"1995-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"HRK", "Currency":"Croatian Kuna", "Entity":"CROATIA", "Minor_Unit":null, "Numeric_Code":"191", "Withdrawal_Date":"2015-06-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"CYP", "Currency":"Cyprus Pound", "Entity":"CYPRUS", "Minor_Unit":null, "Numeric_Code":"196", "Withdrawal_Date":"2008-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"CSJ", 
-    "Currency":"Krona A/53", "Entity":"CZECHOSLOVAKIA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1989 to 1990"}, {"Alphabetic_Code":"CSK", "Currency":"Koruna", "Entity":"CZECHOSLOVAKIA", "Minor_Unit":null, "Numeric_Code":"200", "Withdrawal_Date":"1993-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ECS", "Currency":"Sucre", "Entity":"ECUADOR", "Minor_Unit":null, "Numeric_Code":"218", "Withdrawal_Date":"2000-09-06", "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"ECV", "Currency":"Unidad de Valor Constante (UVC)", "Entity":"ECUADOR", "Minor_Unit":null, "Numeric_Code":"983", "Withdrawal_Date":"2000-09-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"GQE", "Currency":"Ekwele", "Entity":"EQUATORIAL GUINEA", "Minor_Unit":null, "Numeric_Code":"226", "Withdrawal_Date":"1986-06-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"EEK", "Currency":"Kroon", "Entity":"ESTONIA", "Minor_Unit":null, "Numeric_Code":"233", "Withdrawal_Date":"2011-01-06", 
-    "Withdrawal_Interval":null}, {"Alphabetic_Code":"XEU", "Currency":"European Currency Unit (E.C.U)", "Entity":"EUROPEAN MONETARY CO-OPERATION FUND (EMCF)", "Minor_Unit":null, "Numeric_Code":"954", "Withdrawal_Date":"1999-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FIM", "Currency":"Markka", "Entity":"FINLAND", "Minor_Unit":null, "Numeric_Code":"246", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", "Currency":"French Franc", "Entity":"FRANCE", 
-    "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", "Currency":"French Franc", "Entity":"FRENCH  GUIANA", "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", "Currency":"French Franc", "Entity":"FRENCH SOUTHERN TERRITORIES", "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"GEK", 
-    "Currency":"Georgian Coupon", "Entity":"GEORGIA", "Minor_Unit":null, "Numeric_Code":"268", "Withdrawal_Date":"1995-10-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"GEORGIA", "Minor_Unit":null, "Numeric_Code":"810", "Withdrawal_Date":"1994-04-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"DDM", "Currency":"Mark der DDR", "Entity":"GERMAN DEMOCRATIC REPUBLIC", "Minor_Unit":null, "Numeric_Code":"278", "Withdrawal_Date":null, "Withdrawal_Interval":"1990-07 to 1990-09"}, 
-    {"Alphabetic_Code":"DEM", "Currency":"Deutsche Mark", "Entity":"GERMANY", "Minor_Unit":null, "Numeric_Code":"276", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"GHC", "Currency":"Cedi", "Entity":"GHANA", "Minor_Unit":null, "Numeric_Code":"288", "Withdrawal_Date":"2008-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"GHP", "Currency":"Ghana Cedi", "Entity":"GHANA", "Minor_Unit":null, "Numeric_Code":"939", "Withdrawal_Date":"2007-06-06", "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"GRD", "Currency":"Drachma", "Entity":"GREECE", "Minor_Unit":null, "Numeric_Code":"300", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", "Currency":"French Franc", "Entity":"GUADELOUPE", "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"GNE", "Currency":"Syli", "Entity":"GUINEA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1989-12-06", "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"GNS", "Currency":"Syli", "Entity":"GUINEA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1986-02-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"GWE", "Currency":"Guinea Escudo", "Entity":"GUINEA-BISSAU", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1978 to 1981"}, {"Alphabetic_Code":"GWP", "Currency":"Guinea-Bissau Peso", "Entity":"GUINEA-BISSAU", "Minor_Unit":null, "Numeric_Code":"624", "Withdrawal_Date":"1997-05-06", 
-    "Withdrawal_Interval":null}, {"Alphabetic_Code":"ITL", "Currency":"Italian Lira", "Entity":"HOLY SEE (VATICAN CITY STATE)", "Minor_Unit":null, "Numeric_Code":"380", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ISJ", "Currency":"Old Krona", "Entity":"ICELAND", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1989 to 1990"}, {"Alphabetic_Code":"IEP", "Currency":"Irish Pound", "Entity":"IRELAND", "Minor_Unit":null, "Numeric_Code":"372", 
-    "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ILP", "Currency":"Pound", "Entity":"ISRAEL", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1978 to 1981"}, {"Alphabetic_Code":"ILR", "Currency":"Old Shekel", "Entity":"ISRAEL", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1989 to 1990"}, {"Alphabetic_Code":"ITL", "Currency":"Italian Lira", "Entity":"ITALY", "Minor_Unit":null, "Numeric_Code":"380", 
-    "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"KAZAKHSTAN", "Minor_Unit":null, "Numeric_Code":"810", "Withdrawal_Date":"1994-05-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"KYRGYZSTAN", "Minor_Unit":null, "Numeric_Code":"810", "Withdrawal_Date":"1993-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"LAJ", "Currency":"Pathet Lao Kip", "Entity":"LAO", "Minor_Unit":null, 
-    "Numeric_Code":null, "Withdrawal_Date":"1989-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"LVL", "Currency":"Latvian Lats", "Entity":"LATVIA", "Minor_Unit":null, "Numeric_Code":"428", "Withdrawal_Date":"2014-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"LVR", "Currency":"Latvian Ruble", "Entity":"LATVIA", "Minor_Unit":null, "Numeric_Code":"428", "Withdrawal_Date":"1994-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"LSM", "Currency":"Loti", "Entity":"LESOTHO", "Minor_Unit":null, 
-    "Numeric_Code":null, "Withdrawal_Date":"1985-05-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZAL", "Currency":"Financial Rand", "Entity":"LESOTHO", "Minor_Unit":null, "Numeric_Code":"991", "Withdrawal_Date":"1995-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"LTL", "Currency":"Lithuanian Litas", "Entity":"LITHUANIA", "Minor_Unit":null, "Numeric_Code":"440", "Withdrawal_Date":"2014-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"LTT", "Currency":"Talonas", "Entity":"LITHUANIA", 
-    "Minor_Unit":null, "Numeric_Code":"440", "Withdrawal_Date":"1993-07-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"LUC", "Currency":"Luxembourg Convertible Franc", "Entity":"LUXEMBOURG", "Minor_Unit":null, "Numeric_Code":"989", "Withdrawal_Date":"1990-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"LUF", "Currency":"Luxembourg Franc", "Entity":"LUXEMBOURG", "Minor_Unit":null, "Numeric_Code":"442", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"LUL", 
-    "Currency":"Luxembourg Financial Franc", "Entity":"LUXEMBOURG", "Minor_Unit":null, "Numeric_Code":"988", "Withdrawal_Date":"1990-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"MGF", "Currency":"Malagasy Franc", "Entity":"MADAGASCAR", "Minor_Unit":null, "Numeric_Code":"450", "Withdrawal_Date":"2004-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"MWK", "Currency":"Kwacha", "Entity":"MALAWI", "Minor_Unit":null, "Numeric_Code":"454", "Withdrawal_Date":"2016-02-06", "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"MVQ", "Currency":"Maldive Rupee", "Entity":"MALDIVES", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1989-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"MLF", "Currency":"Mali Franc", "Entity":"MALI", "Minor_Unit":null, "Numeric_Code":"466", "Withdrawal_Date":"1984-11-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"MTL", "Currency":"Maltese Lira", "Entity":"MALTA", "Minor_Unit":null, "Numeric_Code":"470", "Withdrawal_Date":"2008-01-06", "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"MTP", "Currency":"Maltese Pound", "Entity":"MALTA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1983-06-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", "Currency":"French Franc", "Entity":"MARTINIQUE", "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", "Currency":"French Franc", "Entity":"MAYOTTE", "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"2002-03-06", 
-    "Withdrawal_Interval":null}, {"Alphabetic_Code":"MXP", "Currency":"Mexican Peso", "Entity":"MEXICO", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1993-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"MOLDOVA, REPUBLIC OF", "Minor_Unit":null, "Numeric_Code":"810", "Withdrawal_Date":"1993-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", "Currency":"French Franc", "Entity":"MONACO", "Minor_Unit":null, "Numeric_Code":"250", 
-    "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"MZE", "Currency":"Mozambique Escudo", "Entity":"MOZAMBIQUE", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1978 to 1981"}, {"Alphabetic_Code":"MZM", "Currency":"Mozambique Metical", "Entity":"MOZAMBIQUE", "Minor_Unit":null, "Numeric_Code":"508", "Withdrawal_Date":"2006-06-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"NLG", "Currency":"Netherlands Guilder", "Entity":"NETHERLANDS", 
-    "Minor_Unit":null, "Numeric_Code":"528", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ANG", "Currency":"Netherlands Antillean Guilder", "Entity":"NETHERLANDS ANTILLES", "Minor_Unit":null, "Numeric_Code":"532", "Withdrawal_Date":"2010-10-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"NIC", "Currency":"Cordoba", "Entity":"NICARAGUA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1990-10-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"PEN", 
-    "Currency":"Nuevo Sol", "Entity":"PERU", "Minor_Unit":null, "Numeric_Code":"604", "Withdrawal_Date":"2015-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"PEH", "Currency":"Sol", "Entity":"PERU", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1989 to 1990"}, {"Alphabetic_Code":"PEI", "Currency":"Inti", "Entity":"PERU", "Minor_Unit":null, "Numeric_Code":"604", "Withdrawal_Date":"1991-07-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"PES", 
-    "Currency":"Sol", "Entity":"PERU", "Minor_Unit":null, "Numeric_Code":"604", "Withdrawal_Date":"1986-02-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"PLZ", "Currency":"Zloty", "Entity":"POLAND", "Minor_Unit":null, "Numeric_Code":"616", "Withdrawal_Date":"1997-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"PTE", "Currency":"Portuguese Escudo", "Entity":"PORTUGAL", "Minor_Unit":null, "Numeric_Code":"620", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", 
-    "Currency":"French Franc", "Entity":"R\u00c3\u2030UNION", "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ROK", "Currency":"Leu A/52", "Entity":"ROMANIA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1989 to 1990"}, {"Alphabetic_Code":"RON", "Currency":"New Romanian Leu", "Entity":"ROMANIA", "Minor_Unit":null, "Numeric_Code":"946", "Withdrawal_Date":"2015-06-06", "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"ROL", "Currency":"Old Leu", "Entity":"ROMANIA", "Minor_Unit":null, "Numeric_Code":"642", "Withdrawal_Date":"2005-06-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"RUSSIAN FEDERATION", "Minor_Unit":null, "Numeric_Code":"810", "Withdrawal_Date":"2004-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", "Currency":"French Franc", "Entity":"SAINT MARTIN", "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"1999-01-06", 
-    "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", "Currency":"French Franc", "Entity":"SAINT PIERRE AND MIQUELON", "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"FRF", "Currency":"French Franc", "Entity":"SAINT-BARTH\u00c3\u2030LEMY", "Minor_Unit":null, "Numeric_Code":"250", "Withdrawal_Date":"1999-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ITL", "Currency":"Italian Lira", "Entity":"SAN MARINO", "Minor_Unit":null, 
-    "Numeric_Code":"380", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"CSD", "Currency":"Serbian Dinar", "Entity":"SERBIA AND MONTENEGRO", "Minor_Unit":null, "Numeric_Code":"891", "Withdrawal_Date":"2006-10-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"SERBIA AND MONTENEGRO", "Minor_Unit":null, "Numeric_Code":"978", "Withdrawal_Date":"2006-10-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"SKK", "Currency":"Slovak Koruna", 
-    "Entity":"SLOVAKIA", "Minor_Unit":null, "Numeric_Code":"703", "Withdrawal_Date":"2009-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"SIT", "Currency":"Tolar", "Entity":"SLOVENIA", "Minor_Unit":null, "Numeric_Code":"705", "Withdrawal_Date":"2007-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZAL", "Currency":"Financial Rand", "Entity":"SOUTH AFRICA", "Minor_Unit":null, "Numeric_Code":"991", "Withdrawal_Date":"1995-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"SDG", 
-    "Currency":"Sudanese Pound", "Entity":"SOUTH SUDAN", "Minor_Unit":null, "Numeric_Code":"938", "Withdrawal_Date":"2012-09-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RHD", "Currency":"Rhodesian Dollar", "Entity":"SOUTHERN RHODESIA\u00c2", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1978 to 1981"}, {"Alphabetic_Code":"ESA", "Currency":"Spanish Peseta", "Entity":"SPAIN", "Minor_Unit":null, "Numeric_Code":"996", "Withdrawal_Date":null, "Withdrawal_Interval":"1978 to 1981"}, 
-    {"Alphabetic_Code":"ESB", "Currency":'"A" Account (convertible Peseta Account)', "Entity":"SPAIN", "Minor_Unit":null, "Numeric_Code":"995", "Withdrawal_Date":"1994-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ESP", "Currency":"Spanish Peseta", "Entity":"SPAIN", "Minor_Unit":null, "Numeric_Code":"724", "Withdrawal_Date":"2002-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"SDD", "Currency":"Sudanese Dinar", "Entity":"SUDAN", "Minor_Unit":null, "Numeric_Code":"736", "Withdrawal_Date":"2007-07-06", 
-    "Withdrawal_Interval":null}, {"Alphabetic_Code":"SDP", "Currency":"Sudanese Pound", "Entity":"SUDAN", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1998-06-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"SRG", "Currency":"Surinam Guilder", "Entity":"SURINAME", "Minor_Unit":null, "Numeric_Code":"740", "Withdrawal_Date":"2003-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"CHC", "Currency":"WIR Franc (for electronic)", "Entity":"SWITZERLAND", "Minor_Unit":null, "Numeric_Code":"948", 
-    "Withdrawal_Date":"2004-11-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"TAJIKISTAN", "Minor_Unit":null, "Numeric_Code":"810", "Withdrawal_Date":"1995-05-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"TJR", "Currency":"Tajik Ruble", "Entity":"TAJIKISTAN", "Minor_Unit":null, "Numeric_Code":"762", "Withdrawal_Date":"2001-04-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"IDR", "Currency":"Rupiah", "Entity":"TIMOR-LESTE", "Minor_Unit":null, 
-    "Numeric_Code":"360", "Withdrawal_Date":"2002-07-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"TPE", "Currency":"Timor Escudo", "Entity":"TIMOR-LESTE", "Minor_Unit":null, "Numeric_Code":"626", "Withdrawal_Date":"2002-11-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"TRL", "Currency":"Old Turkish Lira", "Entity":"TURKEY", "Minor_Unit":null, "Numeric_Code":"792", "Withdrawal_Date":"2005-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"TRY", "Currency":"New Turkish Lira", 
-    "Entity":"TURKEY", "Minor_Unit":null, "Numeric_Code":"949", "Withdrawal_Date":"2009-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"TURKMENISTAN", "Minor_Unit":null, "Numeric_Code":"810", "Withdrawal_Date":"1993-10-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"TMM", "Currency":"Turkmenistan Manat", "Entity":"TURKMENISTAN", "Minor_Unit":null, "Numeric_Code":"795", "Withdrawal_Date":"2009-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"UGS", 
-    "Currency":"Uganda Shilling", "Entity":"UGANDA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1987-05-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"UGW", "Currency":"Old Shilling", "Entity":"UGANDA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1989 to 1990"}, {"Alphabetic_Code":"UAK", "Currency":"Karbovanet", "Entity":"UKRAINE", "Minor_Unit":null, "Numeric_Code":"804", "Withdrawal_Date":"1996-09-06", "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"SUR", "Currency":"Rouble", "Entity":"UNION OF SOVIET SOCIALIST REPUBLICS", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1990-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"USS", "Currency":"US Dollar (Same day)", "Entity":"UNITED STATES", "Minor_Unit":null, "Numeric_Code":"998", "Withdrawal_Date":"2014-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"UYN", "Currency":"Old Uruguay Peso", "Entity":"URUGUAY", "Minor_Unit":null, "Numeric_Code":null, 
-    "Withdrawal_Date":"1989-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"UYP", "Currency":"Uruguayan Peso", "Entity":"URUGUAY", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1993-03-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"RUR", "Currency":"Russian Ruble", "Entity":"UZBEKISTAN", "Minor_Unit":null, "Numeric_Code":"810", "Withdrawal_Date":"1994-07-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"VEB", "Currency":"Bolivar", "Entity":"VENEZUELA", "Minor_Unit":null, 
-    "Numeric_Code":"862", "Withdrawal_Date":"2008-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"VEF", "Currency":"Bolivar Fuerte", "Entity":"VENEZUELA", "Minor_Unit":null, "Numeric_Code":"937", "Withdrawal_Date":"2011-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"VEF", "Currency":"Bolivar", "Entity":"VENEZUELA (BOLIVARIAN REPUBLIC OF)", "Minor_Unit":null, "Numeric_Code":"937", "Withdrawal_Date":"2016-02-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"VNC", "Currency":"Old Dong", 
-    "Entity":"VIETNAM", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":null, "Withdrawal_Interval":"1989 to 1990"}, {"Alphabetic_Code":"YDD", "Currency":"Yemeni Dinar", "Entity":"YEMEN, DEMOCRATIC", "Minor_Unit":null, "Numeric_Code":"720", "Withdrawal_Date":"1991-09-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"YUD", "Currency":"New Yugoslavian Dinar", "Entity":"YUGOSLAVIA", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1990-01-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"YUM", 
-    "Currency":"New Dinar", "Entity":"YUGOSLAVIA", "Minor_Unit":null, "Numeric_Code":"891", "Withdrawal_Date":"2003-07-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"YUN", "Currency":"Yugoslavian Dinar", "Entity":"YUGOSLAVIA", "Minor_Unit":null, "Numeric_Code":"890", "Withdrawal_Date":"1995-11-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZRN", "Currency":"New Zaire", "Entity":"ZAIRE", "Minor_Unit":null, "Numeric_Code":"180", "Withdrawal_Date":"1999-06-06", "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"ZRZ", "Currency":"Zaire", "Entity":"ZAIRE", "Minor_Unit":null, "Numeric_Code":"180", "Withdrawal_Date":"1994-02-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZMK", "Currency":"Zambian Kwacha", "Entity":"ZAMBIA", "Minor_Unit":null, "Numeric_Code":"894", "Withdrawal_Date":"2012-12-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZWC", "Currency":"Rhodesian Dollar", "Entity":"ZIMBABWE", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"1989-12-06", "Withdrawal_Interval":null}, 
-    {"Alphabetic_Code":"ZWD", "Currency":"Zimbabwe Dollar (old)", "Entity":"ZIMBABWE", "Minor_Unit":null, "Numeric_Code":"716", "Withdrawal_Date":"2006-08-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZWD", "Currency":"Zimbabwe Dollar", "Entity":"ZIMBABWE", "Minor_Unit":null, "Numeric_Code":"716", "Withdrawal_Date":"2008-08-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZWN", "Currency":"Zimbabwe Dollar (new)", "Entity":"ZIMBABWE", "Minor_Unit":null, "Numeric_Code":"942", "Withdrawal_Date":"2006-09-06", 
-    "Withdrawal_Interval":null}, {"Alphabetic_Code":"ZWR", "Currency":"Zimbabwe Dollar", "Entity":"ZIMBABWE", "Minor_Unit":null, "Numeric_Code":"935", "Withdrawal_Date":"2009-06-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"XFO", "Currency":"Gold-Franc", "Entity":"ZZ01_Gold-Franc", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"2006-10-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"XRE", "Currency":"RINET Funds Code", "Entity":"ZZ02_RINET Funds Code", "Minor_Unit":null, 
-    "Numeric_Code":null, "Withdrawal_Date":"1999-11-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"XFU", "Currency":"UIC-Franc", "Entity":"ZZ05_UIC-Franc", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"2013-11-06", "Withdrawal_Interval":null}];
-    this.name = "CurrencyValidator";
-  };
-  CurrencyValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
-  CurrencyValidator.prototype.constructor = CurrencyValidator;
-  Object.defineProperty(CurrencyValidator.prototype, "alias", {get:function() {
-    return "currency";
-  }});
-  Object.assign(CurrencyValidator.prototype, {__validate:function() {
-    for (var i = 0; i < this.__currencies.length; i++) {
-      if (this.__currencies[i].Alphabetic_Code === this.data) {
-        return;
-      }
-    }
-    this.__setErrorMessage(this.message, this.__messageParameters());
-    return;
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {CurrencyValidator:CurrencyValidator};
-}());
-abv.registry(abv.CurrencyValidator);
-Object.assign(abv, function() {
-  var LuhnValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.message = this.__options.message || "Invalid card number.";
-    this.name = "LuhnValidator";
-  };
-  LuhnValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
-  LuhnValidator.prototype.constructor = LuhnValidator;
-  Object.defineProperty(LuhnValidator.prototype, "alias", {get:function() {
-    return "luhn";
-  }});
-  Object.assign(LuhnValidator.prototype, {__validate:function() {
-    if (false === abv.isType("digit", this.data)) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    var checkSum = 0;
-    var length = this.data.length;
-    for (var i = length - 1; i >= 0; i -= 2) {
-      checkSum += this.data[i] * 1;
-    }
-    for (var i = length - 2; i >= 0; i -= 2) {
-      checkSum += abv.array_sum(abv.str_split(this.data[i] * 2));
-    }
-    if (0 === checkSum || 0 !== checkSum % 10) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {LuhnValidator:LuhnValidator};
-}());
-abv.registry(abv.LuhnValidator);
-Object.assign(abv, function() {
-  var IbanValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.message = this.__options.message || "This is not a valid International Bank Account Number (IBAN).";
-    this.__formats = {"AD":/^AD\d{2}\d{4}\d{4}[\dA-Z]{12}$/, "AE":/^AE\d{2}\d{3}\d{16}$/, "AL":/^AL\d{2}\d{8}[\dA-Z]{16}$/, "AO":/^AO\d{2}\d{21}$/, "AT":/^AT\d{2}\d{5}\d{11}$/, "AX":/^FI\d{2}\d{6}\d{7}\d{1}$/, "AZ":/^AZ\d{2}[A-Z]{4}[\dA-Z]{20}$/, "BA":/^BA\d{2}\d{3}\d{3}\d{8}\d{2}$/, "BE":/^BE\d{2}\d{3}\d{7}\d{2}$/, "BF":/^BF\d{2}\d{23}$/, "BG":/^BG\d{2}[A-Z]{4}\d{4}\d{2}[\dA-Z]{8}$/, "BH":/^BH\d{2}[A-Z]{4}[\dA-Z]{14}$/, "BI":/^BI\d{2}\d{12}$/, "BJ":/^BJ\d{2}[A-Z]{1}\d{23}$/, "BY":/^BY\d{2}[\dA-Z]{4}\d{4}[\dA-Z]{16}$/, 
-    "BL":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "BR":/^BR\d{2}\d{8}\d{5}\d{10}[A-Z][\dA-Z]$/, "CG":/^CG\d{2}\d{23}$/, "CH":/^CH\d{2}\d{5}[\dA-Z]{12}$/, "CI":/^CI\d{2}[A-Z]{1}\d{23}$/, "CM":/^CM\d{2}\d{23}$/, "CR":/^CR\d{2}0\d{3}\d{14}$/, "CV":/^CV\d{2}\d{21}$/, "CY":/^CY\d{2}\d{3}\d{5}[\dA-Z]{16}$/, "CZ":/^CZ\d{2}\d{20}$/, "DE":/^DE\d{2}\d{8}\d{10}$/, "DO":/^DO\d{2}[\dA-Z]{4}\d{20}$/, "DK":/^DK\d{2}\d{4}\d{10}$/, "DZ":/^DZ\d{2}\d{20}$/, "EE":/^EE\d{2}\d{2}\d{2}\d{11}\d{1}$/, "ES":/^ES\d{2}\d{4}\d{4}\d{1}\d{1}\d{10}$/, 
-    "FI":/^FI\d{2}\d{6}\d{7}\d{1}$/, "FO":/^FO\d{2}\d{4}\d{9}\d{1}$/, "FR":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "GF":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "GB":/^GB\d{2}[A-Z]{4}\d{6}\d{8}$/, "GE":/^GE\d{2}[A-Z]{2}\d{16}$/, "GI":/^GI\d{2}[A-Z]{4}[\dA-Z]{15}$/, "GL":/^GL\d{2}\d{4}\d{9}\d{1}$/, "GP":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "GR":/^GR\d{2}\d{3}\d{4}[\dA-Z]{16}$/, "GT":/^GT\d{2}[\dA-Z]{4}[\dA-Z]{20}$/, "HR":/^HR\d{2}\d{7}\d{10}$/, "HU":/^HU\d{2}\d{3}\d{4}\d{1}\d{15}\d{1}$/, "IE":/^IE\d{2}[A-Z]{4}\d{6}\d{8}$/, 
-    "IL":/^IL\d{2}\d{3}\d{3}\d{13}$/, "IR":/^IR\d{2}\d{22}$/, "IS":/^IS\d{2}\d{4}\d{2}\d{6}\d{10}$/, "IT":/^IT\d{2}[A-Z]{1}\d{5}\d{5}[\dA-Z]{12}$/, "JO":/^JO\d{2}[A-Z]{4}\d{4}[\dA-Z]{18}$/, "KW":/^KW\d{2}[A-Z]{4}\d{22}$/, "KZ":/^KZ\d{2}\d{3}[\dA-Z]{13}$/, "LB":/^LB\d{2}\d{4}[\dA-Z]{20}$/, "LI":/^LI\d{2}\d{5}[\dA-Z]{12}$/, "LT":/^LT\d{2}\d{5}\d{11}$/, "LU":/^LU\d{2}\d{3}[\dA-Z]{13}$/, "LV":/^LV\d{2}[A-Z]{4}[\dA-Z]{13}$/, "MC":/^MC\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "MD":/^MD\d{2}[\dA-Z]{2}[\dA-Z]{18}$/, 
-    "ME":/^ME\d{2}\d{3}\d{13}\d{2}$/, "MF":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "MG":/^MG\d{2}\d{23}$/, "MK":/^MK\d{2}\d{3}[\dA-Z]{10}\d{2}$/, "ML":/^ML\d{2}[A-Z]{1}\d{23}$/, "MQ":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "MR":/^MR13\d{5}\d{5}\d{11}\d{2}$/, "MT":/^MT\d{2}[A-Z]{4}\d{5}[\dA-Z]{18}$/, "MU":/^MU\d{2}[A-Z]{4}\d{2}\d{2}\d{12}\d{3}[A-Z]{3}$/, "MZ":/^MZ\d{2}\d{21}$/, "NC":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "NL":/^NL\d{2}[A-Z]{4}\d{10}$/, "NO":/^NO\d{2}\d{4}\d{6}\d{1}$/, "PF":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, 
-    "PK":/^PK\d{2}[A-Z]{4}[\dA-Z]{16}$/, "PL":/^PL\d{2}\d{8}\d{16}$/, "PM":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "PS":/^PS\d{2}[A-Z]{4}[\dA-Z]{21}$/, "PT":/^PT\d{2}\d{4}\d{4}\d{11}\d{2}$/, "QA":/^QA\d{2}[A-Z]{4}[\dA-Z]{21}$/, "RE":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "RO":/^RO\d{2}[A-Z]{4}[\dA-Z]{16}$/, "RS":/^RS\d{2}\d{3}\d{13}\d{2}$/, "SA":/^SA\d{2}\d{2}[\dA-Z]{18}$/, "SE":/^SE\d{2}\d{3}\d{16}\d{1}$/, "SI":/^SI\d{2}\d{5}\d{8}\d{2}$/, "SK":/^SK\d{2}\d{4}\d{6}\d{10}$/, "SM":/^SM\d{2}[A-Z]{1}\d{5}\d{5}[\dA-Z]{12}$/, 
-    "SN":/^SN\d{2}[A-Z]{1}\d{23}$/, "TF":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "TL":/^TL\d{2}\d{3}\d{14}\d{2}$/, "TN":/^TN59\d{2}\d{3}\d{13}\d{2}$/, "TR":/^TR\d{2}\d{5}[\dA-Z]{1}[\dA-Z]{16}$/, "UA":/^UA\d{2}\d{6}[\dA-Z]{19}$/, "VA":/^VA\d{2}\d{3}\d{15}$/, "VG":/^VG\d{2}[A-Z]{4}\d{16}$/, "WF":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "XK":/^XK\d{2}\d{4}\d{10}\d{2}$/, "YT":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/};
-    this.name = "IbanValidator";
-  };
-  IbanValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
-  IbanValidator.prototype.constructor = IbanValidator;
-  Object.defineProperty(IbanValidator.prototype, "alias", {get:function() {
-    return "iban";
-  }});
-  Object.assign(IbanValidator.prototype, {__validate:function() {
-    var canonicalized = this.data.split(" ").join("");
-    if (false === abv.isType("alnum", canonicalized)) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    var countryCode = canonicalized.substr(0, 2);
-    if (false === abv.isType("alpha", countryCode)) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    if ("undefined" === typeof this.__formats[countryCode]) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    if (false === this.__formats[countryCode].test(canonicalized)) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    canonicalized = canonicalized.substr(4) + canonicalized.substr(0, 4);
-    var checkSum = this.__toBigInt(canonicalized);
-    if (1 !== this.__bigModulo97(checkSum)) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __toBigInt:function(string) {
-    var chars = abv.str_split(string);
-    var bigInt = "";
-    for (var i = 0; i < chars.length; i++) {
-      if (true === abv.isType("upper", chars[i])) {
-        bigInt += abv.ord(chars[i]) - 55;
-        continue;
-      }
-      bigInt += chars[i];
-    }
-    return bigInt;
-  }, __bigModulo97:function(bigInt) {
-    var parts = abv.str_split(bigInt, 7);
-    var rest = 0;
-    for (var i = 0; i < parts.length; i++) {
-      rest = (rest + parts[i]) % 97;
-    }
-    return rest;
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {IbanValidator:IbanValidator};
-}());
-abv.registry(abv.IbanValidator);
-Object.assign(abv, function() {
-  var IsbnValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {bothIsbnMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', isbn10Message:'type:{"type":"string"}|length:{"min":3,"max":255}', isbn13Message:'type:{"type":"string"}|length:{"min":3,"max":255}', message:'type:{"type":"string"}|length:{"min":3,"max":255}', type:'type:{"type":"string"}'}, lang, internal);
-    this.bothIsbnMessage = this.__options.bothIsbnMessage || "This value is neither a valid ISBN-10 nor a valid ISBN-13.";
-    this.isbn10Message = this.__options.isbn10Message || "This value is not a valid ISBN-10.";
-    this.isbn13Message = this.__options.isbn13Message || "This value is not a valid ISBN-13.";
-    this.message = this.__options.message || null;
-    this.type = this.__options.type || null;
-    this.name = "IsbnValidator";
-  };
-  IsbnValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
-  IsbnValidator.prototype.constructor = IsbnValidator;
-  Object.defineProperty(IsbnValidator.prototype, "alias", {get:function() {
-    return "isbn";
-  }});
-  Object.assign(IsbnValidator.prototype, {__validate:function() {
-    var canonical = this.data.split("-").join("");
-    if ("isbn10" === this.type) {
-      if (false === this.__validateIsbn10(canonical)) {
-        this.__setErrorMessage(this.__getMessage(this.type), this.__messageParameters());
-        return;
-      }
-    }
-    if ("isbn13" === this.type) {
-      if (false === this.__validateIsbn13(canonical)) {
-        this.__setErrorMessage(this.__getMessage(this.type), this.__messageParameters());
-        return;
-      }
-    }
-    var code = this.__validateIsbn10(canonical);
-    if (false === code) {
-      code = this.__validateIsbn13(canonical);
-      if (false === code) {
-        code = false;
-      }
-    }
-    if (true !== code) {
-      this.__setErrorMessage(this.__getMessage(), this.__messageParameters());
-      return;
-    }
-  }, __validateIsbn10:function(isbn) {
-    var checkSum = 0;
-    var i;
-    for (i = 0; i < 10; ++i) {
-      if ("undefined" === typeof isbn[i]) {
-        return false;
-      }
-      var digit = null;
-      if ("X" === isbn[i]) {
-        digit = 10;
-      } else {
-        if (true === abv.isType("digit", isbn[i])) {
-          digit = isbn[i];
-        } else {
-          return false;
-        }
-      }
-      checkSum += digit * (10 - i);
-    }
-    if ("undefined" !== typeof isbn[i]) {
-      return false;
-    }
-    return 0 === checkSum % 11 ? true : false;
-  }, __validateIsbn13:function(isbn) {
-    if (false === abv.isType("digit", isbn)) {
-      return false;
-    }
-    var length = isbn.length;
-    if (length < 13) {
-      return false;
-    }
-    if (length > 13) {
-      return false;
-    }
-    var checkSum = 0;
-    for (var i = 0; i < 13; i += 2) {
-      checkSum += isbn[i];
-    }
-    for (var i = 1; i < 12; i += 2) {
-      checkSum += isbn[i] * 3;
-    }
-    return 0 === checkSum % 10 ? true : false;
-  }, __getMessage:function(type) {
-    if (null !== this.message) {
-      return this.message;
-    } else {
-      if ("isbn10" === type) {
-        return this.isbn10Message;
-      } else {
-        if ("isbn13" === type) {
-          return this.isbn13Message;
-        }
-      }
-    }
-    return this.bothIsbnMessage;
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {IsbnValidator:IsbnValidator};
-}());
-abv.registry(abv.IsbnValidator);
-Object.assign(abv, function() {
-  var IssnValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {caseSensitive:'type:{"type":"bool"}', message:'type:{"type":"string"}|length:{"min":3,"max":255}', requireHyphen:'type:{"type":"bool"}'}, lang, internal);
-    this.caseSensitive = true === this.__options.caseSensitive;
-    this.message = this.__options.message || "This value is not a valid ISSN.";
-    this.requireHyphen = true === this.__options.requireHyphen;
-    this.name = "IssnValidator";
-  };
-  IssnValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
-  IssnValidator.prototype.constructor = IssnValidator;
-  Object.defineProperty(IssnValidator.prototype, "alias", {get:function() {
-    return "issn";
-  }});
-  Object.assign(IssnValidator.prototype, {__validate:function() {
-    var canonical = this.data;
-    if ("undefined" !== typeof canonical[4] && "-" === canonical[4]) {
-      canonical = this.data.substr(0, 4);
-      canonical += this.data.substr(5);
-    } else {
-      if (true === this.requireHyphen) {
-        this.__setErrorMessage(this.message, this.__messageParameters());
-        return;
-      }
-    }
-    var length = canonical.length;
-    if (length < 8) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    if (length > 8) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    if (false === abv.isType("digit", canonical.substr(0, 7))) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    if (false === abv.isType("digit", canonical[7]) && "x" !== canonical[7] && "X" !== canonical[7]) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    if (true === this.caseSensitive && "x" === canonical[7]) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-    var checkSum = "X" === canonical[7] || "x" === canonical[7] ? 10 : parseInt(canonical[7]);
-    for (var i = 0; i < 7; ++i) {
-      checkSum += (8 - i) * parseInt(canonical[i]);
-    }
-    if (0 !== checkSum % 11) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    try {
-      if ("undefined" !== typeof this.data) {
-        this.data = this.data.toString();
-      }
-    } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
-      return;
-    }
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {IssnValidator:IssnValidator};
-}());
-abv.registry(abv.IssnValidator);
-Object.assign(abv, function() {
-  var CountValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {exactMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', max:'type:{"type":"numeric"}', maxMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', min:'type:{"type":"numeric"}', minMessage:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.exactMessage = this.__options.exactMessage || "This collection should contain exactly %%limit%% elements.";
-    this.max = this.__options.max || null;
-    this.maxMessage = this.__options.maxMessage || "This collection should contain %%limit%% elements or less.";
-    this.min = this.__options.min || null;
-    this.minMessage = this.__options.minMessage || "This collection should contain %%limit%% elements or more.";
-    this.name = "CountValidator";
-  };
-  CountValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
-  CountValidator.prototype.constructor = CountValidator;
-  Object.defineProperty(CountValidator.prototype, "alias", {get:function() {
-    return "count";
-  }});
-  Object.assign(CountValidator.prototype, {__validate:function() {
-    var count = this.data.length;
-    if (null !== this.max && count > this.max) {
-      var __message = this.min == this.max ? this.exactMessage : this.maxMessage;
-      var __messageParameters = this.min == this.max ? this.__exactMessageParameters() : this.__maxMessageParameters();
-      this.__setErrorMessage(__message, __messageParameters);
-      return;
-    }
-    if (null !== this.min && count < this.min) {
-      var __message = this.min == this.max ? this.exactMessage : this.maxMessage;
-      var __messageParameters = this.min == this.max ? this.__exactMessageParameters() : this.__minMessageParameters();
-      this.__setErrorMessage(__message, __messageParameters);
-      return;
-    }
-  }, __beforeValidate:function() {
-    if (true === this.__isEmptyData()) {
-      this.__skip = true;
-      return;
-    }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', true);
-    if (null !== errorMessage) {
-      this.__setErrorMessage(errorMessage, {});
-      return;
-    }
-    if (null === this.min && null === this.max) {
-      throw new Error('Either option "min" or "max" must be given');
-    }
-  }, __minMessageParameters:function() {
-    return {"count":this.data.length, "limit":this.min};
-  }, __maxMessageParameters:function() {
-    return {"count":this.data.length, "limit":this.max};
-  }, __exactMessageParameters:function() {
-    return {"count":this.data.length, "limit":this.max};
-  }, __messageParameters:function() {
-    return {"value":this.data};
-  }});
-  return {CountValidator:CountValidator};
-}());
-abv.registry(abv.CountValidator);
 
 
 return abv;

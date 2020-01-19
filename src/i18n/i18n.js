@@ -22,12 +22,7 @@ Object.assign(abv, (function () {
      */
 
     var I18n = function (lang) {
-
         this.lang = lang || 'en';
-
-        if ('undefined' === typeof abv.I18nResource[this.lang]) {
-            throw new Error('Current language "' + this.lang + '" does not supported');
-        }
     };
 
     Object.assign(I18n.prototype, {
