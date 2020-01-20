@@ -24,6 +24,10 @@ describe('bic', () => {
     });
 
     describe('Is Invalid', () => {
+        test('BOFAUS6S [iban:"USFAUS6S","ibanMessage":"IBAN error message"]', () => {
+            expect(abv.isValidWithErrorMessage('BOFAUS6S', 'bic:{"iban":"USFAUS6S","ibanMessage":"IBAN error message"}')).toBe("IBAN error message");
+        });
+
         test('BOFAUS6S [iban:"USFAUS6S"]', () => {
             expect(abv.isValidWithErrorMessage('BOFAUS6S', 'bic:{"iban":"USFAUS6S"}')).toBe("This Business Identifier Code (BIC) is not associated with IBAN USFAUS6S.");
         });

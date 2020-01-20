@@ -5,6 +5,7 @@
 ../src/handler/error-handler.js
 ../src/handler/i18n-handler.js
 ../src/handler/validator-handler.js
+../src/handler/validation-settings-handler.js
 ../src/framework/application.js
 ../src/framework/helper/moment/moment.js
 ../src/framework/helper/moment/moment-timezone.js

@@ -60,11 +60,7 @@ Object.assign(abv, function () {
          * @description Configure validator
          */
         __configure: function () {
-            var validationRules = this.rules;
-            if ('string' === typeof this.rules) {
-                var validationRules = abv.__parseRulesFromJsonFormat(this.rules);
-            }
-
+            var validationRules = abv.ValidationSettingsHandler.parse(this.rules);
             for (var key in validationRules) {
                 if (!validationRules.hasOwnProperty(key)) continue;
 

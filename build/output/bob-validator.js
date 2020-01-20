@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision ef61a73
+ * Bob Validator Library v2.0 revision 36de963
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"ef61a73", config:{}, common:{}, validators:{}, registry:function(validator) {
+var abv = {version:"2.0", revision:"36de963", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, "en", true);
   var alias = __validator.alias;
@@ -44,50 +44,6 @@ var abv = {version:"2.0", revision:"ef61a73", config:{}, common:{}, validators:{
       abv.validators[element] = validator;
     }
   });
-}, __parseRulesFromLaravelFormat:function(rules) {
-  var splitted = rules.split("|");
-  var validators = {};
-  for (var key in splitted) {
-    if (!splitted.hasOwnProperty(key)) {
-      continue;
-    }
-    var rule = splitted[key];
-    var validator = rule.substring(0, rule.indexOf(";"));
-    var options = {};
-    if ("" === validator) {
-      validator = rule;
-    } else {
-      rule.substring(rule.indexOf(";") + 1).split(",").map(function(element) {
-        var option = element.split(":");
-        options[option[0]] = option[1];
-      });
-    }
-    validators[validator] = options;
-  }
-  return validators;
-}, __parseRulesFromJsonFormat:function(rules) {
-  var splitted = rules.split("|");
-  var validators = {};
-  for (var key in splitted) {
-    if (!splitted.hasOwnProperty(key)) {
-      continue;
-    }
-    var rule = splitted[key];
-    var validator = rule.substring(0, rule.indexOf(":"));
-    var options = {};
-    if ("" === validator) {
-      validator = rule;
-    } else {
-      var rulesString = rule.substring(rule.indexOf(":") + 1);
-      try {
-        options = JSON.parse(rulesString);
-      } catch (e) {
-        throw new Error('Invalid JSON: "' + rulesString + '"');
-      }
-    }
-    validators[validator] = options;
-  }
-  return validators;
 }, getType:function(data) {
   var results = /function (.{1,})\(/.exec(data.constructor.toString());
   if (null === results && "undefined" !== typeof data.name) {
@@ -372,6 +328,57 @@ Object.assign(abv, function() {
   }});
   return {ValidatorHandler:ValidatorHandler};
 }());
+abv.ValidationSettingsHandler = {parse:function(settings) {
+  var validators = settings;
+  if ("string" === typeof settings) {
+    validators = this.__parseJsonFormat(settings);
+  }
+  return validators;
+}, __parseLaravelFormat:function(settings) {
+  var splitted = settings.split("|");
+  var validators = {};
+  for (var key in splitted) {
+    if (!splitted.hasOwnProperty(key)) {
+      continue;
+    }
+    var rule = splitted[key];
+    var validator = rule.substring(0, rule.indexOf(";"));
+    var options = {};
+    if ("" === validator) {
+      validator = rule;
+    } else {
+      rule.substring(rule.indexOf(";") + 1).split(",").map(function(element) {
+        var option = element.split(":");
+        options[option[0]] = option[1];
+      });
+    }
+    validators[validator] = options;
+  }
+  return validators;
+}, __parseJsonFormat:function(settings) {
+  var splitted = settings.split("|");
+  var validators = {};
+  for (var key in splitted) {
+    if (!splitted.hasOwnProperty(key)) {
+      continue;
+    }
+    var rule = splitted[key];
+    var validator = rule.substring(0, rule.indexOf(":"));
+    var options = {};
+    if ("" === validator) {
+      validator = rule;
+    } else {
+      var settingsString = rule.substring(rule.indexOf(":") + 1);
+      try {
+        options = JSON.parse(settingsString);
+      } catch (e) {
+        throw new Error('Invalid JSON: "' + settingsString + '"');
+      }
+    }
+    validators[validator] = options;
+  }
+  return validators;
+}};
 Object.assign(abv, function() {
   var Application = function(options) {
     options = options || {};
@@ -8659,10 +8666,7 @@ Object.assign(abv, function() {
     return "all";
   }});
   Object.assign(AllValidator.prototype, {__configure:function() {
-    var validationRules = this.rules;
-    if ("string" === typeof this.rules) {
-      var validationRules = abv.__parseRulesFromJsonFormat(this.rules);
-    }
+    var validationRules = abv.ValidationSettingsHandler.parse(this.rules);
     for (var key in validationRules) {
       if (!validationRules.hasOwnProperty(key)) {
         continue;

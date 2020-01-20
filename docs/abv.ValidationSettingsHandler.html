@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: LuhnValidator</title>
+    <title>Namespace: ValidationSettingsHandler</title>
     
     
     
@@ -2372,7 +2372,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="abv.LuhnValidator.html">Class: LuhnValidator</h1>
+        <h1 class="page-title" data-filename="abv.ValidationSettingsHandler.html">Namespace: ValidationSettingsHandler</h1>
         
 
 
@@ -2381,11 +2381,8 @@
     
 <header>
     <div class="header content-size">
-        <h2><span class="ancestors"><a href="abv.html">abv</a>.</span>LuhnValidator
+        <h2><span class="ancestors"><a href="abv.html">abv</a>.</span>ValidationSettingsHandler
         </h2>
-        
-            <div class="class-description"><p>This constraint is used to ensure that a credit card number passes the <a target="_blank" href="https://en.wikipedia.org/wiki/Luhn_algorithm">Luhn algorithm</a>.</p>
-<p>It is useful as a first step to validating a credit card: before communicating with a payment gateway.</p></div>
         
     </div>
 </header>  
@@ -2397,14 +2394,74 @@
 
         
             
+                <div class="description"><p>Validation settings handler.</p>
+<p>This handler provides different types of validation settings parsers (validator's name and settings).</p></div>
+            
+
+            
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+
+            
+                <h3>Example</h3>
+                
+
+    
+    <pre class="prettyprint"><code>var validators = abv.ValidationSettingsHandler.parse('required|email:{"mode":"html5"}');</code></pre>
+    
+
+            
+        
+        </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl class="list-methods">
+            
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="LuhnValidator">
-            <a class="share-icon" href="#LuhnValidator"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="parse">
+            <a class="share-icon" href="#parse"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                new abv.LuhnValidator
+                parse
             </span>
-            <span class="signature">(data, options, lang, internal)</span>
+            <span class="signature">(settings)</span><span class="type-signature">Object</span>
             
             
             
@@ -2420,7 +2477,7 @@
     
     
     <div class="description">
-        Create a new Validator.
+        Prepare validation settings
     </div>
     
 
@@ -2451,35 +2508,18 @@
 	
         <tr>
             
-                <td class="name"><code>data</code></td>
+                <td class="name"><code>settings</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type">String</span>
+|
 
+<span class="param-type">JSON</span>
+|
 
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                The data which needs to be validated.</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-            
-            <td class="type">
-            
-                
 <span class="param-type">Object</span>
 
 
@@ -2490,53 +2530,7 @@
             
             <td class="description last">
                 
-                The setting options</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>lang</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                The language used by the application. Default: "<code>en</code>".</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>internal</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                If this parameter is true, it means, that validation called from core.</td>
+                Validation settings</td>
         </tr>
 	
 	
@@ -2577,189 +2571,6 @@
     
     
     
-    
-    
-        <h5>Example</h5>
-        
-
-    
-    <pre class="prettyprint"><code>var validator = new abv.LuhnValidator(data);
-if (false === validator.isValid()) {
-     validator.errors().first();
-}</code></pre>
-    
-
-    
-</dd>
-
-        
-        </div>
-    
-    
-    
-        <h3 class="subsection-title">Extends</h3>
-        
-        <ul>
-            <li><a href="abv.AbstractComparisonValidator.html">abv.AbstractComparisonValidator</a></li>
-        </ul>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-        <h3 class="subsection-title">Members</h3>
-        
-        <dl class="list-members">
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="message">
-            <a class="share-icon" href="#message"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">message</span>
-            <span class="type-signature type">String</span>
-            
-            
-            
-            
-        </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The default message supplied when the value does not pass the Luhn check.</p>
-<p>Default: "<code>Invalid card number.</code>"</p>
-<p>You can use the following parameters in this message:</p>
-<table>
-    <thead>
-        <tr>
-            <th>Parameter</th>
-            <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>%%value%%</code></td>
-            <td>The current (invalid) value</td>
-        </tr>
-    </tbody>
-</table>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        </dl>
-    
-    
-    
-        <h3 class="subsection-title">Methods</h3>
-        
-        <dl class="list-methods">
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="errors">
-            <a class="share-icon" href="#errors"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">
-                errors
-            </span>
-            <span class="signature">()</span><span class="type-signature">abv.Error</span>
-            
-            
-            
-                <span class="access-signature inherited"><a href="abv.AbstractValidator.html#errors">inherited</a></span>
-            
-            
-        </h4>
-    
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Return error errors
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
     <h5>Returns:</h5>
     
 
@@ -2778,114 +2589,11 @@ if (false === validator.isValid()) {
             
             <td class="type">
             
-                        abv.Error
+                        Object
                         
                     
             </td>
-            <td class="description last">Error messages</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="isValid">
-            <a class="share-icon" href="#isValid"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">
-                isValid
-            </span>
-            <span class="signature">()</span><span class="type-signature">Boolean</span>
-            
-            
-            
-                <span class="access-signature inherited"><a href="abv.AbstractValidator.html#isValid">inherited</a></span>
-            
-            
-        </h4>
-    
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Check if data valid
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        Boolean
-                        
-                    
-            </td>
-            <td class="description last">Validation status</td>
+            <td class="description last">Processed settings</td>
         </tr>
     
     </tbody>
