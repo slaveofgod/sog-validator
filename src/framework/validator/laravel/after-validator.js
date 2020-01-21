@@ -4,7 +4,7 @@ Object.assign(abv, function () {
     /**
      * @constructor
      * @name abv.AfterValidator
-     * @extends abv.GreaterThanValidator
+     * @extends abv.AbstractValidator
      * @classdesc
      * <p>The field under validation must be a value after a given date.</p>
      * @description Create a new Validator.
@@ -18,6 +18,41 @@ Object.assign(abv, function () {
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
+     */
+
+    // PROPERTIES
+
+    /**
+     * @name abv.AfterValidator#message
+     * @type {String}
+     * @description
+     * <p>This is the message that will be shown if the value is not greater than the comparison value.</p>
+     * <p>Default: "<code>The %%attribute%% must be a date after %%date%%.</code>"</p>
+     * <p>You can use the following parameters in this message:</p>
+     * <table>
+     *     <thead>
+     *         <tr>
+     *             <th>Parameter</th>
+     *             <th>Description</th>
+     *         </tr>
+     *     </thead>
+     *     <tbody>
+     *         <tr>
+     *             <td><code>%%attribute%%</code></td>
+     *             <td>The string "value"</td>
+     *         </tr>
+     *         <tr>
+     *             <td><code>%%date%%</code></td>
+     *             <td>The current (invalid) date</td>
+     *         </tr>
+     *     </tbody>
+     * </table>
+     */
+
+    /**
+     * @name abv.AfterValidator#value
+     * @type {*}
+     * @description This option is required. It defines the value to compare to. It can be a date in string, number or date object formats.
      */
 
     var AfterValidator = function (data, options, optionRules, lang, internal) {

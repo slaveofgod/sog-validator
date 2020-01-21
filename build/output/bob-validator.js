@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision 0e678c1
+ * Bob Validator Library v2.0 revision 8cece19
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"0e678c1", config:{}, common:{}, validators:{}, registry:function(validator) {
+var abv = {version:"2.0", revision:"8cece19", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;

@@ -4,7 +4,7 @@ Object.assign(abv, function () {
     /**
      * @constructor
      * @name abv.AcceptedValidator
-     * @extends abv.ChoiceValidator
+     * @extends abv.AbstractValidator
      * @classdesc
      * <p>The field under validation must be yes, on, 1, or true.</p>
      * <p>This is useful for validating "Terms of Service" acceptance.</p>
