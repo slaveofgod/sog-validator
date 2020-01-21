@@ -6,6 +6,14 @@ describe('negative-or-zero', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
+        test('Empty string will not validate', () => {
+            expect(abv.isValidWithErrorMessage('', 'negative-or-zero')).toBe(toBe);
+        });
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'negative-or-zero')).toBe(toBe);
+        });
+
         test('String "0"', () => {
             expect(abv.isValidWithErrorMessage("0", 'negative-or-zero')).toBe(toBe);
         });

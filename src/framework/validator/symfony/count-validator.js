@@ -4,7 +4,7 @@ Object.assign(abv, function () {
     /**
      * @constructor
      * @name abv.CountValidator
-     * @extends abv.AbstractComparisonValidator
+     * @extends abv.AbstractValidator
      * @classdesc Validates that a given collection's (i.e. an array or an object that implements Countable) element count is between some minimum and maximum value.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
@@ -119,7 +119,7 @@ Object.assign(abv, function () {
      */
 
     var CountValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractComparisonValidator.call(this, data, options, {
+        abv.AbstractValidator.call(this, data, options, {
             exactMessage: optionRules.exactMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             max: optionRules.max || 'type:{"type":"numeric"}',
             maxMessage: optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}',
@@ -135,7 +135,7 @@ Object.assign(abv, function () {
 
         this.name = 'CountValidator';
     };
-    CountValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+    CountValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     CountValidator.prototype.constructor = CountValidator;
 
     Object.defineProperty(CountValidator.prototype, 'alias', {

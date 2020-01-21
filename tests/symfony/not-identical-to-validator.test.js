@@ -6,6 +6,14 @@ describe('not-identical-to', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
+        test('Empty string will not validate', () => {
+            expect(abv.isValidWithErrorMessage('', 'not-identical-to:{"value":"12345"}')).toBe(toBe);
+        });
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'not-identical-to:{"value":"12345"}')).toBe(toBe);
+        });
+
         test('12345 !== "12345"', () => {
             expect(abv.isValidWithErrorMessage(12345, 'not-identical-to:{"value":"12345"}')).toBe(toBe);
         });

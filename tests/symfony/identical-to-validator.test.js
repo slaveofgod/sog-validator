@@ -6,6 +6,14 @@ describe('identical-to', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
+        test('Empty string will not validate', () => {
+            expect(abv.isValidWithErrorMessage('', 'identical-to:{"value":"a@a.com"}')).toBe(toBe);
+        });
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'identical-to:{"value":"a@a.com"}')).toBe(toBe);
+        });
+
         test('"a@a.com" === "a@a.com"', () => {
             expect(abv.isValidWithErrorMessage('a@a.com', 'identical-to:{"value":"a@a.com"}')).toBe(toBe);
         });

@@ -6,6 +6,14 @@ describe('negative', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
+        test('Empty string will not validate', () => {
+            expect(abv.isValidWithErrorMessage('', 'negative')).toBe(toBe);
+        });
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'negative')).toBe(toBe);
+        });
+
         test('-5', () => {
             expect(abv.isValidWithErrorMessage(-5, 'negative')).toBe(toBe);
         });

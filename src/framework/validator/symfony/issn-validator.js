@@ -4,7 +4,7 @@ Object.assign(abv, function () {
     /**
      * @constructor
      * @name abv.IssnValidator
-     * @extends abv.AbstractComparisonValidator
+     * @extends abv.AbstractValidator
      * @classdesc Validates that a value is a valid {@link https://en.wikipedia.org/wiki/Issn|International Standard Serial Number (ISSN)}.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
@@ -63,7 +63,7 @@ Object.assign(abv, function () {
      */
 
     var IssnValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractComparisonValidator.call(this, data, options, {
+        abv.AbstractValidator.call(this, data, options, {
             caseSensitive: optionRules.caseSensitive || 'type:{"type":"bool"}',
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             requireHyphen: optionRules.requireHyphen || 'type:{"type":"bool"}'
@@ -75,7 +75,7 @@ Object.assign(abv, function () {
 
         this.name = 'IssnValidator';
     };
-    IssnValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+    IssnValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     IssnValidator.prototype.constructor = IssnValidator;
 
     Object.defineProperty(IssnValidator.prototype, 'alias', {

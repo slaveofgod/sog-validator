@@ -54,6 +54,20 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
+         * @name abv.AbstractComparisonValidator#__beforeValidate
+         * @description Execute before validation is running
+         */
+        __beforeValidate: function () {
+            // Check if empty
+            if (true === this.__isEmptyData()) {
+                this.__skip = true;
+                return ;
+            }
+        },
+
+        /**
+         * @private
+         * @function
          * @name abv.AbstractComparisonValidator#__prepareDataForComparing
          * @description Prepare data for comparing
          * @returns {*}

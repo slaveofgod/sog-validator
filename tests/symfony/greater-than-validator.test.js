@@ -6,6 +6,14 @@ describe('greater-than', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
+        test('Empty string will not validate', () => {
+            expect(abv.isValidWithErrorMessage('', 'greater-than:{"value":"0.00000001"}')).toBe(toBe);
+        });
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'greater-than:{"value":"0.00000001"}')).toBe(toBe);
+        });
+
         test('true > false', () => {
             expect(abv.isValidWithErrorMessage(true, 'greater-than:{"value":false}')).toBe(toBe);
         });

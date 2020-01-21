@@ -4,7 +4,7 @@ Object.assign(abv, function () {
     /**
      * @constructor
      * @name abv.CurrencyValidator
-     * @extends abv.AbstractComparisonValidator
+     * @extends abv.AbstractValidator
      * @classdesc Validates that a value is a valid {@link https://en.wikipedia.org/wiki/ISO_4217|3-letter ISO 4217} currency name.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
@@ -45,7 +45,7 @@ Object.assign(abv, function () {
      */
 
     var CurrencyValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractComparisonValidator.call(this, data, options, {
+        abv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -55,7 +55,7 @@ Object.assign(abv, function () {
 
         this.name = 'CurrencyValidator';
     };
-    CurrencyValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+    CurrencyValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     CurrencyValidator.prototype.constructor = CurrencyValidator;
 
     Object.defineProperty(CurrencyValidator.prototype, 'alias', {

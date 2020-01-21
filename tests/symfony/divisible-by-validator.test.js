@@ -6,6 +6,14 @@ describe('divisible-by', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
+        test('Empty string will not validate', () => {
+            expect(abv.isValidWithErrorMessage('', 'divisible-by:{"value":2}')).toBe(toBe);
+        });
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'divisible-by:{"value":2}')).toBe(toBe);
+        });
+
         test('10 divisible by 2', () => {
             expect(abv.isValidWithErrorMessage(10, 'divisible-by:{"value":2}')).toBe(toBe);
         });

@@ -6,6 +6,14 @@ describe('positive', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
+        test('Empty string will not validate', () => {
+            expect(abv.isValidWithErrorMessage('', 'positive')).toBe(toBe);
+        });
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'positive')).toBe(toBe);
+        });
+
         test('0.00000001', () => {
             expect(abv.isValidWithErrorMessage(0.00000001, 'positive')).toBe(toBe);
         });

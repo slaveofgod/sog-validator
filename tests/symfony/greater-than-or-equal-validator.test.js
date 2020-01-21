@@ -6,6 +6,14 @@ describe('greater-than-or-equal', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
+        test('Empty string will not validate', () => {
+            expect(abv.isValidWithErrorMessage('', 'greater-than-or-equal:{"value":"0.00000001"}')).toBe(toBe);
+        });
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'greater-than-or-equal:{"value":"0.00000001"}')).toBe(toBe);
+        });
+
         test('1995-12-17T03:24:00 >= new Date("1995-12-17T03:24:00")', () => {
             expect(abv.isValidWithErrorMessage('1995-12-17T03:24:00', {
                 "greater-than-or-equal": {

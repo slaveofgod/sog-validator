@@ -4,7 +4,7 @@ Object.assign(abv, function () {
     /**
      * @constructor
      * @name abv.IbanValidator
-     * @extends abv.AbstractComparisonValidator
+     * @extends abv.AbstractValidator
      * @classdesc
      * <p>This constraint is used to ensure that a bank account number has the proper format of an {@link https://en.wikipedia.org/wiki/International_Bank_Account_Number|International Bank Account Number (IBAN)}.</p>
      * <p>IBAN is an internationally agreed means of identifying bank accounts across national borders with a reduced risk of propagating transcription errors.</p>
@@ -47,7 +47,7 @@ Object.assign(abv, function () {
      */
 
     var IbanValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractComparisonValidator.call(this, data, options, {
+        abv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -156,7 +156,7 @@ Object.assign(abv, function () {
 
         this.name = 'IbanValidator';
     };
-    IbanValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+    IbanValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     IbanValidator.prototype.constructor = IbanValidator;
 
     Object.defineProperty(IbanValidator.prototype, 'alias', {

@@ -28,7 +28,10 @@ Object.assign(abv, function () {
 
     Object.defineProperty(ActiveUrlValidator.prototype, 'alias', {
         get: function () {
-            return 'active_url';
+            return [
+                'active_url',
+                'active-url'
+            ];
         }
     });
 

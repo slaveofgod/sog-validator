@@ -47,7 +47,7 @@ Object.assign(abv, function () {
      */
 
     var LuhnValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractComparisonValidator.call(this, data, options, {
+        abv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 

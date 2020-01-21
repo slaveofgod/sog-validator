@@ -22,7 +22,7 @@ Object.assign(abv, function () {
             message: "The %%attribute%% must be a date after %%date%%.",
             value: options.value
         }, {
-            value: 'required|type:{"type":"date"}'
+            value: 'required|type:{"type":["date","date-string"],"any":true}'
         });
 
         this.name = 'AfterValidator';

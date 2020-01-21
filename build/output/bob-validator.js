@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision 2704e0e
+ * Bob Validator Library v2.0 revision 552cc24
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"2704e0e", config:{}, common:{}, validators:{}, registry:function(validator) {
+var abv = {version:"2.0", revision:"552cc24", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -194,6 +194,11 @@ Object.assign(abv, function() {
     }
     if (false === this.__compareValues(this.__prepareDataForComparing(this.__convertDataToValueType()), this.__prepareDataForComparing(this.value))) {
       this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
       return;
     }
   }, __prepareDataForComparing:function(data) {
@@ -10494,7 +10499,7 @@ Object.assign(abv, function() {
 abv.registry(abv.CardSchemeValidator);
 Object.assign(abv, function() {
   var CurrencyValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid currency.";
     this.__currencies = [{"Alphabetic_Code":"AFN", "Currency":"Afghani", "Entity":"AFGHANISTAN", "Minor_Unit":2, "Numeric_Code":"971", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"\u00c5LAND ISLANDS", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ALL", "Currency":"Lek", "Entity":"ALBANIA", "Minor_Unit":2, "Numeric_Code":"008", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
     {"Alphabetic_Code":"DZD", "Currency":"Algerian Dinar", "Entity":"ALGERIA", "Minor_Unit":2, "Numeric_Code":"012", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"AMERICAN SAMOA", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"ANDORRA", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AOA", 
@@ -10647,7 +10652,7 @@ Object.assign(abv, function() {
     "Numeric_Code":null, "Withdrawal_Date":"1999-11-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"XFU", "Currency":"UIC-Franc", "Entity":"ZZ05_UIC-Franc", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"2013-11-06", "Withdrawal_Interval":null}];
     this.name = "CurrencyValidator";
   };
-  CurrencyValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  CurrencyValidator.prototype = Object.create(abv.AbstractValidator.prototype);
   CurrencyValidator.prototype.constructor = CurrencyValidator;
   Object.defineProperty(CurrencyValidator.prototype, "alias", {get:function() {
     return "currency";
@@ -10689,7 +10694,7 @@ Object.assign(abv, function() {
 abv.registry(abv.CurrencyValidator);
 Object.assign(abv, function() {
   var LuhnValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "Invalid card number.";
     this.name = "LuhnValidator";
   };
@@ -10744,7 +10749,7 @@ Object.assign(abv, function() {
 abv.registry(abv.LuhnValidator);
 Object.assign(abv, function() {
   var IbanValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This is not a valid International Bank Account Number (IBAN).";
     this.__formats = {"AD":/^AD\d{2}\d{4}\d{4}[\dA-Z]{12}$/, "AE":/^AE\d{2}\d{3}\d{16}$/, "AL":/^AL\d{2}\d{8}[\dA-Z]{16}$/, "AO":/^AO\d{2}\d{21}$/, "AT":/^AT\d{2}\d{5}\d{11}$/, "AX":/^FI\d{2}\d{6}\d{7}\d{1}$/, "AZ":/^AZ\d{2}[A-Z]{4}[\dA-Z]{20}$/, "BA":/^BA\d{2}\d{3}\d{3}\d{8}\d{2}$/, "BE":/^BE\d{2}\d{3}\d{7}\d{2}$/, "BF":/^BF\d{2}\d{23}$/, "BG":/^BG\d{2}[A-Z]{4}\d{4}\d{2}[\dA-Z]{8}$/, "BH":/^BH\d{2}[A-Z]{4}[\dA-Z]{14}$/, "BI":/^BI\d{2}\d{12}$/, "BJ":/^BJ\d{2}[A-Z]{1}\d{23}$/, "BY":/^BY\d{2}[\dA-Z]{4}\d{4}[\dA-Z]{16}$/, 
     "BL":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "BR":/^BR\d{2}\d{8}\d{5}\d{10}[A-Z][\dA-Z]$/, "CG":/^CG\d{2}\d{23}$/, "CH":/^CH\d{2}\d{5}[\dA-Z]{12}$/, "CI":/^CI\d{2}[A-Z]{1}\d{23}$/, "CM":/^CM\d{2}\d{23}$/, "CR":/^CR\d{2}0\d{3}\d{14}$/, "CV":/^CV\d{2}\d{21}$/, "CY":/^CY\d{2}\d{3}\d{5}[\dA-Z]{16}$/, "CZ":/^CZ\d{2}\d{20}$/, "DE":/^DE\d{2}\d{8}\d{10}$/, "DO":/^DO\d{2}[\dA-Z]{4}\d{20}$/, "DK":/^DK\d{2}\d{4}\d{10}$/, "DZ":/^DZ\d{2}\d{20}$/, "EE":/^EE\d{2}\d{2}\d{2}\d{11}\d{1}$/, "ES":/^ES\d{2}\d{4}\d{4}\d{1}\d{1}\d{10}$/, 
@@ -10755,7 +10760,7 @@ Object.assign(abv, function() {
     "SN":/^SN\d{2}[A-Z]{1}\d{23}$/, "TF":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "TL":/^TL\d{2}\d{3}\d{14}\d{2}$/, "TN":/^TN59\d{2}\d{3}\d{13}\d{2}$/, "TR":/^TR\d{2}\d{5}[\dA-Z]{1}[\dA-Z]{16}$/, "UA":/^UA\d{2}\d{6}[\dA-Z]{19}$/, "VA":/^VA\d{2}\d{3}\d{15}$/, "VG":/^VG\d{2}[A-Z]{4}\d{16}$/, "WF":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "XK":/^XK\d{2}\d{4}\d{10}\d{2}$/, "YT":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/};
     this.name = "IbanValidator";
   };
-  IbanValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  IbanValidator.prototype = Object.create(abv.AbstractValidator.prototype);
   IbanValidator.prototype.constructor = IbanValidator;
   Object.defineProperty(IbanValidator.prototype, "alias", {get:function() {
     return "iban";
@@ -10832,7 +10837,7 @@ Object.assign(abv, function() {
 abv.registry(abv.IbanValidator);
 Object.assign(abv, function() {
   var IsbnValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {bothIsbnMessage:optionRules.bothIsbnMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', isbn10Message:optionRules.isbn10Message || 'type:{"type":"string"}|length:{"min":3,"max":255}', isbn13Message:optionRules.isbn13Message || 'type:{"type":"string"}|length:{"min":3,"max":255}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', type:optionRules.type || 'type:{"type":"string"}|length:{"min":1,"max":255}'}, 
+    abv.AbstractValidator.call(this, data, options, {bothIsbnMessage:optionRules.bothIsbnMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', isbn10Message:optionRules.isbn10Message || 'type:{"type":"string"}|length:{"min":3,"max":255}', isbn13Message:optionRules.isbn13Message || 'type:{"type":"string"}|length:{"min":3,"max":255}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', type:optionRules.type || 'type:{"type":"string"}|length:{"min":1,"max":255}'}, 
     lang, internal);
     this.bothIsbnMessage = this.__options.bothIsbnMessage || "This value is neither a valid ISBN-10 nor a valid ISBN-13.";
     this.isbn10Message = this.__options.isbn10Message || "This value is not a valid ISBN-10.";
@@ -10841,7 +10846,7 @@ Object.assign(abv, function() {
     this.type = this.__options.type || null;
     this.name = "IsbnValidator";
   };
-  IsbnValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  IsbnValidator.prototype = Object.create(abv.AbstractValidator.prototype);
   IsbnValidator.prototype.constructor = IsbnValidator;
   Object.defineProperty(IsbnValidator.prototype, "alias", {get:function() {
     return "isbn";
@@ -10955,13 +10960,13 @@ Object.assign(abv, function() {
 abv.registry(abv.IsbnValidator);
 Object.assign(abv, function() {
   var IssnValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {caseSensitive:optionRules.caseSensitive || 'type:{"type":"bool"}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', requireHyphen:optionRules.requireHyphen || 'type:{"type":"bool"}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {caseSensitive:optionRules.caseSensitive || 'type:{"type":"bool"}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', requireHyphen:optionRules.requireHyphen || 'type:{"type":"bool"}'}, lang, internal);
     this.caseSensitive = true === this.__options.caseSensitive;
     this.message = this.__options.message || "This value is not a valid ISSN.";
     this.requireHyphen = true === this.__options.requireHyphen;
     this.name = "IssnValidator";
   };
-  IssnValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  IssnValidator.prototype = Object.create(abv.AbstractValidator.prototype);
   IssnValidator.prototype.constructor = IssnValidator;
   Object.defineProperty(IssnValidator.prototype, "alias", {get:function() {
     return "issn";
@@ -11035,7 +11040,7 @@ Object.assign(abv, function() {
 abv.registry(abv.IssnValidator);
 Object.assign(abv, function() {
   var CountValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {exactMessage:optionRules.exactMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', max:optionRules.max || 'type:{"type":"numeric"}', maxMessage:optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', min:optionRules.min || 'type:{"type":"numeric"}', minMessage:optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {exactMessage:optionRules.exactMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', max:optionRules.max || 'type:{"type":"numeric"}', maxMessage:optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', min:optionRules.min || 'type:{"type":"numeric"}', minMessage:optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.exactMessage = this.__options.exactMessage || "This collection should contain exactly %%limit%% elements.";
     this.max = this.__options.max || null;
     this.maxMessage = this.__options.maxMessage || "This collection should contain %%limit%% elements or less.";
@@ -11043,7 +11048,7 @@ Object.assign(abv, function() {
     this.minMessage = this.__options.minMessage || "This collection should contain %%limit%% elements or more.";
     this.name = "CountValidator";
   };
-  CountValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  CountValidator.prototype = Object.create(abv.AbstractValidator.prototype);
   CountValidator.prototype.constructor = CountValidator;
   Object.defineProperty(CountValidator.prototype, "alias", {get:function() {
     return "count";
@@ -11117,7 +11122,7 @@ Object.assign(abv, function() {
   ActiveUrlValidator.prototype = Object.create(abv.UrlValidator.prototype);
   ActiveUrlValidator.prototype.constructor = ActiveUrlValidator;
   Object.defineProperty(ActiveUrlValidator.prototype, "alias", {get:function() {
-    return "active_url";
+    return ["active_url", "active-url"];
   }});
   Object.defineProperty(ActiveUrlValidator.prototype, "options", {get:function() {
     return [];

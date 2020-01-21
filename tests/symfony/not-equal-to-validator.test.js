@@ -6,6 +6,14 @@ describe('not-equal-to', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
+        test('Empty string will not validate', () => {
+            expect(abv.isValidWithErrorMessage('', 'not-equal-to:{"value":"a@a.com"}')).toBe(toBe);
+        });
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'not-equal-to:{"value":"a@a.com"}')).toBe(toBe);
+        });
+
         test('new abv.Application({"lang": "en"}) != new abv.Application({"lang": "de"})', () => {
             expect(abv.isValidWithErrorMessage(new abv.Application({"lang": "en"}), {
                 "not-equal-to": {

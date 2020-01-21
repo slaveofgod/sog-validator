@@ -4,7 +4,7 @@ Object.assign(abv, function () {
     /**
      * @constructor
      * @name abv.IsbnValidator
-     * @extends abv.AbstractComparisonValidator
+     * @extends abv.AbstractValidator
      * @classdesc This constraint validates that an {@link https://en.wikipedia.org/wiki/Isbn|International Standard Book Number (ISBN)} is either a valid ISBN-10 or a valid ISBN-13.
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
@@ -122,7 +122,7 @@ Object.assign(abv, function () {
      */
 
     var IsbnValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractComparisonValidator.call(this, data, options, {
+        abv.AbstractValidator.call(this, data, options, {
             bothIsbnMessage: optionRules.bothIsbnMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             isbn10Message: optionRules.isbn10Message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             isbn13Message: optionRules.isbn13Message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
@@ -138,7 +138,7 @@ Object.assign(abv, function () {
 
         this.name = 'IsbnValidator';
     };
-    IsbnValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+    IsbnValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     IsbnValidator.prototype.constructor = IsbnValidator;
 
     Object.defineProperty(IsbnValidator.prototype, 'alias', {
