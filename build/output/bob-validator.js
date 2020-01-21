@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision 95cf92d
+ * Bob Validator Library v2.0 revision a629934
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"95cf92d", config:{}, common:{}, validators:{}, registry:function(validator) {
+var abv = {version:"2.0", revision:"a629934", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -11293,6 +11293,81 @@ Object.assign(abv, function() {
   return {BeforeOrEqualValidator:BeforeOrEqualValidator};
 }());
 abv.registry(abv.BeforeOrEqualValidator);
+Object.assign(abv, function() {
+  var BetweenValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {max:optionRules.max || 'required|type:{"type":["numeric","date-string"],"any":true}', min:optionRules.min || 'required|type:{"type":["numeric","date-string"],"any":true}'}, lang, internal);
+    this.max = this.__options.max;
+    this.min = this.__options.min;
+    this.dateMessage = "The %%attribute%% must be between %%min%% and %%max%% date.";
+    this.numericMessage = "The %%attribute%% must be between %%min%% and %%max%%.";
+    this.stringMessage = "The %%attribute%% must be between %%min%% and %%max%% characters.";
+    this.arrayMessage = "The %%attribute%% must have between %%min%% and %%max%% items.";
+    this.name = "BetweenValidator";
+  };
+  BetweenValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  BetweenValidator.prototype.constructor = BetweenValidator;
+  Object.defineProperty(BetweenValidator.prototype, "alias", {get:function() {
+    return "between";
+  }});
+  Object.defineProperty(BetweenValidator.prototype, "options", {get:function() {
+    return [{"name":"max", "type":"numeric|date-string"}, {"name":"min", "type":"numeric|date-string"}];
+  }});
+  Object.assign(BetweenValidator.prototype, {__validate:function() {
+    if (true === abv.isType("numeric", this.min)) {
+      if (true === abv.isType("numeric", this.data)) {
+        this.__validateNumeric();
+      } else {
+        if (true === abv.isType("array", this.data)) {
+          this.__validateArray();
+        } else {
+          if (true === abv.isType("string", this.data)) {
+            this.__validateString();
+          } else {
+            this.__setErrorMessage("Data type " + typeof this.data + " does not supported");
+            return;
+          }
+        }
+      }
+    } else {
+      if (true === abv.isType("date-string", this.min) || true === abv.isType("datetime", this.min)) {
+        this.__validateDateTime();
+      }
+    }
+  }, __validateNumeric:function() {
+    var status = abv.isValid(this.data, {"range":{"min":this.min, "max":this.max}});
+    if (false === status) {
+      this.__setErrorMessage(this.numericMessage, this.__messageParameters());
+      return;
+    }
+  }, __validateDateTime:function() {
+    var status = abv.isValid(this.data, {"range":{"min":this.min, "max":this.max}});
+    if (false === status) {
+      this.__setErrorMessage(this.dateMessage, this.__messageParameters());
+      return;
+    }
+  }, __validateArray:function() {
+    var status = abv.isValid(this.data, {"count":{"min":this.min, "max":this.max}});
+    if (false === status) {
+      this.__setErrorMessage(this.arrayMessage, this.__messageParameters());
+      return;
+    }
+  }, __validateString:function() {
+    var status = abv.isValid(this.data, {"length":{"min":this.min, "max":this.max}});
+    if (false === status) {
+      this.__setErrorMessage(this.stringMessage, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value", "max":this.max, "min":this.min};
+  }});
+  return {BetweenValidator:BetweenValidator};
+}());
+abv.registry(abv.BetweenValidator);
 abv.I18nHandler.add("af", [{"@id":"1", "source":"This value should be false.", "target":"Hierdie waarde moet vals wees."}, {"@id":"2", "source":"This value should be true.", "target":"Hierdie waarde moet waar wees."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Hierdie waarde moet van die soort {{type}} wees."}, {"@id":"4", "source":"This value should be blank.", "target":"Hierdie waarde moet leeg wees."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Die waarde wat jy gekies het is nie 'n geldige keuse nie."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Jy moet ten minste %%limit%% kies.|Jy moet ten minste %%limit%% keuses kies."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Jy moet by die meeste %%limit%% keuse kies.|Jy moet by die meeste %%limit%% keuses kies."}, {"@id":"8", "source":"One or more of the given values is invalid.", 
 "target":"Een of meer van die gegewe waardes is ongeldig."}, {"@id":"9", "source":"This field was not expected.", "target":"Die veld is nie verwag nie."}, {"@id":"10", "source":"This field is missing.", "target":"Hierdie veld ontbreek."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Hierdie waarde is nie 'n geldige datum nie."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Hierdie waarde is nie 'n geldige datum en tyd nie."}, {"@id":"13", "source":"This value is not a valid email address.", 

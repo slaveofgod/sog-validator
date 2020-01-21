@@ -10,6 +10,10 @@ describe('range', () => {
             expect(abv.isValidWithErrorMessage('', 'range:{"min":10,"max":20}')).toBe(toBe);
         });
 
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'range:{"min":10,"max":20}')).toBe(toBe);
+        });
+
         test('1991-12-17T03:24:00 [min: "1990-12-17T03:24:00", max: "1995-12-17T03:24:00"]', () => {
             expect(abv.isValidWithErrorMessage('1991-12-17T03:24:00', 'range:{"min":"1990-12-17T03:24:00","max":"1995-12-17T03:24:00"}')).toBe(toBe);
         });
@@ -20,11 +24,6 @@ describe('range', () => {
 
         test('String "692933040000" [min: "1990-12-17T03:24:00", max: "1995-12-17T03:24:00"]', () => {
             expect(abv.isValidWithErrorMessage("692933040000", 'range:{"min":"1990-12-17T03:24:00","max":"1995-12-17T03:24:00"}')).toBe(toBe);
-        });
-
-
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'range:{"min":10,"max":20}')).toBe(toBe);
         });
 
         test('150 [min: 150, max: 200]', () => {
