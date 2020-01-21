@@ -10,6 +10,9 @@ Object.assign(abv, function () {
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
+     * @param {Object} optionRules The validation rules for setting options.
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
+     * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.AfterValidator(data);
      * if (false === validator.isValid()) {
@@ -17,13 +20,13 @@ Object.assign(abv, function () {
      * }
      */
 
-    var AfterValidator = function (data, options) {
+    var AfterValidator = function (data, options, optionRules, lang, internal) {
         abv.GreaterThanValidator.call(this, data, {
             message: "The %%attribute%% must be a date after %%date%%.",
             value: options.value
         }, {
             value: 'required|type:{"type":["date","date-string"],"any":true}'
-        });
+        }, lang, internal);
 
         this.name = 'AfterValidator';
     };

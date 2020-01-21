@@ -9,6 +9,10 @@ Object.assign(abv, function () {
      * <p>The field under validation must have a valid A or AAAA record</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
+     * @param {Object} options The setting options
+     * @param {Object} optionRules The validation rules for setting options.
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
+     * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.ActiveUrlValidator(data);
      * if (false === validator.isValid()) {
@@ -16,10 +20,10 @@ Object.assign(abv, function () {
      * }
      */
 
-    var ActiveUrlValidator = function (data) {
+    var ActiveUrlValidator = function (data, options, optionRules, lang, internal) {
         abv.UrlValidator.call(this, data, {
             message: "The %%attribute%% is not a valid URL."
-        }, {});
+        }, {}, lang, internal);
 
         this.name = 'ActiveUrlValidator';
     };

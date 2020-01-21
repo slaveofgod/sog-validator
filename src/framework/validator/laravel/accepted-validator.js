@@ -10,6 +10,10 @@ Object.assign(abv, function () {
      * <p>This is useful for validating "Terms of Service" acceptance.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
+     * @param {Object} options The setting options
+     * @param {Object} optionRules The validation rules for setting options.
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
+     * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
      * var validator = new abv.AcceptedValidator(data);
      * if (false === validator.isValid()) {
@@ -17,11 +21,11 @@ Object.assign(abv, function () {
      * }
      */
 
-    var AcceptedValidator = function (data) {
+    var AcceptedValidator = function (data, options, optionRules, lang, internal) {
         abv.ChoiceValidator.call(this, data, {
             choices: ['yes', 'on', 1, true, '1', 'true'],
             message: "The %%attribute%% must be accepted."
-        }, {});
+        }, {}, lang, internal);
 
         this.name = 'AcceptedValidator';
     };

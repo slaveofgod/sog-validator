@@ -97,6 +97,7 @@
 ../src/framework/validator/symfony/count-validator.js
 ../src/framework/validator/laravel/accepted-validator.js
 ../src/framework/validator/laravel/active-url-validator.js
+../src/framework/validator/laravel/after-validator.js
 ../src/i18n/resource/af.js
 ../src/i18n/resource/ar.js
 ../src/i18n/resource/az.js

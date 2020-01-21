@@ -40,7 +40,7 @@
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.js?(x)",
       "<rootDir>/src/**/?(*.)(spec|test).js?(x)",
-      "<rootDir>/tests/**/?(*.)(spec|test).js?(x)"
+      "<rootDir>/tests/laravel/**/?(*.)(spec|test).js?(x)"
     ],
     "testEnvironment": "node"
   },
