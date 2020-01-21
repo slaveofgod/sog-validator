@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision e4f15b6
+ * Bob Validator Library v2.0 revision 6b5d562
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"e4f15b6", config:{}, common:{}, validators:{}, registry:function(validator) {
+var abv = {version:"2.0", revision:"6b5d562", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -11193,7 +11193,7 @@ Object.assign(abv, function() {
     return [];
   }});
   Object.assign(AlphaValidator.prototype, {__messageParameters:function() {
-    return {"attribute":"field"};
+    return {"attribute":"value"};
   }});
   return {AlphaValidator:AlphaValidator};
 }());
@@ -11212,7 +11212,7 @@ Object.assign(abv, function() {
     return [];
   }});
   Object.assign(AlphaDashValidator.prototype, {__messageParameters:function() {
-    return {"attribute":"field"};
+    return {"attribute":"value"};
   }});
   return {AlphaDashValidator:AlphaDashValidator};
 }());
@@ -11231,11 +11231,30 @@ Object.assign(abv, function() {
     return [];
   }});
   Object.assign(AlphaNumValidator.prototype, {__messageParameters:function() {
-    return {"attribute":"field"};
+    return {"attribute":"value"};
   }});
   return {AlphaNumValidator:AlphaNumValidator};
 }());
 abv.registry(abv.AlphaNumValidator);
+Object.assign(abv, function() {
+  var ArrayValidator = function(data, options, optionRules, lang, internal) {
+    abv.TypeValidator.call(this, data, {type:"array", message:"The %%attribute%% must be an array."}, {}, lang, internal);
+    this.name = "ArrayValidator";
+  };
+  ArrayValidator.prototype = Object.create(abv.TypeValidator.prototype);
+  ArrayValidator.prototype.constructor = ArrayValidator;
+  Object.defineProperty(ArrayValidator.prototype, "alias", {get:function() {
+    return "array";
+  }});
+  Object.defineProperty(ArrayValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(ArrayValidator.prototype, {__messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {ArrayValidator:ArrayValidator};
+}());
+abv.registry(abv.ArrayValidator);
 abv.I18nHandler.add("af", [{"@id":"1", "source":"This value should be false.", "target":"Hierdie waarde moet vals wees."}, {"@id":"2", "source":"This value should be true.", "target":"Hierdie waarde moet waar wees."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Hierdie waarde moet van die soort {{type}} wees."}, {"@id":"4", "source":"This value should be blank.", "target":"Hierdie waarde moet leeg wees."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Die waarde wat jy gekies het is nie 'n geldige keuse nie."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Jy moet ten minste %%limit%% kies.|Jy moet ten minste %%limit%% keuses kies."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Jy moet by die meeste %%limit%% keuse kies.|Jy moet by die meeste %%limit%% keuses kies."}, {"@id":"8", "source":"One or more of the given values is invalid.", 
 "target":"Een of meer van die gegewe waardes is ongeldig."}, {"@id":"9", "source":"This field was not expected.", "target":"Die veld is nie verwag nie."}, {"@id":"10", "source":"This field is missing.", "target":"Hierdie veld ontbreek."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Hierdie waarde is nie 'n geldige datum nie."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Hierdie waarde is nie 'n geldige datum en tyd nie."}, {"@id":"13", "source":"This value is not a valid email address.", 

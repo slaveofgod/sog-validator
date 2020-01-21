@@ -56,7 +56,7 @@ Object.assign(abv, function () {
          */
         __messageParameters: function () {
             return {
-                'attribute': 'field'
+                'attribute': 'value'
             }
         }
     });

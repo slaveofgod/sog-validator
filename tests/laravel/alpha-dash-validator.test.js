@@ -32,7 +32,7 @@ describe('alpha_dash', () => {
     });
 
     describe('Is Invalid', () => {
-        let toBe = "The field may only contain letters, numbers, dashes and underscores.";
+        let toBe = "The value may only contain letters, numbers, dashes and underscores.";
 
         test('26.35', () => {
             expect(abv.isValidWithErrorMessage(26.35, 'alpha-dash')).toBe(toBe);

@@ -20,7 +20,7 @@ describe('alpha', () => {
     });
 
     describe('Is Invalid', () => {
-        let toBe = "The field may only contain letters.";
+        let toBe = "The value may only contain letters.";
 
         test('String "AbF26Fg69H"', () => {
             expect(abv.isValidWithErrorMessage('AbF26Fg69H', 'alpha')).toBe(toBe);

@@ -24,7 +24,7 @@ describe('alpha_num', () => {
     });
 
     describe('Is Invalid', () => {
-        let toBe = "The field may only contain letters and numbers.";
+        let toBe = "The value may only contain letters and numbers.";
 
         test('59', () => {
             expect(abv.isValidWithErrorMessage(59, 'alpha_num')).toBe(toBe);
