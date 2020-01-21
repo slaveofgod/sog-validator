@@ -20,31 +20,6 @@ Object.assign(abv, function () {
      * }
      */
 
-    // PROPERTIES
-
-    /**
-     * @name abv.ActiveUrlValidator#message
-     * @type {String}
-     * @description
-     * This message is shown if the URL is invalid.</p>
-     * <p>Default: "<code>The %%attribute%% is not a valid URL.</code>"</p>
-     * <p>You can use the following parameters in this message:</p>
-     * <table>
-     *     <thead>
-     *         <tr>
-     *             <th>Parameter</th>
-     *             <th>Description</th>
-     *         </tr>
-     *     </thead>
-     *     <tbody>
-     *         <tr>
-     *             <td><code>%%attribute%%</code></td>
-     *             <td>The string "value"</td>
-     *         </tr>
-     *     </tbody>
-     * </table>
-     */
-
     var ActiveUrlValidator = function (data, options, optionRules, lang, internal) {
         abv.UrlValidator.call(this, data, {
             message: "The %%attribute%% is not a valid URL."

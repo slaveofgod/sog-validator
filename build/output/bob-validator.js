@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision 8cece19
+ * Bob Validator Library v2.0 revision 9ad9543
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"8cece19", config:{}, common:{}, validators:{}, registry:function(validator) {
+var abv = {version:"2.0", revision:"9ad9543", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -11152,6 +11152,25 @@ Object.assign(abv, function() {
   return {AfterValidator:AfterValidator};
 }());
 abv.registry(abv.AfterValidator);
+Object.assign(abv, function() {
+  var AfterOrEqualValidator = function(data, options, optionRules, lang, internal) {
+    abv.GreaterThanOrEqualValidator.call(this, data, {message:"The %%attribute%% must be a date after or equal to %%date%%.", value:options.value}, {value:'required|type:{"type":["date","date-string"],"any":true}'}, lang, internal);
+    this.name = "AfterOrEqualValidator";
+  };
+  AfterOrEqualValidator.prototype = Object.create(abv.GreaterThanOrEqualValidator.prototype);
+  AfterOrEqualValidator.prototype.constructor = AfterOrEqualValidator;
+  Object.defineProperty(AfterOrEqualValidator.prototype, "alias", {get:function() {
+    return ["after_or_equal", "after-or-equal"];
+  }});
+  Object.defineProperty(AfterOrEqualValidator.prototype, "options", {get:function() {
+    return [{"name":"value", "type":"date"}];
+  }});
+  Object.assign(AfterOrEqualValidator.prototype, {__messageParameters:function() {
+    return {"attribute":"value", "date":this.data};
+  }});
+  return {AfterOrEqualValidator:AfterOrEqualValidator};
+}());
+abv.registry(abv.AfterOrEqualValidator);
 abv.I18nHandler.add("af", [{"@id":"1", "source":"This value should be false.", "target":"Hierdie waarde moet vals wees."}, {"@id":"2", "source":"This value should be true.", "target":"Hierdie waarde moet waar wees."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Hierdie waarde moet van die soort {{type}} wees."}, {"@id":"4", "source":"This value should be blank.", "target":"Hierdie waarde moet leeg wees."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Die waarde wat jy gekies het is nie 'n geldige keuse nie."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Jy moet ten minste %%limit%% kies.|Jy moet ten minste %%limit%% keuses kies."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Jy moet by die meeste %%limit%% keuse kies.|Jy moet by die meeste %%limit%% keuses kies."}, {"@id":"8", "source":"One or more of the given values is invalid.", 
 "target":"Een of meer van die gegewe waardes is ongeldig."}, {"@id":"9", "source":"This field was not expected.", "target":"Die veld is nie verwag nie."}, {"@id":"10", "source":"This field is missing.", "target":"Hierdie veld ontbreek."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Hierdie waarde is nie 'n geldige datum nie."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Hierdie waarde is nie 'n geldige datum en tyd nie."}, {"@id":"13", "source":"This value is not a valid email address.", 
