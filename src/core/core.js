@@ -145,6 +145,9 @@ var abv = {
             case 'xdigit':
                 return abv["ctype_" + type](data);
                 break;
+            case 'aldash':
+                return /^[a-zA-Z0-9_-]+$/.test(data);
+                break;
             case 'date':
             case 'datetime':
                 if (

@@ -199,6 +199,20 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
+         * @name abv.TimezoneValidator#__beforeValidate
+         * @description Execute before validation is running
+         */
+        __beforeValidate: function () {
+            // Check if empty
+            if (true === this.__isEmptyData()) {
+                this.__skip = true;
+                return ;
+            }
+        },
+
+        /**
+         * @private
+         * @function
          * @name abv.TypeValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters

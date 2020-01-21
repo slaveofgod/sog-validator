@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: RegexValidator</title>
+    <title>Class: AlphaValidator</title>
     
     
     
@@ -2632,7 +2632,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="abv.RegexValidator.html">Class: RegexValidator</h1>
+        <h1 class="page-title" data-filename="abv.AlphaValidator.html">Class: AlphaValidator</h1>
         
 
 
@@ -2641,10 +2641,10 @@
     
 <header>
     <div class="header content-size">
-        <h2><span class="ancestors"><a href="abv.html">abv</a>.</span>RegexValidator
+        <h2><span class="ancestors"><a href="abv.html">abv</a>.</span>AlphaValidator
         </h2>
         
-            <div class="class-description">Validates that a value matches a regular expression.</div>
+            <div class="class-description"><p>The field under validation must be entirely alphabetic characters.</p></div>
         
     </div>
 </header>  
@@ -2658,10 +2658,10 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="RegexValidator">
-            <a class="share-icon" href="#RegexValidator"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="AlphaValidator">
+            <a class="share-icon" href="#AlphaValidator"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                new abv.RegexValidator
+                new abv.AlphaValidator
             </span>
             <span class="signature">(data, options, optionRules, lang, internal)</span>
             
@@ -2865,7 +2865,7 @@
         
 
     
-    <pre class="prettyprint"><code>var validator = new abv.RegexValidator(data, {pattern: 'regular expression'});
+    <pre class="prettyprint"><code>var validator = new abv.AlphaValidator(data);
 if (false === validator.isValid()) {
      validator.errors().first();
 }</code></pre>
@@ -2896,388 +2896,6 @@ if (false === validator.isValid()) {
     
     
     
-    
-        <h3 class="subsection-title">Members</h3>
-        
-        <dl class="list-members">
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="data">
-            <a class="share-icon" href="#data"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">data</span>
-            <span class="type-signature type">*</span>
-            
-            
-            
-            
-        </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        Data that needs to be validated.
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="lang">
-            <a class="share-icon" href="#lang"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">lang</span>
-            <span class="type-signature type">String</span>
-            
-            
-            
-            
-        </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        Language of error messages.
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="lang">
-            <a class="share-icon" href="#lang"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">lang</span>
-            <span class="type-signature type">String</span>
-            
-            
-            
-            
-        </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        Language of messages.
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="match">
-            <a class="share-icon" href="#match"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">match</span>
-            <span class="type-signature type">Boolean</span>
-            
-            
-            
-            
-        </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        If true (or not set), this validator will pass if the given string matches the given pattern regular expression.
-However, when this option is set to false, the opposite will occur: validation will pass only if the given string does not match the pattern regular expression.
-Default to true.
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="message">
-            <a class="share-icon" href="#message"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">message</span>
-            <span class="type-signature type">String</span>
-            
-            
-            
-            
-        </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        This is the message that will be shown if this validator fails.</p>
-<p>Default: "<code>This value is not valid.</code>"</p>
-<p>You can use the following parameters in this message:</p>
-<table>
-    <thead>
-        <tr>
-            <th>Parameter</th>
-            <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>%%value%%</code></td>
-            <td>The current (invalid) value</td>
-        </tr>
-    </tbody>
-</table>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="normalize">
-            <a class="share-icon" href="#normalize"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">normalize</span>
-            <span class="type-signature type">Boolean</span>
-            
-            
-            
-            
-        </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        Normalizer string before validate (trim, etc.).</p>
-Default: <code>false</code>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="pattern">
-            <a class="share-icon" href="#pattern"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">pattern</span>
-            <span class="type-signature type">String</span>
-            
-            
-            
-            
-        </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        This required option is the regular expression pattern that the input will be matched against.
-By default, this validator will fail if the input string does not match this regular expression.
-However, if match is set to false, then validation will fail if the input string does match this pattern.
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        </dl>
     
     
     

@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision 9ad9543
+ * Bob Validator Library v2.0 revision e4f15b6
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"9ad9543", config:{}, common:{}, validators:{}, registry:function(validator) {
+var abv = {version:"2.0", revision:"e4f15b6", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -89,6 +89,9 @@ var abv = {version:"2.0", revision:"9ad9543", config:{}, common:{}, validators:{
     case "upper":
     case "xdigit":
       return abv["ctype_" + type](data);
+      break;
+    case "aldash":
+      return /^[a-zA-Z0-9_-]+$/.test(data);
       break;
     case "date":
     case "datetime":
@@ -8936,6 +8939,11 @@ Object.assign(abv, function() {
     this.__invalidType = types[key];
     this.__setErrorMessage(this.message, this.__messageParameters());
     return;
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
   }, __messageParameters:function() {
     return {"type":this.__invalidType, "value":this.data};
   }});
@@ -11171,6 +11179,63 @@ Object.assign(abv, function() {
   return {AfterOrEqualValidator:AfterOrEqualValidator};
 }());
 abv.registry(abv.AfterOrEqualValidator);
+Object.assign(abv, function() {
+  var AlphaValidator = function(data, options, optionRules, lang, internal) {
+    abv.TypeValidator.call(this, data, {type:"alpha", message:"The %%attribute%% may only contain letters."}, {}, lang, internal);
+    this.name = "AlphaValidator";
+  };
+  AlphaValidator.prototype = Object.create(abv.TypeValidator.prototype);
+  AlphaValidator.prototype.constructor = AlphaValidator;
+  Object.defineProperty(AlphaValidator.prototype, "alias", {get:function() {
+    return "alpha";
+  }});
+  Object.defineProperty(AlphaValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(AlphaValidator.prototype, {__messageParameters:function() {
+    return {"attribute":"field"};
+  }});
+  return {AlphaValidator:AlphaValidator};
+}());
+abv.registry(abv.AlphaValidator);
+Object.assign(abv, function() {
+  var AlphaDashValidator = function(data, options, optionRules, lang, internal) {
+    abv.TypeValidator.call(this, data, {type:"aldash", message:"The %%attribute%% may only contain letters, numbers, dashes and underscores."}, {}, lang, internal);
+    this.name = "AlphaDashValidator";
+  };
+  AlphaDashValidator.prototype = Object.create(abv.TypeValidator.prototype);
+  AlphaDashValidator.prototype.constructor = AlphaDashValidator;
+  Object.defineProperty(AlphaDashValidator.prototype, "alias", {get:function() {
+    return ["alpha_dash", "alpha-dash"];
+  }});
+  Object.defineProperty(AlphaDashValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(AlphaDashValidator.prototype, {__messageParameters:function() {
+    return {"attribute":"field"};
+  }});
+  return {AlphaDashValidator:AlphaDashValidator};
+}());
+abv.registry(abv.AlphaDashValidator);
+Object.assign(abv, function() {
+  var AlphaNumValidator = function(data, options, optionRules, lang, internal) {
+    abv.TypeValidator.call(this, data, {type:"alnum", message:"The %%attribute%% may only contain letters and numbers."}, {}, lang, internal);
+    this.name = "AlphaNumValidator";
+  };
+  AlphaNumValidator.prototype = Object.create(abv.TypeValidator.prototype);
+  AlphaNumValidator.prototype.constructor = AlphaNumValidator;
+  Object.defineProperty(AlphaNumValidator.prototype, "alias", {get:function() {
+    return ["alpha_num", "alpha-num"];
+  }});
+  Object.defineProperty(AlphaNumValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(AlphaNumValidator.prototype, {__messageParameters:function() {
+    return {"attribute":"field"};
+  }});
+  return {AlphaNumValidator:AlphaNumValidator};
+}());
+abv.registry(abv.AlphaNumValidator);
 abv.I18nHandler.add("af", [{"@id":"1", "source":"This value should be false.", "target":"Hierdie waarde moet vals wees."}, {"@id":"2", "source":"This value should be true.", "target":"Hierdie waarde moet waar wees."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Hierdie waarde moet van die soort {{type}} wees."}, {"@id":"4", "source":"This value should be blank.", "target":"Hierdie waarde moet leeg wees."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Die waarde wat jy gekies het is nie 'n geldige keuse nie."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Jy moet ten minste %%limit%% kies.|Jy moet ten minste %%limit%% keuses kies."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Jy moet by die meeste %%limit%% keuse kies.|Jy moet by die meeste %%limit%% keuses kies."}, {"@id":"8", "source":"One or more of the given values is invalid.", 
 "target":"Een of meer van die gegewe waardes is ongeldig."}, {"@id":"9", "source":"This field was not expected.", "target":"Die veld is nie verwag nie."}, {"@id":"10", "source":"This field is missing.", "target":"Hierdie veld ontbreek."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Hierdie waarde is nie 'n geldige datum nie."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Hierdie waarde is nie 'n geldige datum en tyd nie."}, {"@id":"13", "source":"This value is not a valid email address.", 
