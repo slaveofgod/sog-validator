@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: NotIdenticalToValidator</title>
+    <title>Class: BooleanValidator</title>
     
     
     
@@ -2820,7 +2820,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="abv.NotIdenticalToValidator.html">Class: NotIdenticalToValidator</h1>
+        <h1 class="page-title" data-filename="abv.BooleanValidator.html">Class: BooleanValidator</h1>
         
 
 
@@ -2829,11 +2829,10 @@
     
 <header>
     <div class="header content-size">
-        <h2><span class="ancestors"><a href="abv.html">abv</a>.</span>NotIdenticalToValidator
+        <h2><span class="ancestors"><a href="abv.html">abv</a>.</span>BooleanValidator
         </h2>
         
-            <div class="class-description">Validates that a value is not identical to another value, defined in the options.</p>
-This constraint compares using !==, so 3 and "3" are considered not equal.</div>
+            <div class="class-description"><p>The field under validation must be able to be cast as a boolean. Accepted input are true, false, 1, 0, "1", and "0".</p></div>
         
     </div>
 </header>  
@@ -2847,10 +2846,10 @@ This constraint compares using !==, so 3 and "3" are considered not equal.</div>
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="NotIdenticalToValidator">
-            <a class="share-icon" href="#NotIdenticalToValidator"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="BooleanValidator">
+            <a class="share-icon" href="#BooleanValidator"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                new abv.NotIdenticalToValidator
+                new abv.BooleanValidator
             </span>
             <span class="signature">(data, options, optionRules, lang, internal)</span>
             
@@ -3054,7 +3053,7 @@ This constraint compares using !==, so 3 and "3" are considered not equal.</div>
         
 
     
-    <pre class="prettyprint"><code>var validator = new abv.NotIdenticalToValidator(data, {"value": "the value to compare to"});
+    <pre class="prettyprint"><code>var validator = new abv.BooleanValidator(data);
 if (false === validator.isValid()) {
      validator.errors().first();
 }</code></pre>
@@ -3071,7 +3070,7 @@ if (false === validator.isValid()) {
         <h3 class="subsection-title">Extends</h3>
         
         <ul>
-            <li><a href="abv.AbstractComparisonValidator.html">abv.AbstractComparisonValidator</a></li>
+            <li><a href="abv.AbstractValidator.html">abv.AbstractValidator</a></li>
         </ul>
     
     
@@ -3085,136 +3084,6 @@ if (false === validator.isValid()) {
     
     
     
-    
-        <h3 class="subsection-title">Members</h3>
-        
-        <dl class="list-members">
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="message">
-            <a class="share-icon" href="#message"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">message</span>
-            <span class="type-signature type">String</span>
-            
-            
-            
-            
-        </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        This is the message that will be shown if the value is identical.</p>
-<p>Default: "<code>This value should not be identical to %%compared_value_type%% %%compared_value%%.</code>"</p>
-<p>You can use the following parameters in this message:</p>
-<table>
-    <thead>
-        <tr>
-            <th>Parameter</th>
-            <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>%%compared_value%%</code></td>
-            <td>The expected value</td>
-        </tr>
-        <tr>
-            <td><code>%%compared_value_type%%</code></td>
-            <td>The expected value type</td>
-        </tr>
-        <tr>
-            <td><code>%%value%%</code></td>
-            <td>The current (invalid) value</td>
-        </tr>
-    </tbody>
-</table>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="value">
-            <a class="share-icon" href="#value"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">value</span>
-            <span class="type-signature type">*</span>
-            
-            
-            
-            
-        </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        This option is required. It defines the value to compare to. It can be a string, number or object.
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        </dl>
     
     
     
@@ -3339,6 +3208,8 @@ if (false === validator.isValid()) {
                 <span class="access-signature inherited"><a href="abv.AbstractValidator.html#isValid">inherited</a></span>
             
             
+                <span class="access-signature overrides"><a href="abv.AbstractValidator.html#isValid">overrides</a></span>
+            
         </h4>
     
         
@@ -3446,7 +3317,7 @@ if (false === validator.isValid()) {
 
         <footer class="content-size">
             <div class="footer">
-                Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Tue Jan 21 2020 20:09:57 GMT+0200 (Eastern European Standard Time)
+                Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Tue Jan 21 2020 20:09:56 GMT+0200 (Eastern European Standard Time)
             </div>
         </footer>
     </div>

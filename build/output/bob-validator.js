@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision a629934
+ * Bob Validator Library v2.0 revision 8b5b4c8
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"a629934", config:{}, common:{}, validators:{}, registry:function(validator) {
+var abv = {version:"2.0", revision:"8b5b4c8", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -9008,7 +9008,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
   }, __messageParameters:function() {
@@ -9068,7 +9068,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
   }, __exactMessageParameters:function() {
@@ -9133,7 +9133,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
     var errorMessage = abv.isValidWithErrorMessage(this.protocols, 'type:{"type":"array"}', true);
@@ -9191,7 +9191,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
   }, __messageParameters:function() {
@@ -9298,7 +9298,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
   }, __messageParameters:function() {
@@ -9343,7 +9343,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
   }, __messageParameters:function() {
@@ -9477,7 +9477,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
   }, __checkVersions:function() {
@@ -9954,7 +9954,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
   }, __messageParameters:function() {
@@ -10003,7 +10003,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
   }, __messageParameters:function() {
@@ -10047,7 +10047,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
   }, __messageParameters:function() {
@@ -10091,7 +10091,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
   }, __messageParameters:function() {
@@ -10226,7 +10226,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
   }, __messageParameters:function() {
@@ -10310,7 +10310,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
   }, __messageParameters:function() {
@@ -10363,7 +10363,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
   }, __messageParameters:function() {
@@ -10436,7 +10436,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
   }, __messageParameters:function() {
@@ -10496,7 +10496,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
   }, __messageParameters:function() {
@@ -10691,7 +10691,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
   }, __messageParameters:function() {
@@ -10746,7 +10746,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
   }, __messageParameters:function() {
@@ -10834,7 +10834,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
   }, __messageParameters:function() {
@@ -10957,7 +10957,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
   }, __messageParameters:function() {
@@ -11037,7 +11037,7 @@ Object.assign(abv, function() {
         this.data = this.data.toString();
       }
     } catch (e) {
-      this.__setErrorMessage(this.message, this.__messageParameters());
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
   }, __messageParameters:function() {
@@ -11368,6 +11368,41 @@ Object.assign(abv, function() {
   return {BetweenValidator:BetweenValidator};
 }());
 abv.registry(abv.BetweenValidator);
+Object.assign(abv, function() {
+  var BooleanValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+    this.message = "The %%attribute%% field must be true or false.";
+    this.name = "BooleanValidator";
+  };
+  BooleanValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  BooleanValidator.prototype.constructor = BooleanValidator;
+  Object.defineProperty(BooleanValidator.prototype, "alias", {get:function() {
+    return ["bool", "boolean"];
+  }});
+  Object.defineProperty(BooleanValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(BooleanValidator.prototype, {__validate:function() {
+    if (false === abv.isValid(this.data, "false") && false === abv.isValid(this.data, "true")) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {BooleanValidator:BooleanValidator};
+}());
+abv.registry(abv.BooleanValidator);
 abv.I18nHandler.add("af", [{"@id":"1", "source":"This value should be false.", "target":"Hierdie waarde moet vals wees."}, {"@id":"2", "source":"This value should be true.", "target":"Hierdie waarde moet waar wees."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Hierdie waarde moet van die soort {{type}} wees."}, {"@id":"4", "source":"This value should be blank.", "target":"Hierdie waarde moet leeg wees."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Die waarde wat jy gekies het is nie 'n geldige keuse nie."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Jy moet ten minste %%limit%% kies.|Jy moet ten minste %%limit%% keuses kies."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Jy moet by die meeste %%limit%% keuse kies.|Jy moet by die meeste %%limit%% keuses kies."}, {"@id":"8", "source":"One or more of the given values is invalid.", 
 "target":"Een of meer van die gegewe waardes is ongeldig."}, {"@id":"9", "source":"This field was not expected.", "target":"Die veld is nie verwag nie."}, {"@id":"10", "source":"This field is missing.", "target":"Hierdie veld ontbreek."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Hierdie waarde is nie 'n geldige datum nie."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Hierdie waarde is nie 'n geldige datum en tyd nie."}, {"@id":"13", "source":"This value is not a valid email address.", 

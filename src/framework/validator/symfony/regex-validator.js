@@ -158,7 +158,7 @@ Object.assign(abv, function () {
                     this.data = this.data.toString();
                 }
             } catch (e) {
-                this.__setErrorMessage(this.message, this.__messageParameters());
+                this.__setErrorMessage('This value ' + this.data + ' could not be converted to string.');
                 return ;
             }
         },

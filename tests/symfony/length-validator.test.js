@@ -37,7 +37,7 @@ describe('length', () => {
         });
 
         test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'length:{"min":1}')).toBe("This value should be of type scalar.");
+            expect(abv.isValidWithErrorMessage(null, 'length:{"min":1}')).toBe("This value null could not be converted to string.");
         });
 
         test('Object', () => {

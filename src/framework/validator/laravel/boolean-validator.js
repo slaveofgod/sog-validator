@@ -3,9 +3,10 @@ Object.assign(abv, function () {
 
     /**
      * @constructor
-     * @name abv.JsonValidator
+     * @name abv.BooleanValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value has valid JSON syntax.
+     * @classdesc
+     * <p>The field under validation must be able to be cast as a boolean. Accepted input are true, false, 1, 0, "1", and "0".</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
@@ -13,57 +14,49 @@ Object.assign(abv, function () {
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
-     * var validator = new abv.JsonValidator(data);
+     * var validator = new abv.BooleanValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
      */
 
-    // PROPERTIES
+    var BooleanValidator = function (data, options, optionRules, lang, internal) {
+        abv.AbstractValidator.call(this, data, {}, {}, lang, internal);
 
-    /**
-     * @name abv.JsonValidator#message
-     * @type {String}
-     * @description
-     * <p>This message is shown if the underlying data is not a valid JSON value.</p>
-     * <p>Default: "<code>This value should be valid JSON.</code>"</p>
-     */
+        this.message = 'The %%attribute%% field must be true or false.';
 
-    var JsonValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
-            message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
-        }, lang, internal);
-
-        this.message = this.__options.message || 'This value should be valid JSON.';
-
-        this.name = 'JsonValidator';
+        this.name = 'BooleanValidator';
     };
-    JsonValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-    JsonValidator.prototype.constructor = JsonValidator;
+    BooleanValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    BooleanValidator.prototype.constructor = BooleanValidator;
 
-    Object.defineProperty(JsonValidator.prototype, 'alias', {
+    Object.defineProperty(BooleanValidator.prototype, 'alias', {
         get: function () {
-            return 'json';
+            return [
+                'bool',
+                'boolean'
+            ];
         }
     });
 
-    Object.defineProperty(JsonValidator.prototype, 'options', {
+    Object.defineProperty(BooleanValidator.prototype, 'options', {
         get: function () {
             return [];
         }
     });
 
-    Object.assign(JsonValidator.prototype, {
+    Object.assign(BooleanValidator.prototype, {
         /**
          * @private
          * @function
-         * @name abv.JsonValidator#__validate
+         * @name abv.BooleanValidator#__validate
          * @description Validate data
          */
         __validate: function () {
-            try {
-                JSON.parse(this.data);
-            } catch (e) {
+            if (
+                false === abv.isValid(this.data, 'false')
+                && false === abv.isValid(this.data, 'true')
+            ) {
                 this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
@@ -72,7 +65,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.JsonValidator#__beforeValidate
+         * @name abv.BetweenValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
@@ -88,34 +81,25 @@ Object.assign(abv, function () {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
             }
-
-            try {
-                if ('undefined' !== typeof this.data) {
-                    this.data = this.data.toString();
-                }
-            } catch (e) {
-                this.__setErrorMessage('This value ' + this.data + ' could not be converted to string.');
-                return ;
-            }
         },
 
         /**
          * @private
          * @function
-         * @name abv.JsonValidator#__messageParameters
+         * @name abv.BooleanValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
         __messageParameters: function () {
             return {
-                'value': this.data
+                'attribute': 'value'
             }
         }
     });
 
     return {
-        JsonValidator: JsonValidator
+        BooleanValidator: BooleanValidator
     };
 }());
 
-abv.registry(abv.JsonValidator);
+abv.registry(abv.BooleanValidator);

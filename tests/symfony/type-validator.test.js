@@ -9,6 +9,10 @@ describe('type[type:array]', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"array"}')).toBe(toBe);
+        });
+
         test('Array', () => {
             expect(abv.isValidWithErrorMessage([], 'type:{"type":["array","iterable"]}')).toBe(toBe);
         });
@@ -27,10 +31,6 @@ describe('type[type:array]', () => {
 
         test('Function', () => {
             expect(abv.isValidWithErrorMessage(function () {}, 'type:{"type":"array"}')).toBe(toBe);
-        });
-
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"array"}')).toBe(toBe);
         });
 
         test('Boolean', () => {
@@ -199,6 +199,10 @@ describe('type[type:iterable]', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"iterable"}')).toBe(toBe);
+        });
+
         test('Array', () => {
             expect(abv.isValidWithErrorMessage([], 'type:{"type":"iterable"}')).toBe(toBe);
         });
@@ -210,10 +214,6 @@ describe('type[type:iterable]', () => {
 
     describe('Is Invalid', () => {
         let toBe = "This value should be of type iterable.";
-
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"iterable"}')).toBe(toBe);
-        });
 
         test('Object', () => {
             expect(abv.isValidWithErrorMessage({}, 'type:{"type":"iterable"}')).toBe(toBe);
@@ -235,6 +235,10 @@ describe('type[type:null]', () => {
         test('Null', () => {
             expect(abv.isValidWithErrorMessage(null, 'type:{"type":"null"}')).toBe(toBe);
         });
+
+        test('Empty string', () => {
+            expect(abv.isValidWithErrorMessage('', 'type:{"type":"null"}')).toBe(toBe);
+        });
     });
 
     describe('Is Invalid', () => {
@@ -242,10 +246,6 @@ describe('type[type:null]', () => {
 
         test('0', () => {
             expect(abv.isValidWithErrorMessage(0, 'type:{"type":"null"}')).toBe(toBe);
-        });
-
-        test('Empty string', () => {
-            expect(abv.isValidWithErrorMessage('', 'type:{"type":"null"}')).toBe(toBe);
         });
 
         test('String', () => {
@@ -268,6 +268,14 @@ describe('type[type:null]', () => {
 describe('type[type:numeric]', () => {
     describe('Is Valid', () => {
         let toBe = null;
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"numeric"}')).toBe(toBe);
+        });
+
+        test('Empty string', () => {
+            expect(abv.isValidWithErrorMessage('', 'type:{"type":"numeric"}')).toBe(toBe);
+        });
 
         test('10', () => {
             expect(abv.isValidWithErrorMessage(10, 'type:{"type":"numeric"}')).toBe(toBe);
@@ -297,14 +305,6 @@ describe('type[type:numeric]', () => {
     describe('Is Invalid', () => {
         let toBe = "This value should be of type numeric.";
 
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"numeric"}')).toBe(toBe);
-        });
-
-        test('Empty string', () => {
-            expect(abv.isValidWithErrorMessage('', 'type:{"type":"numeric"}')).toBe(toBe);
-        });
-
         test('String', () => {
             expect(abv.isValidWithErrorMessage('Lorem ipsum', 'type:{"type":"numeric"}')).toBe(toBe);
         });
@@ -326,6 +326,10 @@ describe('type[type:object]', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"object"}')).toBe(toBe);
+        });
+
         test('abv', () => {
             expect(abv.isValidWithErrorMessage(abv, 'type:{"type":"object"}')).toBe(toBe);
         });
@@ -337,10 +341,6 @@ describe('type[type:object]', () => {
 
     describe('Is Invalid', () => {
         let toBe = "This value should be of type object.";
-
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"object"}')).toBe(toBe);
-        });
 
         test('Function', () => {
             expect(abv.isValidWithErrorMessage(function () {}, 'type:{"type":"object"}')).toBe(toBe);
@@ -396,6 +396,10 @@ describe('type[type:scalar]', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"scalar"}')).toBe(toBe);
+        });
+
         test('20', () => {
             expect(abv.isValidWithErrorMessage(20, 'type:{"type":"scalar"}')).toBe(toBe);
         });
@@ -424,10 +428,6 @@ describe('type[type:scalar]', () => {
             expect(abv.isValidWithErrorMessage(function () {}, 'type:{"type":"scalar"}')).toBe(toBe);
         });
 
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"scalar"}')).toBe(toBe);
-        });
-
         test('Object', () => {
             expect(abv.isValidWithErrorMessage({}, 'type:{"type":"scalar"}')).toBe(toBe);
         });
@@ -445,6 +445,10 @@ describe('type[type:string]', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"string"}')).toBe(toBe);
+        });
+
         test('String', () => {
             expect(abv.isValidWithErrorMessage('Lorem ipsum', 'type:{"type":"string"}')).toBe(toBe);
         });
@@ -459,10 +463,6 @@ describe('type[type:string]', () => {
 
         test('Function', () => {
             expect(abv.isValidWithErrorMessage(function () {}, 'type:{"type":"string"}')).toBe(toBe);
-        });
-
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"string"}')).toBe(toBe);
         });
 
         test('Object', () => {
@@ -481,6 +481,10 @@ describe('type[type:string]', () => {
 describe('type[type:alnum]', () => {
     describe('Is Valid', () => {
         let toBe = null;
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"alnum"}')).toBe(toBe);
+        });
 
         test('String without space(s)', () => {
             expect(abv.isValidWithErrorMessage('Loremipsum', 'type:{"type":"alnum"}')).toBe(toBe);
@@ -510,10 +514,6 @@ describe('type[type:alnum]', () => {
             expect(abv.isValidWithErrorMessage(function () {}, 'type:{"type":"alnum"}')).toBe(toBe);
         });
 
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"alnum"}')).toBe(toBe);
-        });
-
         test('Object', () => {
             expect(abv.isValidWithErrorMessage({}, 'type:{"type":"alnum"}')).toBe(toBe);
         });
@@ -530,6 +530,10 @@ describe('type[type:alnum]', () => {
 describe('type[type:alpha]', () => {
     describe('Is Valid', () => {
         let toBe = null;
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"alpha"}')).toBe(toBe);
+        });
 
         test('String "Loremipsum"', () => {
             expect(abv.isValidWithErrorMessage('Loremipsum', 'type:{"type":"alpha"}')).toBe(toBe);
@@ -559,10 +563,6 @@ describe('type[type:alpha]', () => {
             expect(abv.isValidWithErrorMessage(function () {}, 'type:{"type":"alpha"}')).toBe(toBe);
         });
 
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"alpha"}')).toBe(toBe);
-        });
-
         test('Object', () => {
             expect(abv.isValidWithErrorMessage({}, 'type:{"type":"alpha"}')).toBe(toBe);
         });
@@ -579,6 +579,10 @@ describe('type[type:alpha]', () => {
 describe('type[type:digit]', () => {
     describe('Is Valid', () => {
         let toBe = null;
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"digit"}')).toBe(toBe);
+        });
 
         test('String "59"', () => {
             expect(abv.isValidWithErrorMessage("59", 'type:{"type":"digit"}')).toBe(toBe);
@@ -612,10 +616,6 @@ describe('type[type:digit]', () => {
             expect(abv.isValidWithErrorMessage(function () {}, 'type:{"type":"digit"}')).toBe(toBe);
         });
 
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"digit"}')).toBe(toBe);
-        });
-
         test('Object', () => {
             expect(abv.isValidWithErrorMessage({}, 'type:{"type":"digit"}')).toBe(toBe);
         });
@@ -632,6 +632,10 @@ describe('type[type:digit]', () => {
 describe('type[type:graph]', () => {
     describe('Is Valid', () => {
         let toBe = null;
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"graph"}')).toBe(toBe);
+        });
 
         test('String "Loremipsum"', () => {
             expect(abv.isValidWithErrorMessage('Loremipsum', 'type:{"type":"graph"}')).toBe(toBe);
@@ -673,10 +677,6 @@ describe('type[type:graph]', () => {
             expect(abv.isValidWithErrorMessage(function () {}, 'type:{"type":"graph"}')).toBe(toBe);
         });
 
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"graph"}')).toBe(toBe);
-        });
-
         test('Object', () => {
             expect(abv.isValidWithErrorMessage({}, 'type:{"type":"graph"}')).toBe(toBe);
         });
@@ -693,6 +693,10 @@ describe('type[type:graph]', () => {
 describe('type[type:lower]', () => {
     describe('Is Valid', () => {
         let toBe = null;
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"lower"}')).toBe(toBe);
+        });
 
         test('String "loremipsum"', () => {
             expect(abv.isValidWithErrorMessage('loremipsum', 'type:{"type":"lower"}')).toBe(toBe);
@@ -734,10 +738,6 @@ describe('type[type:lower]', () => {
             expect(abv.isValidWithErrorMessage(function () {}, 'type:{"type":"lower"}')).toBe(toBe);
         });
 
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"lower"}')).toBe(toBe);
-        });
-
         test('Object', () => {
             expect(abv.isValidWithErrorMessage({}, 'type:{"type":"lower"}')).toBe(toBe);
         });
@@ -754,6 +754,10 @@ describe('type[type:lower]', () => {
 describe('type[type:print]', () => {
     describe('Is Valid', () => {
         let toBe = null;
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"print"}')).toBe(toBe);
+        });
 
         test('String "loremipsum"', () => {
             expect(abv.isValidWithErrorMessage('loremipsum', 'type:{"type":"print"}')).toBe(toBe);
@@ -803,10 +807,6 @@ describe('type[type:print]', () => {
             expect(abv.isValidWithErrorMessage(function () {}, 'type:{"type":"print"}')).toBe(toBe);
         });
 
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"print"}')).toBe(toBe);
-        });
-
         test('Object', () => {
             expect(abv.isValidWithErrorMessage({}, 'type:{"type":"print"}')).toBe(toBe);
         });
@@ -823,6 +823,10 @@ describe('type[type:print]', () => {
 describe('type[type:punct]', () => {
     describe('Is Valid', () => {
         let toBe = null;
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"punct"}')).toBe(toBe);
+        });
 
         test('String "*&$()"', () => {
             expect(abv.isValidWithErrorMessage('*&$()', 'type:{"type":"punct"}')).toBe(toBe);
@@ -868,10 +872,6 @@ describe('type[type:punct]', () => {
             expect(abv.isValidWithErrorMessage(function () {}, 'type:{"type":"punct"}')).toBe(toBe);
         });
 
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"punct"}')).toBe(toBe);
-        });
-
         test('Object', () => {
             expect(abv.isValidWithErrorMessage({}, 'type:{"type":"punct"}')).toBe(toBe);
         });
@@ -888,6 +888,10 @@ describe('type[type:punct]', () => {
 describe('type[type:space]', () => {
     describe('Is Valid', () => {
         let toBe = null;
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"space"}')).toBe(toBe);
+        });
 
         test('String "\\r\\n\\t"', () => {
             expect(abv.isValidWithErrorMessage("\r\n\t", 'type:{"type":"space"}')).toBe(toBe);
@@ -937,10 +941,6 @@ describe('type[type:space]', () => {
             expect(abv.isValidWithErrorMessage(function () {}, 'type:{"type":"space"}')).toBe(toBe);
         });
 
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"space"}')).toBe(toBe);
-        });
-
         test('Object', () => {
             expect(abv.isValidWithErrorMessage({}, 'type:{"type":"space"}')).toBe(toBe);
         });
@@ -957,6 +957,10 @@ describe('type[type:space]', () => {
 describe('type[type:upper]', () => {
     describe('Is Valid', () => {
         let toBe = null;
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"upper"}')).toBe(toBe);
+        });
 
         test('String "GTEFFGGS"', () => {
             expect(abv.isValidWithErrorMessage("GTEFFGGS", 'type:{"type":"upper"}')).toBe(toBe);
@@ -1010,10 +1014,6 @@ describe('type[type:upper]', () => {
             expect(abv.isValidWithErrorMessage(function () {}, 'type:{"type":"upper"}')).toBe(toBe);
         });
 
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"upper"}')).toBe(toBe);
-        });
-
         test('Object', () => {
             expect(abv.isValidWithErrorMessage({}, 'type:{"type":"upper"}')).toBe(toBe);
         });
@@ -1030,6 +1030,10 @@ describe('type[type:upper]', () => {
 describe('type[type:xdigit]', () => {
     describe('Is Valid', () => {
         let toBe = null;
+
+        test('Null', () => {
+            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"xdigit"}')).toBe(toBe);
+        });
 
         test('String "20"', () => {
             expect(abv.isValidWithErrorMessage("20", 'type:{"type":"xdigit"}')).toBe(toBe);
@@ -1089,10 +1093,6 @@ describe('type[type:xdigit]', () => {
 
         test('Function', () => {
             expect(abv.isValidWithErrorMessage(function () {}, 'type:{"type":"xdigit"}')).toBe(toBe);
-        });
-
-        test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'type:{"type":"xdigit"}')).toBe(toBe);
         });
 
         test('Object', () => {
