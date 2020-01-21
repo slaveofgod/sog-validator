@@ -30,11 +30,11 @@ abv.I18nHandler = {
     add: function (lang, messages) {
         var validationEngine = new abv.Application();
         var form = validationEngine.make({
-            lang: 'required|language',
-            messages: 'required|type:{"type":"iterable"}',
-        }, {
             lang: lang,
             messages: messages,
+        }, {
+            lang: 'required|language',
+            messages: 'required|type:{"type":"iterable"}',
         });
 
         var error = form.isValidWithErrorMessage();

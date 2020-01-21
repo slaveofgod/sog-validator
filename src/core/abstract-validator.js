@@ -80,6 +80,16 @@ Object.assign(abv, (function () {
         /**
          * @private
          * @function
+         * @name abv.AbstractValidator#__validate
+         * @description Validate data
+         */
+        __validate: function () {
+            throw new Error('The validator has to implement "__validate" method');
+        },
+
+        /**
+         * @private
+         * @function
          * @name abv.AbstractValidator#isValid
          * @description Check if data valid
          * @returns {Boolean} Validation status

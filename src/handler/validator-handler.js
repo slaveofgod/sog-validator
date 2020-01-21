@@ -1,7 +1,7 @@
 Object.assign(abv, function () {
     'use strict';
 
-    /**
+    /**add
      * @constructor
      * @name abv.ValidatorHandler
      * @classdesc This service provides handling validation of form

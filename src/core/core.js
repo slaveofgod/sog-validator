@@ -34,8 +34,9 @@ var abv = {
      */
     registry: function (validator) {
         var __v = [validator];
-        var __validator = new __v[0](null, {}, 'en', true);
+        var __validator = new __v[0](null, {}, {}, 'en', true);
         var alias = __validator.alias;
+        var options = __validator.options;
 
         // Check that "alias" property exist
         if ('undefined' === typeof alias) {
@@ -60,6 +61,14 @@ var abv = {
             throw new Error('The alias must be type of "string" or "array", "' + abv.getType(alias) + '" given');
         }
 
+        // Check that options is type of "array"
+        if (
+            !options
+            || false === abv.isType('array', options)
+        ) {
+            throw new Error('The options must be type of "array", "' + abv.getType(options) + '" given');
+        }
+
         if ('string' === typeof alias) {
             alias = [alias];
         }
@@ -79,16 +88,21 @@ var abv = {
      * @returns {String}
      */
     getType: function (data) {
-        var results = /function (.{1,})\(/.exec(data.constructor.toString());
+        var results = null;
+
+        try {
+            results = /function (.{1,})\(/.exec(data.constructor.toString());
+        } catch (e) {}
 
         if (
             null === results
+            && 'undefined' !== typeof data
             && 'undefined' !== typeof data.name
         ) {
             return data.name;
         }
 
-        return (results && results.length > 1) ? results[1] : "";
+        return (results && results.length > 1) ? results[1] : typeof data;
     },
 
     /**
@@ -156,16 +170,18 @@ var abv = {
      * @description Create object of the validator
      * @param {*} data The data which needs to be validated
      * @param {String} validator Validator name
+     * @param {Object} options The setting options
+     * @param {Object} optionRules The validation rules for setting options.
      * @param {Object} lang The language used by the application. Defaults to 'en'.
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @returns {Object} The roles in array format
      */
-    makeValidator: function (data, validator, options, lang, internal) {
+    makeValidator: function (data, validator, options, optionRules, lang, internal) {
         if ('undefined' === typeof abv.validators[validator]) {
             throw new Error('Validator with alias "' + validator + '" is not registered');
         }
 
-        return new abv.validators[validator](data, options, lang, internal);
+        return new abv.validators[validator](data, options, optionRules, lang, internal);
     },
 
     /**

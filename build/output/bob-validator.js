@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision 36de963
+ * Bob Validator Library v2.0 revision 2704e0e
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,10 +20,11 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"36de963", config:{}, common:{}, validators:{}, registry:function(validator) {
+var abv = {version:"2.0", revision:"2704e0e", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
-  var __validator = new __v[0](null, {}, "en", true);
+  var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
+  var options = __validator.options;
   if ("undefined" === typeof alias) {
     throw new Error('The validator has to have "alias" property');
   }
@@ -36,6 +37,9 @@ var abv = {version:"2.0", revision:"36de963", config:{}, common:{}, validators:{
   if (false === abv.isType("string", alias) && false === abv.isType("array", alias)) {
     throw new Error('The alias must be type of "string" or "array", "' + abv.getType(alias) + '" given');
   }
+  if (!options || false === abv.isType("array", options)) {
+    throw new Error('The options must be type of "array", "' + abv.getType(options) + '" given');
+  }
   if ("string" === typeof alias) {
     alias = [alias];
   }
@@ -45,11 +49,15 @@ var abv = {version:"2.0", revision:"36de963", config:{}, common:{}, validators:{
     }
   });
 }, getType:function(data) {
-  var results = /function (.{1,})\(/.exec(data.constructor.toString());
-  if (null === results && "undefined" !== typeof data.name) {
+  var results = null;
+  try {
+    results = /function (.{1,})\(/.exec(data.constructor.toString());
+  } catch (e) {
+  }
+  if (null === results && "undefined" !== typeof data && "undefined" !== typeof data.name) {
     return data.name;
   }
-  return results && results.length > 1 ? results[1] : "";
+  return results && results.length > 1 ? results[1] : typeof data;
 }, isType:function(type, data) {
   switch(type) {
     case "array":
@@ -97,11 +105,11 @@ var abv = {version:"2.0", revision:"36de963", config:{}, common:{}, validators:{
       break;
   }
   return false;
-}, makeValidator:function(data, validator, options, lang, internal) {
+}, makeValidator:function(data, validator, options, optionRules, lang, internal) {
   if ("undefined" === typeof abv.validators[validator]) {
     throw new Error('Validator with alias "' + validator + '" is not registered');
   }
-  return new abv.validators[validator](data, options, lang, internal);
+  return new abv.validators[validator](data, options, optionRules, lang, internal);
 }, isValid:function(data, rules, internal) {
   var engine = new abv.Application({internal:internal});
   var validator = engine.makeSingle(data, rules);
@@ -140,6 +148,8 @@ if (typeof exports !== "undefined") {
     }
     this.__afterValidate();
     return false === this.__hasErrors() ? true : false;
+  }, __validate:function() {
+    throw new Error('The validator has to implement "__validate" method');
   }, __hasErrors:function() {
     return this.__errorService.has();
   }, errors:function() {
@@ -267,7 +277,7 @@ Object.assign(abv, function() {
 abv.I18nResource = [];
 abv.I18nHandler = {add:function(lang, messages) {
   var validationEngine = new abv.Application;
-  var form = validationEngine.make({lang:"required|language", messages:'required|type:{"type":"iterable"}'}, {lang:lang, messages:messages});
+  var form = validationEngine.make({lang:lang, messages:messages}, {lang:"required|language", messages:'required|type:{"type":"iterable"}'});
   var error = form.isValidWithErrorMessage();
   if (null !== error) {
     throw new Error(error);
@@ -391,7 +401,7 @@ Object.assign(abv, function() {
   Object.defineProperty(Application.prototype, "alias", {get:function() {
     return "Application";
   }});
-  Object.assign(Application.prototype, {make:function(rules, data) {
+  Object.assign(Application.prototype, {make:function(data, rules) {
     var validators = new abv.ValidatorHandler;
     for (var key in rules) {
       if (!rules.hasOwnProperty(key)) {
@@ -8665,6 +8675,9 @@ Object.assign(abv, function() {
   Object.defineProperty(AllValidator.prototype, "alias", {get:function() {
     return "all";
   }});
+  Object.defineProperty(AllValidator.prototype, "options", {get:function() {
+    return [];
+  }});
   Object.assign(AllValidator.prototype, {__configure:function() {
     var validationRules = abv.ValidationSettingsHandler.parse(this.rules);
     for (var key in validationRules) {
@@ -8674,7 +8687,7 @@ Object.assign(abv, function() {
       this.add(key, validationRules[key]);
     }
   }, add:function(name, options) {
-    var validator = abv.makeValidator(this.data, name, options, this.lang, this.__internal);
+    var validator = abv.makeValidator(this.data, name, options, {}, this.lang, this.__internal);
     this.__validatorCollection.push(validator);
   }, __validate:function() {
     for (var key in this.__validatorCollection) {
@@ -8690,8 +8703,8 @@ Object.assign(abv, function() {
   return {AllValidator:AllValidator};
 }());
 Object.assign(abv, function() {
-  var NotBlankValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var NotBlankValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.allowNull = !this.__options.allowNull || false === this.__options.allowNull ? false : true;
     this.message = this.__options.message || "This value should not be blank.";
     this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
@@ -8701,6 +8714,9 @@ Object.assign(abv, function() {
   NotBlankValidator.prototype.constructor = NotBlankValidator;
   Object.defineProperty(NotBlankValidator.prototype, "alias", {get:function() {
     return "not-blank";
+  }});
+  Object.defineProperty(NotBlankValidator.prototype, "options", {get:function() {
+    return [];
   }});
   Object.assign(NotBlankValidator.prototype, {__validate:function() {
     if ("string" === typeof this.data && true === this.normalize) {
@@ -8733,8 +8749,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.NotBlankValidator);
 Object.assign(abv, function() {
-  var BlankValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var BlankValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value should be blank.";
     this.name = "BlankValidator";
   };
@@ -8742,6 +8758,9 @@ Object.assign(abv, function() {
   BlankValidator.prototype.constructor = BlankValidator;
   Object.defineProperty(BlankValidator.prototype, "alias", {get:function() {
     return "blank";
+  }});
+  Object.defineProperty(BlankValidator.prototype, "options", {get:function() {
+    return [];
   }});
   Object.assign(BlankValidator.prototype, {__validate:function() {
     if ("" !== this.data && null !== this.data) {
@@ -8755,8 +8774,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.BlankValidator);
 Object.assign(abv, function() {
-  var IsNullValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var IsNullValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value should be null.";
     this.name = "IsNullValidator";
   };
@@ -8764,6 +8783,9 @@ Object.assign(abv, function() {
   IsNullValidator.prototype.constructor = IsNullValidator;
   Object.defineProperty(IsNullValidator.prototype, "alias", {get:function() {
     return ["is-null", "null"];
+  }});
+  Object.defineProperty(IsNullValidator.prototype, "options", {get:function() {
+    return [];
   }});
   Object.assign(IsNullValidator.prototype, {__validate:function() {
     if (null !== this.data) {
@@ -8777,8 +8799,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.IsNullValidator);
 Object.assign(abv, function() {
-  var NotNullValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var NotNullValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value should not be null.";
     this.name = "NotNullValidator";
   };
@@ -8786,6 +8808,9 @@ Object.assign(abv, function() {
   NotNullValidator.prototype.constructor = NotNullValidator;
   Object.defineProperty(NotNullValidator.prototype, "alias", {get:function() {
     return ["not-null", "required"];
+  }});
+  Object.defineProperty(NotNullValidator.prototype, "options", {get:function() {
+    return [];
   }});
   Object.assign(NotNullValidator.prototype, {__validate:function() {
     if ("undefined" === typeof this.data) {
@@ -8803,8 +8828,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.NotNullValidator);
 Object.assign(abv, function() {
-  var IsTrueValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var IsTrueValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value should be true.";
     this.name = "IsTrueValidator";
   };
@@ -8812,6 +8837,9 @@ Object.assign(abv, function() {
   IsTrueValidator.prototype.constructor = IsTrueValidator;
   Object.defineProperty(IsTrueValidator.prototype, "alias", {get:function() {
     return ["is-true", "true"];
+  }});
+  Object.defineProperty(IsTrueValidator.prototype, "options", {get:function() {
+    return [];
   }});
   Object.assign(IsTrueValidator.prototype, {__validate:function() {
     if (true !== this.data && 1 !== this.data && "1" !== this.data) {
@@ -8825,8 +8853,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.IsTrueValidator);
 Object.assign(abv, function() {
-  var IsFalseValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var IsFalseValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value should be false.";
     this.name = "IsFalseValidator";
   };
@@ -8834,6 +8862,9 @@ Object.assign(abv, function() {
   IsFalseValidator.prototype.constructor = IsFalseValidator;
   Object.defineProperty(IsFalseValidator.prototype, "alias", {get:function() {
     return ["is-false", "false"];
+  }});
+  Object.defineProperty(IsFalseValidator.prototype, "options", {get:function() {
+    return [];
   }});
   Object.assign(IsFalseValidator.prototype, {__validate:function() {
     if (false !== this.data && 0 !== this.data && "0" !== this.data) {
@@ -8847,8 +8878,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.IsFalseValidator);
 Object.assign(abv, function() {
-  var TypeValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {type:'type:{"type":["string","array"],"any":true}', message:'type:{"type":"string"}|length:{"min":3,"max":255}', any:'type:{"type":"boolean"}'}, lang, internal);
+  var TypeValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {type:optionRules.type || 'type:{"type":["string","array"],"any":true}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', any:optionRules.any || 'type:{"type":"boolean"}'}, lang, internal);
     this.type = this.__options.type || "string";
     this.message = this.__options.message || "This value should be of type %%type%%.";
     this.any = true === this.__options.any;
@@ -8859,6 +8890,9 @@ Object.assign(abv, function() {
   TypeValidator.prototype.constructor = TypeValidator;
   Object.defineProperty(TypeValidator.prototype, "alias", {get:function() {
     return "type";
+  }});
+  Object.defineProperty(TypeValidator.prototype, "options", {get:function() {
+    return [{"name":"type", "type":"array"}, {"name":"any", "type":"boolean"}];
   }});
   Object.assign(TypeValidator.prototype, {__validate:function() {
     if ("undefined" === typeof this.data) {
@@ -8904,8 +8938,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.TypeValidator);
 Object.assign(abv, function() {
-  var EmailValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', mode:'length:{"min":2,"max":20}', normalize:'type:{"type":"bool"}'}, lang, internal);
+  var EmailValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', mode:optionRules.mode || 'type:{"type":"string"}|length:{"min":2,"max":20}', normalize:optionRules.normalize || 'type:{"type":"bool"}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid email address.";
     this.mode = ["loose", "strict", "html5"].includes(this.__options.mode) ? this.__options.mode : "html5";
     this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
@@ -8917,6 +8951,9 @@ Object.assign(abv, function() {
   EmailValidator.prototype.constructor = EmailValidator;
   Object.defineProperty(EmailValidator.prototype, "alias", {get:function() {
     return "email";
+  }});
+  Object.defineProperty(EmailValidator.prototype, "options", {get:function() {
+    return [{"name":"mode", "type":"string"}];
   }});
   Object.assign(EmailValidator.prototype, {__validate:function() {
     if (true === this.normalize) {
@@ -8968,8 +9005,9 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.EmailValidator);
 Object.assign(abv, function() {
-  var LengthValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {allowEmptyString:'type:{"type":"bool"}', charset:'length:{"min":2,"max":10}', charsetMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', exactMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', max:'type:{"type":"integer"}', maxMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', min:'type:{"type":"integer"}', minMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}'}, lang, internal);
+  var LengthValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {allowEmptyString:optionRules.allowEmptyString || 'type:{"type":"bool"}', charset:optionRules.charset || 'length:{"min":2,"max":10}', charsetMessage:optionRules.charsetMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', exactMessage:optionRules.exactMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', max:optionRules.max || 'type:{"type":"integer"}', maxMessage:optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', 
+    min:optionRules.min || 'type:{"type":"integer"}', minMessage:optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:optionRules.normalize || 'type:{"type":"bool"}'}, lang, internal);
     this.allowEmptyString = !this.__options.allowEmptyString || false === this.__options.allowEmptyString ? false : true;
     this.exactMessage = this.__options.exactMessage || "This value should have exactly %%limit%% characters.";
     this.max = this.__options.max;
@@ -8983,6 +9021,9 @@ Object.assign(abv, function() {
   LengthValidator.prototype.constructor = LengthValidator;
   Object.defineProperty(LengthValidator.prototype, "alias", {get:function() {
     return "length";
+  }});
+  Object.defineProperty(LengthValidator.prototype, "options", {get:function() {
+    return [{"name":"max", "type":"bool"}, {"name":"min", "type":"bool"}];
   }});
   Object.assign(LengthValidator.prototype, {__validate:function() {
     if (true === this.normalize) {
@@ -9028,8 +9069,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.LengthValidator);
 Object.assign(abv, function() {
-  var UrlValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}', protocols:'type:{"type":["string","array"],"any":true}', relativeProtocol:'type:{"type":"bool"}'}, lang, internal);
+  var UrlValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:optionRules.normalize || 'type:{"type":"bool"}', protocols:optionRules.protocols || 'type:{"type":["string","array"],"any":true}', relativeProtocol:optionRules.relativeProtocol || 'type:{"type":"bool"}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid URL.";
     this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
     this.protocols = this.__options.protocols || ["http", "https", "ftp"];
@@ -9042,6 +9083,9 @@ Object.assign(abv, function() {
   UrlValidator.prototype.constructor = UrlValidator;
   Object.defineProperty(UrlValidator.prototype, "alias", {get:function() {
     return "url";
+  }});
+  Object.defineProperty(UrlValidator.prototype, "options", {get:function() {
+    return [{"name":"protocols", "type":"array"}, {"name":"relativeProtocol", "type":"bool"}];
   }});
   Object.assign(UrlValidator.prototype, {__configure:function() {
     if ("string" === typeof this.protocols) {
@@ -9091,8 +9135,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.UrlValidator);
 Object.assign(abv, function() {
-  var RegexValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {match:'type:{"type": "bool"}', message:'type:{"type":"string"}|length:{"min":3,"max":255}', pattern:"required", normalize:'type:{"type": "bool"}'}, lang, internal);
+  var RegexValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {match:optionRules.match || 'type:{"type": "bool"}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', pattern:optionRules.pattern || "required", normalize:optionRules.normalize || 'type:{"type": "bool"}'}, lang, internal);
     this.match = false === this.__options.match ? false : true;
     this.message = this.__options.message || "This value is not valid.";
     this.pattern = this.__options.pattern;
@@ -9103,6 +9147,9 @@ Object.assign(abv, function() {
   RegexValidator.prototype.constructor = RegexValidator;
   Object.defineProperty(RegexValidator.prototype, "alias", {get:function() {
     return "regex";
+  }});
+  Object.defineProperty(RegexValidator.prototype, "options", {get:function() {
+    return [{"name":"match", "type":"bool"}, {"name":"pattern", "type":"any"}];
   }});
   Object.assign(RegexValidator.prototype, {__validate:function() {
     if (true === this.normalize) {
@@ -9141,8 +9188,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.RegexValidator);
 Object.assign(abv, function() {
-  var IpValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}', version:'length:{"min":1,"max":255}'}, lang, internal);
+  var IpValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:optionRules.normalize || 'type:{"type":"bool"}', version:optionRules.version || 'type:{"type":"string"}|length:{"min":1,"max":255}'}, lang, internal);
     this.V4 = "4";
     this.V6 = "6";
     this.ALL = "all";
@@ -9169,6 +9216,9 @@ Object.assign(abv, function() {
   IpValidator.prototype.constructor = IpValidator;
   Object.defineProperty(IpValidator.prototype, "alias", {get:function() {
     return "ip";
+  }});
+  Object.defineProperty(IpValidator.prototype, "options", {get:function() {
+    return [{"name":"version", "type":"string"}];
   }});
   Object.assign(IpValidator.prototype, {__validate:function() {
     if (true === this.normalize) {
@@ -9245,8 +9295,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.IpValidator);
 Object.assign(abv, function() {
-  var JsonValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var JsonValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value should be valid JSON.";
     this.name = "JsonValidator";
   };
@@ -9254,6 +9304,9 @@ Object.assign(abv, function() {
   JsonValidator.prototype.constructor = JsonValidator;
   Object.defineProperty(JsonValidator.prototype, "alias", {get:function() {
     return "json";
+  }});
+  Object.defineProperty(JsonValidator.prototype, "options", {get:function() {
+    return [];
   }});
   Object.assign(JsonValidator.prototype, {__validate:function() {
     try {
@@ -9287,8 +9340,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.JsonValidator);
 Object.assign(abv, function() {
-  var UuidValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:'type:{"type":"bool"}', versions:'type:{"type":"array"}'}, lang, internal);
+  var UuidValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:optionRules.normalize || 'type:{"type":"bool"}', versions:optionRules.versions || 'type:{"type":"array"}'}, lang, internal);
     this.V1_MAC1 = 1;
     this.V2_DCE = 2;
     this.V3_MD5 = 3;
@@ -9312,6 +9365,9 @@ Object.assign(abv, function() {
   UuidValidator.prototype.constructor = UuidValidator;
   Object.defineProperty(UuidValidator.prototype, "alias", {get:function() {
     return "uuid";
+  }});
+  Object.defineProperty(UuidValidator.prototype, "options", {get:function() {
+    return [{"name":"versions", "type":"array"}];
   }});
   Object.assign(UuidValidator.prototype, {__validate:function() {
     if (true === this.normalize) {
@@ -9435,8 +9491,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.UuidValidator);
 Object.assign(abv, function() {
-  var EqualToValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:"required"}, lang, internal);
+  var EqualToValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || "required"}, lang, internal);
     this.message = this.__options.message || "This value should be equal to %%compared_value%%.";
     this.name = "EqualToValidator";
   };
@@ -9444,6 +9500,9 @@ Object.assign(abv, function() {
   EqualToValidator.prototype.constructor = EqualToValidator;
   Object.defineProperty(EqualToValidator.prototype, "alias", {get:function() {
     return "equal-to";
+  }});
+  Object.defineProperty(EqualToValidator.prototype, "options", {get:function() {
+    return [{"name":"value", "type":"any"}];
   }});
   Object.assign(EqualToValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value == comparedValue;
@@ -9454,8 +9513,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.EqualToValidator);
 Object.assign(abv, function() {
-  var NotEqualToValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:"required"}, lang, internal);
+  var NotEqualToValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || "required"}, lang, internal);
     this.message = this.__options.message || "This value should not be equal to %%compared_value%%.";
     this.name = "NotEqualToValidator";
   };
@@ -9463,6 +9522,9 @@ Object.assign(abv, function() {
   NotEqualToValidator.prototype.constructor = NotEqualToValidator;
   Object.defineProperty(NotEqualToValidator.prototype, "alias", {get:function() {
     return "not-equal-to";
+  }});
+  Object.defineProperty(NotEqualToValidator.prototype, "options", {get:function() {
+    return [{"name":"value", "type":"any"}];
   }});
   Object.assign(NotEqualToValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value != comparedValue;
@@ -9473,8 +9535,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.NotEqualToValidator);
 Object.assign(abv, function() {
-  var IdenticalToValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:"required"}, lang, internal);
+  var IdenticalToValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || "required"}, lang, internal);
     this.message = this.__options.message || "This value should be identical to %%compared_value_type%% %%compared_value%%.";
     this.name = "IdenticalToValidator";
   };
@@ -9482,6 +9544,9 @@ Object.assign(abv, function() {
   IdenticalToValidator.prototype.constructor = IdenticalToValidator;
   Object.defineProperty(IdenticalToValidator.prototype, "alias", {get:function() {
     return "identical-to";
+  }});
+  Object.defineProperty(IdenticalToValidator.prototype, "options", {get:function() {
+    return [{"name":"value", "type":"any"}];
   }});
   Object.assign(IdenticalToValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value === comparedValue;
@@ -9492,8 +9557,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.IdenticalToValidator);
 Object.assign(abv, function() {
-  var NotIdenticalToValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:"required"}, lang, internal);
+  var NotIdenticalToValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || "required"}, lang, internal);
     this.message = this.__options.message || "This value should not be identical to %%compared_value_type%% %%compared_value%%.";
     this.name = "NotIdenticalToValidator";
   };
@@ -9501,6 +9566,9 @@ Object.assign(abv, function() {
   NotIdenticalToValidator.prototype.constructor = NotIdenticalToValidator;
   Object.defineProperty(NotIdenticalToValidator.prototype, "alias", {get:function() {
     return "not-identical-to";
+  }});
+  Object.defineProperty(NotIdenticalToValidator.prototype, "options", {get:function() {
+    return [{"name":"value", "type":"any"}];
   }});
   Object.assign(NotIdenticalToValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value !== comparedValue;
@@ -9511,8 +9579,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.NotIdenticalToValidator);
 Object.assign(abv, function() {
-  var LessThanValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+  var LessThanValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
     this.message = this.__options.message || "This value should be less than %%compared_value%%.";
     this.name = "LessThanValidator";
   };
@@ -9520,6 +9588,9 @@ Object.assign(abv, function() {
   LessThanValidator.prototype.constructor = LessThanValidator;
   Object.defineProperty(LessThanValidator.prototype, "alias", {get:function() {
     return "less-than";
+  }});
+  Object.defineProperty(LessThanValidator.prototype, "options", {get:function() {
+    return [{"name":"value", "type":"scalar|date"}];
   }});
   Object.assign(LessThanValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value < comparedValue;
@@ -9530,8 +9601,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.LessThanValidator);
 Object.assign(abv, function() {
-  var LessThanOrEqualValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+  var LessThanOrEqualValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
     this.message = this.__options.message || "This value should be less than or equal to %%compared_value%%.";
     this.name = "LessThanOrEqualValidator";
   };
@@ -9539,6 +9610,9 @@ Object.assign(abv, function() {
   LessThanOrEqualValidator.prototype.constructor = LessThanOrEqualValidator;
   Object.defineProperty(LessThanOrEqualValidator.prototype, "alias", {get:function() {
     return "less-than-or-equal";
+  }});
+  Object.defineProperty(LessThanOrEqualValidator.prototype, "options", {get:function() {
+    return [{"name":"value", "type":"scalar|date"}];
   }});
   Object.assign(LessThanOrEqualValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value <= comparedValue;
@@ -9549,8 +9623,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.LessThanOrEqualValidator);
 Object.assign(abv, function() {
-  var GreaterThanValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+  var GreaterThanValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
     this.message = this.__options.message || "This value should be greater than %%compared_value%%.";
     this.name = "GreaterThanValidator";
   };
@@ -9558,6 +9632,9 @@ Object.assign(abv, function() {
   GreaterThanValidator.prototype.constructor = GreaterThanValidator;
   Object.defineProperty(GreaterThanValidator.prototype, "alias", {get:function() {
     return "greater-than";
+  }});
+  Object.defineProperty(GreaterThanValidator.prototype, "options", {get:function() {
+    return [{"name":"value", "type":"scalar|date"}];
   }});
   Object.assign(GreaterThanValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value > comparedValue;
@@ -9568,8 +9645,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.GreaterThanValidator);
 Object.assign(abv, function() {
-  var GreaterThanOrEqualValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+  var GreaterThanOrEqualValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
     this.message = this.__options.message || "This value should be greater than or equal to %%compared_value%%.";
     this.name = "GreaterThanOrEqualValidator";
   };
@@ -9577,6 +9654,9 @@ Object.assign(abv, function() {
   GreaterThanOrEqualValidator.prototype.constructor = GreaterThanOrEqualValidator;
   Object.defineProperty(GreaterThanOrEqualValidator.prototype, "alias", {get:function() {
     return "greater-than-or-equal";
+  }});
+  Object.defineProperty(GreaterThanOrEqualValidator.prototype, "options", {get:function() {
+    return [{"name":"value", "type":"scalar|date"}];
   }});
   Object.assign(GreaterThanOrEqualValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value >= comparedValue;
@@ -9587,8 +9667,9 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.GreaterThanOrEqualValidator);
 Object.assign(abv, function() {
-  var RangeValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {invalidMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', max:'required|type:{"type":["numeric","date-string"],"any":true}', maxMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', min:'required|type:{"type":["numeric","date-string"],"any":true}', minMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', notInRangeMessage:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var RangeValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {invalidMessage:optionRules.invalidMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', max:optionRules.max || 'required|type:{"type":["numeric","date-string"],"any":true}', maxMessage:optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', min:optionRules.min || 'required|type:{"type":["numeric","date-string"],"any":true}', minMessage:optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', 
+    notInRangeMessage:optionRules.notInRangeMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.invalidMessage = this.__options.invalidMessage || "This value should be a valid number.";
     this.max = this.__options.max;
     this.maxMessage = this.__options.maxMessage || "This value should be %%limit%% or less.";
@@ -9601,6 +9682,9 @@ Object.assign(abv, function() {
   RangeValidator.prototype.constructor = RangeValidator;
   Object.defineProperty(RangeValidator.prototype, "alias", {get:function() {
     return "range";
+  }});
+  Object.defineProperty(RangeValidator.prototype, "options", {get:function() {
+    return [{"name":"max", "type":"numeric|date-string"}, {"name":"min", "type":"numeric|date-string"}];
   }});
   Object.assign(RangeValidator.prototype, {__validate:function() {
     var hasLowerLimit = null !== this.min;
@@ -9651,8 +9735,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.RangeValidator);
 Object.assign(abv, function() {
-  var DivisibleByValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', value:'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+  var DivisibleByValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
     this.message = this.__options.message || "This value should be a multiple of %%compared_value%%.";
     this.name = "DivisibleByValidator";
   };
@@ -9660,6 +9744,9 @@ Object.assign(abv, function() {
   DivisibleByValidator.prototype.constructor = DivisibleByValidator;
   Object.defineProperty(DivisibleByValidator.prototype, "alias", {get:function() {
     return "divisible-by";
+  }});
+  Object.defineProperty(DivisibleByValidator.prototype, "options", {get:function() {
+    return [{"name":"value", "type":"date"}];
   }});
   Object.assign(DivisibleByValidator.prototype, {__compareValues:function(value, comparedValue) {
     if (abv.isType("integer", value) && abv.isType("integer", comparedValue)) {
@@ -9677,8 +9764,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.DivisibleByValidator);
 Object.assign(abv, function() {
-  var UniqueValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var UniqueValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This collection should contain only unique elements.";
     this.__repeated = [];
     this.name = "UniqueValidator";
@@ -9687,6 +9774,9 @@ Object.assign(abv, function() {
   UniqueValidator.prototype.constructor = UniqueValidator;
   Object.defineProperty(UniqueValidator.prototype, "alias", {get:function() {
     return "unique";
+  }});
+  Object.defineProperty(UniqueValidator.prototype, "options", {get:function() {
+    return [];
   }});
   Object.assign(UniqueValidator.prototype, {__validate:function() {
     if (true === abv.isType("string", this.data) || true === abv.isType("array", this.data)) {
@@ -9725,8 +9815,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.UniqueValidator);
 Object.assign(abv, function() {
-  var PositiveValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var PositiveValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.value = 0;
     this.message = this.__options.message || "This value should be positive.";
     this.name = "PositiveValidator";
@@ -9735,6 +9825,9 @@ Object.assign(abv, function() {
   PositiveValidator.prototype.constructor = PositiveValidator;
   Object.defineProperty(PositiveValidator.prototype, "alias", {get:function() {
     return "positive";
+  }});
+  Object.defineProperty(PositiveValidator.prototype, "options", {get:function() {
+    return [];
   }});
   Object.assign(PositiveValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value > comparedValue;
@@ -9745,8 +9838,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.PositiveValidator);
 Object.assign(abv, function() {
-  var PositiveOrZeroValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var PositiveOrZeroValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.value = 0;
     this.message = this.__options.message || "This value should be either positive or zero.";
     this.name = "PositiveOrZeroValidator";
@@ -9755,6 +9848,9 @@ Object.assign(abv, function() {
   PositiveOrZeroValidator.prototype.constructor = PositiveOrZeroValidator;
   Object.defineProperty(PositiveOrZeroValidator.prototype, "alias", {get:function() {
     return "positive-or-zero";
+  }});
+  Object.defineProperty(PositiveOrZeroValidator.prototype, "options", {get:function() {
+    return [];
   }});
   Object.assign(PositiveOrZeroValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value >= comparedValue;
@@ -9765,8 +9861,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.PositiveOrZeroValidator);
 Object.assign(abv, function() {
-  var NegativeValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var NegativeValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.value = 0;
     this.message = this.__options.message || "This value should be negative.";
     this.name = "NegativeValidator";
@@ -9775,6 +9871,9 @@ Object.assign(abv, function() {
   NegativeValidator.prototype.constructor = NegativeValidator;
   Object.defineProperty(NegativeValidator.prototype, "alias", {get:function() {
     return "negative";
+  }});
+  Object.defineProperty(NegativeValidator.prototype, "options", {get:function() {
+    return [];
   }});
   Object.assign(NegativeValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value < comparedValue;
@@ -9785,8 +9884,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.NegativeValidator);
 Object.assign(abv, function() {
-  var NegativeOrZeroValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var NegativeOrZeroValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.value = 0;
     this.message = this.__options.message || "This value should be either negative or zero.";
     this.name = "NegativeOrZeroValidator";
@@ -9795,6 +9894,9 @@ Object.assign(abv, function() {
   NegativeOrZeroValidator.prototype.constructor = NegativeOrZeroValidator;
   Object.defineProperty(NegativeOrZeroValidator.prototype, "alias", {get:function() {
     return "negative-or-zero";
+  }});
+  Object.defineProperty(NegativeOrZeroValidator.prototype, "options", {get:function() {
+    return [];
   }});
   Object.assign(NegativeOrZeroValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value <= comparedValue;
@@ -9805,8 +9907,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.NegativeOrZeroValidator);
 Object.assign(abv, function() {
-  var DateValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var DateValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid date.";
     this.format = this.__options.format || "YYYY-MM-DD";
     this.name = "DateValidator";
@@ -9815,6 +9917,9 @@ Object.assign(abv, function() {
   DateValidator.prototype.constructor = DateValidator;
   Object.defineProperty(DateValidator.prototype, "alias", {get:function() {
     return "date";
+  }});
+  Object.defineProperty(DateValidator.prototype, "options", {get:function() {
+    return [];
   }});
   Object.assign(DateValidator.prototype, {__validate:function() {
     if (this.data !== this.__moment(this.data, this.format).format(this.format)) {
@@ -9846,8 +9951,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.DateValidator);
 Object.assign(abv, function() {
-  var DateTimeValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', format:'type:{"type":"string"}'}, lang, internal);
+  var DateTimeValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', format:optionRules.format || 'type:{"type":"string"}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid datetime.";
     this.format = this.__options.format || "YYYY-MM-DD HH:mm:ss";
     this.name = "DateTimeValidator";
@@ -9856,6 +9961,9 @@ Object.assign(abv, function() {
   DateTimeValidator.prototype.constructor = DateTimeValidator;
   Object.defineProperty(DateTimeValidator.prototype, "alias", {get:function() {
     return "date-time";
+  }});
+  Object.defineProperty(DateTimeValidator.prototype, "options", {get:function() {
+    return [{"name":"format", "type":"string"}];
   }});
   Object.assign(DateTimeValidator.prototype, {__validate:function() {
     var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"date-string"}', true);
@@ -9892,8 +10000,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.DateTimeValidator);
 Object.assign(abv, function() {
-  var TimeValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var TimeValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid time.";
     this.format = this.__options.format || "HH:mm:ss";
     this.name = "TimeValidator";
@@ -9902,6 +10010,9 @@ Object.assign(abv, function() {
   TimeValidator.prototype.constructor = TimeValidator;
   Object.defineProperty(TimeValidator.prototype, "alias", {get:function() {
     return "time";
+  }});
+  Object.defineProperty(TimeValidator.prototype, "options", {get:function() {
+    return [];
   }});
   Object.assign(TimeValidator.prototype, {__validate:function() {
     if (this.data !== this.__moment(this.data, this.format).format(this.format)) {
@@ -9933,8 +10044,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.TimeValidator);
 Object.assign(abv, function() {
-  var TimezoneValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var TimezoneValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid timezone.";
     this.name = "TimezoneValidator";
   };
@@ -9942,6 +10053,9 @@ Object.assign(abv, function() {
   TimezoneValidator.prototype.constructor = TimezoneValidator;
   Object.defineProperty(TimezoneValidator.prototype, "alias", {get:function() {
     return "timezone";
+  }});
+  Object.defineProperty(TimezoneValidator.prototype, "options", {get:function() {
+    return [];
   }});
   Object.assign(TimezoneValidator.prototype, {__validate:function() {
     var zone = this.__moment.tz.zone(this.data);
@@ -9974,8 +10088,9 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.TimezoneValidator);
 Object.assign(abv, function() {
-  var ChoiceValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {callback:'type:{"type":["string","array","callable"],"any":true}', choices:'type:{"type":"array"}', max:'type:{"type":"numeric"}', maxMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', min:'type:{"type":"numeric"}', minMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', multiple:'type:{"type":"bool"}', multipleMessage:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var ChoiceValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {callback:optionRules.callback || 'type:{"type":["string","array","callable"],"any":true}', choices:optionRules.choices || 'type:{"type":"array"}', max:optionRules.max || 'type:{"type":"numeric"}', maxMessage:optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', min:optionRules.min || 'type:{"type":"numeric"}', minMessage:optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', multiple:optionRules.multiple || 
+    'type:{"type":"bool"}', multipleMessage:optionRules.multipleMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.callback = this.__options.callback;
     this.choices = this.__options.choices;
     this.max = this.__options.max;
@@ -9992,6 +10107,9 @@ Object.assign(abv, function() {
   ChoiceValidator.prototype.constructor = ChoiceValidator;
   Object.defineProperty(ChoiceValidator.prototype, "alias", {get:function() {
     return "choice";
+  }});
+  Object.defineProperty(ChoiceValidator.prototype, "options", {get:function() {
+    return [{"name":"choices", "type":"array"}, {"name":"max", "type":"numeric"}, {"name":"min", "type":"numeric"}, {"name":"multiple", "type":"bool"}];
   }});
   Object.assign(ChoiceValidator.prototype, {__validate:function() {
     if (true === this.multiple) {
@@ -10053,8 +10171,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.ChoiceValidator);
 Object.assign(abv, function() {
-  var LanguageValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var LanguageValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid language.";
     this.__languages = ["aa", "ab", "ace", "ach", "ada", "ady", "ae", "aeb", "af", "afh", "agq", "ain", "ak", "akk", "akz", "ale", "aln", "alt", "am", "an", "ang", "anp", "ar", "arc", "arn", "aro", "arp", "arq", "ars", "arw", "ary", "arz", "as", "asa", "ase", "ast", "av", "avk", "awa", "ay", "az", "ba", "bal", "ban", "bar", "bas", "bax", "bbc", "bbj", "be", "bej", "bem", "bew", "bez", "bfd", "bfq", "bg", "bgn", "bho", "bi", "bik", "bin", "bjn", "bkm", "bla", "bm", "bn", "bo", "bpy", "bqi", "br", 
     "bra", "brh", "brx", "bs", "bss", "bua", "bug", "bum", "byn", "byv", "ca", "cad", "car", "cay", "cch", "ccp", "ce", "ceb", "cgg", "ch", "chb", "chg", "chk", "chm", "chn", "cho", "chp", "chr", "chy", "cic", "ckb", "co", "cop", "cps", "cr", "crh", "crs", "cs", "csb", "cu", "cv", "cy", "da", "dak", "dar", "dav", "de", "del", "den", "dgr", "din", "dje", "doi", "dsb", "dtp", "dua", "dum", "dv", "dyo", "dyu", "dz", "dzg", "ebu", "ee", "efi", "egl", "egy", "eka", "el", "elx", "en", "enm", "eo", "es", 
@@ -10070,6 +10188,9 @@ Object.assign(abv, function() {
   LanguageValidator.prototype.constructor = LanguageValidator;
   Object.defineProperty(LanguageValidator.prototype, "alias", {get:function() {
     return "language";
+  }});
+  Object.defineProperty(LanguageValidator.prototype, "options", {get:function() {
+    return [];
   }});
   Object.assign(LanguageValidator.prototype, {__validate:function() {
     var language = this.data.toLowerCase().split(/[-_]/);
@@ -10102,8 +10223,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.LanguageValidator);
 Object.assign(abv, function() {
-  var LocaleValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var LocaleValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid locale.";
     this.__locales = {"eu":"Basque", "hr_BA":"Croatian (Bosnia & Herzegovina)", "en_CM":"English (Cameroon)", "en_BI":"English (Burundi)", "rw_RW":"Kinyarwanda (Rwanda)", "ast":"Asturian", "en_SZ":"English (Swaziland)", "he_IL":"Hebrew (Israel)", "ar":"Uzbek (Arabic)", "Arabicuz_Arab":"Uzbek (Arabic)", "en_PN":"English (Pitcairn Islands)", "as":"Assamese", "en_NF":"English (Norfolk Island)", "ks_IN":"Kashmiri (India)", "rwk_TZ":"Rwa (Tanzania)", "zh_Hant_TW":"Chinese (Traditional, Taiwan)", "en_CN":"English (China)", 
     "gsw_LI":"Swiss German (Liechtenstein)", "ta_IN":"Tamil (India)", "th_TH":"Thai (Thailand)", "es_EA":"Spanish (Ceuta & Melilla)", "fr_GF":"French (French Guiana)", "ar_001":"Arabic (World)", "en_RW":"English (Rwanda)", "tr_TR":"Turkish (Turkey)", "de_CH":"German (Switzerland)", "ee_TG":"Ewe (Togo)", "en_NG":"English (Nigeria)", "fr_TG":"French (Togo)", "az":"Azerbaijani", "fr_SC":"French (Seychelles)", "es_HN":"Spanish (Honduras)", "en_AG":"English (Antigua & Barbuda)", "ru_KZ":"Russian (Kazakhstan)", 
@@ -10153,6 +10274,9 @@ Object.assign(abv, function() {
   Object.defineProperty(LocaleValidator.prototype, "alias", {get:function() {
     return "locale";
   }});
+  Object.defineProperty(LocaleValidator.prototype, "options", {get:function() {
+    return [];
+  }});
   Object.assign(LocaleValidator.prototype, {__validate:function() {
     if ("undefined" === typeof this.__locales[this.data]) {
       this.__setErrorMessage(this.message, this.__messageParameters());
@@ -10183,8 +10307,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.LocaleValidator);
 Object.assign(abv, function() {
-  var CountryValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var CountryValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid country.";
     this.__countries = {"AF":"Afghanistan", "AX":"Aland Islands", "AL":"Albania", "DZ":"Algeria", "AS":"American Samoa", "AD":"Andorra", "AO":"Angola", "AI":"Anguilla", "AQ":"Antarctica", "AG":"Antigua And Barbuda", "AR":"Argentina", "AM":"Armenia", "AW":"Aruba", "AU":"Australia", "AT":"Austria", "AZ":"Azerbaijan", "BS":"Bahamas", "BH":"Bahrain", "BD":"Bangladesh", "BB":"Barbados", "BY":"Belarus", "BE":"Belgium", "BZ":"Belize", "BJ":"Benin", "BM":"Bermuda", "BT":"Bhutan", "BO":"Bolivia", "BA":"Bosnia And Herzegovina", 
     "BW":"Botswana", "BV":"Bouvet Island", "BR":"Brazil", "IO":"British Indian Ocean Territory", "BN":"Brunei Darussalam", "BG":"Bulgaria", "BF":"Burkina Faso", "BI":"Burundi", "KH":"Cambodia", "CM":"Cameroon", "CA":"Canada", "CV":"Cape Verde", "KY":"Cayman Islands", "CF":"Central African Republic", "TD":"Chad", "CL":"Chile", "CN":"China", "CX":"Christmas Island", "CC":"Cocos (Keeling) Islands", "CO":"Colombia", "KM":"Comoros", "CG":"Congo", "CD":"Congo, Democratic Republic", "CK":"Cook Islands", 
@@ -10202,6 +10326,9 @@ Object.assign(abv, function() {
   CountryValidator.prototype.constructor = CountryValidator;
   Object.defineProperty(CountryValidator.prototype, "alias", {get:function() {
     return "country";
+  }});
+  Object.defineProperty(CountryValidator.prototype, "options", {get:function() {
+    return [];
   }});
   Object.assign(CountryValidator.prototype, {__validate:function() {
     if ("undefined" === typeof this.__countries[this.data]) {
@@ -10233,8 +10360,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.CountryValidator);
 Object.assign(abv, function() {
-  var BicValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {iban:'type:{"type":"string"}|length:{"min":3,"max":255}', ibanMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var BicValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {iban:optionRules.iban || 'type:{"type":"string"}|length:{"min":3,"max":255}', ibanMessage:optionRules.ibanMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.BIC_COUNTRY_TO_IBAN_COUNTRY_MAP = {"GF":"FR", "PF":"FR", "TF":"FR", "GP":"FR", "MQ":"FR", "YT":"FR", "NC":"FR", "RE":"FR", "PM":"FR", "WF":"FR", "JE":"GB", "IM":"GB", "GG":"GB", "VG":"GB"};
     this.iban = this.__options.iban || null;
     this.ibanMessage = this.__options.ibanMessage || "This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.";
@@ -10245,6 +10372,9 @@ Object.assign(abv, function() {
   BicValidator.prototype.constructor = BicValidator;
   Object.defineProperty(BicValidator.prototype, "alias", {get:function() {
     return "bic";
+  }});
+  Object.defineProperty(BicValidator.prototype, "options", {get:function() {
+    return [{"name":"iban", "type":"string"}];
   }});
   Object.assign(BicValidator.prototype, {__validate:function() {
     var canonicalize = this.data.split(" ").join("");
@@ -10305,8 +10435,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.BicValidator);
 Object.assign(abv, function() {
-  var CardSchemeValidator = function(data, options, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}', schemes:'required|type:{"type":["string","array"],"any":true}'}, lang, internal);
+  var CardSchemeValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', schemes:optionRules.schemes || 'required|type:{"type":["string","array"],"any":true}'}, lang, internal);
     this.__schemes = {"AMEX":[/^3[47][0-9]{13}$/], "CHINA_UNIONPAY":[/^62[0-9]{14,17}$/], "DINERS":[/^3(?:0[0-5]|[68][0-9])[0-9]{11}$/], "DISCOVER":[/^6011[0-9]{12}$/, /^64[4-9][0-9]{13}$/, /^65[0-9]{14}$/, /^622(12[6-9]|1[3-9][0-9]|[2-8][0-9][0-9]|91[0-9]|92[0-5])[0-9]{10}$/], "INSTAPAYMENT":[/^63[7-9][0-9]{13}$/], "JCB":[/^(?:2131|1800|35[0-9]{3})[0-9]{11}$/], "LASER":[/^(6304|670[69]|6771)[0-9]{12,15}$/], "MAESTRO":[/^(6759[0-9]{2})[0-9]{6,13}$/, /^(50[0-9]{4})[0-9]{6,13}$/, /^5[6-9][0-9]{10,17}$/, 
     /^6[0-9]{11,18}$/], "MASTERCARD":[/^5[1-5][0-9]{14}$/, /^2(22[1-9][0-9]{12}|2[3-9][0-9]{13}|[3-6][0-9]{14}|7[0-1][0-9]{13}|720[0-9]{12})$/], "MIR":[/^220[0-4][0-9]{12}$/], "UATP":[/^1[0-9]{14}$/], "VISA":[/^4([0-9]{12}|[0-9]{15}|[0-9]{18})$/]};
     this.message = this.__options.message || "Unsupported card type or invalid card number.";
@@ -10317,6 +10447,9 @@ Object.assign(abv, function() {
   CardSchemeValidator.prototype.constructor = CardSchemeValidator;
   Object.defineProperty(CardSchemeValidator.prototype, "alias", {get:function() {
     return "card-scheme";
+  }});
+  Object.defineProperty(CardSchemeValidator.prototype, "options", {get:function() {
+    return [{"name":"schemes", "type":"array"}];
   }});
   Object.assign(CardSchemeValidator.prototype, {__validate:function() {
     if (false === abv.isType("numeric", this.data)) {
@@ -10360,8 +10493,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.CardSchemeValidator);
 Object.assign(abv, function() {
-  var CurrencyValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var CurrencyValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid currency.";
     this.__currencies = [{"Alphabetic_Code":"AFN", "Currency":"Afghani", "Entity":"AFGHANISTAN", "Minor_Unit":2, "Numeric_Code":"971", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"\u00c5LAND ISLANDS", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ALL", "Currency":"Lek", "Entity":"ALBANIA", "Minor_Unit":2, "Numeric_Code":"008", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
     {"Alphabetic_Code":"DZD", "Currency":"Algerian Dinar", "Entity":"ALGERIA", "Minor_Unit":2, "Numeric_Code":"012", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"AMERICAN SAMOA", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"ANDORRA", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AOA", 
@@ -10519,6 +10652,9 @@ Object.assign(abv, function() {
   Object.defineProperty(CurrencyValidator.prototype, "alias", {get:function() {
     return "currency";
   }});
+  Object.defineProperty(CurrencyValidator.prototype, "options", {get:function() {
+    return [];
+  }});
   Object.assign(CurrencyValidator.prototype, {__validate:function() {
     for (var i = 0; i < this.__currencies.length; i++) {
       if (this.__currencies[i].Alphabetic_Code === this.data) {
@@ -10552,8 +10688,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.CurrencyValidator);
 Object.assign(abv, function() {
-  var LuhnValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var LuhnValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "Invalid card number.";
     this.name = "LuhnValidator";
   };
@@ -10561,6 +10697,9 @@ Object.assign(abv, function() {
   LuhnValidator.prototype.constructor = LuhnValidator;
   Object.defineProperty(LuhnValidator.prototype, "alias", {get:function() {
     return "luhn";
+  }});
+  Object.defineProperty(LuhnValidator.prototype, "options", {get:function() {
+    return [];
   }});
   Object.assign(LuhnValidator.prototype, {__validate:function() {
     if (false === abv.isType("digit", this.data)) {
@@ -10604,8 +10743,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.LuhnValidator);
 Object.assign(abv, function() {
-  var IbanValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var IbanValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This is not a valid International Bank Account Number (IBAN).";
     this.__formats = {"AD":/^AD\d{2}\d{4}\d{4}[\dA-Z]{12}$/, "AE":/^AE\d{2}\d{3}\d{16}$/, "AL":/^AL\d{2}\d{8}[\dA-Z]{16}$/, "AO":/^AO\d{2}\d{21}$/, "AT":/^AT\d{2}\d{5}\d{11}$/, "AX":/^FI\d{2}\d{6}\d{7}\d{1}$/, "AZ":/^AZ\d{2}[A-Z]{4}[\dA-Z]{20}$/, "BA":/^BA\d{2}\d{3}\d{3}\d{8}\d{2}$/, "BE":/^BE\d{2}\d{3}\d{7}\d{2}$/, "BF":/^BF\d{2}\d{23}$/, "BG":/^BG\d{2}[A-Z]{4}\d{4}\d{2}[\dA-Z]{8}$/, "BH":/^BH\d{2}[A-Z]{4}[\dA-Z]{14}$/, "BI":/^BI\d{2}\d{12}$/, "BJ":/^BJ\d{2}[A-Z]{1}\d{23}$/, "BY":/^BY\d{2}[\dA-Z]{4}\d{4}[\dA-Z]{16}$/, 
     "BL":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "BR":/^BR\d{2}\d{8}\d{5}\d{10}[A-Z][\dA-Z]$/, "CG":/^CG\d{2}\d{23}$/, "CH":/^CH\d{2}\d{5}[\dA-Z]{12}$/, "CI":/^CI\d{2}[A-Z]{1}\d{23}$/, "CM":/^CM\d{2}\d{23}$/, "CR":/^CR\d{2}0\d{3}\d{14}$/, "CV":/^CV\d{2}\d{21}$/, "CY":/^CY\d{2}\d{3}\d{5}[\dA-Z]{16}$/, "CZ":/^CZ\d{2}\d{20}$/, "DE":/^DE\d{2}\d{8}\d{10}$/, "DO":/^DO\d{2}[\dA-Z]{4}\d{20}$/, "DK":/^DK\d{2}\d{4}\d{10}$/, "DZ":/^DZ\d{2}\d{20}$/, "EE":/^EE\d{2}\d{2}\d{2}\d{11}\d{1}$/, "ES":/^ES\d{2}\d{4}\d{4}\d{1}\d{1}\d{10}$/, 
@@ -10620,6 +10759,9 @@ Object.assign(abv, function() {
   IbanValidator.prototype.constructor = IbanValidator;
   Object.defineProperty(IbanValidator.prototype, "alias", {get:function() {
     return "iban";
+  }});
+  Object.defineProperty(IbanValidator.prototype, "options", {get:function() {
+    return [];
   }});
   Object.assign(IbanValidator.prototype, {__validate:function() {
     var canonicalized = this.data.split(" ").join("");
@@ -10689,8 +10831,9 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.IbanValidator);
 Object.assign(abv, function() {
-  var IsbnValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {bothIsbnMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', isbn10Message:'type:{"type":"string"}|length:{"min":3,"max":255}', isbn13Message:'type:{"type":"string"}|length:{"min":3,"max":255}', message:'type:{"type":"string"}|length:{"min":3,"max":255}', type:'type:{"type":"string"}'}, lang, internal);
+  var IsbnValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {bothIsbnMessage:optionRules.bothIsbnMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', isbn10Message:optionRules.isbn10Message || 'type:{"type":"string"}|length:{"min":3,"max":255}', isbn13Message:optionRules.isbn13Message || 'type:{"type":"string"}|length:{"min":3,"max":255}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', type:optionRules.type || 'type:{"type":"string"}|length:{"min":1,"max":255}'}, 
+    lang, internal);
     this.bothIsbnMessage = this.__options.bothIsbnMessage || "This value is neither a valid ISBN-10 nor a valid ISBN-13.";
     this.isbn10Message = this.__options.isbn10Message || "This value is not a valid ISBN-10.";
     this.isbn13Message = this.__options.isbn13Message || "This value is not a valid ISBN-13.";
@@ -10702,6 +10845,9 @@ Object.assign(abv, function() {
   IsbnValidator.prototype.constructor = IsbnValidator;
   Object.defineProperty(IsbnValidator.prototype, "alias", {get:function() {
     return "isbn";
+  }});
+  Object.defineProperty(IsbnValidator.prototype, "options", {get:function() {
+    return [{"name":"type", "type":"string"}];
   }});
   Object.assign(IsbnValidator.prototype, {__validate:function() {
     var canonical = this.data.split("-").join("");
@@ -10808,8 +10954,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.IsbnValidator);
 Object.assign(abv, function() {
-  var IssnValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {caseSensitive:'type:{"type":"bool"}', message:'type:{"type":"string"}|length:{"min":3,"max":255}', requireHyphen:'type:{"type":"bool"}'}, lang, internal);
+  var IssnValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {caseSensitive:optionRules.caseSensitive || 'type:{"type":"bool"}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', requireHyphen:optionRules.requireHyphen || 'type:{"type":"bool"}'}, lang, internal);
     this.caseSensitive = true === this.__options.caseSensitive;
     this.message = this.__options.message || "This value is not a valid ISSN.";
     this.requireHyphen = true === this.__options.requireHyphen;
@@ -10819,6 +10965,9 @@ Object.assign(abv, function() {
   IssnValidator.prototype.constructor = IssnValidator;
   Object.defineProperty(IssnValidator.prototype, "alias", {get:function() {
     return "issn";
+  }});
+  Object.defineProperty(IssnValidator.prototype, "options", {get:function() {
+    return [{"name":"caseSensitive", "type":"bool"}, {"name":"requireHyphen", "type":"bool"}];
   }});
   Object.assign(IssnValidator.prototype, {__validate:function() {
     var canonical = this.data;
@@ -10885,8 +11034,8 @@ Object.assign(abv, function() {
 }());
 abv.registry(abv.IssnValidator);
 Object.assign(abv, function() {
-  var CountValidator = function(data, options, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {exactMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', max:'type:{"type":"numeric"}', maxMessage:'type:{"type":"string"}|length:{"min":3,"max":255}', min:'type:{"type":"numeric"}', minMessage:'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+  var CountValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {exactMessage:optionRules.exactMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', max:optionRules.max || 'type:{"type":"numeric"}', maxMessage:optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', min:optionRules.min || 'type:{"type":"numeric"}', minMessage:optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.exactMessage = this.__options.exactMessage || "This collection should contain exactly %%limit%% elements.";
     this.max = this.__options.max || null;
     this.maxMessage = this.__options.maxMessage || "This collection should contain %%limit%% elements or less.";
@@ -10898,6 +11047,9 @@ Object.assign(abv, function() {
   CountValidator.prototype.constructor = CountValidator;
   Object.defineProperty(CountValidator.prototype, "alias", {get:function() {
     return "count";
+  }});
+  Object.defineProperty(CountValidator.prototype, "options", {get:function() {
+    return [{"name":"max", "type":"numeric"}, {"name":"min", "type":"numeric"}];
   }});
   Object.assign(CountValidator.prototype, {__validate:function() {
     var count = this.data.length;
@@ -10938,6 +11090,44 @@ Object.assign(abv, function() {
   return {CountValidator:CountValidator};
 }());
 abv.registry(abv.CountValidator);
+Object.assign(abv, function() {
+  var AcceptedValidator = function(data) {
+    abv.ChoiceValidator.call(this, data, {choices:["yes", "on", 1, true, "1", "true"], message:"The %%attribute%% must be accepted."}, {});
+    this.name = "AcceptedValidator";
+  };
+  AcceptedValidator.prototype = Object.create(abv.ChoiceValidator.prototype);
+  AcceptedValidator.prototype.constructor = AcceptedValidator;
+  Object.defineProperty(AcceptedValidator.prototype, "alias", {get:function() {
+    return "accepted";
+  }});
+  Object.defineProperty(AcceptedValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(AcceptedValidator.prototype, {__messageParameters:function() {
+    return {"attribute":"field"};
+  }});
+  return {AcceptedValidator:AcceptedValidator};
+}());
+abv.registry(abv.AcceptedValidator);
+Object.assign(abv, function() {
+  var ActiveUrlValidator = function(data) {
+    abv.UrlValidator.call(this, data, {message:"The %%attribute%% is not a valid URL."}, {});
+    this.name = "ActiveUrlValidator";
+  };
+  ActiveUrlValidator.prototype = Object.create(abv.UrlValidator.prototype);
+  ActiveUrlValidator.prototype.constructor = ActiveUrlValidator;
+  Object.defineProperty(ActiveUrlValidator.prototype, "alias", {get:function() {
+    return "active_url";
+  }});
+  Object.defineProperty(ActiveUrlValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(ActiveUrlValidator.prototype, {__messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {ActiveUrlValidator:ActiveUrlValidator};
+}());
+abv.registry(abv.ActiveUrlValidator);
 abv.I18nHandler.add("af", [{"@id":"1", "source":"This value should be false.", "target":"Hierdie waarde moet vals wees."}, {"@id":"2", "source":"This value should be true.", "target":"Hierdie waarde moet waar wees."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Hierdie waarde moet van die soort {{type}} wees."}, {"@id":"4", "source":"This value should be blank.", "target":"Hierdie waarde moet leeg wees."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Die waarde wat jy gekies het is nie 'n geldige keuse nie."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Jy moet ten minste %%limit%% kies.|Jy moet ten minste %%limit%% keuses kies."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Jy moet by die meeste %%limit%% keuse kies.|Jy moet by die meeste %%limit%% keuses kies."}, {"@id":"8", "source":"One or more of the given values is invalid.", 
 "target":"Een of meer van die gegewe waardes is ongeldig."}, {"@id":"9", "source":"This field was not expected.", "target":"Die veld is nie verwag nie."}, {"@id":"10", "source":"This field is missing.", "target":"Hierdie veld ontbreek."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Hierdie waarde is nie 'n geldige datum nie."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Hierdie waarde is nie 'n geldige datum en tyd nie."}, {"@id":"13", "source":"This value is not a valid email address.", 

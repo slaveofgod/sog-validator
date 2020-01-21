@@ -90,11 +90,11 @@ Object.assign(abv, function () {
          * @function
          * @name abv.Application#make
          * @description Create validators for all the fields
-         * @param {Object} rules The validation rules
          * @param {Object} data The data which needs to be validated
+         * @param {Object} rules The validation rules
          * @returns {abv.ValidatorHandler}
          */
-        make: function (rules, data) {
+        make: function (data, rules) {
             var validators = new abv.ValidatorHandler();
 
             for (var key in rules) {
