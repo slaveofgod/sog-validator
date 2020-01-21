@@ -43,9 +43,5 @@ describe('after', () => {
                 }
             })).toBe("The value must be a date after 1995-12-17T03:21:00.");
         });
-
-        test('"abcd" > "efgh"', () => {
-            expect(abv.isValidWithErrorMessage("abcd", 'greater-than:{"value":"efgh"}')).toBe("This value should be greater than efgh.");
-        });
     });
 });

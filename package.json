@@ -64,7 +64,7 @@
     "watch": "^1.0.2"
   },
   "scripts": {
-    "dev": "watch 'npm run  ' src",
+    "dev": "watch 'npm run build' src",
     "build": "cd build && node build.js -o output/bob-validator.js",
     "build:debug": "cd build && node build.js -d -o output/bob-validator.dbg.js",
     "build:profiler": "cd build && node build.js -p -o output/bob-validator.prf.js",

@@ -103,6 +103,8 @@
 ../src/framework/validator/laravel/alpha-dash-validator.js
 ../src/framework/validator/laravel/alpha-num-validator.js
 ../src/framework/validator/laravel/array-validator.js
+../src/framework/validator/laravel/before-validator.js
+../src/framework/validator/laravel/before-or-equal-validator.js
 ../src/i18n/resource/af.js
 ../src/i18n/resource/ar.js
 ../src/i18n/resource/az.js
