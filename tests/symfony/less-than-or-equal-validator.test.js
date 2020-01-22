@@ -69,7 +69,7 @@ describe('less-than-or-equal', () => {
                 "less-than-or-equal": {
                     "value": new Date('1995-12-17T03:24:00')
                 }
-            })).toBe("This value should be less than or equal to Sun Dec 17 1995 03:24:00 GMT+0200 (Eastern European Standard Time).");
+            })).toBe("This value should be less than or equal to December 17, 1995 3:24 AM.");
         });
 
         test('Lorem ipsum < new Date("1995-12-17T03:24:00")', () => {
@@ -77,7 +77,7 @@ describe('less-than-or-equal', () => {
                 "less-than-or-equal": {
                     "value": new Date('1995-12-17T03:24:00')
                 }
-            })).toBe("This value should be less than or equal to Sun Dec 17 1995 03:24:00 GMT+0200 (Eastern European Standard Time).");
+            })).toBe("This value should be less than or equal to December 17, 1995 3:24 AM.");
         });
 
         test('1995-12-17T03:24:00 < new Date("1995-12-17T03:21:00")', () => {
@@ -85,7 +85,7 @@ describe('less-than-or-equal', () => {
                 "less-than-or-equal": {
                     "value": new Date('1995-12-17T03:21:00')
                 }
-            })).toBe("This value should be less than or equal to Sun Dec 17 1995 03:21:00 GMT+0200 (Eastern European Standard Time).");
+            })).toBe("This value should be less than or equal to December 17, 1995 3:21 AM.");
         });
 
         test('"true" < true', () => {

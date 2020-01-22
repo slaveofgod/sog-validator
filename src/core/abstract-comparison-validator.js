@@ -97,6 +97,33 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
+         * @name abv.AbstractComparisonValidator#__formattedData
+         * @description Formatted data depending of type
+         * @returns {*}
+         */
+        __formattedData: function (data) {
+            if (true === abv.isType('numeric', data)) {
+                return data;
+            }
+
+            if (true === abv.isType('bool', data)) {
+                return data;
+            }
+
+            if (true === abv.isType('array', data)) {
+                return data;
+            }
+
+            if (true === this.__moment(data, 'LLL').isValid()) {
+                return this.__moment(data).format('LLL');
+            }
+
+            return data;
+        },
+
+        /**
+         * @private
+         * @function
          * @name abv.AbstractComparisonValidator#__convertDataToValueType
          * @description Convert data to value type
          * @returns {*}

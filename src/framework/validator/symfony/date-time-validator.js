@@ -366,7 +366,7 @@ Object.assign(abv, function () {
          */
         __messageParameters: function () {
             return {
-                'value': this.data
+                'value': this.__moment(this.data).format(this.format)
             }
         }
     });

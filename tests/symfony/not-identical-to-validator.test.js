@@ -89,7 +89,7 @@ describe('not-identical-to', () => {
                 "not-identical-to": {
                     "value": new Date('1995-12-17T03:24:00')
                 }
-            })).toBe("This value should not be identical to Date Sun Dec 17 1995 03:24:00 GMT+0200 (Eastern European Standard Time).");
+            })).toBe("This value should not be identical to Date December 17, 1995 3:24 AM.");
         });
 
         test('new Object() !== new Object()', () => {

@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision 8b5b4c8
+ * Bob Validator Library v2.0 revision 47ff07f
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"8b5b4c8", config:{}, common:{}, validators:{}, registry:function(validator) {
+var abv = {version:"2.0", revision:"47ff07f", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -220,6 +220,20 @@ Object.assign(abv, function() {
       } catch (e) {
         return data;
       }
+    }
+    return data;
+  }, __formattedData:function(data) {
+    if (true === abv.isType("numeric", data)) {
+      return data;
+    }
+    if (true === abv.isType("bool", data)) {
+      return data;
+    }
+    if (true === abv.isType("array", data)) {
+      return data;
+    }
+    if (true === this.__moment(data, "LLL").isValid()) {
+      return this.__moment(data).format("LLL");
     }
     return data;
   }, __convertDataToValueType:function() {
@@ -7263,6 +7277,9 @@ abv.moment = function() {
   hooks.locale("en");
   return hooks;
 }();
+abv.moment.createFromInputFallback = function(config) {
+  config._d = new Date(NaN);
+};
 (function(moment) {
   var VERSION = "0.5.25", zones = {}, links = {}, names = {}, guesses = {}, cachedGuess;
   if (!moment || typeof moment.version !== "string") {
@@ -9520,7 +9537,7 @@ Object.assign(abv, function() {
   Object.assign(EqualToValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value == comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
   }});
   return {EqualToValidator:EqualToValidator};
 }());
@@ -9542,7 +9559,7 @@ Object.assign(abv, function() {
   Object.assign(NotEqualToValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value != comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
   }});
   return {NotEqualToValidator:NotEqualToValidator};
 }());
@@ -9564,7 +9581,7 @@ Object.assign(abv, function() {
   Object.assign(IdenticalToValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value === comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
   }});
   return {IdenticalToValidator:IdenticalToValidator};
 }());
@@ -9586,7 +9603,7 @@ Object.assign(abv, function() {
   Object.assign(NotIdenticalToValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value !== comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
   }});
   return {NotIdenticalToValidator:NotIdenticalToValidator};
 }());
@@ -9608,7 +9625,7 @@ Object.assign(abv, function() {
   Object.assign(LessThanValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value < comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
   }});
   return {LessThanValidator:LessThanValidator};
 }());
@@ -9630,7 +9647,7 @@ Object.assign(abv, function() {
   Object.assign(LessThanOrEqualValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value <= comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
   }});
   return {LessThanOrEqualValidator:LessThanOrEqualValidator};
 }());
@@ -9652,7 +9669,7 @@ Object.assign(abv, function() {
   Object.assign(GreaterThanValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value > comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
   }});
   return {GreaterThanValidator:GreaterThanValidator};
 }());
@@ -9674,7 +9691,7 @@ Object.assign(abv, function() {
   Object.assign(GreaterThanOrEqualValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value >= comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
   }});
   return {GreaterThanOrEqualValidator:GreaterThanOrEqualValidator};
 }());
@@ -9771,7 +9788,7 @@ Object.assign(abv, function() {
     }
     return abv.sprintf("%.12e", comparedValue) === abv.sprintf("%.12e", remainder);
   }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
   }});
   return {DivisibleByValidator:DivisibleByValidator};
 }());
@@ -9845,7 +9862,7 @@ Object.assign(abv, function() {
   Object.assign(PositiveValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value > comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
   }});
   return {PositiveValidator:PositiveValidator};
 }());
@@ -9868,7 +9885,7 @@ Object.assign(abv, function() {
   Object.assign(PositiveOrZeroValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value >= comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
   }});
   return {PositiveOrZeroValidator:PositiveOrZeroValidator};
 }());
@@ -9891,7 +9908,7 @@ Object.assign(abv, function() {
   Object.assign(NegativeValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value < comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
   }});
   return {NegativeValidator:NegativeValidator};
 }());
@@ -9914,7 +9931,7 @@ Object.assign(abv, function() {
   Object.assign(NegativeOrZeroValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value <= comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.data, "compared_value":this.value, "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
   }});
   return {NegativeOrZeroValidator:NegativeOrZeroValidator};
 }());
@@ -9958,7 +9975,7 @@ Object.assign(abv, function() {
       return;
     }
   }, __messageParameters:function() {
-    return {"value":this.data};
+    return {"value":this.__moment(this.data).format(this.format)};
   }});
   return {DateValidator:DateValidator};
 }());
@@ -10007,7 +10024,7 @@ Object.assign(abv, function() {
       return;
     }
   }, __messageParameters:function() {
-    return {"value":this.data};
+    return {"value":this.__moment(this.data).format(this.format)};
   }});
   return {DateTimeValidator:DateTimeValidator};
 }());
@@ -11403,6 +11420,38 @@ Object.assign(abv, function() {
   return {BooleanValidator:BooleanValidator};
 }());
 abv.registry(abv.BooleanValidator);
+Object.assign(abv, function() {
+  var DateEqualsValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractComparisonValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["date-string","datetime"],"any":true}'}, lang, internal);
+    this.message = "The %%attribute%% must be a date equal to %%date%%.";
+    this.name = "DateEqualsValidator";
+  };
+  DateEqualsValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  DateEqualsValidator.prototype.constructor = DateEqualsValidator;
+  Object.defineProperty(DateEqualsValidator.prototype, "alias", {get:function() {
+    return ["date_equals", "date-equals"];
+  }});
+  Object.defineProperty(DateEqualsValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(DateEqualsValidator.prototype, {__compareValues:function(value, comparedValue) {
+    return value == comparedValue;
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":["datetime","date-string"],"any":true}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value", "date":this.__moment(this.data).format("LLL")};
+  }});
+  return {DateEqualsValidator:DateEqualsValidator};
+}());
+abv.registry(abv.DateEqualsValidator);
 abv.I18nHandler.add("af", [{"@id":"1", "source":"This value should be false.", "target":"Hierdie waarde moet vals wees."}, {"@id":"2", "source":"This value should be true.", "target":"Hierdie waarde moet waar wees."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Hierdie waarde moet van die soort {{type}} wees."}, {"@id":"4", "source":"This value should be blank.", "target":"Hierdie waarde moet leeg wees."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Die waarde wat jy gekies het is nie 'n geldige keuse nie."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Jy moet ten minste %%limit%% kies.|Jy moet ten minste %%limit%% keuses kies."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Jy moet by die meeste %%limit%% keuse kies.|Jy moet by die meeste %%limit%% keuses kies."}, {"@id":"8", "source":"One or more of the given values is invalid.", 
 "target":"Een of meer van die gegewe waardes is ongeldig."}, {"@id":"9", "source":"This field was not expected.", "target":"Die veld is nie verwag nie."}, {"@id":"10", "source":"This field is missing.", "target":"Hierdie veld ontbreek."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Hierdie waarde is nie 'n geldige datum nie."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Hierdie waarde is nie 'n geldige datum en tyd nie."}, {"@id":"13", "source":"This value is not a valid email address.", 

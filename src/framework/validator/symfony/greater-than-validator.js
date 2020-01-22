@@ -111,8 +111,8 @@ Object.assign(abv, function () {
          */
         __messageParameters: function () {
             return {
-                'value': this.data,
-                'compared_value': this.value,
+                'value': this.__formattedData(this.data),
+                'compared_value': this.__formattedData(this.value),
                 'compared_value_type': abv.getType(this.value)
             }
         }

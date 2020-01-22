@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: AllValidator</title>
+    <title>Class: DateEqualsValidator</title>
     
     
     
@@ -2856,7 +2856,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="abv.AllValidator.html">Class: AllValidator</h1>
+        <h1 class="page-title" data-filename="abv.DateEqualsValidator.html">Class: DateEqualsValidator</h1>
         
 
 
@@ -2865,10 +2865,10 @@
     
 <header>
     <div class="header content-size">
-        <h2><span class="ancestors"><a href="abv.html">abv</a>.</span>AllValidator
+        <h2><span class="ancestors"><a href="abv.html">abv</a>.</span>DateEqualsValidator
         </h2>
         
-            <div class="class-description">Validates that a value is valid according to list of validation rules.</div>
+            <div class="class-description"><p>The field under validation must be equal to the given date.</p></div>
         
     </div>
 </header>  
@@ -2882,12 +2882,12 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="AllValidator">
-            <a class="share-icon" href="#AllValidator"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="DateEqualsValidator">
+            <a class="share-icon" href="#DateEqualsValidator"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                new abv.AllValidator
+                new abv.DateEqualsValidator
             </span>
-            <span class="signature">(data, rules, options)</span>
+            <span class="signature">(data, options, optionRules, lang, internal)</span>
             
             
             
@@ -2957,29 +2957,6 @@
 	
         <tr>
             
-                <td class="name"><code>rules</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                Validation rules.</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
                 <td class="name"><code>options</code></td>
             
             
@@ -2996,7 +2973,76 @@
             
             <td class="description last">
                 
-                The setting options.</td>
+                The setting options</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>optionRules</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                The validation rules for setting options.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>lang</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                The language used by the application. Default: "<code>en</code>".</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>internal</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                If this parameter is true, it means, that validation called from core.</td>
         </tr>
 	
 	
@@ -3043,11 +3089,7 @@
         
 
     
-    <pre class="prettyprint"><code>var rules = 'required|email';
-var data = 'alexey.bob@gmail.com'
-var validator = new abv.AllValidator(data, rules, {
-     lang: 'en'
-});
+    <pre class="prettyprint"><code>var validator = new abv.DateEqualsValidator(data);
 if (false === validator.isValid()) {
      validator.errors().first();
 }</code></pre>
@@ -3079,206 +3121,11 @@ if (false === validator.isValid()) {
     
     
     
-        <h3 class="subsection-title">Members</h3>
-        
-        <dl class="list-members">
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="rules">
-            <a class="share-icon" href="#rules"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">rules</span>
-            <span class="type-signature type">String</span>
-            
-            
-            
-            
-        </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        Validation rules.
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        </dl>
-    
     
     
         <h3 class="subsection-title">Methods</h3>
         
         <dl class="list-methods">
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="add">
-            <a class="share-icon" href="#add"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">
-                add
-            </span>
-            <span class="signature">(name, options)</span>
-            
-            
-            
-            
-        </h4>
-    
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Add new validator
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                The validator name</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                The validation settings</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
             
 <dt>
     <div class="nameContainer">
