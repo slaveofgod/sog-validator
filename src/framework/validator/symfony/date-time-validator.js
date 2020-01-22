@@ -291,7 +291,11 @@ Object.assign(abv, function () {
 
     Object.defineProperty(DateTimeValidator.prototype, 'alias', {
         get: function () {
-            return 'date-time';
+            return [
+                'date-time',
+                'date_format',
+                'date-format'
+            ];
         }
     });
 

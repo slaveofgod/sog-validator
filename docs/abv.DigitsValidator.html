@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: BeforeOrEqualValidator</title>
+    <title>Class: DigitsValidator</title>
     
     
     
@@ -2896,7 +2896,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="abv.BeforeOrEqualValidator.html">Class: BeforeOrEqualValidator</h1>
+        <h1 class="page-title" data-filename="abv.DigitsValidator.html">Class: DigitsValidator</h1>
         
 
 
@@ -2905,12 +2905,10 @@
     
 <header>
     <div class="header content-size">
-        <h2><span class="ancestors"><a href="abv.html">abv</a>.</span>BeforeOrEqualValidator
+        <h2><span class="ancestors"><a href="abv.html">abv</a>.</span>DigitsValidator
         </h2>
         
-            <div class="class-description"><p>The field under validation must be a value preceding or equal to the given date.</p>
-<p>The dates will be passed into the Data object.</p>
-<p>In addition, like the after rule, the name of another field under validation may be supplied as the value of date.</p></div>
+            <div class="class-description"><p>The field under validation must be numeric and must have an exact length of value.</p></div>
         
     </div>
 </header>  
@@ -2924,10 +2922,10 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="BeforeOrEqualValidator">
-            <a class="share-icon" href="#BeforeOrEqualValidator"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="DigitsValidator">
+            <a class="share-icon" href="#DigitsValidator"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                new abv.BeforeOrEqualValidator
+                new abv.DigitsValidator
             </span>
             <span class="signature">(data, options, optionRules, lang, internal)</span>
             
@@ -3131,7 +3129,7 @@
         
 
     
-    <pre class="prettyprint"><code>var validator = new abv.BeforeOrEqualValidator(data, {"value": "the value to compare to"});
+    <pre class="prettyprint"><code>var validator = new abv.DigitsValidator(data, {"length": 10});
 if (false === validator.isValid()) {
      validator.errors().first();
 }</code></pre>
@@ -3169,9 +3167,9 @@ if (false === validator.isValid()) {
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="value">
-            <a class="share-icon" href="#value"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">value</span>
+        <h4 class="name" id="length">
+            <a class="share-icon" href="#length"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">length</span>
             <span class="type-signature type">*</span>
             
             
@@ -3185,7 +3183,7 @@ if (false === validator.isValid()) {
 <dd>
     
     <div class="description">
-        This option is required. It defines the value to compare to. It can be a date in string, number or date object formats.
+        This option is required. It defines the exact count of digits.
     </div>
     
     

@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision 47ff07f
+ * Bob Validator Library v2.0 revision 23a59a2
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"47ff07f", config:{}, common:{}, validators:{}, registry:function(validator) {
+var abv = {version:"2.0", revision:"23a59a2", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -9990,7 +9990,7 @@ Object.assign(abv, function() {
   DateTimeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
   DateTimeValidator.prototype.constructor = DateTimeValidator;
   Object.defineProperty(DateTimeValidator.prototype, "alias", {get:function() {
-    return "date-time";
+    return ["date-time", "date_format", "date-format"];
   }});
   Object.defineProperty(DateTimeValidator.prototype, "options", {get:function() {
     return [{"name":"format", "type":"string"}];
@@ -11452,6 +11452,54 @@ Object.assign(abv, function() {
   return {DateEqualsValidator:DateEqualsValidator};
 }());
 abv.registry(abv.DateEqualsValidator);
+Object.assign(abv, function() {
+  var DigitsValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', length:optionRules.length || 'required|type:{"type":"integer"}'}, lang, internal);
+    this.message = "The %%attribute%% must be %%digits%% digits.";
+    this.length = this.__options.length;
+    this.name = "DigitsValidator";
+  };
+  DigitsValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  DigitsValidator.prototype.constructor = DigitsValidator;
+  Object.defineProperty(DigitsValidator.prototype, "alias", {get:function() {
+    return ["digits"];
+  }});
+  Object.defineProperty(DigitsValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(DigitsValidator.prototype, {__validate:function() {
+    if (false === abv.isValid(this.data, 'type:{"type":"numeric"}')) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+    if (this.length !== this.data.length) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value", "digits":this.value};
+  }});
+  return {DigitsValidator:DigitsValidator};
+}());
+abv.registry(abv.DigitsValidator);
 abv.I18nHandler.add("af", [{"@id":"1", "source":"This value should be false.", "target":"Hierdie waarde moet vals wees."}, {"@id":"2", "source":"This value should be true.", "target":"Hierdie waarde moet waar wees."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Hierdie waarde moet van die soort {{type}} wees."}, {"@id":"4", "source":"This value should be blank.", "target":"Hierdie waarde moet leeg wees."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Die waarde wat jy gekies het is nie 'n geldige keuse nie."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Jy moet ten minste %%limit%% kies.|Jy moet ten minste %%limit%% keuses kies."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Jy moet by die meeste %%limit%% keuse kies.|Jy moet by die meeste %%limit%% keuses kies."}, {"@id":"8", "source":"One or more of the given values is invalid.", 
 "target":"Een of meer van die gegewe waardes is ongeldig."}, {"@id":"9", "source":"This field was not expected.", "target":"Die veld is nie verwag nie."}, {"@id":"10", "source":"This field is missing.", "target":"Hierdie veld ontbreek."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Hierdie waarde is nie 'n geldige datum nie."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Hierdie waarde is nie 'n geldige datum en tyd nie."}, {"@id":"13", "source":"This value is not a valid email address.", 
