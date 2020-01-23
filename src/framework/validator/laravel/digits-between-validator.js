@@ -3,10 +3,10 @@ Object.assign(abv, function () {
 
     /**
      * @constructor
-     * @name abv.DigitsValidator
+     * @name abv.DigitsBetweenValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * <p>The field under validation must be numeric and must have an exact length of value.</p>
+     * <p>The field under validation must be numeric and must have a length between the given min and max.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
@@ -14,7 +14,7 @@ Object.assign(abv, function () {
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
-     * var validator = new abv.DigitsValidator(data, {"length": 10});
+     * var validator = new abv.DigitsBetweenValidator(data, {"min": 5, "max": 10});
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -23,49 +23,63 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.DigitsValidator#length
-     * @type {*}
-     * @description This option is required. It defines the exact count of digits.
+     * @name abv.DigitsBetweenValidator#min
+     * @type {Integer}
+     * @description
+     * This option is required. It defines the min count of digits.
      */
 
-    var DigitsValidator = function (data, options, optionRules, lang, internal) {
+    /**
+     * @name abv.DigitsBetweenValidator#max
+     * @type {Integer}
+     * @description
+     * This option is required. It defines the max count of digits.
+     */
+
+    var DigitsBetweenValidator = function (data, options, optionRules, lang, internal) {
         abv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
-            length: optionRules.length || 'required|type:{"type":"integer"}'
+            max: optionRules.max || 'type:{"type":"integer"}',
+            min: optionRules.min || 'type:{"type":"integer"}'
         }, lang, internal);
 
-        this.message = 'The %%attribute%% must be %%digits%% digits.';
-        this.length = this.__options.length;
+        this.max = this.__options.max;
+        this.min = this.__options.min;
+        this.message = 'The %%attribute%% must be between %%min%% and %%max%% digits.';
 
-        this.name = 'DigitsValidator';
+        this.name = 'DigitsBetweenValidator';
     };
-    DigitsValidator.prototype = Object.create(abv.AbstractValidator.prototype);
-    DigitsValidator.prototype.constructor = DigitsValidator;
+    DigitsBetweenValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    DigitsBetweenValidator.prototype.constructor = DigitsBetweenValidator;
 
-    Object.defineProperty(DigitsValidator.prototype, 'alias', {
+    Object.defineProperty(DigitsBetweenValidator.prototype, 'alias', {
         get: function () {
             return [
-                'digits'
+                'digits_between',
+                'digits-between'
             ];
         }
     });
 
-    Object.defineProperty(DigitsValidator.prototype, 'options', {
+    Object.defineProperty(DigitsBetweenValidator.prototype, 'options', {
         get: function () {
             return [
                 {
-                    'name': 'length',
+                    'name': 'min',
+                    'type': 'integer'
+                }, {
+                    'name': 'max',
                     'type': 'integer'
                 }
             ];
         }
     });
 
-    Object.assign(DigitsValidator.prototype, {
+    Object.assign(DigitsBetweenValidator.prototype, {
         /**
          * @private
          * @function
-         * @name abv.DigitsValidator#__validate
+         * @name abv.DigitsBetweenValidator#__validate
          * @description Validate data
          */
         __validate: function () {
@@ -75,7 +89,12 @@ Object.assign(abv, function () {
                 return ;
             }
 
-            if (this.length !== this.data.length) {
+            if (this.min > this.data.length) {
+                this.__setErrorMessage(this.message, this.__messageParameters());
+                return ;
+            }
+
+            if (this.max < this.data.length) {
                 this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
@@ -88,6 +107,11 @@ Object.assign(abv, function () {
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
+            // Check "min" and "max" exist
+            if (!this.min || !this.max) {
+                throw new Error('Either option "min" and "max" must be given for constraint');
+            }
+
             // Check if empty
             if (true === this.__isEmptyData()) {
                 this.__skip = true;
@@ -115,21 +139,22 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.DigitsValidator#__messageParameters
+         * @name abv.DigitsBetweenValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
         __messageParameters: function () {
             return {
                 'attribute': 'value',
-                'digits': this.length
+                'min': this.min,
+                'max': this.max
             }
         }
     });
 
     return {
-        DigitsValidator: DigitsValidator
+        DigitsBetweenValidator: DigitsBetweenValidator
     };
 }());
 
-abv.registry(abv.DigitsValidator);
+abv.registry(abv.DigitsBetweenValidator);

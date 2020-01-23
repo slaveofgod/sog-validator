@@ -27,7 +27,7 @@ Object.assign(abv, function () {
      * @name abv.NotEqualToValidator#message
      * @type {String}
      * @description
-     * This is the message that will be shown if the value is not equal.</p>
+     * <p>This is the message that will be shown if the value is not equal.</p>
      * <p>Default: "<code>This value should not be equal to %%compared_value%%.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>

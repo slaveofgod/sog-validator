@@ -6,20 +6,20 @@ describe('email', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
-        test('a@a.com', () => {
-            expect(abv.isValidWithErrorMessage('a@a.com', 'email:{"mode":"loose"}')).toBe(toBe);
-        });
-
-        test('alexey.bob@gmail.com', () => {
-            expect(abv.isValidWithErrorMessage('alexey.bob@gmail.com', 'email:{"mode":"html5"}')).toBe(toBe);
-        });
-
         test('Empty string will not validate', () => {
             expect(abv.isValidWithErrorMessage('', 'email:{"mode":"html5"}')).toBe(toBe);
         });
 
         test('Null', () => {
             expect(abv.isValidWithErrorMessage(null, 'email')).toBe(toBe);
+        });
+
+        test('a@a.com', () => {
+            expect(abv.isValidWithErrorMessage('a@a.com', 'email:{"mode":"loose"}')).toBe(toBe);
+        });
+
+        test('alexey.bob@gmail.com', () => {
+            expect(abv.isValidWithErrorMessage('alexey.bob@gmail.com', 'email:{"mode":"html5"}')).toBe(toBe);
         });
     });
 

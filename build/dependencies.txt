@@ -109,6 +109,9 @@
 ../src/framework/validator/laravel/boolean-validator.js
 ../src/framework/validator/laravel/date-equals-validator.js
 ../src/framework/validator/laravel/digits-validator.js
+../src/framework/validator/laravel/digits-between-validator.js
+../src/framework/validator/laravel/distinct-validator.js
+../src/framework/validator/laravel/ends-with-validator.js
 ../src/i18n/resource/af.js
 ../src/i18n/resource/ar.js
 ../src/i18n/resource/az.js

@@ -172,6 +172,7 @@ Object.assign(abv, function () {
                 return ;
             }
 
+            // Convert data to string
             try {
                 if ('undefined' !== typeof this.data) {
                     this.data = this.data.toString();

@@ -25,7 +25,7 @@ Object.assign(abv, function () {
      * @name abv.RangeValidator#invalidMessage
      * @type {String}
      * @description
-     * The message that will be shown if the underlying value is not a number.</p>
+     * <p>The message that will be shown if the underlying value is not a number.</p>
      * <p>Default: "<code>This value should be a valid number.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
@@ -55,7 +55,7 @@ Object.assign(abv, function () {
      * @name abv.RangeValidator#maxMessage
      * @type {String}
      * @description
-     * The message that will be shown if the underlying value is more than the max option.</p>
+     * <p>The message that will be shown if the underlying value is more than the max option.</p>
      * <p>Default: "<code>This value should be %%limit%% or less.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
@@ -85,7 +85,7 @@ Object.assign(abv, function () {
      * @name abv.RangeValidator#minMessage
      * @type {String}
      * @description
-     * The message that will be shown if the underlying value is less than the min option.</p>
+     * <p>The message that will be shown if the underlying value is less than the min option.</p>
      * <p>Default: "<code>This value should be %%limit%% or more.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
@@ -108,7 +108,7 @@ Object.assign(abv, function () {
      * @name abv.RangeValidator#notInRangeMessage
      * @type {String}
      * @description
-     * The message that will be shown if the underlying value is less than the min option or greater than the max option.</p>
+     * <p>The message that will be shown if the underlying value is less than the min option or greater than the max option.</p>
      * <p>Default: "<code>This value should be between %%min%% and %%max%%.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>

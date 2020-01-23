@@ -66,8 +66,8 @@ Object.assign(abv, function () {
      * @name abv.RegexValidator#normalize
      * @type {Boolean}
      * @description
-     * Normalizer string before validate (trim, etc.).</p>
-     * Default: <code>false</code>
+     * <p>Normalizer string before validate (trim, etc.).</p>
+     * <p>Default: <code>false</code></p>
      */
 
     var RegexValidator = function (data, options, optionRules, lang, internal) {
@@ -153,6 +153,7 @@ Object.assign(abv, function () {
                 return ;
             }
 
+            // Convert data to string
             try {
                 if ('undefined' !== typeof this.data) {
                     this.data = this.data.toString();

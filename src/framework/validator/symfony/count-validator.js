@@ -95,7 +95,7 @@ Object.assign(abv, function () {
      * @name abv.CountValidator#minMessage
      * @type {String}
      * @description
-     * The message that will be shown if the underlying collection elements count is less than the min option.</p>
+     * <p>The message that will be shown if the underlying collection elements count is less than the min option.</p>
      * <p>Default: "<code>This collection should contain %%limit%% elements or more.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>

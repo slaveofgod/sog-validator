@@ -33,8 +33,8 @@ Object.assign(abv, function () {
      * @name abv.NotBlankValidator#normalize
      * @type {Boolean}
      * @description
-     * Normalizer string before validate (trim, etc.).</p>
-     * Default: <code>false</code>
+     * <p>Normalizer string before validate (trim, etc.).</p>
+     * <p>Default: <code>false</code></p>
      */
 
     /**

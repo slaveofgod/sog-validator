@@ -42,23 +42,23 @@ Object.assign(abv, function () {
      * @name abv.ChoiceValidator#choices
      * @type {Array}
      * @description
-     * A required option (unless callback is specified) - this is the array of options that should be considered in the valid set.</p>
-     * The input value will be matched against this array.
+     * <p>A required option (unless callback is specified) - this is the array of options that should be considered in the valid set.</p>
+     * <p>The input value will be matched against this array.</p>
      */
 
     /**
      * @name abv.ChoiceValidator#max
      * @type {Integer}
      * @description
-     * If the multiple option is true, then you can use the max option to force no more than XX number of values to be selected.</p>
-     * For example, if max is 3, but the input array contains 4 valid items, the validation will fail.
+     * <p>If the multiple option is true, then you can use the max option to force no more than XX number of values to be selected.</p>
+     * <p>For example, if max is 3, but the input array contains 4 valid items, the validation will fail.</p>
      */
 
     /**
      * @name abv.ChoiceValidator#maxMessage
      * @type {String}
      * @description
-     * This is the validation error message that's displayed when the user chooses too many options per the max option.</p>
+     * <p>This is the validation error message that's displayed when the user chooses too many options per the max option.</p>
      * <p>Default: "<code>You must select at most {{ limit }} choices.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
@@ -89,7 +89,7 @@ Object.assign(abv, function () {
      * @name abv.ChoiceValidator#message
      * @type {String}
      * @description
-     * This is the message that you will receive if the multiple option is set to false and the underlying value is not in the valid array of choices.</p>
+     * <p>This is the message that you will receive if the multiple option is set to false and the underlying value is not in the valid array of choices.</p>
      * <p>Default: "<code>The value you selected is not a valid choice.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
@@ -120,7 +120,7 @@ Object.assign(abv, function () {
      * @name abv.ChoiceValidator#minMessage
      * @type {String}
      * @description
-     * This is the validation error message that's displayed when the user chooses too few choices per the min option.</p>
+     * <p>This is the validation error message that's displayed when the user chooses too few choices per the min option.</p>
      * <p>Default: "<code>You must select at least {{ limit }} choices.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
@@ -161,7 +161,7 @@ Object.assign(abv, function () {
      * @name abv.ChoiceValidator#multipleMessage
      * @type {String}
      * @description
-     * This is the message that you will receive if the multiple option is set to true and one of the values on the underlying array being checked is not in the array of valid choices.</p>
+     * <p>This is the message that you will receive if the multiple option is set to true and one of the values on the underlying array being checked is not in the array of valid choices.</p>
      * <p>Default: "<code>One or more of the given values is invalid.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>

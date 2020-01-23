@@ -6,8 +6,8 @@ Object.assign(abv, function () {
      * @name abv.IdenticalToValidator
      * @extends abv.AbstractComparisonValidator
      * @classdesc
-     * Validates that a value is identical to another value, defined in the options.</p>
-     * This constraint compares using ===, so 3 and "3" are not considered equal.
+     * <p>Validates that a value is identical to another value, defined in the options.</p>
+     * <p>This constraint compares using ===, so 3 and "3" are not considered equal.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
@@ -27,7 +27,7 @@ Object.assign(abv, function () {
      * @name abv.IdenticalToValidator#message
      * @type {String}
      * @description
-     * This is the message that will be shown if the value is not identical.</p>
+     * <p>This is the message that will be shown if the value is not identical.</p>
      * <p>Default: "<code>This value should be identical to %%compared_value_type%% %%compared_value%%.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>

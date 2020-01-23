@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Index</title>
+    <title>Class: EndsWithValidator</title>
     
     
     
@@ -3014,27 +3014,549 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="index.html">Index</h1>
+        <h1 class="page-title" data-filename="abv.EndsWithValidator.html">Class: EndsWithValidator</h1>
         
 
 
+
+<section>
+    
+<header>
+    <div class="header content-size">
+        <h2><span class="ancestors"><a href="abv.html">abv</a>.</span>EndsWithValidator
+        </h2>
+        
+            <div class="class-description"><p>The field under validation must end with one of the given values.</p></div>
+        
+    </div>
+</header>  
+
+<article class="content-size">
+    
+        <div class="container-overview">
+        
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="EndsWithValidator">
+            <a class="share-icon" href="#EndsWithValidator"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                new abv.EndsWithValidator
+            </span>
+            <span class="signature">(data, options, optionRules, lang, internal)</span>
+            
+            
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Create a new Validator.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                The data which needs to be validated.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                The setting options</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>optionRules</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                The validation rules for setting options.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>lang</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                The language used by the application. Default: "<code>en</code>".</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>internal</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                If this parameter is true, it means, that validation called from core.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+
+    
+    <pre class="prettyprint"><code>var validator = new abv.EndsWithValidator(data, {ends: ['abc','def']});
+if (false === validator.isValid()) {
+     validator.errors().first();
+}</code></pre>
+    
+
+    
+</dd>
+
+        
+        </div>
+    
+    
+    
+        <h3 class="subsection-title">Extends</h3>
+        
+        <ul>
+            <li><a href="abv.AbstractValidator.html">abv.AbstractValidator</a></li>
+        </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Members</h3>
+        
+        <dl class="list-members">
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="ends">
+            <a class="share-icon" href="#ends"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">ends</span>
+            <span class="type-signature type">String | Array</span>
+            
+            
+            
+            
+        </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>The option is required. The list of ends. One of the "end" needs to be the end of the passed value.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        </dl>
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl class="list-methods">
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="errors">
+            <a class="share-icon" href="#errors"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                errors
+            </span>
+            <span class="signature">()</span><span class="type-signature">abv.Error</span>
+            
+            
+            
+                <span class="access-signature inherited"><a href="abv.AbstractValidator.html#errors">inherited</a></span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Return error errors
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
     
 
 
-    <h3> </h3>
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        abv.Error
+                        
+                    
+            </td>
+            <td class="description last">Error messages</td>
+        </tr>
+    
+    </tbody>
+</table>
 
+    
+    
+    
+</dd>
 
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="isValid">
+            <a class="share-icon" href="#isValid"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                isValid
+            </span>
+            <span class="signature">()</span><span class="type-signature">Boolean</span>
+            
+            
+            
+                <span class="access-signature inherited"><a href="abv.AbstractValidator.html#isValid">inherited</a></span>
+            
+            
+                <span class="access-signature overrides"><a href="abv.AbstractValidator.html#isValid">overrides</a></span>
+            
+        </h4>
+    
+        
+    </div>
 
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Check if data valid
+    </div>
+    
 
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
 
-
-
+    
+    
 
     
 
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
 
 
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Boolean
+                        
+                    
+            </td>
+            <td class="description last">Validation status</td>
+        </tr>
+    
+    </tbody>
+</table>
 
+    
+    
+    
+</dd>
+
+        </dl>
+    
+    
+    
+    
+    
+
+    
+</article>
+
+</section>  
 
 
 

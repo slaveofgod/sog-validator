@@ -25,25 +25,25 @@ Object.assign(abv, function () {
      * @name abv.LengthValidator#allowEmptyString
      * @type {Boolean}
      * @description
-     * If set to true, empty strings are considered valid.</p>
-     * The default false value considers empty strings not valid.</p>
-     * Default: <code>false</code>.
+     * <p>If set to true, empty strings are considered valid.</p>
+     * <p>The default false value considers empty strings not valid.</p>
+     * <p>Default: <code>false</code>.</p>
      */
 
     // /**
     //  * @name abv.LengthValidator#charset
     //  * @type {String}
     //  * @description
-    //  * The charset to be used when computing value's length.</p>
-    //  * <p>Default: "<code>UTF-8</code>".
+    //  * <p>The charset to be used when computing value's length.</p>
+    //  * <p>Default: "<code>UTF-8</code>".</p>
     //  */
     //
     // /**
     //  * @name abv.LengthValidator#charsetMessage
     //  * @type {String}
     //  * @description
-    //  * The message that will be shown if the value is not using the given charset.
-    //  * <p>Default: "This value does not match the expected %%charset%% charset.".
+    //  * <p>The message that will be shown if the value is not using the given charset.</p>
+    //  * <p>Default: "This value does not match the expected %%charset%% charset.".</p>
     //  * <p>You can use the following parameters in this message:</p>
     //  * <table>
     //  *     <tr>
@@ -65,7 +65,7 @@ Object.assign(abv, function () {
      * @name abv.LengthValidator#exactMessage
      * @type {String}
      * @description
-     * The message that will be shown if min and max values are equal and the underlying value's length is not exactly this value.</p>
+     * <p>The message that will be shown if min and max values are equal and the underlying value's length is not exactly this value.</p>
      * <p>Default: "<code>This value should have exactly %%limit%% characters.</code>".</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
@@ -95,7 +95,7 @@ Object.assign(abv, function () {
      * @name abv.LengthValidator#maxMessage
      * @type {String}
      * @description
-     * The message that will be shown if the underlying value's length is more than the max option.</p>
+     * <p>The message that will be shown if the underlying value's length is more than the max option.</p>
      * <p>Default: "This value is too long. It should have %%limit%% characters or less.".
      * <p>You can use the following parameters in this message:</p>
      * <table>
@@ -127,7 +127,7 @@ Object.assign(abv, function () {
      * @name abv.LengthValidator#minMessage
      * @type {String}
      * @description
-     * The message that will be shown if the underlying value's length is less than the min option.</p>
+     * <p>The message that will be shown if the underlying value's length is less than the min option.</p>
      * <p>Default: "<code>This value is too short. It should have %%limit%% characters or more.</code>".</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
@@ -266,6 +266,7 @@ Object.assign(abv, function () {
                 return ;
             }
 
+            // Convert data to string
             try {
                 if ('undefined' !== typeof this.data) {
                     this.data = this.data.toString();
