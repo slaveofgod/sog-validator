@@ -97,7 +97,7 @@ describe('not-identical-to', () => {
                 "not-identical-to": {
                     "value": new Object()
                 }
-            })).toBe("This value should not be identical to Object [object Object].");
+            })).toBe("This value should not be identical to Object {}.");
         });
 
         test('{} !== new Object()', () => {
@@ -105,7 +105,7 @@ describe('not-identical-to', () => {
                 "not-identical-to": {
                     "value": new Object()
                 }
-            })).toBe("This value should not be identical to Object [object Object].");
+            })).toBe("This value should not be identical to Object {}.");
         });
 
         test('{"name": "Alex", "email": "alex@fmail.com"} !== new Object("name": "Alex", "email": "alex@fmail.com")', () => {
@@ -113,7 +113,7 @@ describe('not-identical-to', () => {
                 "not-identical-to": {
                     "value": new Object({"name": "Alex", "email": "alex@fmail.com"})
                 }
-            })).toBe("This value should not be identical to Object [object Object].");
+            })).toBe('This value should not be identical to Object {\"name\":\"Alex\",\"email\":\"alex@fmail.com\"}.');
         });
 
         test('[1,2,3,4,5] !== new Array(1,2,3,4,5)', () => {
@@ -121,7 +121,7 @@ describe('not-identical-to', () => {
                 "not-identical-to": {
                     "value": new Array(1,2,3,4,5)
                 }
-            })).toBe("This value should not be identical to Array 1,2,3,4,5.");
+            })).toBe("This value should not be identical to Array [1,2,3,4,5].");
         });
 
         test('new abv.Application({"lang": "en"}) !== new abv.Application({"lang": "en"})', () => {
@@ -129,7 +129,7 @@ describe('not-identical-to', () => {
                 "not-identical-to": {
                     "value": new abv.Application({"lang": "en"})
                 }
-            })).toBe("This value should not be identical to Application [object Object].");
+            })).toBe('This value should not be identical to Application {\"lang\":\"en\",\"internal\":false,\"name\":\"Application\"}.');
         });
     });
 });

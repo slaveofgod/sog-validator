@@ -9,7 +9,8 @@ Object.assign(abv, function () {
      * <p>Validates that a value is a valid {@link https://en.wikipedia.org/wiki/Universally_unique_identifier|Universally unique identifier (UUID)} per {@link https://tools.ietf.org/html/rfc4122|RFC 4122}.</p>
      * <p>By default, this will validate the format according to the RFC's guidelines, but this can be relaxed to accept non-standard <code>UUIDs</code> that other systems (like PostgreSQL) accept.</p>
      * <p><code>UUID</code> versions can also be restricted using a whitelist.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -28,8 +29,8 @@ Object.assign(abv, function () {
      * @name abv.UuidValidator#message
      * @type {String}
      * @description
-     * This message is shown if the string is not a valid UUID.
-     * <p>Default: "This is not a valid UUID."
+     * <p>This message is shown if the string is not a valid <code>UUID</code>.</p>
+     * <p>Default: "<code>This is not a valid UUID.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -50,16 +51,18 @@ Object.assign(abv, function () {
     /**
      * @name abv.UuidValidator#normalize
      * @type {Boolean}
-     * @description Normalizer string before validate (trim, etc.). Default: false.
+     * @description
+     * <p>Normalizer string before validate (trim, etc.).</p>
+     * <p>Default: <code>false</code>.</p>
      */
 
     /**
      * @name abv.UuidValidator#strict
      * @type {Boolean}
      * @description
-     * If this option is set to true the constraint will check if the UUID is formatted per the RFC's input format rules: 216fff40-98d9-11e3-a5e2-0800200c9a66.
-     * Default: true.
-     * Setting this to false will allow alternate input formats like:
+     * <p>If this option is set to true the constraint will check if the <code>UUID</code> is formatted per the RFC's input format rules: <code>216fff40-98d9-11e3-a5e2-0800200c9a66</code>.</p>
+     * <p>Default: <code>true</code>.</p>
+     * <p>Setting this to false will allow alternate input formats like:</p>
      * </p>
      * <ul>
      *     <li><b>216f-ff40-98d9-11e3-a5e2-0800-200c-9a66</b></li>
@@ -72,11 +75,10 @@ Object.assign(abv, function () {
      * @name abv.UuidValidator#versions
      * @type {Array}
      * @description
-     * This option can be used to only allow specific {@link https://en.wikipedia.org/wiki/Universally_unique_identifier#Variants_and_versions|UUID versions}.
-     * Valid versions are 1 - 5.
-     * Default: [1,2,3,4,5].
-     * The following PHP constants can also be used:
-     * </p>
+     * <p>This option can be used to only allow specific {@link https://en.wikipedia.org/wiki/Universally_unique_identifier#Variants_and_versions|UUID versions}.</p>
+     * <p>Valid versions are <code>1</code> - <code>5</code>.</p>
+     * <p>Default: <code>[1,2,3,4,5]</code>.</p>
+     * <p>The following PHP constants can also be used:</p>
      * <ul>
      *     <li><b>1</b> - Date-Time and MAC address</li>
      *     <li><b>2</b> - Date-Time and MAC address, DCE security version</li>
@@ -103,8 +105,8 @@ Object.assign(abv, function () {
         /**
          * @private
          * @description
-         * Array of allowed versions (see version constants above).
-         * All UUID versions are allowed by default
+         * <p>Array of allowed versions (see version constants above).</p>
+         * <p>All <code>UUID</code> versions are allowed by default.</p>
          * @type {Array}
          */
         this.__versions = [
@@ -170,7 +172,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.UuidValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data</p>
          */
         __validate: function () {
             // Normalize
@@ -194,7 +197,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.UuidValidator#__validateLoose
-         * @description Validate loose
+         * @description
+         * <p>Validate loose.</p>
          */
         __validateLoose: function () {
             // Error priority:
@@ -246,7 +250,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.UuidValidator#__validateStrict
-         * @description Validate strict
+         * @description
+         * <p>Validate strict.</p>
          */
         __validateStrict: function () {
             // Error priority:
@@ -313,7 +318,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.UuidValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             // Check if empty
@@ -344,7 +350,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.UuidValidator#__checkVersions
-         * @description Verification of transmitted versions
+         * @description
+         * <p>Verification of transmitted versions.</p>
          * @returns {Boolean}
          */
         __checkVersions: function () {
@@ -372,7 +379,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.UuidValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
          */
         __messageParameters: function () {

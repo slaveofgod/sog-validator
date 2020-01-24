@@ -8,7 +8,8 @@ Object.assign(abv, function () {
      * @classdesc
      * <p>Validates that a value is of a specific <code>data</code> type.</p>
      * <p>For example, if a variable should be an array, you can use this constraint with the <code>array</code> type option to validate this.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.

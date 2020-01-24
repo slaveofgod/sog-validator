@@ -8,7 +8,8 @@ Object.assign(abv, function () {
      * @classdesc
      * <p>Validates that a value is a positive number.</p>
      * <p>Zero is neither positive nor negative, so you must use <code>abv.PositiveOrZero</code> if you want to allow zero as value.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -84,7 +85,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.PositiveValidator#__compareValues
-         * @description Compare two value
+         * @description
+         * <p>Compare two value.</p>
          * @param {*} value Value
          * @param {*} comparedValue Compared value
          * @returns {Boolean}
@@ -97,7 +99,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.PositiveValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
          */
         __messageParameters: function () {

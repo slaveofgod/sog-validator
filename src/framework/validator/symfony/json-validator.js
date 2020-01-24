@@ -7,7 +7,8 @@ Object.assign(abv, function () {
      * @extends abv.AbstractValidator
      * @classdesc
      * <p>Validates that a value has valid <code>JSON</code> syntax.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -59,7 +60,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.JsonValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             try {
@@ -74,7 +76,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.JsonValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             // Check if empty
@@ -105,7 +108,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.JsonValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
          */
         __messageParameters: function () {

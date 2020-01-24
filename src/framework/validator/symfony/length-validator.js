@@ -7,7 +7,8 @@ Object.assign(abv, function () {
      * @extends abv.AbstractValidator
      * @classdesc
      * <p>Validates that a given string length is between some <code>minimum</code> and <code>maximum</code> value.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -44,7 +45,7 @@ Object.assign(abv, function () {
     //  * @type {String}
     //  * @description
     //  * <p>The message that will be shown if the value is not using the given charset.</p>
-    //  * <p>Default: "This value does not match the expected %%charset%% charset.".</p>
+    //  * <p>Default: "<code>This value does not match the expected %%charset%% charset.</code>".</p>
     //  * <p>You can use the following parameters in this message:</p>
     //  * <table>
     //  *     <tr>
@@ -97,7 +98,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * <p>The message that will be shown if the underlying value's length is more than the max option.</p>
-     * <p>Default: "This value is too long. It should have %%limit%% characters or less.".
+     * <p>Default: "<code>This value is too long. It should have %%limit%% characters or less.</code>".
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <tr>
@@ -150,7 +151,9 @@ Object.assign(abv, function () {
     /**
      * @name abv.LengthValidator#normalize
      * @type {Boolean}
-     * @description Normalizer string before validate (trim, etc.). Default: false
+     * @description
+     * <p>Normalizer string before validate (trim, etc.).</p>
+     * <p>Default: <code>false</code></p>
      */
 
     var LengthValidator = function (data, options, optionRules, lang, internal) {

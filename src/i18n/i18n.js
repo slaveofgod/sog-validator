@@ -3,22 +3,12 @@ Object.assign(abv, (function () {
     /**
      * @constructor
      * @name abv.I18n
-     * @classdesc Handles translation. Responsible for the translation. Can also handle plural forms.
-     * @property {String} lang The current language. This parameter is required.
+     * @classdesc
+     * <p>Handles translation. Responsible for the translation. Can also handle plural forms.</p>
+     * @param {String} lang The current language. This parameter is required.
      * @example
-     * var translator = new abv.I18n(language);
+     * var translator = new abv.I18n(lang);
      * var translatedMessage = translator.getText(message, parameters);
-     */
-
-    // PROPERTIES
-
-    /**
-     * @name abv.Application#lang
-     * @type {String}
-     * @description The language used for translation. Defaults to 'en' ({@link https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes|List of ISO 639-1 codes}).
-     * @example
-     * // Set the language for the application
-     * this.app.lang = 'en';
      */
 
     var I18n = function (lang) {

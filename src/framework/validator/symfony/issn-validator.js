@@ -7,7 +7,8 @@ Object.assign(abv, function () {
      * @extends abv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is a valid {@link https://en.wikipedia.org/wiki/Issn|International Standard Serial Number (ISSN)}.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -35,7 +36,7 @@ Object.assign(abv, function () {
      * @name abv.IssnValidator#message
      * @type {String}
      * @description
-     * The message shown if the given value is not a valid ISSN.</p>
+     * <p>The message shown if the given value is not a valid ISSN.</p>
      * <p>Default: "<code>This value is not a valid ISSN.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>

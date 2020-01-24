@@ -3,14 +3,16 @@ abv.I18nResource = [];
 /**
  * @namespace
  * @name abv.I18nHandler
- * @description I18n handler
+ * @description
+ * <p>I18n handler</p>
  */
 abv.I18nHandler = {
 
     /**
      * @function
      * @name abv.I18nHandler#add
-     * @description Add new message or messages to global collection for specific language.
+     * @description
+     * <p>Add new message or messages to global collection for specific language.</p>
      * @param {String} lang The current language
      * @param {Array} messages Message or messages
      * @example
@@ -57,7 +59,8 @@ abv.I18nHandler = {
     /**
      * @function
      * @name abv.I18nHandler#get
-     * @description Get translated message for specific language by origin message.
+     * @description
+     * <p>Get translated message for specific language by origin message.</p>
      * @param {String} lang The current language
      * @param {String} sourceMessage The source message
      * @returns {String|Null} The translated message
@@ -80,7 +83,8 @@ abv.I18nHandler = {
     /**
      * @function
      * @name abv.I18nHandler#prepare
-     * @description Prepare message
+     * @description
+     * <p>Prepare message.</p>
      * @param {String} message Message text
      * @param {Object} parameters Message parameters
      * @returns {String} Processed message

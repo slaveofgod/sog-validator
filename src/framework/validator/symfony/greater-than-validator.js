@@ -7,7 +7,8 @@ Object.assign(abv, function () {
      * @extends abv.AbstractComparisonValidator
      * @classdesc
      * <p>Validates that a value is <code>greater</code> than another value, defined in the options.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -56,7 +57,10 @@ Object.assign(abv, function () {
     /**
      * @name abv.GreaterThanValidator#value
      * @type {*}
-     * @description This option is required. It defines the value to compare to. It can be a string, number or date object.
+     * @description
+     * <p>This option is required.</p>
+     * <p>It defines the value to compare to.</p>
+     * <p>It can be a <code>string</code>, <code>number</code> or <code>date object</code>.</p>
      */
 
     var GreaterThanValidator = function (data, options, optionRules, lang, internal) {
@@ -94,7 +98,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.GreaterThanValidator#__compareValues
-         * @description Compare two value
+         * @description
+         * <p>Compare two value.</p>
          * @param {*} value Value
          * @param {*} comparedValue Compared value
          * @returns {Boolean}
@@ -107,7 +112,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.GreaterThanValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
          */
         __messageParameters: function () {

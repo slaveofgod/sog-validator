@@ -8,7 +8,8 @@ Object.assign(abv, function () {
      * @classdesc
      * <p>This constraint is used to ensure that a bank account number has the proper format of an {@link https://en.wikipedia.org/wiki/International_Bank_Account_Number|International Bank Account Number (IBAN)}.</p>
      * <p>IBAN is an internationally agreed means of identifying bank accounts across national borders with a reduced risk of propagating transcription errors.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -27,7 +28,7 @@ Object.assign(abv, function () {
      * @name abv.IbanValidator#message
      * @type {String}
      * @description
-     * The default message supplied when the value does not pass the IBAN check.</p>
+     * <p>The default message supplied when the value does not pass the <code>IBAN</code> check.</p>
      * <p>Default: "<code>This is not a valid International Bank Account Number (IBAN).</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
@@ -176,7 +177,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.IbanValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             // Remove spaces and convert to uppercase
@@ -230,7 +232,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.IbanValidator#__toBigInt
-         * @description To big int
+         * @description
+         * <p>To big int.</p>
          * @param {String} string
          * @returns {Number}
          */
@@ -255,7 +258,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.IbanValidator#__bigModulo97
-         * @description Big modulo 97
+         * @description
+         * <p>Big modulo 97.</p>
          * @param {String} bigInt
          * @returns {Number}
          */
@@ -274,7 +278,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.IbanValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             // Check if empty
@@ -305,7 +310,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.IbanValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
          */
         __messageParameters: function () {

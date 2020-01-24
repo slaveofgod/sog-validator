@@ -7,7 +7,8 @@ Object.assign(abv, function () {
      * @extends abv.AbstractValidator
      * @classdesc
      * <p>The field under validation must be a value after a given date.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -25,7 +26,10 @@ Object.assign(abv, function () {
     /**
      * @name abv.AfterValidator#value
      * @type {*}
-     * @description This option is required. It defines the value to compare to. It can be a date in string, number or date object formats.
+     * @description
+     * <p>This option is required.</p>
+     * <p>It defines the value to compare to.</p>
+     * <p>It can be a data in <code>string</code>, <code>number</code> or <code>date object</code> formats.</p>
      */
 
     var AfterValidator = function (data, options, optionRules, lang, internal) {
@@ -63,7 +67,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.AfterValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
          */
         __messageParameters: function () {

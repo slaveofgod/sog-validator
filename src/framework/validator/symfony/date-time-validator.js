@@ -7,7 +7,8 @@ Object.assign(abv, function () {
      * @extends abv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is a valid "<code>datetime</code>", meaning a string (or an object that can be cast into a string) that follows a specific format.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -26,8 +27,8 @@ Object.assign(abv, function () {
      * @name abv.DateTimeValidator#message
      * @type {String}
      * @description
-     * This message is shown if the underlying data is not a valid datetime.
-     * <p>Default: "This value is not a valid datetime."
+     * <p>This message is shown if the underlying data is not a valid datetime.</p>
+     * <p>Default: "This value is not a valid datetime."</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -49,11 +50,10 @@ Object.assign(abv, function () {
      * @name abv.DateTimeValidator#format
      * @type {String}
      * @description
-     * This option allows to validate a custom date format. See DateTime::createFromFormat() for formatting options.
-     * <p>Default: "YYYY-MM-DD HH:mm:ss"
-     * @description
-     * <h2>Year, month, and day tokens</h2>
-     * <i>Tokens are case-sensitive.</i>
+     * <p>This option allows to validate a custom date format. See DateTime::createFromFormat() for formatting options.</p>
+     * <p>Default: "YYYY-MM-DD HH:mm:ss"</p>
+     * <p><h2>Year, month, and day tokens</h2></p>
+     * <p><i>Tokens are case-sensitive.</i></p>
      * <table>
      *     <thead>
      *         <tr>
@@ -120,8 +120,8 @@ Object.assign(abv, function () {
      *         </tr>
      *     </tbody>
      * </table>
-     * <h2>Week year, week, and weekday tokens</h2>
-     * <i>Tokens are case-sensitive.</i>
+     * <p><h2>Week year, week, and weekday tokens</h2></p>
+     * <p><i>Tokens are case-sensitive.</i></p>
      * <table>
      *     <thead>
      *         <tr>
@@ -178,8 +178,8 @@ Object.assign(abv, function () {
      *         </tr>
      *     </tbody>
      * </table>
-     * <h2>Locale aware formats</h2>
-     * <i>Tokens are case-sensitive.</i>
+     * <p><h2>Locale aware formats</h2></p>
+     * <p><i>Tokens are case-sensitive.</i></p>
      * <table>
      *     <thead>
      *         <tr>
@@ -221,8 +221,8 @@ Object.assign(abv, function () {
      *         </tr>
      *     </tbody>
      * </table>
-     * <h2>Hour, minute, second, millisecond, and offset tokens</h2>
-     * <i>Tokens are case-sensitive.</i>
+     * <p><h2>Hour, minute, second, millisecond, and offset tokens</h2></p>
+     * <p><i>Tokens are case-sensitive.</i></p>
      * <table>
      *     <thead>
      *         <tr>
@@ -316,7 +316,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.DateTimeValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             // Check if value is date
@@ -336,7 +337,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.DateTimeValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             // Check if empty
@@ -367,7 +369,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.DateTimeValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
          */
         __messageParameters: function () {

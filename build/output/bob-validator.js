@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision 9d9fc14
+ * Bob Validator Library v2.0 revision 5ab6693
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"9d9fc14", config:{}, common:{}, validators:{}, registry:function(validator) {
+var abv = {version:"2.0", revision:"5ab6693", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -180,6 +180,51 @@ if (typeof exports !== "undefined") {
     }
   }, __isEmptyData:function() {
     return "undefined" === typeof this.data || null === this.data || "" === this.data;
+  }, __formattedData:function(data) {
+    if (true === abv.isType("numeric", data)) {
+      return data;
+    }
+    if (true === abv.isType("bool", data)) {
+      return data;
+    }
+    if (true === abv.isType("array", data)) {
+      return JSON.stringify(data);
+    }
+    if (true === abv.isType("object", data) && "Date" !== abv.getType(data)) {
+      return JSON.stringify(data);
+    }
+    if (true === this.__moment(data).isValid()) {
+      return this.__moment(data).format("LLL");
+    }
+    return data;
+  }, __convertDataToValueType:function() {
+    if (abv.getType(this.data) === abv.getType(this.value)) {
+      return this.data;
+    }
+    switch(abv.getType(this.value)) {
+      case "Date":
+        return new Date(this.data);
+        break;
+    }
+    return this.data;
+  }, __prepareDataForComparing:function(data) {
+    switch(abv.getType(data)) {
+      case "Date":
+        return data.getTime();
+        break;
+      case "Object":
+      case "Array":
+        return JSON.stringify(data);
+        break;
+    }
+    if ("object" === typeof data) {
+      try {
+        return JSON.stringify(data);
+      } catch (e) {
+        return data;
+      }
+    }
+    return data;
   }});
   return {AbstractValidator:AbstractValidator};
 }());
@@ -204,48 +249,6 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-  }, __prepareDataForComparing:function(data) {
-    switch(abv.getType(data)) {
-      case "Date":
-        return data.getTime();
-        break;
-      case "Object":
-      case "Array":
-        return JSON.stringify(data);
-        break;
-    }
-    if ("object" === typeof data) {
-      try {
-        return JSON.stringify(data);
-      } catch (e) {
-        return data;
-      }
-    }
-    return data;
-  }, __formattedData:function(data) {
-    if (true === abv.isType("numeric", data)) {
-      return data;
-    }
-    if (true === abv.isType("bool", data)) {
-      return data;
-    }
-    if (true === abv.isType("array", data)) {
-      return data;
-    }
-    if (true === this.__moment(data, "LLL").isValid()) {
-      return this.__moment(data).format("LLL");
-    }
-    return data;
-  }, __convertDataToValueType:function() {
-    if (abv.getType(this.data) === abv.getType(this.value)) {
-      return this.data;
-    }
-    switch(abv.getType(this.value)) {
-      case "Date":
-        return new Date(this.data);
-        break;
-    }
-    return this.data;
   }});
   return {AbstractComparisonValidator:AbstractComparisonValidator};
 }());
@@ -8567,6 +8570,9 @@ abv.is_binary = function(vr) {
 abv.is_bool = function(mixedVar) {
   return mixedVar === true || mixedVar === false;
 };
+abv.is_boolean = function(mixedVar) {
+  return abv.is_bool(mixedVar);
+};
 abv.is_buffer = function(vr) {
   return typeof vr === "string";
 };
@@ -11622,6 +11628,72 @@ Object.assign(abv, function() {
   return {EndsWithValidator:EndsWithValidator};
 }());
 abv.registry(abv.EndsWithValidator);
+Object.assign(abv, function() {
+  var FilledValidator = function(data, options, optionRules, lang, internal) {
+    abv.NotBlankValidator.call(this, data, {message:"The %%attribute%% field must have a value."}, optionRules, lang, internal);
+    this.name = "FilledValidator";
+  };
+  FilledValidator.prototype = Object.create(abv.NotBlankValidator.prototype);
+  FilledValidator.prototype.constructor = FilledValidator;
+  Object.defineProperty(FilledValidator.prototype, "alias", {get:function() {
+    return "filled";
+  }});
+  Object.defineProperty(FilledValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(FilledValidator.prototype, {__messageParameters:function() {
+    return {"attribute":"current"};
+  }});
+  return {FilledValidator:FilledValidator};
+}());
+abv.registry(abv.FilledValidator);
+Object.assign(abv, function() {
+  var GtValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["numeric","datetime","date-string","boolean"],"any":true}'}, lang, internal);
+    this.value = this.__options.value;
+    this.dateMessage = "The %%attribute%% must be greater than %%value%% date.";
+    this.numericMessage = "The %%attribute%% must be greater than %%value%%.";
+    this.stringMessage = "The %%attribute%% must be greater than %%value%% characters.";
+    this.arrayMessage = "The %%attribute%% must have more than %%value%% items.";
+    this.name = "GtValidator";
+  };
+  GtValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  GtValidator.prototype.constructor = GtValidator;
+  Object.defineProperty(GtValidator.prototype, "alias", {get:function() {
+    return "gt";
+  }});
+  Object.defineProperty(GtValidator.prototype, "options", {get:function() {
+    return [{"name":"value", "type":"boolean|string|numeric|array|datetime"}];
+  }});
+  Object.assign(GtValidator.prototype, {__validate:function() {
+    this.__data = this.__prepareDataForComparing(this.__convertDataToValueType());
+    this.__value = this.__prepareDataForComparing(this.value);
+    if (true === abv.isType("integer", this.value) && (true === abv.isType("array", this.data) || true === abv.isType("string", this.data))) {
+      if (this.data.length <= this.value) {
+        this.__setErrorMessage(true === abv.isType("string", this.data) ? this.stringMessage : this.arrayMessage, this.__messageParameters());
+        return;
+      }
+    } else {
+      if (false === abv.isValid(this.data, {"greater-than":{"value":this.value}}, true)) {
+        var __message = this.dateMessage;
+        if (true === abv.isType("numeric", this.value) || true === abv.isType("boolean", this.value)) {
+          __message = this.numericMessage;
+        }
+        this.__setErrorMessage(__message, this.__messageParameters());
+        return;
+      }
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value", "value":this.__formattedData(this.value)};
+  }});
+  return {GtValidator:GtValidator};
+}());
+abv.registry(abv.GtValidator);
 abv.I18nHandler.add("af", [{"@id":"1", "source":"This value should be false.", "target":"Hierdie waarde moet vals wees."}, {"@id":"2", "source":"This value should be true.", "target":"Hierdie waarde moet waar wees."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Hierdie waarde moet van die soort {{type}} wees."}, {"@id":"4", "source":"This value should be blank.", "target":"Hierdie waarde moet leeg wees."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Die waarde wat jy gekies het is nie 'n geldige keuse nie."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Jy moet ten minste %%limit%% kies.|Jy moet ten minste %%limit%% keuses kies."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Jy moet by die meeste %%limit%% keuse kies.|Jy moet by die meeste %%limit%% keuses kies."}, {"@id":"8", "source":"One or more of the given values is invalid.", 
 "target":"Een of meer van die gegewe waardes is ongeldig."}, {"@id":"9", "source":"This field was not expected.", "target":"Die veld is nie verwag nie."}, {"@id":"10", "source":"This field is missing.", "target":"Hierdie veld ontbreek."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Hierdie waarde is nie 'n geldige datum nie."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Hierdie waarde is nie 'n geldige datum en tyd nie."}, {"@id":"13", "source":"This value is not a valid email address.", 

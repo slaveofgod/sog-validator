@@ -7,7 +7,8 @@ Object.assign(abv, function () {
      * @extends abv.AbstractValidator
      * @classdesc
      * <p>Validates that a given collection's (i.e. an array or an object that implements Countable) element <code>count</code> is <code>between</code> some <code>minimum</code> and <code>maximum</code> value.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -164,7 +165,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.IsTrueValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             var count = this.data.length;
@@ -188,7 +190,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.IpValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             // Check if empty
@@ -213,7 +216,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.IsTrueValidator#__minMessageParameters
-         * @description Returned parameters for error message which needs to be replaced
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
          */
         __minMessageParameters: function () {
@@ -227,7 +231,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.IsTrueValidator#__maxMessageParameters
-         * @description Returned parameters for error message which needs to be replaced
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
          */
         __maxMessageParameters: function () {
@@ -241,7 +246,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.IsTrueValidator#__exactMessageParameters
-         * @description Returned parameters for error message which needs to be replaced
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
          */
         __exactMessageParameters: function () {
@@ -255,7 +261,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.IsTrueValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
          */
         __messageParameters: function () {

@@ -8,7 +8,8 @@ Object.assign(abv, function () {
      * @classdesc
      * <p>Validates that a value is a <code>positive</code> number or <code>equal</code> to <code>zero</code>.</p>
      * <p>If you don't want to allow zero as value, use <code>abv.Positive</code> instead.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -27,8 +28,8 @@ Object.assign(abv, function () {
      * @name abv.PositiveOrZeroValidator#message
      * @type {String}
      * @description
-     * The default message supplied when the value is not greater than or equal to zero.
-     * <p>Default: "This value should be either positive or zero."
+     * <p>The default message supplied when the value is not <code>greater</code> than or <code>equal</code> to <code>zero</code>.</p>
+     * <p>Default: "<code>This value should be either positive or zero.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -84,7 +85,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.PositiveOrZeroValidator#__compareValues
-         * @description Compare two value
+         * @description
+         * <p>Compare two value.</p>
          * @param {*} value Value
          * @param {*} comparedValue Compared value
          * @returns {Boolean}
@@ -97,7 +99,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.PositiveOrZeroValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
          */
         __messageParameters: function () {

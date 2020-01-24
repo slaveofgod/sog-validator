@@ -8,7 +8,8 @@ Object.assign(abv, function () {
      * @classdesc
      * <p>Validates that a value is not equal to another value, defined in the options.</p>
      * <p>This constraint compares using <code>!=</code>, so <code>3</code> and "<code>3</code>" are considered equal. <code>abv.Use NotIdenticalTo</code> to compare with <code>!==</code>.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.

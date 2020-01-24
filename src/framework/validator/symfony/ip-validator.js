@@ -8,7 +8,8 @@ Object.assign(abv, function () {
      * @classdesc
      * <p>Validates that a value is a valid IP address.</p>
      * <p>By default, this will validate the value as <code>IPv4</code>, but a number of different options exist to validate as <code>IPv6</code> and many other combinations.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -50,8 +51,8 @@ Object.assign(abv, function () {
      * @name abv.IpValidator#normalize
      * @type {Boolean}
      * @description
-     * Normalizer string before validate (trim, etc.).
-     * Default: false.
+     * <p>Normalizer string before validate (trim, etc.).</p>
+     * <p>Default: <code>false</code>.</p>
      */
 
     /**
@@ -59,7 +60,7 @@ Object.assign(abv, function () {
      * @type {String}
      * @description
      * <p>This determines exactly how the IP address is validated and can take one of a variety of different values.</p>
-     * <p>Default: "4".</p>
+     * <p>Default: "<code>4</code>".</p>
      * <b>All ranges</b>
      * <ul>
      *     <li><b>4</b> - Validates for IPv4 addresses</li>
@@ -159,7 +160,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.IpValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data</p>
          */
         __validate: function () {
             // Normalize
@@ -222,7 +224,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.IpValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.<p>
          */
         __beforeValidate: function () {
             // Check if empty
@@ -253,7 +256,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.IpValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
          */
         __messageParameters: function () {

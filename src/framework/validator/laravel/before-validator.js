@@ -9,7 +9,8 @@ Object.assign(abv, function () {
      * <p>The field under validation must be a value preceding the given <code>date</code>.</p>
      * <p>The dates will be passed into the <code>Data object</code>.</p>
      * <p>In addition, like the after rule, the name of another field under validation may be supplied as the value of <code>date</code>.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -27,7 +28,10 @@ Object.assign(abv, function () {
     /**
      * @name abv.BeforeValidator#value
      * @type {*}
-     * @description This option is required. It defines the value to compare to. It can be a date in string, number or date object formats.
+     * @description
+     * <p>This option is required.</p>
+     * <p>It defines the value to compare to.</p>
+     * <p>It can be a data in <code>string</code>, <code>number</code> or <code>date object</code> formats.</p>
      */
 
     var BeforeValidator = function (data, options, optionRules, lang, internal) {

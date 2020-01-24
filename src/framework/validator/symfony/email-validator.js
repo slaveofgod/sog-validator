@@ -8,7 +8,8 @@ Object.assign(abv, function () {
      * @classdesc
      * <p>Validates that a value is a valid <code>email address</code>.</p>
      * <p>The underlying value is cast to a string before being validated.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -27,9 +28,9 @@ Object.assign(abv, function () {
      * @name abv.EmailValidator#mode
      * @type {String}
      * @description
-     * This option is optional and defines the pattern the email address is validated against.
-     * Default to 'html5'
-     * Valid values are:
+     * <p>This option is optional and defines the pattern the <code>email</code> address is validated against.</p>
+     * <p>Default: '<code>html5</code>'</p>
+     * <p>Valid values are:</p>
      * <ul>
      *     <li><b>loose</b> - A simple regular expression. Allows all values with an "@" symbol in, and a "." in the second host part of the email address.</li>
      *     <!--li><b>strict</b> - Uses the egulias/email-validator library to perform an RFC compliant validation. You will need to install that library to use this mode.</li-->
@@ -41,16 +42,16 @@ Object.assign(abv, function () {
      * @name abv.EmailValidator#normalize
      * @type {Boolean}
      * @description
-     * Normalizer string before validate (trim, etc.).
-     * Default: false
+     * <p>Normalizer string before validate (trim, etc.).</p>
+     * <p>Default: <code>false</code></p>
      */
 
     /**
      * @name abv.EmailValidator#message
      * @type {String}
      * @description
-     * This message is shown if the underlying data is not a valid email address.
-     * <p>Default: "This value is not a valid email address."
+     * <p>This message is shown if the underlying data is not a valid email address.</p>
+     * <p>Default: "<code>This value is not a valid email address.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -109,7 +110,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.EmailValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             // Normalize
@@ -149,7 +151,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.EmailValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             // Check if empty
@@ -180,7 +183,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.EmailValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
          */
         __messageParameters: function () {

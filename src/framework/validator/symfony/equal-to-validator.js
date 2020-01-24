@@ -8,7 +8,8 @@ Object.assign(abv, function () {
      * @classdesc
      * <p>Validates that a value is equal to another value, defined in the options.</p>
      * <p>This constraint compares using <code>==</code>, so <code>3</code> and "<code>3</code>" are considered equal. Use <code>abv.IdenticalTo</code> to compare with <code>===</code>.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -57,7 +58,10 @@ Object.assign(abv, function () {
     /**
      * @name abv.EqualToValidator#value
      * @type {*}
-     * @description This option is required. It defines the value to compare to. It can be a string, number or object.
+     * @description
+     * <p>This option is required.</p>
+     * <p>It defines the value to compare to.</p>
+     * <p>It can be a <code>string</code>, <code>number</code> or <code>object</code>.</p>
      */
 
     var EqualToValidator = function (data, options, optionRules, lang, internal) {
@@ -95,7 +99,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.EqualToValidator#__compareValues
-         * @description Compare two value
+         * @description
+         * <p>Compare two value.</p>
          * @param {*} value Value
          * @param {*} comparedValue Compared value
          * @returns {Boolean}
@@ -108,7 +113,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.EqualToValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
          */
         __messageParameters: function () {

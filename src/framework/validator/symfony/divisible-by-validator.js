@@ -7,7 +7,8 @@ Object.assign(abv, function () {
      * @extends abv.AbstractComparisonValidator
      * @classdesc
      * <p>Validates that a value is divisible by another value, defined in the options.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.

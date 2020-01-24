@@ -7,7 +7,8 @@ Object.assign(abv, function () {
      * @extends abv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is a valid {@link https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes/ISO 3166-1 alpha-2} <code>country</code> code.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -26,8 +27,8 @@ Object.assign(abv, function () {
      * @name abv.CountryValidator#message
      * @type {String}
      * @description
-     * This message is shown if the string is not a valid country code.</p>
-     * Default:"<code>This value is not a valid country.</code>"</p>
+     * <p>This message is shown if the <code>string</code> is not a valid country code.</p>
+     * <p>Default:"<code>This value is not a valid country.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -76,7 +77,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.CountryValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             if ('undefined' === typeof this.__countries[this.data]) {
@@ -89,7 +91,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.CountryValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             // Check if empty
@@ -120,7 +123,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.CountryValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
          */
         __messageParameters: function () {

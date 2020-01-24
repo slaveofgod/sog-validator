@@ -7,7 +7,8 @@ Object.assign(abv, function () {
      * @extends abv.AbstractValidator
      * @classdesc
      * <p>This constraint validates that an {@link https://en.wikipedia.org/wiki/Isbn|International Standard Book Number (ISBN)} is either a valid <code>ISBN-10</code> or a valid <code>ISBN-13</code>.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -26,7 +27,7 @@ Object.assign(abv, function () {
      * @name abv.IsbnValidator#bothIsbnMessage
      * @type {String}
      * @description
-     * The message that will be shown if the type option is null and the given value does not pass any of the ISBN checks.</p>
+     * <p>The message that will be shown if the type option is null and the given value does not pass any of the <code>ISBN</code> checks.</p>
      * <p>Default: "<code>This value is neither a valid ISBN-10 nor a valid ISBN-13.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
@@ -49,7 +50,7 @@ Object.assign(abv, function () {
      * @name abv.IsbnValidator#isbn10Message
      * @type {String}
      * @description
-     * The message that will be shown if the type option is isbn10 and the given value does not pass the ISBN-10 check.</p>
+     * <p>The message that will be shown if the type option is isbn10 and the given value does not pass the <code>ISBN-10</code> check.</p>
      * <p>Default: "<code>This value is not a valid ISBN-10.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
@@ -72,7 +73,7 @@ Object.assign(abv, function () {
      * @name abv.IsbnValidator#isbn13Message
      * @type {String}
      * @description
-     * The message that will be shown if the type option is isbn13 and the given value does not pass the ISBN-13 check.</p>
+     * <p>The message that will be shown if the type option is <code>isbn13</code> and the given value does not pass the <code>ISBN-13</code> check.</p>
      * <p>Default: "<code>This value is not a valid ISBN-13.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
@@ -95,8 +96,8 @@ Object.assign(abv, function () {
      * @name abv.IsbnValidator#message
      * @type {String}
      * @description
-     * The message that will be shown if the value is not valid. If not null, this message has priority over all the other messages.
-     * Default: <code>null</code>
+     * <p>The message that will be shown if the value is not valid. If not <code>null</code>, this message has priority over all the other messages.</p>
+     * <p>Default: <code>null</code></p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -118,8 +119,8 @@ Object.assign(abv, function () {
      * @name abv.IsbnValidator#type
      * @type {String}
      * @description
-     * The type of ISBN to validate against. Valid values are isbn10, isbn13 and null to accept any kind of ISBN.
-     * Default: <code>null</code>
+     * <p>The type of ISBN to validate against. Valid values are <code>isbn10</code>, <code>isbn13</code> and <code>null</code> to accept any kind of <code>ISBN</code>.</p>
+     * <p>Default: <code>null</code></p>
      */
 
     var IsbnValidator = function (data, options, optionRules, lang, internal) {
@@ -164,7 +165,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.IsbnValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             var canonical = this.data.split('-').join('');
@@ -210,7 +212,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.IsbnValidator#__validateIsbn10
-         * @description Validate ISBN 10
+         * @description
+         * <p>Validate <code>ISBN 10</code></p>
          * @param {String} isbn ISBN
          * @returns {Boolean}
          */
@@ -252,7 +255,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.IsbnValidator#__validateIsbn13
-         * @description Validate ISBN 13
+         * @description
+         * <p>Validate <code>ISBN 13</code></p>
          * @param {String} isbn ISBN
          * @returns {Boolean}
          */
@@ -285,7 +289,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.IsbnValidator#__getMessage
-         * @description Get message by type
+         * @description
+         * <p>Get message by type.</p>
          * @param {String} type Message type
          * @returns {String}
          */
@@ -305,7 +310,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.IsbnValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             // Check if empty
@@ -336,7 +342,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.IsbnValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
          */
         __messageParameters: function () {

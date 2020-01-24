@@ -85,7 +85,7 @@ describe('identical-to', () => {
                 "identical-to": {
                     "value": new abv.Application({"lang": "de"})
                 }
-            })).toBe("This value should be identical to Application [object Object].");
+            })).toBe('This value should be identical to Application {\"lang\":\"de\",\"internal\":false,\"name\":\"Application\"}.');
         });
 
         test('Lorem ipsum === new Date("1995-12-17T03:24:00")', () => {
@@ -101,7 +101,7 @@ describe('identical-to', () => {
                 "identical-to": {
                     "value": new Array(1,2,3,4,5,6)
                 }
-            })).toBe("This value should be identical to Array 1,2,3,4,5,6.");
+            })).toBe("This value should be identical to Array [1,2,3,4,5,6].");
         });
 
         test('{"name": "Vasy", "email": "vasy@fmail.com"} === new Object("name": "Alex", "email": "alex@fmail.com")', () => {
@@ -109,7 +109,7 @@ describe('identical-to', () => {
                 "identical-to": {
                     "value": new Object({"name": "Alex", "email": "alex@fmail.com"})
                 }
-            })).toBe("This value should be identical to Object [object Object].");
+            })).toBe('This value should be identical to Object {\"name\":\"Alex\",\"email\":\"alex@fmail.com\"}.');
         });
 
         test('1995-12-17T03:24:00 === new Date("1995-12-17T03:21:00")', () => {
@@ -125,7 +125,7 @@ describe('identical-to', () => {
                 "identical-to": {
                     "value": new Object()
                 }
-            })).toBe("This value should be identical to Object [object Object].");
+            })).toBe("This value should be identical to Object {}.");
         });
 
         test('"true" === true', () => {

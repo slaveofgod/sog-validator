@@ -179,6 +179,90 @@ Object.assign(abv, (function () {
          */
         __isEmptyData: function () {
             return ('undefined' === typeof this.data || null === this.data || '' === this.data);
+        },
+
+        /**
+         * @private
+         * @function
+         * @name abv.AbstractValidator#__formattedData
+         * @description Formatted data depending of type
+         * @returns {*}
+         */
+        __formattedData: function (data) {
+            if (true === abv.isType('numeric', data)) {
+                return data;
+            }
+
+            if (true === abv.isType('bool', data)) {
+                return data;
+            }
+
+            if (true === abv.isType('array', data)) {
+                return JSON.stringify(data);
+            }
+
+            if (
+                true === abv.isType('object', data)
+                && 'Date' !== abv.getType(data)
+            ) {
+                return JSON.stringify(data);
+            }
+
+            if (true === this.__moment(data).isValid()) {
+                return this.__moment(data).format('LLL');
+            }
+
+            return data;
+        },
+
+        /**
+         * @private
+         * @function
+         * @name abv.AbstractValidator#__convertDataToValueType
+         * @description Convert data to value type
+         * @returns {*}
+         */
+        __convertDataToValueType: function () {
+            if (abv.getType(this.data) === abv.getType(this.value)) {
+                return this.data;
+            }
+
+            switch (abv.getType(this.value)) {
+                case 'Date':
+                    return new Date(this.data);
+                    break;
+            }
+
+            return this.data;
+        },
+
+        /**
+         * @private
+         * @function
+         * @name abv.AbstractComparisonValidator#__prepareDataForComparing
+         * @description Prepare data for comparing
+         * @returns {*}
+         */
+        __prepareDataForComparing: function (data) {
+            switch (abv.getType(data)) {
+                case 'Date':
+                    return data.getTime();
+                    break;
+                case 'Object':
+                case 'Array':
+                    return JSON.stringify(data);
+                    break;
+            }
+
+            if ('object' === typeof data) {
+                try {
+                    return JSON.stringify(data);
+                } catch (e) {
+                    return data;
+                }
+            }
+
+            return data;
         }
     });
 

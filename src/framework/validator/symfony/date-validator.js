@@ -7,7 +7,8 @@ Object.assign(abv, function () {
      * @extends abv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is a valid <code>date</code>, meaning a string (or an object that can be cast into a string) that follows a valid <code>YYYY-MM-DD</code> format.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -26,8 +27,8 @@ Object.assign(abv, function () {
      * @name abv.DateValidator#message
      * @type {String}
      * @description
-     * This message is shown if the underlying data is not a valid date.
-     * <p>Default: "<code>This value is not a valid date.</code>"
+     * <p>This message is shown if the underlying data is not a valid date.</p>
+     * <p>Default: "<code>This value is not a valid date.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -75,7 +76,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.DateValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             if (this.data !== this.__moment(this.data, this.format).format(this.format)) {
@@ -88,7 +90,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.DateValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             // Check if empty
@@ -119,7 +122,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.DateValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
          */
         __messageParameters: function () {

@@ -10,7 +10,8 @@ Object.assign(abv, function () {
      * <p>The "<code>value</code>" for each locale is any of the @link(http://userguide.icu-project.org/locale|ICU format locale IDs).</p>
      * <p>For example, the two letter {@link https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes|ISO 639-1}language code (e.g. <code>fr</code>), or the language code followed by an underscore (<code>_</code>) and the {@link https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes|ISO 3166-1 alpha-2} country code (e.g. fr_FR for French/France).</p>
      * <p>The given locale values are canonicalized before validating them to avoid issues with wrong uppercase/lowercase values and to remove unneeded elements (e.g. <code>FR-fr.utf8</code> will be validated as <code>fr_FR</code>).</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -79,7 +80,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.LocaleValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data</p>
          */
         __validate: function () {
             if ('undefined' === typeof this.__locales[this.data]) {
@@ -92,7 +94,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.LocaleValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running</p>
          */
         __beforeValidate: function () {
             // Check if empty
@@ -123,7 +126,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.LocaleValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced</p>
          * @returns {Object} List of parameters
          */
         __messageParameters: function () {

@@ -5,7 +5,8 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.ValidatorHandler
      * @classdesc This service provides handling validation of form
-     * @description Create a new validator handler.
+     * @description
+     * <p>Create a new validator handler.</p>
      */
 
     var ValidatorHandler = function (options) {
@@ -18,7 +19,8 @@ Object.assign(abv, function () {
         /**
          * @function
          * @name abv.ValidatorHandler#add
-         * @description Add new validator for field
+         * @description
+         * <p>Add new validator for field.</p>
          * @param {String} key Field key
          * @param {abv.AllValidator} validator Validator
          */
@@ -32,7 +34,8 @@ Object.assign(abv, function () {
         /**
          * @function
          * @name abv.ValidatorHandler#get
-         * @description Get validator for field
+         * @description
+         * <p>Get validator for field.</p>
          * @param {String} key Field key
          * @returns {abv.AllValidator}
          */
@@ -49,7 +52,8 @@ Object.assign(abv, function () {
         /**
          * @function
          * @name abv.ValidatorHandler#isValid
-         * @description Check if data valid
+         * @description
+         * <p>Check if data valid.</p>
          * @returns {Boolean} Validation status
          */
         isValid: function () {
@@ -65,7 +69,8 @@ Object.assign(abv, function () {
         /**
          * @function
          * @name abv.ValidatorHandler#isValidWithErrorMessage
-         * @description Check if data valid
+         * @description
+         * <p>Check if data valid.</p>
          * @returns {Boolean} Validation status
          */
         isValidWithErrorMessage: function () {

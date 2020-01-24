@@ -9,7 +9,8 @@ Object.assign(abv, function () {
      * <p>Validates that all the elements of the given collection are <code>unique</code> (none of them is present more than once).</p>
      * <p>Elements are compared strictly, so '<code>7</code>' and <code>7</code> are considered different elements (a string and an integer, respectively).</p>
      * <p>It can be a <code>string</code> or <code>array</code>.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -28,8 +29,8 @@ Object.assign(abv, function () {
      * @name abv.UniqueValidator#message
      * @type {String}
      * @description
-     * This is the message that will be shown if at least one element is repeated in the collection.
-     * <p>Default: "This collection should contain only unique elements."
+     * <p>This is the message that will be shown if at least one element is repeated in the collection.</p>
+     * <p>Default: "<code>This collection should contain only unique elements.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
      *     <thead>
@@ -79,7 +80,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.UniqueValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             if (
@@ -99,7 +101,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.UniqueValidator#__validateArray
-         * @description Validate array data
+         * @description
+         * <p>Validate array data.</p>
          */
         __validateArray: function () {
             var counter = {};
@@ -125,7 +128,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.UniqueValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             // Check if empty
@@ -146,7 +150,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.UniqueValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
          */
         __messageParameters: function () {

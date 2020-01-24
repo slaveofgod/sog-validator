@@ -7,7 +7,8 @@ Object.assign(abv, function () {
      * @extends abv.AbstractValidator
      * @classdesc
      * <p>The field under validation must end with one of the given values.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
@@ -26,7 +27,9 @@ Object.assign(abv, function () {
      * @name abv.EndsWithValidator#ends
      * @type {String|Array}
      * @description
-     * <p>The option is required. The list of ends. One of the "end" needs to be the end of the passed value.</p>
+     * <p>The option is required.</p>
+     * <p>The list of ends.</p>
+     * <p>One of the "<code>end</code>" needs to be the end of the passed value.</p>
      */
 
     var EndsWithValidator = function (data, options, optionRules, lang, internal) {
@@ -70,7 +73,8 @@ Object.assign(abv, function () {
          * @private
          * @function
          * @name abv.EndsWithValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             for (var i = 0; i < this.ends.length; i ++) {

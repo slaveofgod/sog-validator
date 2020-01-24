@@ -8,7 +8,8 @@ Object.assign(abv, function () {
      * @classdesc
      * <p>This constraint ensures that a credit card number is valid for a given credit card company.</p>
      * <p>It can be used to validate the number before trying to initiate a payment through a payment gateway.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.

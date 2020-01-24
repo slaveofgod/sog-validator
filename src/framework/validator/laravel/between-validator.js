@@ -8,7 +8,8 @@ Object.assign(abv, function () {
      * @classdesc
      * <p>The field under validation must have a <code>size</code> between the given <code>min</code> and <code>max</code>.</p>
      * <p><code>Strings</code>, <code>numerics</code>, <code>arrays</code> and <code>dates</code> are evaluated in the same fashion as the size rule.</p>
-     * @description Create a new Validator.
+     * @description
+     * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
      * @param {Object} optionRules The validation rules for setting options.
