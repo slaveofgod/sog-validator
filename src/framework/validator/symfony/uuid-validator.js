@@ -6,9 +6,9 @@ Object.assign(abv, function () {
      * @name abv.UuidValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * Validates that a value is a valid {@link https://en.wikipedia.org/wiki/Universally_unique_identifier|Universally unique identifier (UUID)} per {@link https://tools.ietf.org/html/rfc4122|RFC 4122}.</p>
-     * By default, this will validate the format according to the RFC's guidelines, but this can be relaxed to accept non-standard UUIDs that other systems (like PostgreSQL) accept.</p>
-     * UUID versions can also be restricted using a whitelist.
+     * <p>Validates that a value is a valid {@link https://en.wikipedia.org/wiki/Universally_unique_identifier|Universally unique identifier (UUID)} per {@link https://tools.ietf.org/html/rfc4122|RFC 4122}.</p>
+     * <p>By default, this will validate the format according to the RFC's guidelines, but this can be relaxed to accept non-standard <code>UUIDs</code> that other systems (like PostgreSQL) accept.</p>
+     * <p><code>UUID</code> versions can also be restricted using a whitelist.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

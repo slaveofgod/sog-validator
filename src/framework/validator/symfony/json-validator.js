@@ -5,7 +5,8 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.JsonValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value has valid JSON syntax.
+     * @classdesc
+     * <p>Validates that a value has valid <code>JSON</code> syntax.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

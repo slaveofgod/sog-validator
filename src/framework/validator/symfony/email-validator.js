@@ -6,8 +6,8 @@ Object.assign(abv, function () {
      * @name abv.EmailValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * Validates that a value is a valid email address.</p>
-     * The underlying value is cast to a string before being validated.
+     * <p>Validates that a value is a valid <code>email address</code>.</p>
+     * <p>The underlying value is cast to a string before being validated.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

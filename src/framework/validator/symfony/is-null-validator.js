@@ -5,7 +5,8 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.IsNullValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value is exactly equal to <code>null</code>.
+     * @classdesc
+     * <p>Validates that a value is exactly equal to <code>null</code>.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

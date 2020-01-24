@@ -5,7 +5,8 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.CountValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a given collection's (i.e. an array or an object that implements Countable) element count is between some minimum and maximum value.
+     * @classdesc
+     * <p>Validates that a given collection's (i.e. an array or an object that implements Countable) element <code>count</code> is <code>between</code> some <code>minimum</code> and <code>maximum</code> value.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

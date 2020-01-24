@@ -5,7 +5,8 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.CurrencyValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value is a valid {@link https://en.wikipedia.org/wiki/ISO_4217|3-letter ISO 4217} currency name.
+     * @classdesc
+     * <p>Validates that a value is a valid {@link https://en.wikipedia.org/wiki/ISO_4217|3-letter ISO 4217} <code>currency</code> name.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

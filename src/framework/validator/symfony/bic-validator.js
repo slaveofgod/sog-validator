@@ -6,9 +6,9 @@ Object.assign(abv, function () {
      * @name abv.BicValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * This constraint is used to ensure that a value has the proper format of a {@link https://en.wikipedia.org/wiki/Business_Identifier_Code|Business Identifier Code (BIC)}.</p>
-     * BIC is an internationally agreed means to uniquely identify both financial and non-financial institutions.</p>
-     * You may also check that the BIC is associated with a given IBAN.
+     * <p>This constraint is used to ensure that a value has the proper format of a {@link https://en.wikipedia.org/wiki/Business_Identifier_Code|Business Identifier Code (BIC)}.</p>
+     * <p><code>BIC</code> is an internationally agreed means to uniquely identify both financial and non-financial institutions.</p>
+     * <p>You may also check that the <code>BIC</code> is associated with a given <code>IBAN</code>.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

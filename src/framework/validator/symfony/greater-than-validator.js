@@ -5,7 +5,8 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.GreaterThanValidator
      * @extends abv.AbstractComparisonValidator
-     * @classdesc Validates that a value is greater than another value, defined in the options.
+     * @classdesc
+     * <p>Validates that a value is <code>greater</code> than another value, defined in the options.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

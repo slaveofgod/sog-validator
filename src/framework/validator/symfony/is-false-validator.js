@@ -6,7 +6,7 @@ Object.assign(abv, function () {
      * @name abv.IsFalseValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * <p>Validates that a value is false.</p>
+     * <p>Validates that a value is <code>false</code>.</p>
      * <p>Specifically, this checks to see if the value is exactly <code>false</code>, exactly the integer <code>0</code>, or exactly the string <code>"0"</code>.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.

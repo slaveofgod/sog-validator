@@ -7,7 +7,7 @@ Object.assign(abv, function () {
      * @extends abv.AbstractComparisonValidator
      * @classdesc
      * <p>Validates that a value is not equal to another value, defined in the options.</p>
-     * <p>This constraint compares using !=, so 3 and "3" are considered equal. abv.Use NotIdenticalTo to compare with !==.</p>
+     * <p>This constraint compares using <code>!=</code>, so <code>3</code> and "<code>3</code>" are considered equal. <code>abv.Use NotIdenticalTo</code> to compare with <code>!==</code>.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

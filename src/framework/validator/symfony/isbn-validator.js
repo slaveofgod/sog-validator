@@ -5,7 +5,8 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.IsbnValidator
      * @extends abv.AbstractValidator
-     * @classdesc This constraint validates that an {@link https://en.wikipedia.org/wiki/Isbn|International Standard Book Number (ISBN)} is either a valid ISBN-10 or a valid ISBN-13.
+     * @classdesc
+     * <p>This constraint validates that an {@link https://en.wikipedia.org/wiki/Isbn|International Standard Book Number (ISBN)} is either a valid <code>ISBN-10</code> or a valid <code>ISBN-13</code>.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

@@ -6,7 +6,7 @@ Object.assign(abv, function () {
      * @name abv.DateEqualsValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * <p>The field under validation must be equal to the given date.</p>
+     * <p>The field under validation must be <code>equal</code> to the given <code>date</code>.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

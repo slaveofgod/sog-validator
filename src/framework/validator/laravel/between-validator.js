@@ -6,8 +6,8 @@ Object.assign(abv, function () {
      * @name abv.BetweenValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * <p>The field under validation must have a size between the given min and max.</p>
-     * <p>Strings, numerics, arrays and dates are evaluated in the same fashion as the size rule.</p>
+     * <p>The field under validation must have a <code>size</code> between the given <code>min</code> and <code>max</code>.</p>
+     * <p><code>Strings</code>, <code>numerics</code>, <code>arrays</code> and <code>dates</code> are evaluated in the same fashion as the size rule.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

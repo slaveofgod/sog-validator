@@ -6,7 +6,7 @@ Object.assign(abv, function () {
      * @name abv.LuhnValidator
      * @extends abv.AbstractComparisonValidator
      * @classdesc
-     * <p>This constraint is used to ensure that a credit card number passes the {@link https://en.wikipedia.org/wiki/Luhn_algorithm|Luhn algorithm}.</p>
+     * <p>This constraint is used to ensure that a <code>credit card</code> number passes the {@link https://en.wikipedia.org/wiki/Luhn_algorithm|Luhn algorithm}.</p>
      * <p>It is useful as a first step to validating a credit card: before communicating with a payment gateway.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.

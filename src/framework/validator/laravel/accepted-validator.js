@@ -6,7 +6,7 @@ Object.assign(abv, function () {
      * @name abv.AcceptedValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * <p>The field under validation must be yes, on, 1, or true.</p>
+     * <p>The field under validation must be <code>yes</code>, <code>on</code>, <code>1</code>, or <code>true</code>.</p>
      * <p>This is useful for validating "Terms of Service" acceptance.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.

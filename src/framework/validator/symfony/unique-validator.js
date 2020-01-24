@@ -6,9 +6,9 @@ Object.assign(abv, function () {
      * @name abv.UniqueValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * <p>Validates that all the elements of the given collection are unique (none of them is present more than once).</p>
-     * <p>Elements are compared strictly, so '7' and 7 are considered different elements (a string and an integer, respectively).</p>
-     * <p>It can be a string or array.</p>
+     * <p>Validates that all the elements of the given collection are <code>unique</code> (none of them is present more than once).</p>
+     * <p>Elements are compared strictly, so '<code>7</code>' and <code>7</code> are considered different elements (a string and an integer, respectively).</p>
+     * <p>It can be a <code>string</code> or <code>array</code>.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

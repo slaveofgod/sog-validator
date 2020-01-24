@@ -6,8 +6,8 @@ Object.assign(abv, function () {
      * @name abv.TypeValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * Validates that a value is of a specific data type.</p>
-     * For example, if a variable should be an array, you can use this constraint with the <code>array</code> type option to validate this.
+     * <p>Validates that a value is of a specific <code>data</code> type.</p>
+     * <p>For example, if a variable should be an array, you can use this constraint with the <code>array</code> type option to validate this.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

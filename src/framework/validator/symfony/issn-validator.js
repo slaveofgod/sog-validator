@@ -5,7 +5,8 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.IssnValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value is a valid {@link https://en.wikipedia.org/wiki/Issn|International Standard Serial Number (ISSN)}.
+     * @classdesc
+     * <p>Validates that a value is a valid {@link https://en.wikipedia.org/wiki/Issn|International Standard Serial Number (ISSN)}.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

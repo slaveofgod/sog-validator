@@ -6,7 +6,7 @@ Object.assign(abv, function () {
      * @name abv.BooleanValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * <p>The field under validation must be able to be cast as a boolean. Accepted input are true, false, 1, 0, "1", and "0".</p>
+     * <p>The field under validation must be able to be cast as a <code>boolean</code>. Accepted input are <code>true</code>, <code>false</code>, <code>1</code>, <code>0</code>, "<code>1</code>", and "<code>0</code>".</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

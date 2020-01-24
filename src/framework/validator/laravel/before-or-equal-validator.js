@@ -6,9 +6,9 @@ Object.assign(abv, function () {
      * @name abv.BeforeOrEqualValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * <p>The field under validation must be a value preceding or equal to the given date.</p>
-     * <p>The dates will be passed into the Data object.</p>
-     * <p>In addition, like the after rule, the name of another field under validation may be supplied as the value of date.</p>
+     * <p>The field under validation must be a value preceding or equal to the given <code>date</code>.</p>
+     * <p>The dates will be passed into the <code>Data object</code>.</p>
+     * <p>In addition, like the after rule, the name of another field under validation may be supplied as the value of <code>date</code>.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

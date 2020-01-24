@@ -5,7 +5,8 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.AllValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value is valid according to list of validation rules.
+     * @classdesc
+     * <p>Validates that a value is valid according to list of validation rules.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} rules Validation rules.

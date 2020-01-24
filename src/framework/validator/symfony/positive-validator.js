@@ -7,7 +7,7 @@ Object.assign(abv, function () {
      * @extends abv.AbstractComparisonValidator
      * @classdesc
      * <p>Validates that a value is a positive number.</p>
-     * <p>Zero is neither positive nor negative, so you must use abv.PositiveOrZero if you want to allow zero as value.</p>
+     * <p>Zero is neither positive nor negative, so you must use <code>abv.PositiveOrZero</code> if you want to allow zero as value.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

@@ -6,7 +6,7 @@ Object.assign(abv, function () {
      * @name abv.AfterOrEqualValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * <p>The field under validation must be a value after or equal to the given date.</p>
+     * <p>The field under validation must be a value <code>after</code> or <code>equal</code> to the given <code>date</code>.</p>
      * <p>For more information, see the after rule.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.

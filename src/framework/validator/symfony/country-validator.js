@@ -5,7 +5,8 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.CountryValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value is a valid {@link https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes/ISO 3166-1 alpha-2} country code.
+     * @classdesc
+     * <p>Validates that a value is a valid {@link https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes/ISO 3166-1 alpha-2} <code>country</code> code.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

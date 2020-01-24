@@ -6,8 +6,8 @@ Object.assign(abv, function () {
      * @name abv.CardSchemeValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * This constraint ensures that a credit card number is valid for a given credit card company.</p>
-     * It can be used to validate the number before trying to initiate a payment through a payment gateway.
+     * <p>This constraint ensures that a credit card number is valid for a given credit card company.</p>
+     * <p>It can be used to validate the number before trying to initiate a payment through a payment gateway.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

@@ -5,7 +5,8 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.LessThanOrEqualValidator
      * @extends abv.AbstractComparisonValidator
-     * @classdesc Validates that a value is less than or equal to another value, defined in the options.
+     * @classdesc
+     * <p>Validates that a value is <code>less than</code> or <code>equal</code> to another value, defined in the options.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

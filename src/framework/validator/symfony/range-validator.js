@@ -5,7 +5,8 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.RangeValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a given number or Date object is between some minimum and maximum.
+     * @classdesc
+     * <p>Validates that a given <code>number</code> or <code>Date object</code> is between some <code>minimum</code> and <code>maximum</code>.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

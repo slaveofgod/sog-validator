@@ -5,7 +5,8 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.UrlValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value is a valid URL string.
+     * @classdesc
+     * <p>Validates that a value is a valid <code>URL</code> string.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

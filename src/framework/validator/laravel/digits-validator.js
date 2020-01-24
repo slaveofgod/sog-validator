@@ -6,7 +6,7 @@ Object.assign(abv, function () {
      * @name abv.DigitsValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * <p>The field under validation must be numeric and must have an exact length of value.</p>
+     * <p>The field under validation must be <code>numeric</code> and must have an exact <code>length</code> of value.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

@@ -6,7 +6,7 @@ Object.assign(abv, function () {
      * @name abv.NotBlankValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * <p>Validates that a value is not blank - meaning not equal to a blank string, a blank array, <code>false</code> or <code>null</code> (null behavior is configurable).</p>
+     * <p>The field under validation must not be <code>empty</code> when it is present.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

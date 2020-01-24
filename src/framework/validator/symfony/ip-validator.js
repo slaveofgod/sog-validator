@@ -7,7 +7,7 @@ Object.assign(abv, function () {
      * @extends abv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is a valid IP address.</p>
-     * <p>By default, this will validate the value as IPv4, but a number of different options exist to validate as IPv6 and many other combinations.</p>
+     * <p>By default, this will validate the value as <code>IPv4</code>, but a number of different options exist to validate as <code>IPv6</code> and many other combinations.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

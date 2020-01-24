@@ -5,7 +5,8 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.TimeValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value is a valid time, meaning a string (or an object that can be cast into a string) that follows a valid HH:mm:ss format.
+     * @classdesc
+     * <p>Validates that a value is a valid <code>time</code>, meaning a string (or an object that can be cast into a string) that follows a valid <code>HH:mm:ss</code> format.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

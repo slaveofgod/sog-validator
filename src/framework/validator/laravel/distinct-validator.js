@@ -6,7 +6,7 @@ Object.assign(abv, function () {
      * @name abv.DistinctValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * <p>When working with arrays, the field under validation must not have any duplicate values.</p>
+     * <p>When working with <code>arrays</code>, the field under validation must not have any duplicate values.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

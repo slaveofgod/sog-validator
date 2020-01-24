@@ -5,7 +5,8 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.LengthValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a given string length is between some minimum and maximum value.
+     * @classdesc
+     * <p>Validates that a given string length is between some <code>minimum</code> and <code>maximum</code> value.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

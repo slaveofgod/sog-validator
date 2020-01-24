@@ -6,7 +6,7 @@ Object.assign(abv, function () {
      * @name abv.AlphaNumValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * <p>The field under validation must be entirely alpha-numeric characters.</p>
+     * <p>The field under validation must be entirely <code>alpha-numeric</code> characters.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

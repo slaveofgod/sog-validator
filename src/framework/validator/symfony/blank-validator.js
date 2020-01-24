@@ -5,7 +5,8 @@ Object.assign(abv, function () {
      * @constructor
      * @name abv.BlankValidator
      * @extends abv.AbstractValidator
-     * @classdesc Validates that a value is blank - meaning equal to an empty string or <code>null</code>.
+     * @classdesc
+     * <p>Validates that a value is blank - meaning equal to an <code>empty string</code> or <code>null</code>.</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options

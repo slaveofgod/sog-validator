@@ -6,7 +6,7 @@ Object.assign(abv, function () {
      * @name abv.ActiveUrlValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * <p>The field under validation must have a valid A or AAAA record</p>
+     * <p>The field under validation must have a valid <code>A</code> or <code>AAAA</code> record</p>
      * @description Create a new Validator.
      * @param {*} data The data which needs to be validated.
      * @param {Object} options The setting options
