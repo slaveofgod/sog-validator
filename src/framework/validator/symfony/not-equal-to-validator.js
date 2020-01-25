@@ -76,7 +76,10 @@ Object.assign(abv, function () {
 
     Object.defineProperty(NotEqualToValidator.prototype, 'alias', {
         get: function () {
-            return 'not-equal-to';
+            return [
+                'not-equal-to',
+                'not-equal'
+            ];
         }
     });
 

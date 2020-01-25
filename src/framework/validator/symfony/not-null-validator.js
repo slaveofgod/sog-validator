@@ -60,7 +60,11 @@ Object.assign(abv, function () {
 
     Object.defineProperty(NotNullValidator.prototype, 'alias', {
         get: function () {
-            return ['not-null', 'required'];
+            return [
+                'not-null',
+                'required',
+                'present'
+            ];
         }
     });
 

@@ -120,12 +120,12 @@ Object.assign(abv, function () {
         get: function () {
             return [
                 {
-                    'name': 'type',
-                    'type': 'array'
-                }, {
                     'name': 'any',
                     'type': 'boolean'
-                }
+                }, {
+                    'name': 'type',
+                    'type': 'array'
+                },
             ];
         }
     });

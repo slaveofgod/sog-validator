@@ -101,7 +101,7 @@ Object.assign(abv, function () {
             return [
                 {
                     'name': 'match',
-                    'type': 'bool'
+                    'type': 'boolean'
                 }, {
                     'name': 'pattern',
                     'type': 'any'

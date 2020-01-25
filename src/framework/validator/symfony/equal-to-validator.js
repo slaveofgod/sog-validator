@@ -79,7 +79,11 @@ Object.assign(abv, function () {
 
     Object.defineProperty(EqualToValidator.prototype, 'alias', {
         get: function () {
-            return 'equal-to';
+            return [
+                'equal-to',
+                'equal',
+                'same'
+            ];
         }
     });
 

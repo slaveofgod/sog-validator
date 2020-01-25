@@ -115,6 +115,12 @@
 ../src/framework/validator/laravel/ends-with-validator.js
 ../src/framework/validator/laravel/filled-validator.js
 ../src/framework/validator/laravel/gt-validator.js
+../src/framework/validator/laravel/numeric-validator.js
+../src/framework/validator/laravel/string-validator.js
+../src/framework/validator/laravel/integer-validator.js
+../src/framework/validator/laravel/ipv4-validator.js
+../src/framework/validator/laravel/ipv6-validator.js
+../src/framework/validator/laravel/starts-with-validator.js
 ../src/i18n/resource/symfony/af.js
 ../src/i18n/resource/symfony/ar.js
 ../src/i18n/resource/symfony/az.js

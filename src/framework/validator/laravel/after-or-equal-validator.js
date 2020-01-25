@@ -30,7 +30,7 @@ Object.assign(abv, function () {
      * @description
      * <p>This option is required.<p>
      * <p>It defines the value to compare to.<p>
-     * <p>It can be a data in <code>string</code>, <code>number</code> or <code>date object</code> formats.<p>
+     * <p>The data type could be <code>string</code>, <code>number</code> or <code>date</code>.<p>
      */
 
     var AfterOrEqualValidator = function (data, options, optionRules, lang, internal) {

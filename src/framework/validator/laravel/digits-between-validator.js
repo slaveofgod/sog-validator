@@ -67,10 +67,10 @@ Object.assign(abv, function () {
             return [
                 {
                     'name': 'min',
-                    'type': 'integer'
+                    'type': 'numeric'
                 }, {
                     'name': 'max',
-                    'type': 'integer'
+                    'type': 'numeric'
                 }
             ];
         }

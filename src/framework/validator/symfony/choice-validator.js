@@ -213,7 +213,10 @@ Object.assign(abv, function () {
 
     Object.defineProperty(ChoiceValidator.prototype, 'alias', {
         get: function () {
-            return 'choice';
+            return [
+                'choice',
+                'in'
+            ];
         }
     });
 
@@ -221,9 +224,6 @@ Object.assign(abv, function () {
         get: function () {
             return [
                 {
-                    'name': 'choices',
-                    'type': 'array'
-                }, {
                     'name': 'max',
                     'type': 'numeric'
                 }, {
@@ -231,8 +231,11 @@ Object.assign(abv, function () {
                     'type': 'numeric'
                 }, {
                     'name': 'multiple',
-                    'type': 'bool'
-                }
+                    'type': 'boolean'
+                }, {
+                    'name': 'choices',
+                    'type': 'array'
+                },
             ];
         }
     });

@@ -6,8 +6,8 @@ Object.assign(abv, function () {
      * @name abv.GtValidator
      * @extends abv.AbstractValidator
      * @classdesc
-     * <p>The field under validation must be <code>greater</code> than the given field. The two fields must be of the same type.</p>
-     * <p><code>Strings</code>, <code>numerics</code>, <code>arrays</code>, <code>dates</code> and files are evaluated using the same conventions as the size rule.</p>
+     * <p>The data must be <code>greater</code> than the given value.</p>
+     * <p><code>Strings</code>, <code>numerics</code>, <code>arrays</code> and <code>dates</code> are evaluated using the same conventions as the size rule.</p>
      * @description
      * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
@@ -16,7 +16,7 @@ Object.assign(abv, function () {
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
      * @example
-     * var validator = new abv.GtValidator(data);
+     * var validator = new abv.GtValidator(data, {"value": 10});
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -30,7 +30,7 @@ Object.assign(abv, function () {
      * @description
      * <p>This option is required.</p>
      * <p>It defines the value to compare to.</p>
-     * <p>It can be a data in <code>string</code>, <code>number</code>, <code>array</code> or <code>date object</code> formats.</p>
+     * <p>The data type could be <code>string</code>, <code>number</code>, <code>array</code> or <code>date</code>.<p>
      */
 
     var GtValidator = function (data, options, optionRules, lang, internal) {
@@ -75,9 +75,6 @@ Object.assign(abv, function () {
          * <p>Validate data.</p>
          */
         __validate: function () {
-            this.__data = this.__prepareDataForComparing(this.__convertDataToValueType());
-            this.__value = this.__prepareDataForComparing(this.value);
-
             if (
                 true === abv.isType('integer', this.value)
                 && (

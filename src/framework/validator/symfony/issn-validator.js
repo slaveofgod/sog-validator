@@ -91,10 +91,10 @@ Object.assign(abv, function () {
             return [
                 {
                     'name': 'caseSensitive',
-                    'type': 'bool'
+                    'type': 'boolean'
                 }, {
                     'name': 'requireHyphen',
-                    'type': 'bool'
+                    'type': 'boolean'
                 }
             ];
         }

@@ -104,11 +104,11 @@ Object.assign(abv, function () {
         get: function () {
             return [
                 {
+                    'name': 'relativeProtocol',
+                    'type': 'boolean'
+                }, {
                     'name': 'protocols',
                     'type': 'array'
-                }, {
-                    'name': 'relativeProtocol',
-                    'type': 'bool'
                 }
             ];
         }

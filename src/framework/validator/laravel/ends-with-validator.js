@@ -33,19 +33,17 @@ Object.assign(abv, function () {
      */
 
     var EndsWithValidator = function (data, options, optionRules, lang, internal) {
-        abv.RegexValidator.call(this, data, options, {
+        abv.AbstractValidator.call(this, data, options, {
             pattern: optionRules.pattern || 'length:{"min":3,"max":255}',
             ends: optionRules.ends || 'type:{"type":["iterable","string"],"any":true}'
         }, lang, internal);
 
         this.message = this.__options.message || 'The %%attribute%% must end with one of the following: %%values%%.';
         this.ends = this.__options.ends;
-        this.pattern;
-        this.patternSample = "^.*%s$";
 
         this.name = 'EndsWithValidator';
     };
-    EndsWithValidator.prototype = Object.create(abv.RegexValidator.prototype);
+    EndsWithValidator.prototype = Object.create(abv.AbstractValidator.prototype);
     EndsWithValidator.prototype.constructor = EndsWithValidator;
 
     Object.defineProperty(EndsWithValidator.prototype, 'alias', {
@@ -78,9 +76,7 @@ Object.assign(abv, function () {
          */
         __validate: function () {
             for (var i = 0; i < this.ends.length; i ++) {
-                this.pattern = abv.sprintf(this.patternSample, this.ends[i]);
-                abv.RegexValidator.prototype.__validate.call(this);
-                if(false === this.__hasErrors()) {
+                if(true === this.data.endsWith(this.ends[i])) {
                     return ;
                 }
             }
@@ -96,7 +92,28 @@ Object.assign(abv, function () {
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
-            abv.RegexValidator.prototype.__beforeValidate.call(this);
+            // Check if empty
+            if (true === this.__isEmptyData()) {
+                this.__skip = true;
+                return ;
+            }
+
+            // Check if value is scalar
+            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            if(null !== errorMessage) {
+                this.__setErrorMessage(errorMessage, {});
+                return ;
+            }
+
+            // Convert data to string
+            try {
+                if ('undefined' !== typeof this.data) {
+                    this.data = this.data.toString();
+                }
+            } catch (e) {
+                this.__setErrorMessage('This value ' + this.data + ' could not be converted to string.');
+                return ;
+            }
 
             if (true === abv.isType('string', this.ends)) {
                 this.ends = [this.ends];

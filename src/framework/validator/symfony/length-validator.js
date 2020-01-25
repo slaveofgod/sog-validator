@@ -195,10 +195,10 @@ Object.assign(abv, function () {
             return [
                 {
                     'name': 'max',
-                    'type': 'bool'
+                    'type': 'numeric'
                 }, {
                     'name': 'min',
-                    'type': 'bool'
+                    'type': 'numeric'
                 }
             ];
         }

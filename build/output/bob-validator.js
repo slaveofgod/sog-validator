@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision 5ab6693
+ * Bob Validator Library v2.0 revision dd993c4
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"5ab6693", config:{}, common:{}, validators:{}, registry:function(validator) {
+var abv = {version:"2.0", revision:"dd993c4", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -8813,7 +8813,7 @@ Object.assign(abv, function() {
   IsNullValidator.prototype = Object.create(abv.AbstractValidator.prototype);
   IsNullValidator.prototype.constructor = IsNullValidator;
   Object.defineProperty(IsNullValidator.prototype, "alias", {get:function() {
-    return ["is-null", "null"];
+    return ["is-null", "null", "nullable"];
   }});
   Object.defineProperty(IsNullValidator.prototype, "options", {get:function() {
     return [];
@@ -8838,7 +8838,7 @@ Object.assign(abv, function() {
   NotNullValidator.prototype = Object.create(abv.AbstractValidator.prototype);
   NotNullValidator.prototype.constructor = NotNullValidator;
   Object.defineProperty(NotNullValidator.prototype, "alias", {get:function() {
-    return ["not-null", "required"];
+    return ["not-null", "required", "present"];
   }});
   Object.defineProperty(NotNullValidator.prototype, "options", {get:function() {
     return [];
@@ -8923,7 +8923,7 @@ Object.assign(abv, function() {
     return "type";
   }});
   Object.defineProperty(TypeValidator.prototype, "options", {get:function() {
-    return [{"name":"type", "type":"array"}, {"name":"any", "type":"boolean"}];
+    return [{"name":"any", "type":"boolean"}, {"name":"type", "type":"array"}];
   }});
   Object.assign(TypeValidator.prototype, {__validate:function() {
     if ("undefined" === typeof this.data) {
@@ -9059,7 +9059,7 @@ Object.assign(abv, function() {
     return "length";
   }});
   Object.defineProperty(LengthValidator.prototype, "options", {get:function() {
-    return [{"name":"max", "type":"bool"}, {"name":"min", "type":"bool"}];
+    return [{"name":"max", "type":"numeric"}, {"name":"min", "type":"numeric"}];
   }});
   Object.assign(LengthValidator.prototype, {__validate:function() {
     if (true === this.normalize) {
@@ -9121,7 +9121,7 @@ Object.assign(abv, function() {
     return "url";
   }});
   Object.defineProperty(UrlValidator.prototype, "options", {get:function() {
-    return [{"name":"protocols", "type":"array"}, {"name":"relativeProtocol", "type":"bool"}];
+    return [{"name":"relativeProtocol", "type":"boolean"}, {"name":"protocols", "type":"array"}];
   }});
   Object.assign(UrlValidator.prototype, {__configure:function() {
     if ("string" === typeof this.protocols) {
@@ -9185,7 +9185,7 @@ Object.assign(abv, function() {
     return "regex";
   }});
   Object.defineProperty(RegexValidator.prototype, "options", {get:function() {
-    return [{"name":"match", "type":"bool"}, {"name":"pattern", "type":"any"}];
+    return [{"name":"match", "type":"boolean"}, {"name":"pattern", "type":"any"}];
   }});
   Object.assign(RegexValidator.prototype, {__validate:function() {
     if (true === this.normalize) {
@@ -9225,7 +9225,7 @@ Object.assign(abv, function() {
 abv.registry(abv.RegexValidator);
 Object.assign(abv, function() {
   var IpValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:optionRules.normalize || 'type:{"type":"bool"}', version:optionRules.version || 'type:{"type":"string"}|length:{"min":1,"max":255}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:optionRules.normalize || 'type:{"type":"bool"}', version:optionRules.version || 'type:{"type":["string","numeric"],"any":true}|length:{"min":1,"max":255}'}, lang, internal);
     this.V4 = "4";
     this.V6 = "6";
     this.ALL = "all";
@@ -9535,7 +9535,7 @@ Object.assign(abv, function() {
   EqualToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
   EqualToValidator.prototype.constructor = EqualToValidator;
   Object.defineProperty(EqualToValidator.prototype, "alias", {get:function() {
-    return "equal-to";
+    return ["equal-to", "equal", "same"];
   }});
   Object.defineProperty(EqualToValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"any"}];
@@ -9557,7 +9557,7 @@ Object.assign(abv, function() {
   NotEqualToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
   NotEqualToValidator.prototype.constructor = NotEqualToValidator;
   Object.defineProperty(NotEqualToValidator.prototype, "alias", {get:function() {
-    return "not-equal-to";
+    return ["not-equal-to", "not-equal"];
   }});
   Object.defineProperty(NotEqualToValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"any"}];
@@ -10142,10 +10142,10 @@ Object.assign(abv, function() {
   ChoiceValidator.prototype = Object.create(abv.AbstractValidator.prototype);
   ChoiceValidator.prototype.constructor = ChoiceValidator;
   Object.defineProperty(ChoiceValidator.prototype, "alias", {get:function() {
-    return "choice";
+    return ["choice", "in"];
   }});
   Object.defineProperty(ChoiceValidator.prototype, "options", {get:function() {
-    return [{"name":"choices", "type":"array"}, {"name":"max", "type":"numeric"}, {"name":"min", "type":"numeric"}, {"name":"multiple", "type":"bool"}];
+    return [{"name":"max", "type":"numeric"}, {"name":"min", "type":"numeric"}, {"name":"multiple", "type":"boolean"}, {"name":"choices", "type":"array"}];
   }});
   Object.assign(ChoiceValidator.prototype, {__validate:function() {
     if (true === this.multiple) {
@@ -11003,7 +11003,7 @@ Object.assign(abv, function() {
     return "issn";
   }});
   Object.defineProperty(IssnValidator.prototype, "options", {get:function() {
-    return [{"name":"caseSensitive", "type":"bool"}, {"name":"requireHyphen", "type":"bool"}];
+    return [{"name":"caseSensitive", "type":"boolean"}, {"name":"requireHyphen", "type":"boolean"}];
   }});
   Object.assign(IssnValidator.prototype, {__validate:function() {
     var canonical = this.data;
@@ -11521,7 +11521,7 @@ Object.assign(abv, function() {
     return ["digits_between", "digits-between"];
   }});
   Object.defineProperty(DigitsBetweenValidator.prototype, "options", {get:function() {
-    return [{"name":"min", "type":"integer"}, {"name":"max", "type":"integer"}];
+    return [{"name":"min", "type":"numeric"}, {"name":"max", "type":"numeric"}];
   }});
   Object.assign(DigitsBetweenValidator.prototype, {__validate:function() {
     var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"numeric"}', true);
@@ -11592,14 +11592,12 @@ Object.assign(abv, function() {
 abv.registry(abv.DistinctValidator);
 Object.assign(abv, function() {
   var EndsWithValidator = function(data, options, optionRules, lang, internal) {
-    abv.RegexValidator.call(this, data, options, {pattern:optionRules.pattern || 'length:{"min":3,"max":255}', ends:optionRules.ends || 'type:{"type":["iterable","string"],"any":true}'}, lang, internal);
+    abv.AbstractValidator.call(this, data, options, {pattern:optionRules.pattern || 'length:{"min":3,"max":255}', ends:optionRules.ends || 'type:{"type":["iterable","string"],"any":true}'}, lang, internal);
     this.message = this.__options.message || "The %%attribute%% must end with one of the following: %%values%%.";
     this.ends = this.__options.ends;
-    this.pattern;
-    this.patternSample = "^.*%s$";
     this.name = "EndsWithValidator";
   };
-  EndsWithValidator.prototype = Object.create(abv.RegexValidator.prototype);
+  EndsWithValidator.prototype = Object.create(abv.AbstractValidator.prototype);
   EndsWithValidator.prototype.constructor = EndsWithValidator;
   Object.defineProperty(EndsWithValidator.prototype, "alias", {get:function() {
     return ["ends_with", "ends-with"];
@@ -11609,16 +11607,30 @@ Object.assign(abv, function() {
   }});
   Object.assign(EndsWithValidator.prototype, {__validate:function() {
     for (var i = 0; i < this.ends.length; i++) {
-      this.pattern = abv.sprintf(this.patternSample, this.ends[i]);
-      abv.RegexValidator.prototype.__validate.call(this);
-      if (false === this.__hasErrors()) {
+      if (true === this.data.endsWith(this.ends[i])) {
         return;
       }
     }
     this.__setErrorMessage(this.message, this.__messageParameters());
     return;
   }, __beforeValidate:function() {
-    abv.RegexValidator.prototype.__beforeValidate.call(this);
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
+      return;
+    }
     if (true === abv.isType("string", this.ends)) {
       this.ends = [this.ends];
     }
@@ -11666,8 +11678,6 @@ Object.assign(abv, function() {
     return [{"name":"value", "type":"boolean|string|numeric|array|datetime"}];
   }});
   Object.assign(GtValidator.prototype, {__validate:function() {
-    this.__data = this.__prepareDataForComparing(this.__convertDataToValueType());
-    this.__value = this.__prepareDataForComparing(this.value);
     if (true === abv.isType("integer", this.value) && (true === abv.isType("array", this.data) || true === abv.isType("string", this.data))) {
       if (this.data.length <= this.value) {
         this.__setErrorMessage(true === abv.isType("string", this.data) ? this.stringMessage : this.arrayMessage, this.__messageParameters());
@@ -11694,6 +11704,151 @@ Object.assign(abv, function() {
   return {GtValidator:GtValidator};
 }());
 abv.registry(abv.GtValidator);
+Object.assign(abv, function() {
+  var NumericValidator = function(data, options, optionRules, lang, internal) {
+    abv.TypeValidator.call(this, data, {type:"numeric", message:"The %%attribute%% must be a number."}, {}, lang, internal);
+    this.name = "NumericValidator";
+  };
+  NumericValidator.prototype = Object.create(abv.TypeValidator.prototype);
+  NumericValidator.prototype.constructor = NumericValidator;
+  Object.defineProperty(NumericValidator.prototype, "alias", {get:function() {
+    return ["numeric"];
+  }});
+  Object.defineProperty(NumericValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(NumericValidator.prototype, {__messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {NumericValidator:NumericValidator};
+}());
+abv.registry(abv.NumericValidator);
+Object.assign(abv, function() {
+  var StringValidator = function(data, options, optionRules, lang, internal) {
+    abv.TypeValidator.call(this, data, {type:"string", message:"The %%attribute%% must be a string."}, {}, lang, internal);
+    this.name = "StringValidator";
+  };
+  StringValidator.prototype = Object.create(abv.TypeValidator.prototype);
+  StringValidator.prototype.constructor = StringValidator;
+  Object.defineProperty(StringValidator.prototype, "alias", {get:function() {
+    return ["string"];
+  }});
+  Object.defineProperty(StringValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(StringValidator.prototype, {__messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {StringValidator:StringValidator};
+}());
+abv.registry(abv.StringValidator);
+Object.assign(abv, function() {
+  var IntegerValidator = function(data, options, optionRules, lang, internal) {
+    abv.TypeValidator.call(this, data, {type:"integer", message:"The %%attribute%% must be an integer."}, {}, lang, internal);
+    this.name = "IntegerValidator";
+  };
+  IntegerValidator.prototype = Object.create(abv.TypeValidator.prototype);
+  IntegerValidator.prototype.constructor = IntegerValidator;
+  Object.defineProperty(IntegerValidator.prototype, "alias", {get:function() {
+    return ["integer"];
+  }});
+  Object.defineProperty(IntegerValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(IntegerValidator.prototype, {__messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {IntegerValidator:IntegerValidator};
+}());
+abv.registry(abv.IntegerValidator);
+Object.assign(abv, function() {
+  var Ipv4Validator = function(data, options, optionRules, lang, internal) {
+    abv.IpValidator.call(this, data, {version:4, message:"The %%attribute%% must be a valid IPv4 address."}, optionRules, lang, internal);
+    this.name = "Ipv4Validator";
+  };
+  Ipv4Validator.prototype = Object.create(abv.IpValidator.prototype);
+  Ipv4Validator.prototype.constructor = Ipv4Validator;
+  Object.defineProperty(Ipv4Validator.prototype, "alias", {get:function() {
+    return "ipv4";
+  }});
+  Object.defineProperty(Ipv4Validator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(Ipv4Validator.prototype, {__messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {Ipv4Validator:Ipv4Validator};
+}());
+abv.registry(abv.Ipv4Validator);
+Object.assign(abv, function() {
+  var Ipv6Validator = function(data, options, optionRules, lang, internal) {
+    abv.IpValidator.call(this, data, {version:6, message:"The %%attribute%% must be a valid IPv6 address."}, optionRules, lang, internal);
+    this.name = "Ipv6Validator";
+  };
+  Ipv6Validator.prototype = Object.create(abv.IpValidator.prototype);
+  Ipv6Validator.prototype.constructor = Ipv6Validator;
+  Object.defineProperty(Ipv6Validator.prototype, "alias", {get:function() {
+    return "ipv6";
+  }});
+  Object.defineProperty(Ipv6Validator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(Ipv6Validator.prototype, {__messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {Ipv6Validator:Ipv6Validator};
+}());
+abv.registry(abv.Ipv6Validator);
+Object.assign(abv, function() {
+  var StartsWithValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {pattern:optionRules.pattern || 'length:{"min":3,"max":255}', starts:optionRules.starts || 'type:{"type":["iterable","string"],"any":true}'}, lang, internal);
+    this.message = this.__options.message || "The %%attribute%% must start with one of the following: %%values%%.";
+    this.starts = this.__options.starts;
+    this.name = "StartsWithValidator";
+  };
+  StartsWithValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  StartsWithValidator.prototype.constructor = StartsWithValidator;
+  Object.defineProperty(StartsWithValidator.prototype, "alias", {get:function() {
+    return ["starts_with", "starts-with"];
+  }});
+  Object.defineProperty(StartsWithValidator.prototype, "options", {get:function() {
+    return [{"name":"ends", "type":"array"}];
+  }});
+  Object.assign(StartsWithValidator.prototype, {__validate:function() {
+    for (var i = 0; i < this.starts.length; i++) {
+      if (true === this.data.startsWith(this.starts[i])) {
+        return;
+      }
+    }
+    this.__setErrorMessage(this.message, this.__messageParameters());
+    return;
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
+      return;
+    }
+    if (true === abv.isType("string", this.starts)) {
+      this.starts = [this.starts];
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value", "values":JSON.stringify(this.starts)};
+  }});
+  return {StartsWithValidator:StartsWithValidator};
+}());
+abv.registry(abv.StartsWithValidator);
 abv.I18nHandler.add("af", [{"@id":"1", "source":"This value should be false.", "target":"Hierdie waarde moet vals wees."}, {"@id":"2", "source":"This value should be true.", "target":"Hierdie waarde moet waar wees."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Hierdie waarde moet van die soort {{type}} wees."}, {"@id":"4", "source":"This value should be blank.", "target":"Hierdie waarde moet leeg wees."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Die waarde wat jy gekies het is nie 'n geldige keuse nie."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Jy moet ten minste %%limit%% kies.|Jy moet ten minste %%limit%% keuses kies."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Jy moet by die meeste %%limit%% keuse kies.|Jy moet by die meeste %%limit%% keuses kies."}, {"@id":"8", "source":"One or more of the given values is invalid.", 
 "target":"Een of meer van die gegewe waardes is ongeldig."}, {"@id":"9", "source":"This field was not expected.", "target":"Die veld is nie verwag nie."}, {"@id":"10", "source":"This field is missing.", "target":"Hierdie veld ontbreek."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Hierdie waarde is nie 'n geldige datum nie."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Hierdie waarde is nie 'n geldige datum en tyd nie."}, {"@id":"13", "source":"This value is not a valid email address.", 

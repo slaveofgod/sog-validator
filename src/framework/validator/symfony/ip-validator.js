@@ -91,7 +91,7 @@ Object.assign(abv, function () {
         abv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             normalize: optionRules.normalize || 'type:{"type":"bool"}',
-            version: optionRules.version || 'type:{"type":"string"}|length:{"min":1,"max":255}'
+            version: optionRules.version || 'type:{"type":["string","numeric"],"any":true}|length:{"min":1,"max":255}'
         }, lang, internal);
 
         this.V4 = "4";

@@ -21,9 +21,17 @@ describe('ends_with', () => {
         test('alexey.bob@gmail.com', () => {
             expect(abv.isValidWithErrorMessage('alexey.bob@gmail.com', 'ends_with:{"ends":["com","eu"]}')).toBe(toBe);
         });
+
+        test('132453465465498', () => {
+            expect(abv.isValidWithErrorMessage(132453465465498, 'ends_with:{"ends":["com","eu","5498"]}')).toBe(toBe);
+        });
     });
 
     describe('Is Invalid', () => {
+        test('132453465465498', () => {
+            expect(abv.isValidWithErrorMessage(132453465465498, 'ends_with:{"ends":["com","eu","6498"]}')).toBe('The value must end with one of the following: [\"com\",\"eu\",\"6498\"].');
+        });
+
         test('a@a-com', () => {
             expect(abv.isValidWithErrorMessage('a@a-com', 'ends-with:{"ends":"abs"}')).toBe('The value must end with one of the following: [\"abs\"].');
         });
