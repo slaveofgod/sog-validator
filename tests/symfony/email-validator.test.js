@@ -18,8 +18,8 @@ describe('email', () => {
             expect(abv.isValidWithErrorMessage('a@a.com', 'email:{"mode":"loose"}')).toBe(toBe);
         });
 
-        test('alexey.bob@gmail.com', () => {
-            expect(abv.isValidWithErrorMessage('alexey.bob@gmail.com', 'email:{"mode":"html5"}')).toBe(toBe);
+        test('iamtheslaveofgod@gmail.com', () => {
+            expect(abv.isValidWithErrorMessage('iamtheslaveofgod@gmail.com', 'email:{"mode":"html5"}')).toBe(toBe);
         });
     });
 

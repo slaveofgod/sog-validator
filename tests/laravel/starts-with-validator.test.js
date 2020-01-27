@@ -18,8 +18,8 @@ describe('starts_with', () => {
             expect(abv.isValidWithErrorMessage('a@a.com', 'starts_with:{"starts":"a@a"}')).toBe(toBe);
         });
 
-        test('alexey.bob@gmail.com', () => {
-            expect(abv.isValidWithErrorMessage('alexey.bob@gmail.com', 'starts_with:{"starts":["com","alexey"]}')).toBe(toBe);
+        test('iamtheslaveofgod@gmail.com', () => {
+            expect(abv.isValidWithErrorMessage('iamtheslaveofgod@gmail.com', 'starts_with:{"starts":["com","alexey","iam"]}')).toBe(toBe);
         });
 
         test('1234567895664', () => {

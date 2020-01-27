@@ -30,8 +30,8 @@ describe('json', () => {
             expect(abv.isValidWithErrorMessage('a@a.com', 'json')).toBe(toBe);
         });
 
-        test('alexey.bob@gmail.com', () => {
-            expect(abv.isValidWithErrorMessage('alexey.bob@gmail.com', 'json')).toBe(toBe);
+        test('iamtheslaveofgod@gmail.com', () => {
+            expect(abv.isValidWithErrorMessage('iamtheslaveofgod@gmail.com', 'json')).toBe(toBe);
         });
 
         test('a@a-com', () => {

@@ -1,6 +1,6 @@
 /*
- * Bob Validator Library v2.0 revision c749bea
- * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
+ * SOG Validator Library v2.0 revision 18e21d0
+ * Copyright 2011-2020 SOG Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
     if (typeof define === 'function' && define.amd) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"c749bea", config:{}, common:{}, validators:{}, registry:function(validator) {
+var abv = {version:"2.0", revision:"18e21d0", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -9717,6 +9717,8 @@ Object.assign(abv, function() {
     this.min = this.__options.min;
     this.minMessage = this.__options.minMessage || "This value should be %%limit%% or more.";
     this.notInRangeMessage = this.__options.notInRangeMessage || "This value should be between %%min%% and %%max%%.";
+    this.originMin = this.min;
+    this.originMax = this.max;
     this.name = "RangeValidator";
   };
   RangeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
@@ -9764,13 +9766,13 @@ Object.assign(abv, function() {
       this.max = date.getTime();
     }
   }, __invalidMessageParameters:function() {
-    return {"value":this.data};
+    return {"value":this.__formattedData(this.data)};
   }, __notInRangeMessageParameters:function() {
-    return {"max":this.max, "min":this.min, "value":this.data};
+    return {"max":this.__formattedData(this.originMax), "min":this.__formattedData(this.originMin), "value":this.__formattedData(this.data)};
   }, __maxMessageParameters:function() {
-    return {"limit":this.max, "value":this.data};
+    return {"limit":this.__formattedData(this.originMax), "value":this.__formattedData(this.data)};
   }, __minMessageParameters:function() {
-    return {"limit":this.min, "value":this.data};
+    return {"limit":this.__formattedData(this.originMin), "value":this.__formattedData(this.data)};
   }});
   return {RangeValidator:RangeValidator};
 }());

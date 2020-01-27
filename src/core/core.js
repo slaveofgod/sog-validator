@@ -17,7 +17,7 @@ var _typeLookup = function () {
 /**
  * @name abv
  * @namespace
- * @description Root namespace for the Bob Validator Library
+ * @description Root namespace for the SOG Validator Library
  */
 var abv = {
     version: "__CURRENT_SDK_VERSION__",

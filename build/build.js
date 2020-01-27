@@ -170,8 +170,8 @@ var getCopyrightNotice = function (ver, rev) {
     }
     return [
         "/*",
-        " * Bob Validator Library v" + ver + " revision " + rev + buildOptions,
-        " * Copyright 2011-" + new Date().getFullYear() + " Bob Validator Ltd. All rights reserved.",
+        " * SOG Validator Library v" + ver + " revision " + rev + buildOptions,
+        " * Copyright 2011-" + new Date().getFullYear() + " SOG Validator Ltd. All rights reserved.",
         " */",
         ""
     ].join("\n");
@@ -297,7 +297,7 @@ var arguments = function () {
     var _arg = null;
     process.argv.forEach(function (arg) {
         if (arg === '-h') {
-            console.log("Build Script for Bob Validator Library\n");
+            console.log("Build Script for SOG Validator Library\n");
             console.log("Usage: node build.js -l [COMPILER_LEVEL] -o [OUTPUT_PATH] -m [SOURCE_PATH]\n");
             console.log("Arguments:");
             console.log("-h: show this help");

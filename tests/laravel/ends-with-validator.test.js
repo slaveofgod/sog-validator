@@ -18,8 +18,8 @@ describe('ends_with', () => {
             expect(abv.isValidWithErrorMessage('a@a.com', 'ends_with:{"ends":"com"}')).toBe(toBe);
         });
 
-        test('alexey.bob@gmail.com', () => {
-            expect(abv.isValidWithErrorMessage('alexey.bob@gmail.com', 'ends_with:{"ends":["com","eu"]}')).toBe(toBe);
+        test('iamtheslaveofgod@gmail.com', () => {
+            expect(abv.isValidWithErrorMessage('iamtheslaveofgod@gmail.com', 'ends_with:{"ends":["com","eu"]}')).toBe(toBe);
         });
 
         test('132453465465498', () => {

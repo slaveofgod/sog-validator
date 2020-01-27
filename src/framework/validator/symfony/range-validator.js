@@ -150,6 +150,9 @@ Object.assign(abv, function () {
         this.minMessage = this.__options.minMessage || 'This value should be %%limit%% or more.';
         this.notInRangeMessage = this.__options.notInRangeMessage || 'This value should be between %%min%% and %%max%%.';
 
+        this.originMin = this.min;
+        this.originMax = this.max;
+
         this.name = 'RangeValidator';
     };
     RangeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
@@ -261,7 +264,7 @@ Object.assign(abv, function () {
          */
         __invalidMessageParameters: function () {
             return {
-                'value': this.data
+                'value': this.__formattedData(this.data)
             }
         },
 
@@ -274,9 +277,9 @@ Object.assign(abv, function () {
          */
         __notInRangeMessageParameters: function () {
             return {
-                'max': this.max,
-                'min': this.min,
-                'value': this.data
+                'max': this.__formattedData(this.originMax),
+                'min': this.__formattedData(this.originMin),
+                'value': this.__formattedData(this.data)
             }
         },
 
@@ -289,8 +292,8 @@ Object.assign(abv, function () {
          */
         __maxMessageParameters: function () {
             return {
-                'limit': this.max,
-                'value': this.data
+                'limit': this.__formattedData(this.originMax),
+                'value': this.__formattedData(this.data)
             }
         },
 
@@ -303,8 +306,8 @@ Object.assign(abv, function () {
          */
         __minMessageParameters: function () {
             return {
-                'limit': this.min,
-                'value': this.data
+                'limit': this.__formattedData(this.originMin),
+                'value': this.__formattedData(this.data)
             }
         }
     });

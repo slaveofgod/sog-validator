@@ -41,7 +41,7 @@ describe('range', () => {
         });
 
         test('1990-12-17T03:24:00 [min: "1991-12-17T03:24:00", max: "1995-12-17T03:24:00"]', () => {
-            expect(abv.isValidWithErrorMessage('1990-12-17T03:24:00', 'range:{"min":"1991-12-17T03:24:00","max":"1995-12-17T03:24:00"}')).toBe("This value should be between 692933040000 and 819163440000.");
+            expect(abv.isValidWithErrorMessage('1990-12-17T03:24:00', 'range:{"min":"1991-12-17T03:24:00","max":"1995-12-17T03:24:00"}')).toBe("This value should be between December 17, 1991 3:24 AM and December 17, 1995 3:24 AM.");
         });
 
         test('Lorem ipsum [min: "1990-12-17T03:24:00", max: "1995-12-17T03:24:00"]', () => {

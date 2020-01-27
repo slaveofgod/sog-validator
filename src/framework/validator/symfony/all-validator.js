@@ -14,7 +14,7 @@ Object.assign(abv, function () {
      * @param {Object} options The setting options.
      * @example
      * var rules = 'required|email';
-     * var data = 'alexey.bob@gmail.com'
+     * var data = 'iamtheslaveofgod@gmail.com'
      * var validator = new abv.AllValidator(data, rules, {
      *      lang: 'en'
      * });

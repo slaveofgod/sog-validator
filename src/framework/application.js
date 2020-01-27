@@ -32,7 +32,7 @@ Object.assign(abv, function () {
      *   locale: 'cy_GB',
      *   country: 'US',
      *   language: 'en_gb',
-     *   homepage: 'https://github.com/alexeybob/sog-validator'
+     *   homepage: 'https://github.com//slaveofgod/sog-validator'
      * });
      *
      * if (false === form.get('name').isValid()) {
