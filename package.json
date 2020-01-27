@@ -1,6 +1,6 @@
 {
   "name": "sog-validator",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "author": {
     "name": "Slave God",
     "email": "iamtheslaveofgod@gmail.com"
@@ -78,6 +78,6 @@
     "tsd": "jsdoc -c conf-tsd.json"
   },
   "engines": {
-    "node": ">= 0.6.12"
+    "node": ">= 8.0.0"
   }
 }
