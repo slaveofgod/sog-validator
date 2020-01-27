@@ -1,11 +1,11 @@
 {
   "name": "sog-validator",
-  "version": "0.9.4",
+  "version": "0.9.6",
   "author": {
     "name": "Slave God",
     "email": "iamtheslaveofgod@gmail.com"
   },
-  "homepage": "https://gitlab.com/slaveofgod/sog-validator.git",
+  "homepage": "https://github.com/slaveofgod/sog-validator.git",
   "description": "A library of validators",
   "keywords": [
     "assert",
@@ -21,11 +21,11 @@
   "main": "build/output/sog-validator.js",
   "types": "index.d.ts",
   "bugs": {
-    "url": "https://gitlab.com/slaveofgod/sog-validator/issues"
+    "url": "https://github.com/slaveofgod/sog-validator/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/slaveofgod/sog-validator.git"
+    "url": "https://github.com/slaveofgod/sog-validator.git"
   },
   "eslintConfig": {
     "extends": "<rootDir>/eslint-config.js"
