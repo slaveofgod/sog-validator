@@ -16,7 +16,7 @@ describe('less-than-or-equal', () => {
 
         test('1995-12-17T03:24:00 < new Date("1996-12-17T03:24:00")', () => {
             expect(abv.isValidWithErrorMessage('1995-12-17T03:24:00', {
-                "less-than-or-equal": {
+                "max": {
                     "value": new Date('1996-12-17T03:24:00')
                 }
             })).toBe(toBe);
@@ -31,7 +31,7 @@ describe('less-than-or-equal', () => {
         });
 
         test('false < true', () => {
-            expect(abv.isValidWithErrorMessage(false, 'less-than-or-equal:{"value":true}')).toBe(toBe);
+            expect(abv.isValidWithErrorMessage(false, 'max:{"value":true}')).toBe(toBe);
         });
 
         test('12345 < "12346"', () => {

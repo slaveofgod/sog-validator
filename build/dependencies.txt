@@ -124,6 +124,9 @@
 ../src/framework/validator/laravel/ipv4-validator.js
 ../src/framework/validator/laravel/ipv6-validator.js
 ../src/framework/validator/laravel/starts-with-validator.js
+../src/framework/validator/laravel/in-validator.js
+../src/framework/validator/laravel/not-in-validator.js
+../src/framework/validator/laravel/size-validator.js
 ../src/i18n/resource/symfony/af.js
 ../src/i18n/resource/symfony/ar.js
 ../src/i18n/resource/symfony/az.js

@@ -78,7 +78,10 @@ Object.assign(abv, function () {
 
     Object.defineProperty(LessThanOrEqualValidator.prototype, 'alias', {
         get: function () {
-            return 'less-than-or-equal';
+            return [
+                'less-than-or-equal',
+                'max'
+            ];
         }
     });
 

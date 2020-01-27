@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: IntegerValidator</title>
+    <title>Class: SizeValidator</title>
     
     
     
@@ -3544,7 +3544,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="abv.IntegerValidator.html">Class: IntegerValidator</h1>
+        <h1 class="page-title" data-filename="abv.SizeValidator.html">Class: SizeValidator</h1>
         
 
 
@@ -3553,10 +3553,13 @@
     
 <header>
     <div class="header content-size">
-        <h2><span class="ancestors"><a href="abv.html">abv</a>.</span>IntegerValidator
+        <h2><span class="ancestors"><a href="abv.html">abv</a>.</span>SizeValidator
         </h2>
         
-            <div class="class-description"><p>The field under validation must be an integer.</p></div>
+            <div class="class-description"><p>The field under validation must have a size matching the given value.</p>
+<p>For <code>string</code> data, value corresponds to the number of characters.</p>
+<p>For <code>numeric</code> data, value corresponds to a given integer value.</p>
+<p>For an <code>array</code>, size corresponds to the count of the array.</p></div>
         
     </div>
 </header>  
@@ -3570,10 +3573,10 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="IntegerValidator">
-            <a class="share-icon" href="#IntegerValidator"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="SizeValidator">
+            <a class="share-icon" href="#SizeValidator"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                new abv.IntegerValidator
+                new abv.SizeValidator
             </span>
             <span class="signature">(data, options, optionRules, lang, internal)</span>
             
@@ -3777,7 +3780,7 @@
         
 
     
-    <pre class="prettyprint"><code>var validator = new abv.IntegerValidator(data);
+    <pre class="prettyprint"><code>var validator = new abv.SizeValidator(data, {min: 10});
 if (false === validator.isValid()) {
      validator.errors().first();
 }</code></pre>
@@ -3808,6 +3811,62 @@ if (false === validator.isValid()) {
     
     
     
+    
+        <h3 class="subsection-title">Members</h3>
+        
+        <dl class="list-members">
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="value">
+            <a class="share-icon" href="#value"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">value</span>
+            <span class="type-signature type">Integer</span>
+            
+            
+            
+            
+        </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>This option is required.</p>
+<p>It defines the value to compare to.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        </dl>
     
     
     

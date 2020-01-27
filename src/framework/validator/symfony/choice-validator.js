@@ -214,8 +214,7 @@ Object.assign(abv, function () {
     Object.defineProperty(ChoiceValidator.prototype, 'alias', {
         get: function () {
             return [
-                'choice',
-                'in'
+                'choice'
             ];
         }
     });

@@ -16,7 +16,7 @@ describe('greater-than-or-equal', () => {
 
         test('1995-12-17T03:24:00 >= new Date("1995-12-17T03:24:00")', () => {
             expect(abv.isValidWithErrorMessage('1995-12-17T03:24:00', {
-                "greater-than-or-equal": {
+                "min": {
                     "value": new Date('1995-12-17T03:24:00')
                 }
             })).toBe(toBe);
@@ -56,7 +56,7 @@ describe('greater-than-or-equal', () => {
 
         test('1995-12-17T03:24:00 >= new Date("1995-12-17T03:21:00")', () => {
             expect(abv.isValidWithErrorMessage('1995-12-17T03:24:00', {
-                "greater-than-or-equal": {
+                "min": {
                     "value": new Date('1995-12-17T03:21:00')
                 }
             })).toBe(toBe);
@@ -86,7 +86,7 @@ describe('greater-than-or-equal', () => {
 
         test('Lorem ipsum >= new Date("1995-12-17T03:24:00")', () => {
             expect(abv.isValidWithErrorMessage('Lorem ipsum', {
-                "greater-than-or-equal": {
+                "min": {
                     "value": new Date('1995-12-17T03:24:00')
                 }
             })).toBe("This value should be greater than or equal to December 17, 1995 3:24 AM.");

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: IntegerValidator</title>
+    <title>Class: NotInValidator</title>
     
     
     
@@ -3544,7 +3544,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="abv.IntegerValidator.html">Class: IntegerValidator</h1>
+        <h1 class="page-title" data-filename="abv.NotInValidator.html">Class: NotInValidator</h1>
         
 
 
@@ -3553,10 +3553,10 @@
     
 <header>
     <div class="header content-size">
-        <h2><span class="ancestors"><a href="abv.html">abv</a>.</span>IntegerValidator
+        <h2><span class="ancestors"><a href="abv.html">abv</a>.</span>NotInValidator
         </h2>
         
-            <div class="class-description"><p>The field under validation must be an integer.</p></div>
+            <div class="class-description"><p>The field under validation must <code>not be included</code> in the given list of values.</p></div>
         
     </div>
 </header>  
@@ -3570,10 +3570,10 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="IntegerValidator">
-            <a class="share-icon" href="#IntegerValidator"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="NotInValidator">
+            <a class="share-icon" href="#NotInValidator"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                new abv.IntegerValidator
+                new abv.NotInValidator
             </span>
             <span class="signature">(data, options, optionRules, lang, internal)</span>
             
@@ -3777,7 +3777,12 @@
         
 
     
-    <pre class="prettyprint"><code>var validator = new abv.IntegerValidator(data);
+    <pre class="prettyprint"><code>var validator = new abv.NotInValidator("Bob", [
+  "Liam", "Noah", "William", "James", "Logan", "Benjamin", "Mason", "Elijah",
+  "Oliver", "Jacob", "Lucas", "Michael", "Alexander", "Ethan", "Daniel",
+  "Matthew", "Aiden", "Henry", "Joseph", "Jackson", "Samuel", "Sebastian",
+  "David", "Carter", "Wyatt", "Jayden", "John", "Owen", "Dylan", "Luke"
+]);
 if (false === validator.isValid()) {
      validator.errors().first();
 }</code></pre>

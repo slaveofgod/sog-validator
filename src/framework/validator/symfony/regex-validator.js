@@ -125,6 +125,7 @@ Object.assign(abv, function () {
 
             // Check if empty
             if (true === this.__isEmptyData()) {
+                this.__skip = true;
                 return ;
             }
 
