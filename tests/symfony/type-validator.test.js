@@ -1,6 +1,6 @@
 'use strict';
 
-const abv = require('../../build/output/bob-validator');
+const abv = require('../../build/output/sog-validator');
 
 /**
  * Array - Finds whether a variable is an array

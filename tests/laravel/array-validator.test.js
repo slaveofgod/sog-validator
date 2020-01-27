@@ -1,6 +1,6 @@
 'use strict';
 
-const abv = require('../../build/output/bob-validator');
+const abv = require('../../build/output/sog-validator');
 describe('array', () => {
     describe('Is Valid', () => {
         let toBe = null;

@@ -1,6 +1,6 @@
 'use strict';
 
-const abv = require('../../build/output/bob-validator');
+const abv = require('../../build/output/sog-validator');
 
 describe('alpha_num', () => {
     describe('Is Valid', () => {

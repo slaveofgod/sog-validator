@@ -1,14 +1,14 @@
 /**
-* build.js - compile bob-validator engine from source into single javascript library
+* build.js - compile sog-validator engine from source into single javascript library
 * This uses the Closure Compiler which requires java to be installed
 * Example usage:
 *
 * // regular release build
-* node build.js -l 0 -o output/bob-validator.js
+* node build.js -l 0 -o output/sog-validator.js
 * // production minified build
-* node build.js -l 1 -o output/bob-validator.min.js
+* node build.js -l 1 -o output/sog-validator.min.js
 * // include extra debug code
-* node build.js -l 0 -d -o output/bob-validator.dbg.js
+* node build.js -l 0 -d -o output/sog-validator.dbg.js
 */
 
 var fs = require("fs");
@@ -36,7 +36,7 @@ try {
     process.exit(1);
 }
 
-var DEFAULT_OUTPUT = "output/bob-validator.js";
+var DEFAULT_OUTPUT = "output/sog-validator.js";
 var DEFAULT_TEMP = "_tmp";
 var DEFAULT_SOURCE = "../src";
 var SRC_DIR = "../";
@@ -305,7 +305,7 @@ var arguments = function () {
             console.log("\t0: WHITESPACE_ONLY [default]");
             console.log("\t1: SIMPLE");
             console.log("\t2: ADVANCED OPTIMIZATIONS");
-            console.log("-o PATH: output file path [output/bob-validator.js]");
+            console.log("-o PATH: output file path [output/sog-validator.js]");
             console.log("-d: build debug engine configuration");
             console.log("-p: build profiler engine configuration");
             console.log("-m SOURCE_PATH: build engine and generate source map next to output file. [../src]");
