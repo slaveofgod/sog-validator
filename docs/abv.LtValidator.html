@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: EndsWithValidator</title>
+    <title>Class: LtValidator</title>
     
     
     
@@ -3428,7 +3428,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="abv.EndsWithValidator.html">Class: EndsWithValidator</h1>
+        <h1 class="page-title" data-filename="abv.LtValidator.html">Class: LtValidator</h1>
         
 
 
@@ -3437,10 +3437,11 @@
     
 <header>
     <div class="header content-size">
-        <h2><span class="ancestors"><a href="abv.html">abv</a>.</span>EndsWithValidator
+        <h2><span class="ancestors"><a href="abv.html">abv</a>.</span>LtValidator
         </h2>
         
-            <div class="class-description"><p>The field under validation must end with one of the given values.</p></div>
+            <div class="class-description"><p>The field under validation must be <code>less</code> than the given field.<p>
+<p><code>Strings</code>, <code>numerics</code>, <code>arrays</code>, and <code>dates</code> are evaluated using the same conventions as the size rule.</p></div>
         
     </div>
 </header>  
@@ -3454,10 +3455,10 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="EndsWithValidator">
-            <a class="share-icon" href="#EndsWithValidator"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="LtValidator">
+            <a class="share-icon" href="#LtValidator"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                new abv.EndsWithValidator
+                new abv.LtValidator
             </span>
             <span class="signature">(data, options, optionRules, lang, internal)</span>
             
@@ -3661,7 +3662,7 @@
         
 
     
-    <pre class="prettyprint"><code>var validator = new abv.EndsWithValidator(data, {ends: ['abc','def']});
+    <pre class="prettyprint"><code>var validator = new abv.LtValidator(data, {"value": 10});
 if (false === validator.isValid()) {
      validator.errors().first();
 }</code></pre>
@@ -3699,10 +3700,10 @@ if (false === validator.isValid()) {
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="ends">
-            <a class="share-icon" href="#ends"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">ends</span>
-            <span class="type-signature type">String | Array</span>
+        <h4 class="name" id="value">
+            <a class="share-icon" href="#value"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">value</span>
+            <span class="type-signature type">*</span>
             
             
             
@@ -3715,9 +3716,9 @@ if (false === validator.isValid()) {
 <dd>
     
     <div class="description">
-        <p>The option is required.</p>
-<p>The list of ends.</p>
-<p>One of the "<code>end</code>" needs to be the end of the passed value.</p>
+        <p>This option is required.</p>
+<p>It defines the value to compare to.</p>
+<p>The data type could be <code>string</code>, <code>number</code>, <code>array</code> or <code>date</code>.<p>
     </div>
     
     

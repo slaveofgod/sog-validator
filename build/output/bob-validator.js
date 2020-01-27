@@ -1,5 +1,5 @@
 /*
- * Bob Validator Library v2.0 revision dd993c4
+ * Bob Validator Library v2.0 revision 379efe9
  * Copyright 2011-2020 Bob Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"dd993c4", config:{}, common:{}, validators:{}, registry:function(validator) {
+var abv = {version:"2.0", revision:"379efe9", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -11679,7 +11679,7 @@ Object.assign(abv, function() {
   }});
   Object.assign(GtValidator.prototype, {__validate:function() {
     if (true === abv.isType("integer", this.value) && (true === abv.isType("array", this.data) || true === abv.isType("string", this.data))) {
-      if (this.data.length <= this.value) {
+      if (this.data.length < this.value) {
         this.__setErrorMessage(true === abv.isType("string", this.data) ? this.stringMessage : this.arrayMessage, this.__messageParameters());
         return;
       }
@@ -11704,6 +11704,141 @@ Object.assign(abv, function() {
   return {GtValidator:GtValidator};
 }());
 abv.registry(abv.GtValidator);
+Object.assign(abv, function() {
+  var GteValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["numeric","datetime","date-string","boolean"],"any":true}'}, lang, internal);
+    this.value = this.__options.value;
+    this.dateMessage = "The %%attribute%% must be greater than or equal %%value%% date.";
+    this.numericMessage = "The %%attribute%% must be greater than or equal %%value%%.";
+    this.stringMessage = "The %%attribute%% must be greater than or equal %%value%% characters.";
+    this.arrayMessage = "The %%attribute%% must have %%value%% items or more.";
+    this.name = "GteValidator";
+  };
+  GteValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  GteValidator.prototype.constructor = GteValidator;
+  Object.defineProperty(GteValidator.prototype, "alias", {get:function() {
+    return "gte";
+  }});
+  Object.defineProperty(GteValidator.prototype, "options", {get:function() {
+    return [{"name":"value", "type":"boolean|string|numeric|array|datetime"}];
+  }});
+  Object.assign(GteValidator.prototype, {__validate:function() {
+    if (true === abv.isType("integer", this.value) && (true === abv.isType("array", this.data) || true === abv.isType("string", this.data))) {
+      if (this.data.length <= this.value) {
+        this.__setErrorMessage(true === abv.isType("string", this.data) ? this.stringMessage : this.arrayMessage, this.__messageParameters());
+        return;
+      }
+    } else {
+      if (false === abv.isValid(this.data, {"greater-than-or-equal":{"value":this.value}}, true)) {
+        var __message = this.dateMessage;
+        if (true === abv.isType("numeric", this.value) || true === abv.isType("boolean", this.value)) {
+          __message = this.numericMessage;
+        }
+        this.__setErrorMessage(__message, this.__messageParameters());
+        return;
+      }
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value", "value":this.__formattedData(this.value)};
+  }});
+  return {GteValidator:GteValidator};
+}());
+abv.registry(abv.GteValidator);
+Object.assign(abv, function() {
+  var LtValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["numeric","datetime","date-string","boolean"],"any":true}'}, lang, internal);
+    this.value = this.__options.value;
+    this.dateMessage = "The %%attribute%% must be less than %%value%% date.";
+    this.numericMessage = "The %%attribute%% must be less than %%value%%.";
+    this.stringMessage = "The %%attribute%% must be less than %%value%% characters.";
+    this.arrayMessage = "The %%attribute%% must have less than %%value%% items.";
+    this.name = "LtValidator";
+  };
+  LtValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  LtValidator.prototype.constructor = LtValidator;
+  Object.defineProperty(LtValidator.prototype, "alias", {get:function() {
+    return "lt";
+  }});
+  Object.defineProperty(LtValidator.prototype, "options", {get:function() {
+    return [{"name":"value", "type":"boolean|string|numeric|array|datetime"}];
+  }});
+  Object.assign(LtValidator.prototype, {__validate:function() {
+    if (true === abv.isType("integer", this.value) && (true === abv.isType("array", this.data) || true === abv.isType("string", this.data))) {
+      if (this.data.length > this.value) {
+        this.__setErrorMessage(true === abv.isType("string", this.data) ? this.stringMessage : this.arrayMessage, this.__messageParameters());
+        return;
+      }
+    } else {
+      if (false === abv.isValid(this.data, {"less-than":{"value":this.value}}, true)) {
+        var __message = this.dateMessage;
+        if (true === abv.isType("numeric", this.value) || true === abv.isType("boolean", this.value)) {
+          __message = this.numericMessage;
+        }
+        this.__setErrorMessage(__message, this.__messageParameters());
+        return;
+      }
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value", "value":this.__formattedData(this.value)};
+  }});
+  return {LtValidator:LtValidator};
+}());
+abv.registry(abv.LtValidator);
+Object.assign(abv, function() {
+  var LteValidator = function(data, options, optionRules, lang, internal) {
+    abv.AbstractValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["numeric","datetime","date-string","boolean"],"any":true}'}, lang, internal);
+    this.value = this.__options.value;
+    this.dateMessage = "The %%attribute%% must be less than or equal %%value%% date.";
+    this.numericMessage = "The %%attribute%% must be less than or equal %%value%%.";
+    this.stringMessage = "The %%attribute%% must be less than or equal %%value%% characters.";
+    this.arrayMessage = "The %%attribute%% must not have more than %%value%% items.";
+    this.name = "LteValidator";
+  };
+  LteValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  LteValidator.prototype.constructor = LteValidator;
+  Object.defineProperty(LteValidator.prototype, "alias", {get:function() {
+    return "lte";
+  }});
+  Object.defineProperty(LteValidator.prototype, "options", {get:function() {
+    return [{"name":"value", "type":"boolean|string|numeric|array|datetime"}];
+  }});
+  Object.assign(LteValidator.prototype, {__validate:function() {
+    if (true === abv.isType("integer", this.value) && (true === abv.isType("array", this.data) || true === abv.isType("string", this.data))) {
+      if (this.data.length >= this.value) {
+        this.__setErrorMessage(true === abv.isType("string", this.data) ? this.stringMessage : this.arrayMessage, this.__messageParameters());
+        return;
+      }
+    } else {
+      if (false === abv.isValid(this.data, {"less-than-or-equal":{"value":this.value}}, true)) {
+        var __message = this.dateMessage;
+        if (true === abv.isType("numeric", this.value) || true === abv.isType("boolean", this.value)) {
+          __message = this.numericMessage;
+        }
+        this.__setErrorMessage(__message, this.__messageParameters());
+        return;
+      }
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value", "value":this.__formattedData(this.value)};
+  }});
+  return {LteValidator:LteValidator};
+}());
+abv.registry(abv.LteValidator);
 Object.assign(abv, function() {
   var NumericValidator = function(data, options, optionRules, lang, internal) {
     abv.TypeValidator.call(this, data, {type:"numeric", message:"The %%attribute%% must be a number."}, {}, lang, internal);
