@@ -1,4 +1,4 @@
-abv.is_double = function (mixedVar) {
+sogv.is_double = function (mixedVar) {
     // eslint-disable-line camelcase
     //  discuss at: https://locutus.io/php/is_double/
     // original by: Paulo Freitas
@@ -7,5 +7,5 @@ abv.is_double = function (mixedVar) {
     //   example 1: is_double(186.31)
     //   returns 1: true
 
-    return abv.is_float(mixedVar);
+    return sogv.is_float(mixedVar);
 };

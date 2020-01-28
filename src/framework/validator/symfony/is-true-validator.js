@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.IsTrueValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.IsTrueValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is true.</p>
      * <p>Specifically, this checks if the value is exactly <code>true</code>, exactly the integer <code>1</code>, or exactly the string <code>"1"</code>.</p>
@@ -15,8 +15,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>is-true</code>', '<code>true</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.IsTrueValidator(data);
+     * var validator = new sogv.IsTrueValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -25,7 +30,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.IsTrueValidator#message
+     * @name sogv.IsTrueValidator#message
      * @type {String}
      * @description
      * <p>This message is shown if the underlying data is not true.</p>
@@ -48,7 +53,7 @@ Object.assign(abv, function () {
      */
 
     var IsTrueValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -56,12 +61,15 @@ Object.assign(abv, function () {
 
         this.name = 'IsTrueValidator';
     };
-    IsTrueValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    IsTrueValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     IsTrueValidator.prototype.constructor = IsTrueValidator;
 
     Object.defineProperty(IsTrueValidator.prototype, 'alias', {
         get: function () {
-            return ['is-true', 'true'];
+            return [
+                'is-true',
+                'true'
+            ];
         }
     });
 
@@ -75,7 +83,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IsTrueValidator#__validate
+         * @name sogv.IsTrueValidator#__validate
          * @description Validate data
          */
         __validate: function () {
@@ -92,7 +100,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IsTrueValidator#__messageParameters
+         * @name sogv.IsTrueValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -108,4 +116,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.IsTrueValidator);
+sogv.registry(sogv.IsTrueValidator);

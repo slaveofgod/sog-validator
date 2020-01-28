@@ -1,4 +1,4 @@
-abv.is_callable = function (mixedVar, syntaxOnly, callableName) {
+sogv.is_callable = function (mixedVar, syntaxOnly, callableName) {
     // eslint-disable-line camelcase
     //  discuss at: https://locutus.io/php/is_callable/
     // original by: Brett Zamir (https://brett-zamir.me)
@@ -31,7 +31,8 @@ abv.is_callable = function (mixedVar, syntaxOnly, callableName) {
     //   example 5: is_callable(class MyClass {})
     //   returns 5: false
 
-    var $global = (typeof window !== 'undefined' ? window : global);
+    var __global; if ('undefined' === typeof global) { var __global = global; } else { var __global = global; }
+    var $global = (typeof window !== 'undefined' ? window : __global);
 
     var validJSFunctionNamePattern = /^[_$a-zA-Z\xA0-\uFFFF][_$a-zA-Z0-9\xA0-\uFFFF]*$/;
 

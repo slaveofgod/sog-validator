@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.IsFalseValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.IsFalseValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is <code>false</code>.</p>
      * <p>Specifically, this checks to see if the value is exactly <code>false</code>, exactly the integer <code>0</code>, or exactly the string <code>"0"</code>.</p>
@@ -15,8 +15,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>is-false</code>', '<code>false</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.IsFalseValidator(data);
+     * var validator = new sogv.IsFalseValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -25,7 +30,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.IsFalseValidator#message
+     * @name sogv.IsFalseValidator#message
      * @type {String}
      * @description
      * <p>This message is shown if the underlying data is not false.</p>
@@ -48,7 +53,7 @@ Object.assign(abv, function () {
      */
 
     var IsFalseValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -56,12 +61,15 @@ Object.assign(abv, function () {
 
         this.name = 'IsFalseValidator';
     };
-    IsFalseValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    IsFalseValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     IsFalseValidator.prototype.constructor = IsFalseValidator;
 
     Object.defineProperty(IsFalseValidator.prototype, 'alias', {
         get: function () {
-            return ['is-false', 'false'];
+            return [
+                'is-false',
+                'false'
+            ];
         }
     });
 
@@ -75,7 +83,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IsFalseValidator#__validate
+         * @name sogv.IsFalseValidator#__validate
          * @description Validate data
          */
         __validate: function () {
@@ -92,7 +100,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IsFalseValidator#__messageParameters
+         * @name sogv.IsFalseValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -108,4 +116,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.IsFalseValidator);
+sogv.registry(sogv.IsFalseValidator);

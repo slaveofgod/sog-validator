@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.IssnValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.IssnValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is a valid {@link https://en.wikipedia.org/wiki/Issn|International Standard Serial Number (ISSN)}.</p>
      * @description
@@ -14,8 +14,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>issn</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.IssnValidator(data);
+     * var validator = new sogv.IssnValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -24,7 +29,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.IssnValidator#caseSensitive
+     * @name sogv.IssnValidator#caseSensitive
      * @type {Boolean}
      * @description
      * <p>The validator will allow ISSN values to end with a lower case 'x' by default.</p>
@@ -33,7 +38,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.IssnValidator#message
+     * @name sogv.IssnValidator#message
      * @type {String}
      * @description
      * <p>The message shown if the given value is not a valid ISSN.</p>
@@ -56,7 +61,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.IssnValidator#requireHyphen
+     * @name sogv.IssnValidator#requireHyphen
      * @type {Boolean}
      * @description
      * <p>The validator will allow non hyphenated ISSN values by default.</p>
@@ -65,7 +70,7 @@ Object.assign(abv, function () {
      */
 
     var IssnValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             caseSensitive: optionRules.caseSensitive || 'type:{"type":"bool"}',
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             requireHyphen: optionRules.requireHyphen || 'type:{"type":"bool"}'
@@ -77,12 +82,14 @@ Object.assign(abv, function () {
 
         this.name = 'IssnValidator';
     };
-    IssnValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    IssnValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     IssnValidator.prototype.constructor = IssnValidator;
 
     Object.defineProperty(IssnValidator.prototype, 'alias', {
         get: function () {
-            return 'issn';
+            return [
+                'issn'
+            ];
         }
     });
 
@@ -104,7 +111,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IssnValidator#__validate
+         * @name sogv.IssnValidator#__validate
          * @description Validate data
          */
         __validate: function () {
@@ -135,14 +142,14 @@ Object.assign(abv, function () {
 
             // 1234567X
             // ^^^^^^^ digits only
-            if (false === abv.isType('digit', canonical.substr(0, 7))) {
+            if (false === sogv.isType('digit', canonical.substr(0, 7))) {
                 this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
 
             // 1234567X
             //        ^ digit, x or X
-            if (false === abv.isType('digit', canonical[7]) && 'x' !== canonical[7] && 'X' !== canonical[7]) {
+            if (false === sogv.isType('digit', canonical[7]) && 'x' !== canonical[7] && 'X' !== canonical[7]) {
                 this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
@@ -169,7 +176,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IssnValidator#__beforeValidate
+         * @name sogv.IssnValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
@@ -180,7 +187,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -200,7 +207,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IssnValidator#__messageParameters
+         * @name sogv.IssnValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -216,4 +223,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.IssnValidator);
+sogv.registry(sogv.IssnValidator);

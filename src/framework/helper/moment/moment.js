@@ -1,6 +1,6 @@
 'use strict';
 
-abv.moment = (function () {
+sogv.moment = (function () {
     var hookCallback;
 
     function hooks () {
@@ -1844,6 +1844,11 @@ abv.moment = (function () {
             module && module.exports) {
             try {
                 oldLocale = globalLocale._abbr;
+
+                if ('undefined' === typeof require) {
+                    var require = function () {};
+                }
+
                 var aliasedRequire = require;
                 aliasedRequire('./locale/' + name);
                 getSetGlobalLocale(oldLocale);
@@ -14761,6 +14766,6 @@ abv.moment = (function () {
 
 })();
 
-abv.moment.createFromInputFallback = function (config) {
+sogv.moment.createFromInputFallback = function (config) {
     config._d = new Date(NaN);
 }

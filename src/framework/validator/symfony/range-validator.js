@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.RangeValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.RangeValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a given <code>number</code> or <code>Date object</code> is between some <code>minimum</code> and <code>maximum</code>.</p>
      * @description
@@ -14,8 +14,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>range</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.RangeValidator('1991-12-17T03:24:00', {"min":"1990-12-17T03:24:00","max":"1995-12-17T03:24:00"});
+     * var validator = new sogv.RangeValidator('1991-12-17T03:24:00', {"min":"1990-12-17T03:24:00","max":"1995-12-17T03:24:00"});
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -24,7 +29,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.RangeValidator#invalidMessage
+     * @name sogv.RangeValidator#invalidMessage
      * @type {String}
      * @description
      * <p>The message that will be shown if the underlying value is not a number.</p>
@@ -47,14 +52,14 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.RangeValidator#max
+     * @name sogv.RangeValidator#max
      * @type {Number|String|Date}
      * @description
      * This required option is the "max" value. Validation will fail if the given value is greater than this max value.
      */
 
     /**
-     * @name abv.RangeValidator#maxMessage
+     * @name sogv.RangeValidator#maxMessage
      * @type {String}
      * @description
      * <p>The message that will be shown if the underlying value is more than the max option.</p>
@@ -77,14 +82,14 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.RangeValidator#min
+     * @name sogv.RangeValidator#min
      * @type {Number|String|Date}
      * @description
      * This required option is the "min" value. Validation will fail if the given value is less than this min value.
      */
 
     /**
-     * @name abv.RangeValidator#minMessage
+     * @name sogv.RangeValidator#minMessage
      * @type {String}
      * @description
      * <p>The message that will be shown if the underlying value is less than the min option.</p>
@@ -107,7 +112,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.RangeValidator#notInRangeMessage
+     * @name sogv.RangeValidator#notInRangeMessage
      * @type {String}
      * @description
      * <p>The message that will be shown if the underlying value is less than the min option or greater than the max option.</p>
@@ -134,7 +139,7 @@ Object.assign(abv, function () {
      */
 
     var RangeValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             invalidMessage: optionRules.invalidMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             max: optionRules.max || 'required|type:{"type":["numeric","date-string"],"any":true}',
             maxMessage: optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}',
@@ -155,12 +160,14 @@ Object.assign(abv, function () {
 
         this.name = 'RangeValidator';
     };
-    RangeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    RangeValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     RangeValidator.prototype.constructor = RangeValidator;
 
     Object.defineProperty(RangeValidator.prototype, 'alias', {
         get: function () {
-            return 'range';
+            return [
+                'range'
+            ];
         }
     });
 
@@ -182,7 +189,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.RangeValidator#__validate
+         * @name sogv.RangeValidator#__validate
          * @description Validate data
          */
         __validate: function () {
@@ -208,7 +215,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.RangeValidator#__beforeValidate
+         * @name sogv.RangeValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
@@ -220,8 +227,8 @@ Object.assign(abv, function () {
 
             // Check if data type in not "numeric" or "date-string"
             if (
-                false === abv.isType('numeric', this.data)
-                && false === abv.isType('date-string', this.data)
+                false === sogv.isType('numeric', this.data)
+                && false === sogv.isType('date-string', this.data)
             ) {
                 this.__setErrorMessage(this.invalidMessage, this.__invalidMessageParameters());
                 return ;
@@ -229,8 +236,8 @@ Object.assign(abv, function () {
 
             // Convert "data" to datetime if type is "date-string"
             if (
-                false === abv.isType('numeric', this.data)
-                && true === abv.isType('date-string', this.data)
+                false === sogv.isType('numeric', this.data)
+                && true === sogv.isType('date-string', this.data)
             ) {
                 var date = new Date(this.data);
                 this.data = date.getTime();
@@ -238,8 +245,8 @@ Object.assign(abv, function () {
 
             // Convert "min" to datetime if type is "date-string"
             if (
-                false === abv.isType('numeric', this.min)
-                && true === abv.isType('date-string', this.min)
+                false === sogv.isType('numeric', this.min)
+                && true === sogv.isType('date-string', this.min)
             ) {
                 var date = new Date(this.min);
                 this.min = date.getTime();
@@ -247,8 +254,8 @@ Object.assign(abv, function () {
 
             // Convert "max" to datetime if type is "date-string"
             if (
-                false === abv.isType('numeric', this.max)
-                && true === abv.isType('date-string', this.max)
+                false === sogv.isType('numeric', this.max)
+                && true === sogv.isType('date-string', this.max)
             ) {
                 var date = new Date(this.max);
                 this.max = date.getTime();
@@ -258,7 +265,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.RangeValidator#__invalidMessageParameters
+         * @name sogv.RangeValidator#__invalidMessageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -271,7 +278,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.RangeValidator#__notInRangeMessageParameters
+         * @name sogv.RangeValidator#__notInRangeMessageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -286,7 +293,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.RangeValidator#__maxMessageParameters
+         * @name sogv.RangeValidator#__maxMessageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -300,7 +307,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.RangeValidator#__minMessageParameters
+         * @name sogv.RangeValidator#__minMessageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -317,4 +324,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.RangeValidator);
+sogv.registry(sogv.RangeValidator);

@@ -1,13 +1,13 @@
-Object.assign(abv, (function () {
+Object.assign(sogv, (function () {
 
     /**
      * @constructor
-     * @name abv.I18n
+     * @name sogv.I18n
      * @classdesc
      * <p>Handles translation. Responsible for the translation. Can also handle plural forms.</p>
      * @param {String} lang The current language. This parameter is required.
      * @example
-     * var translator = new abv.I18n(lang);
+     * var translator = new sogv.I18n(lang);
      * var translatedMessage = translator.getText(message, parameters);
      */
 
@@ -18,14 +18,14 @@ Object.assign(abv, (function () {
     Object.assign(I18n.prototype, {
         /**
          * @function
-         * @name abv.I18n#translate
+         * @name sogv.I18n#translate
          * @description Returns the translation.
          * @param {String} message The message which need to be translated
          * @param {Object} parameters The message parameters
          * @returns {String} Translated and processed message
          */
         translate: function (message, parameters) {
-            var translation = abv.I18nHandler.get(this.lang, message);
+            var translation = sogv.I18nHandler.get(this.lang, message);
             if (null === translation) {
                 translation = message;
             }
@@ -44,7 +44,7 @@ Object.assign(abv, (function () {
                 }
             }
 
-            return abv.I18nHandler.prepare(translation, parameters);
+            return sogv.I18nHandler.prepare(translation, parameters);
         }
     });
 

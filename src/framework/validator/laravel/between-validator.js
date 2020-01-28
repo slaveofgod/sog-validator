@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.BetweenValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.BetweenValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>The field under validation must have a <code>size</code> between the given <code>min</code> and <code>max</code>.</p>
      * <p><code>Strings</code>, <code>numerics</code>, <code>arrays</code> and <code>dates</code> are evaluated in the same fashion as the size rule.</p>
@@ -15,15 +15,20 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>between</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.BetweenValidator(data);
+     * var validator = new sogv.BetweenValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
      */
 
     var BetweenValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             max: optionRules.max || 'required|type:{"type":["numeric","date-string"],"any":true}',
             min: optionRules.min || 'required|type:{"type":["numeric","date-string"],"any":true}',
         }, lang, internal);
@@ -37,12 +42,14 @@ Object.assign(abv, function () {
 
         this.name = 'BetweenValidator';
     };
-    BetweenValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    BetweenValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     BetweenValidator.prototype.constructor = BetweenValidator;
 
     Object.defineProperty(BetweenValidator.prototype, 'alias', {
         get: function () {
-            return 'between';
+            return [
+                'between'
+            ];
         }
     });
 
@@ -64,24 +71,24 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.BetweenValidator#__validate
+         * @name sogv.BetweenValidator#__validate
          * @description Validate data
          */
         __validate: function () {
-            if (true === abv.isType('numeric', this.min)) {
-                if (true === abv.isType('numeric', this.data)) {
+            if (true === sogv.isType('numeric', this.min)) {
+                if (true === sogv.isType('numeric', this.data)) {
                     this.__validateNumeric();
-                } else if (true === abv.isType('array', this.data)) {
+                } else if (true === sogv.isType('array', this.data)) {
                     this.__validateArray();
-                } else if (true === abv.isType('string', this.data)) {
+                } else if (true === sogv.isType('string', this.data)) {
                     this.__validateString();
                 } else {
                     this.__setErrorMessage('Data type ' + typeof this.data + ' does not supported');
                     return ;
                 }
             } else if (
-                true === abv.isType('date-string', this.min)
-                || true === abv.isType('datetime', this.min)
+                true === sogv.isType('date-string', this.min)
+                || true === sogv.isType('datetime', this.min)
             ) {
                 this.__validateDateTime();
             }
@@ -90,11 +97,11 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.BetweenValidator#__validateNumeric
+         * @name sogv.BetweenValidator#__validateNumeric
          * @description Validate numeric
          */
         __validateNumeric: function () {
-            var status = abv.isValid(this.data, {
+            var status = sogv.isValid(this.data, {
                 'range': {
                     'min': this.min,
                     'max': this.max
@@ -110,11 +117,11 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.BetweenValidator#__validateDateTime
+         * @name sogv.BetweenValidator#__validateDateTime
          * @description Validate date time
          */
         __validateDateTime: function () {
-            var status = abv.isValid(this.data, {
+            var status = sogv.isValid(this.data, {
                 'range': {
                     'min': this.min,
                     'max': this.max
@@ -130,11 +137,11 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.BetweenValidator#__validateArray
+         * @name sogv.BetweenValidator#__validateArray
          * @description Validate array
          */
         __validateArray: function () {
-            var status = abv.isValid(this.data, {
+            var status = sogv.isValid(this.data, {
                 'count': {
                     'min': this.min,
                     'max': this.max
@@ -150,11 +157,11 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.BetweenValidator#__validateString
+         * @name sogv.BetweenValidator#__validateString
          * @description Validate array
          */
         __validateString: function () {
-            var status = abv.isValid(this.data, {
+            var status = sogv.isValid(this.data, {
                 'length': {
                     'min': this.min,
                     'max': this.max
@@ -170,7 +177,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.BetweenValidator#__beforeValidate
+         * @name sogv.BetweenValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
@@ -184,7 +191,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.BetweenValidator#__messageParameters
+         * @name sogv.BetweenValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -202,4 +209,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.BetweenValidator);
+sogv.registry(sogv.BetweenValidator);

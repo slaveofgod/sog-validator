@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.SizeValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.SizeValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>The field under validation must have a size matching the given value.</p>
      * <p>For <code>string</code> data, value corresponds to the number of characters.</p>
@@ -17,8 +17,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>size</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.SizeValidator(data, {min: 10});
+     * var validator = new sogv.SizeValidator(data, {min: 10});
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -27,7 +32,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.SizeValidator#value
+     * @name sogv.SizeValidator#value
      * @type {Integer}
      * @description
      * <p>This option is required.</p>
@@ -35,7 +40,7 @@ Object.assign(abv, function () {
      */
 
     var SizeValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             value: optionRules.max || 'required|type:{"type":"numeric"}',
             message: optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
@@ -47,12 +52,14 @@ Object.assign(abv, function () {
 
         this.name = 'SizeValidator';
     };
-    SizeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    SizeValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     SizeValidator.prototype.constructor = SizeValidator;
 
     Object.defineProperty(SizeValidator.prototype, 'alias', {
         get: function () {
-            return 'size';
+            return [
+                'size'
+            ];
         }
     });
 
@@ -71,21 +78,21 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.SizeValidator#__validate
+         * @name sogv.SizeValidator#__validate
          * @description Validate data
          */
         __validate: function () {
-            if (true === abv.isType('numeric', this.data)) {
+            if (true === sogv.isType('numeric', this.data)) {
                 if (this.data !== this.value) {
                     this.__setErrorMessage(this.numericMessage, this.__numericMessageParameters());
                     return ;
                 }
-            } else if (true === abv.isType('string', this.data)) {
+            } else if (true === sogv.isType('string', this.data)) {
                 if (this.data.length !== this.value) {
                     this.__setErrorMessage(this.stringMessage, this.__stringMessageParameters());
                     return ;
                 }
-            } else if (true === abv.isType('array', this.data)) {
+            } else if (true === sogv.isType('array', this.data)) {
                 if (this.data.length !== this.value) {
                     this.__setErrorMessage(this.arrayMessage, this.__arrayMessageParameters());
                     return;
@@ -96,7 +103,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.SizeValidator#__beforeValidate
+         * @name sogv.SizeValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
@@ -107,7 +114,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is valid type
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":["string","numeric","array"],"any":true}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":["string","numeric","array"],"any":true}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return;
@@ -117,7 +124,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.SizeValidator#__numericMessageParameters
+         * @name sogv.SizeValidator#__numericMessageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -131,7 +138,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.SizeValidator#__stringMessageParameters
+         * @name sogv.SizeValidator#__stringMessageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -145,7 +152,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.SizeValidator#__arrayMessageParameters
+         * @name sogv.SizeValidator#__arrayMessageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -162,4 +169,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.SizeValidator);
+sogv.registry(sogv.SizeValidator);

@@ -1,22 +1,22 @@
-abv.I18nResource = [];
+sogv.I18nResource = [];
 
 /**
  * @namespace
- * @name abv.I18nHandler
+ * @name sogv.I18nHandler
  * @description
  * <p>I18n handler</p>
  */
-abv.I18nHandler = {
+sogv.I18nHandler = {
 
     /**
      * @function
-     * @name abv.I18nHandler#add
+     * @name sogv.I18nHandler#add
      * @description
      * <p>Add new message or messages to global collection for specific language.</p>
      * @param {String} lang The current language
      * @param {Array} messages Message or messages
      * @example
-     * abv.I18nHandler.add('fr', [{
+     * sogv.I18nHandler.add('fr', [{
      *     "source": "The value you selected is not a valid choice.",
      *     "target": "Cette valeur doit être l'un des choix proposés."
      * }]);
@@ -24,13 +24,13 @@ abv.I18nHandler = {
      * // The first part of the message: "You must select at least %%limit%% choice." - this is the singular form
      * // The second part of the message: "You must select at least %%limit%% choices." - this is the plural form
      * // The form depends on value of "%%limit%%". If value "1", "0" or "-1" - singular form, otherwise - plural form
-     * abv.I18nHandler.add('fr', [{
+     * sogv.I18nHandler.add('fr', [{
      *     "source": "You must select at least %%limit%% choice.|You must select at least %%limit%% choices.",
      *     "target": "Vous devez sélectionner au moins %%limit%% choix.|Vous devez sélectionner au moins %%limit%% choix."
      * }]);
      */
     add: function (lang, messages) {
-        var validationEngine = new abv.Application();
+        var validationEngine = new sogv.Application();
         var form = validationEngine.make({
             lang: lang,
             messages: messages,
@@ -48,17 +48,17 @@ abv.I18nHandler = {
         for (var i = 0; i < messages.length; i ++) {
             var message = messages[i];
 
-            if ('undefined' === typeof abv.I18nResource[lang]) {
-                abv.I18nResource[lang] = [];
+            if ('undefined' === typeof sogv.I18nResource[lang]) {
+                sogv.I18nResource[lang] = [];
             }
 
-            abv.I18nResource[lang].push(message);
+            sogv.I18nResource[lang].push(message);
         }
     },
 
     /**
      * @function
-     * @name abv.I18nHandler#get
+     * @name sogv.I18nHandler#get
      * @description
      * <p>Get translated message for specific language by origin message.</p>
      * @param {String} lang The current language
@@ -66,7 +66,7 @@ abv.I18nHandler = {
      * @returns {String|Null} The translated message
      */
     get: function (lang, sourceMessage) {
-        var resource = abv.I18nResource[lang];
+        var resource = sogv.I18nResource[lang];
 
         for (var i = 0; i < resource.length; i ++) {
             if (
@@ -82,7 +82,7 @@ abv.I18nHandler = {
 
     /**
      * @function
-     * @name abv.I18nHandler#prepare
+     * @name sogv.I18nHandler#prepare
      * @description
      * <p>Prepare message.</p>
      * @param {String} message Message text

@@ -1,4 +1,4 @@
-abv.is_null = function (mixedVar) {
+sogv.is_null = function (mixedVar) {
     // eslint-disable-line camelcase
     //  discuss at: https://locutus.io/php/is_null/
     // original by: Kevin van Zonneveld (https://kvz.io)

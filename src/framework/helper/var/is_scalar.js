@@ -1,4 +1,4 @@
-abv.is_scalar = function (mixedVar) {
+sogv.is_scalar = function (mixedVar) {
     // eslint-disable-line camelcase
     //  discuss at: https://locutus.io/php/is_scalar/
     // original by: Paulo Freitas

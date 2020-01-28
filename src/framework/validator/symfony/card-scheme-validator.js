@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.CardSchemeValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.CardSchemeValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>This constraint ensures that a credit card number is valid for a given credit card company.</p>
      * <p>It can be used to validate the number before trying to initiate a payment through a payment gateway.</p>
@@ -15,8 +15,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>card-scheme</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.CardSchemeValidator(data);
+     * var validator = new sogv.CardSchemeValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -25,7 +30,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.CardSchemeValidator#message
+     * @name sogv.CardSchemeValidator#message
      * @type {String}
      * @description
      * The message shown when the value does not pass the CardScheme check.
@@ -48,7 +53,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.CardSchemeValidator#schemes
+     * @name sogv.CardSchemeValidator#schemes
      * @type {String|Array}
      * @description
      * This option is required and represents the name of the number scheme used to validate the credit card number, it can either be a string or an array.
@@ -72,7 +77,7 @@ Object.assign(abv, function () {
      */
 
     var CardSchemeValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             schemes: optionRules.schemes || 'required|type:{"type":["string","array"],"any":true}'
         }, lang, internal);
@@ -147,12 +152,14 @@ Object.assign(abv, function () {
 
         this.name = 'CardSchemeValidator';
     };
-    CardSchemeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    CardSchemeValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     CardSchemeValidator.prototype.constructor = CardSchemeValidator;
 
     Object.defineProperty(CardSchemeValidator.prototype, 'alias', {
         get: function () {
-            return 'card-scheme';
+            return [
+                'card-scheme'
+            ];
         }
     });
 
@@ -171,11 +178,11 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.CardSchemeValidator#__validate
+         * @name sogv.CardSchemeValidator#__validate
          * @description Validate data
          */
         __validate: function () {
-            if (false === abv.isType('numeric', this.data)) {
+            if (false === sogv.isType('numeric', this.data)) {
                 this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
@@ -197,7 +204,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.CardSchemeValidator#__beforeValidate
+         * @name sogv.CardSchemeValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
@@ -208,7 +215,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -228,7 +235,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.CardSchemeValidator#__messageParameters
+         * @name sogv.CardSchemeValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -244,4 +251,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.CardSchemeValidator);
+sogv.registry(sogv.CardSchemeValidator);

@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.LocaleValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.LocaleValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is a valid <code>locale</code>.</p>
      * <p>The "<code>value</code>" for each locale is any of the @link(http://userguide.icu-project.org/locale|ICU format locale IDs).</p>
@@ -17,8 +17,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>locale</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.LocaleValidator(data);
+     * var validator = new sogv.LocaleValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -27,7 +32,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.LocaleValidator#message
+     * @name sogv.LocaleValidator#message
      * @type {String}
      * @description
      * <p>This message is shown if the string is not a valid locale.</p>
@@ -50,7 +55,7 @@ Object.assign(abv, function () {
      */
 
     var LocaleValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -60,12 +65,14 @@ Object.assign(abv, function () {
 
         this.name = 'LocaleValidator';
     };
-    LocaleValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    LocaleValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     LocaleValidator.prototype.constructor = LocaleValidator;
 
     Object.defineProperty(LocaleValidator.prototype, 'alias', {
         get: function () {
-            return 'locale';
+            return [
+                'locale'
+            ];
         }
     });
 
@@ -79,7 +86,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LocaleValidator#__validate
+         * @name sogv.LocaleValidator#__validate
          * @description
          * <p>Validate data</p>
          */
@@ -93,7 +100,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LocaleValidator#__beforeValidate
+         * @name sogv.LocaleValidator#__beforeValidate
          * @description
          * <p>Execute before validation is running</p>
          */
@@ -105,7 +112,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -125,7 +132,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LocaleValidator#__messageParameters
+         * @name sogv.LocaleValidator#__messageParameters
          * @description
          * <p>Returned parameters for error message which needs to be replaced</p>
          * @returns {Object} List of parameters
@@ -142,4 +149,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.LocaleValidator);
+sogv.registry(sogv.LocaleValidator);

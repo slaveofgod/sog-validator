@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.UniqueValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.UniqueValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that all the elements of the given collection are <code>unique</code> (none of them is present more than once).</p>
      * <p>Elements are compared strictly, so '<code>7</code>' and <code>7</code> are considered different elements (a string and an integer, respectively).</p>
@@ -16,8 +16,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>unique</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.UniqueValidator(data);
+     * var validator = new sogv.UniqueValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -26,7 +31,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.UniqueValidator#message
+     * @name sogv.UniqueValidator#message
      * @type {String}
      * @description
      * <p>This is the message that will be shown if at least one element is repeated in the collection.</p>
@@ -49,7 +54,7 @@ Object.assign(abv, function () {
      */
 
     var UniqueValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -60,12 +65,14 @@ Object.assign(abv, function () {
 
         this.name = 'UniqueValidator';
     };
-    UniqueValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    UniqueValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     UniqueValidator.prototype.constructor = UniqueValidator;
 
     Object.defineProperty(UniqueValidator.prototype, 'alias', {
         get: function () {
-            return 'unique';
+            return [
+                'unique'
+            ];
         }
     });
 
@@ -79,14 +86,14 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.UniqueValidator#__validate
+         * @name sogv.UniqueValidator#__validate
          * @description
          * <p>Validate data.</p>
          */
         __validate: function () {
             if (
-                true === abv.isType('string', this.data)
-                || true === abv.isType('array', this.data)
+                true === sogv.isType('string', this.data)
+                || true === sogv.isType('array', this.data)
             ) {
                 this.__validateArray();
             }
@@ -100,7 +107,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.UniqueValidator#__validateArray
+         * @name sogv.UniqueValidator#__validateArray
          * @description
          * <p>Validate array data.</p>
          */
@@ -127,7 +134,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.UniqueValidator#__beforeValidate
+         * @name sogv.UniqueValidator#__beforeValidate
          * @description
          * <p>Execute before validation is running.</p>
          */
@@ -139,7 +146,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -149,7 +156,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.UniqueValidator#__messageParameters
+         * @name sogv.UniqueValidator#__messageParameters
          * @description
          * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
@@ -166,4 +173,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.UniqueValidator);
+sogv.registry(sogv.UniqueValidator);

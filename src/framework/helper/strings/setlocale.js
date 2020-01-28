@@ -1,4 +1,4 @@
-abv.setlocale = function (category, locale) {
+sogv.setlocale = function (category, locale) {
     //  discuss at: https://locutus.io/php/setlocale/
     // original by: Brett Zamir (https://brett-zamir.me)
     // original by: Blues (https://hacks.bluesmoon.info/strftime/strftime.js)
@@ -57,7 +57,8 @@ abv.setlocale = function (category, locale) {
         return n > 1 ? 1 : 0;
     };
 
-    var $global = (typeof window !== 'undefined' ? window : global);
+    var __global; if ('undefined' === typeof global) { var __global = global; } else { var __global = global; }
+    var $global = (typeof window !== 'undefined' ? window : __global);
     $global.$locutus = $global.$locutus || {};
     var $locutus = $global.$locutus;
     $locutus.php = $locutus.php || {};
@@ -300,7 +301,7 @@ abv.setlocale = function (category, locale) {
     }
 
     if (locale === null || locale === '') {
-        locale = abv.getenv(category) || abv.getenv('LANG');
+        locale = sogv.getenv(category) || sogv.getenv('LANG');
     } else if (Object.prototype.toString.call(locale) === '[object Array]') {
         for (i = 0; i < locale.length; i++) {
             if (!(locale[i] in $locutus.php.locales)) {

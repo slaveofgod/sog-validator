@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.NotNullValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.NotNullValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is not strictly equal to <code>null</code>.</p>
      * @description
@@ -14,8 +14,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>not-null</code>', '<code>required</code>', '<code>present</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.NotNullValidator(data);
+     * var validator = new sogv.NotNullValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -24,7 +29,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.NotNullValidator#message
+     * @name sogv.NotNullValidator#message
      * @type {String}
      * @description
      * <p>This is the message that will be shown if the value is null.</p>
@@ -47,7 +52,7 @@ Object.assign(abv, function () {
      */
 
     var NotNullValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -55,7 +60,7 @@ Object.assign(abv, function () {
 
         this.name = 'NotNullValidator';
     };
-    NotNullValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    NotNullValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     NotNullValidator.prototype.constructor = NotNullValidator;
 
     Object.defineProperty(NotNullValidator.prototype, 'alias', {
@@ -78,7 +83,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.NotNullValidator#__validate
+         * @name sogv.NotNullValidator#__validate
          * @description Validate data
          */
         __validate: function () {
@@ -98,7 +103,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.NotNullValidator#__messageParameters
+         * @name sogv.NotNullValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -114,4 +119,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.NotNullValidator);
+sogv.registry(sogv.NotNullValidator);

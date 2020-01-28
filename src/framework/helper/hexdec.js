@@ -1,6 +1,6 @@
 'use strict'
 
-abv.hexdec = function  (hexString) {
+sogv.hexdec = function  (hexString) {
     //  discuss at: https://locutus.io/php/hexdec/
     // original by: Philippe Baumann
     //   example 1: hexdec('that')

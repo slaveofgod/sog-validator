@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.NotBlankValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.NotBlankValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is not blank - meaning not equal to a blank string, a blank array, <code>false</code> or <code>null</code> (null behavior is configurable).</p>
      * @description
@@ -14,8 +14,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>not-blank</code>', '<code>not-empty</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.NotBlankValidator(data);
+     * var validator = new sogv.NotBlankValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -24,7 +29,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.NotBlankValidator#allowNull
+     * @name sogv.NotBlankValidator#allowNull
      * @type {Boolean}
      * @description
      * If set to <code>true</code>, <code>null</code> values are considered valid and won't trigger a constraint violation.</p>
@@ -32,7 +37,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.NotBlankValidator#normalize
+     * @name sogv.NotBlankValidator#normalize
      * @type {Boolean}
      * @description
      * <p>Normalizer string before validate (trim, etc.).</p>
@@ -40,7 +45,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.NotBlankValidator#message
+     * @name sogv.NotBlankValidator#message
      * @type {String}
      * @description
      * This is the message that will be shown if the value is blank.</p>
@@ -63,7 +68,7 @@ Object.assign(abv, function () {
      */
 
     var NotBlankValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -73,12 +78,15 @@ Object.assign(abv, function () {
 
         this.name = 'NotBlankValidator';
     };
-    NotBlankValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    NotBlankValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     NotBlankValidator.prototype.constructor = NotBlankValidator;
 
     Object.defineProperty(NotBlankValidator.prototype, 'alias', {
         get: function () {
-            return 'not-blank';
+            return [
+                'not-blank',
+                'not-empty'
+            ];
         }
     });
 
@@ -92,7 +100,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.NotBlankValidator#__validate
+         * @name sogv.NotBlankValidator#__validate
          * @description Validate data
          */
         __validate: function () {
@@ -144,7 +152,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.NotBlankValidator#__messageParameters
+         * @name sogv.NotBlankValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -160,4 +168,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.NotBlankValidator);
+sogv.registry(sogv.NotBlankValidator);

@@ -1,4 +1,4 @@
-abv.is_float = function is_float (mixedVar) {
+sogv.is_float = function is_float (mixedVar) {
     // eslint-disable-line camelcase
     //  discuss at: https://locutus.io/php/is_float/
     // original by: Paulo Freitas

@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.DateValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.DateValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is a valid <code>date</code>, meaning a string (or an object that can be cast into a string) that follows a valid <code>YYYY-MM-DD</code> format.</p>
      * @description
@@ -14,8 +14,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>date</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.DateValidator(data);
+     * var validator = new sogv.DateValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -24,7 +29,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.DateValidator#message
+     * @name sogv.DateValidator#message
      * @type {String}
      * @description
      * <p>This message is shown if the underlying data is not a valid date.</p>
@@ -47,7 +52,7 @@ Object.assign(abv, function () {
      */
 
     var DateValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -56,12 +61,14 @@ Object.assign(abv, function () {
 
         this.name = 'DateValidator';
     };
-    DateValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    DateValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     DateValidator.prototype.constructor = DateValidator;
 
     Object.defineProperty(DateValidator.prototype, 'alias', {
         get: function () {
-            return 'date';
+            return [
+                'date'
+            ];
         }
     });
 
@@ -75,7 +82,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.DateValidator#__validate
+         * @name sogv.DateValidator#__validate
          * @description
          * <p>Validate data.</p>
          */
@@ -89,7 +96,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.DateValidator#__beforeValidate
+         * @name sogv.DateValidator#__beforeValidate
          * @description
          * <p>Execute before validation is running.</p>
          */
@@ -101,7 +108,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -121,7 +128,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.DateValidator#__messageParameters
+         * @name sogv.DateValidator#__messageParameters
          * @description
          * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
@@ -138,4 +145,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.DateValidator);
+sogv.registry(sogv.DateValidator);

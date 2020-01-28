@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.BeforeOrEqualValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.BeforeOrEqualValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>The field under validation must be a value preceding or equal to the given <code>date</code>.</p>
      * <p>The dates will be passed into the <code>Data object</code>.</p>
@@ -16,8 +16,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>before_or_equal</code>', '<code>before-or-equal</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.BeforeOrEqualValidator(data, {"value": "the value to compare to"});
+     * var validator = new sogv.BeforeOrEqualValidator(data, {"value": "the value to compare to"});
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -26,7 +31,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.BeforeOrEqualValidator#value
+     * @name sogv.BeforeOrEqualValidator#value
      * @type {*}
      * @description
      * <p>This option is required.</p>
@@ -35,7 +40,7 @@ Object.assign(abv, function () {
      */
 
     var BeforeOrEqualValidator = function (data, options, optionRules, lang, internal) {
-        abv.LessThanOrEqualValidator.call(this, data, {
+        sogv.LessThanOrEqualValidator.call(this, data, {
             message: "The %%attribute%% must be a date before or equal to %%date%%.",
             value: options.value
         }, {
@@ -44,7 +49,7 @@ Object.assign(abv, function () {
 
         this.name = 'BeforeOrEqualValidator';
     };
-    BeforeOrEqualValidator.prototype = Object.create(abv.LessThanOrEqualValidator.prototype);
+    BeforeOrEqualValidator.prototype = Object.create(sogv.LessThanOrEqualValidator.prototype);
     BeforeOrEqualValidator.prototype.constructor = BeforeOrEqualValidator;
 
     Object.defineProperty(BeforeOrEqualValidator.prototype, 'alias', {
@@ -71,7 +76,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.BeforeOrEqualValidator#__messageParameters
+         * @name sogv.BeforeOrEqualValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -88,4 +93,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.BeforeOrEqualValidator);
+sogv.registry(sogv.BeforeOrEqualValidator);

@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.IdenticalToValidator
-     * @extends abv.AbstractComparisonValidator
+     * @name sogv.IdenticalToValidator
+     * @extends sogv.AbstractComparisonValidator
      * @classdesc
      * <p>Validates that a value is identical to another value, defined in the options.</p>
      * <p>This constraint compares using <code>===</code>, so <code>3</code> and "<code>3</code>" are not considered equal.</p>
@@ -15,8 +15,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>identical-to</code>', '<code>identical</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.IdenticalToValidator(data, {"value": "the value to compare to"});
+     * var validator = new sogv.IdenticalToValidator(data, {"value": "the value to compare to"});
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -25,7 +30,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.IdenticalToValidator#message
+     * @name sogv.IdenticalToValidator#message
      * @type {String}
      * @description
      * <p>This is the message that will be shown if the value is not identical.</p>
@@ -56,13 +61,13 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.IdenticalToValidator#value
+     * @name sogv.IdenticalToValidator#value
      * @type {*}
      * @description This option is required. It defines the value to compare to. It can be a string, number or object.
      */
 
     var IdenticalToValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractComparisonValidator.call(this, data, options, {
+        sogv.AbstractComparisonValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             value: optionRules.value || 'required'
         }, lang, internal);
@@ -71,12 +76,15 @@ Object.assign(abv, function () {
 
         this.name = 'IdenticalToValidator';
     };
-    IdenticalToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+    IdenticalToValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
     IdenticalToValidator.prototype.constructor = IdenticalToValidator;
 
     Object.defineProperty(IdenticalToValidator.prototype, 'alias', {
         get: function () {
-            return 'identical-to';
+            return [
+                'identical-to',
+                'identical'
+            ];
         }
     });
 
@@ -95,7 +103,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IdenticalToValidator#__compareValues
+         * @name sogv.IdenticalToValidator#__compareValues
          * @description Compare two value
          * @param {*} value Value
          * @param {*} comparedValue Compared value
@@ -108,7 +116,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IdenticalToValidator#__messageParameters
+         * @name sogv.IdenticalToValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -116,7 +124,7 @@ Object.assign(abv, function () {
             return {
                 'value': this.__formattedData(this.data),
                 'compared_value': this.__formattedData(this.value),
-                'compared_value_type': abv.getType(this.value)
+                'compared_value_type': sogv.getType(this.value)
             }
         }
     });
@@ -126,4 +134,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.IdenticalToValidator);
+sogv.registry(sogv.IdenticalToValidator);

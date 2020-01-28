@@ -1,4 +1,4 @@
-abv.is_unicode = function (vr) {
+sogv.is_unicode = function (vr) {
     // eslint-disable-line camelcase
     //  discuss at: https://locutus.io/php/is_unicode/
     // original by: Brett Zamir (https://brett-zamir.me)

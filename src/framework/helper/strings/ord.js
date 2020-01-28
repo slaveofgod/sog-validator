@@ -1,4 +1,4 @@
-abv.ord = function (string) {
+sogv.ord = function (string) {
     //  discuss at: https://locutus.io/php/ord/
     // original by: Kevin van Zonneveld (https://kvz.io)
     // bugfixed by: Onno Marsman (https://twitter.com/onnomarsman)

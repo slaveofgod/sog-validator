@@ -1,4 +1,4 @@
-abv.is_binary = function (vr) {
+sogv.is_binary = function (vr) {
     // eslint-disable-line camelcase
     //  discuss at: https://locutus.io/php/is_binary/
     // original by: Brett Zamir (https://brett-zamir.me)

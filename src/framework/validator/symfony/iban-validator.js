@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.IbanValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.IbanValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>This constraint is used to ensure that a bank account number has the proper format of an {@link https://en.wikipedia.org/wiki/International_Bank_Account_Number|International Bank Account Number (IBAN)}.</p>
      * <p>IBAN is an internationally agreed means of identifying bank accounts across national borders with a reduced risk of propagating transcription errors.</p>
@@ -15,8 +15,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>iban</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.IbanValidator(data);
+     * var validator = new sogv.IbanValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -25,7 +30,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.IbanValidator#message
+     * @name sogv.IbanValidator#message
      * @type {String}
      * @description
      * <p>The default message supplied when the value does not pass the <code>IBAN</code> check.</p>
@@ -48,7 +53,7 @@ Object.assign(abv, function () {
      */
 
     var IbanValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -157,12 +162,14 @@ Object.assign(abv, function () {
 
         this.name = 'IbanValidator';
     };
-    IbanValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    IbanValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     IbanValidator.prototype.constructor = IbanValidator;
 
     Object.defineProperty(IbanValidator.prototype, 'alias', {
         get: function () {
-            return 'iban';
+            return [
+                'iban'
+            ];
         }
     });
 
@@ -176,7 +183,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IbanValidator#__validate
+         * @name sogv.IbanValidator#__validate
          * @description
          * <p>Validate data.</p>
          */
@@ -185,14 +192,14 @@ Object.assign(abv, function () {
             var canonicalized = this.data.split(' ').join('');
 
             // The IBAN must contain only digits and characters...
-            if (false === abv.isType('alnum', canonicalized)) {
+            if (false === sogv.isType('alnum', canonicalized)) {
                 this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
 
             // ...start with a two-letter country code
             var countryCode = canonicalized.substr(0, 2);
-            if (false === abv.isType('alpha', countryCode)) {
+            if (false === sogv.isType('alpha', countryCode)) {
                 this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
@@ -231,20 +238,20 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IbanValidator#__toBigInt
+         * @name sogv.IbanValidator#__toBigInt
          * @description
          * <p>To big int.</p>
          * @param {String} string
          * @returns {Number}
          */
         __toBigInt: function (string) {
-            var chars = abv.str_split(string);
+            var chars = sogv.str_split(string);
             var bigInt = '';
 
             for (var i = 0; i < chars.length; i ++) {
                 // Convert uppercase characters to ordinals, starting with 10 for "A"
-                if (true === abv.isType('upper', chars[i])) {
-                    bigInt += (abv.ord(chars[i]) - 55);
+                if (true === sogv.isType('upper', chars[i])) {
+                    bigInt += (sogv.ord(chars[i]) - 55);
                     continue;
                 }
                 // Simply append digits
@@ -257,14 +264,14 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IbanValidator#__bigModulo97
+         * @name sogv.IbanValidator#__bigModulo97
          * @description
          * <p>Big modulo 97.</p>
          * @param {String} bigInt
          * @returns {Number}
          */
         __bigModulo97: function (bigInt) {
-            var parts = abv.str_split(bigInt, 7);
+            var parts = sogv.str_split(bigInt, 7);
             var rest = 0;
 
             for (var i = 0; i < parts.length; i ++) {
@@ -277,7 +284,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IbanValidator#__beforeValidate
+         * @name sogv.IbanValidator#__beforeValidate
          * @description
          * <p>Execute before validation is running.</p>
          */
@@ -289,7 +296,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -309,7 +316,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IbanValidator#__messageParameters
+         * @name sogv.IbanValidator#__messageParameters
          * @description
          * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
@@ -326,4 +333,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.IbanValidator);
+sogv.registry(sogv.IbanValidator);

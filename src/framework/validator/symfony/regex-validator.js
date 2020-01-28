@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.RegexValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.RegexValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a value matches a regular expression.</p>
      * @description
@@ -14,8 +14,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>regex</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.RegexValidator(data, {pattern: 'regular expression'});
+     * var validator = new sogv.RegexValidator(data, {pattern: 'regular expression'});
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -24,7 +29,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.RegexValidator#match
+     * @name sogv.RegexValidator#match
      * @type {Boolean}
      * @description
      * If true (or not set), this validator will pass if the given string matches the given pattern regular expression.
@@ -33,7 +38,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.RegexValidator#message
+     * @name sogv.RegexValidator#message
      * @type {String}
      * @description
      * This is the message that will be shown if this validator fails.</p>
@@ -56,7 +61,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.RegexValidator#pattern
+     * @name sogv.RegexValidator#pattern
      * @type {String}
      * @description
      * This required option is the regular expression pattern that the input will be matched against.
@@ -65,7 +70,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.RegexValidator#normalize
+     * @name sogv.RegexValidator#normalize
      * @type {Boolean}
      * @description
      * <p>Normalizer string before validate (trim, etc.).</p>
@@ -73,7 +78,7 @@ Object.assign(abv, function () {
      */
 
     var RegexValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             match: optionRules.match || 'type:{"type": "bool"}',
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             pattern: optionRules.pattern || 'required',
@@ -87,12 +92,14 @@ Object.assign(abv, function () {
 
         this.name = 'RegexValidator';
     };
-    RegexValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    RegexValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     RegexValidator.prototype.constructor = RegexValidator;
 
     Object.defineProperty(RegexValidator.prototype, 'alias', {
         get: function () {
-            return 'regex';
+            return [
+                'regex'
+            ];
         }
     });
 
@@ -114,7 +121,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.RegexValidator#__validate
+         * @name sogv.RegexValidator#__validate
          * @description Validate data
          */
         __validate: function () {
@@ -139,7 +146,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.RegexValidator#__beforeValidate
+         * @name sogv.RegexValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
@@ -150,7 +157,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -170,7 +177,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.RegexValidator#__messageParameters
+         * @name sogv.RegexValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -186,4 +193,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.RegexValidator);
+sogv.registry(sogv.RegexValidator);

@@ -21,4 +21,4 @@ Math.fmod(10000000.40, 0.07)
 
 /* TODO: fix for  a=4.55  b=0.05  !!*/
 
-abv.fmod = function (a,b) { return Number((a - (Math.floor(a / b) * b)).toPrecision(8)); };
+sogv.fmod = function (a,b) { return Number((a - (Math.floor(a / b) * b)).toPrecision(8)); };

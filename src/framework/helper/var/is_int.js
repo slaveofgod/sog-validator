@@ -1,4 +1,4 @@
-abv.is_int = function (mixedVar) {
+sogv.is_int = function (mixedVar) {
     // eslint-disable-line camelcase
     //  discuss at: https://locutus.io/php/is_int/
     // original by: Alex

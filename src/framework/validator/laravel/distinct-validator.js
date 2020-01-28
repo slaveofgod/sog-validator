@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.DistinctValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.DistinctValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>When working with <code>arrays</code>, the field under validation must not have any duplicate values.</p>
      * @description
@@ -14,26 +14,33 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>distinct</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.DistinctValidator(data);
+     * var validator = new sogv.DistinctValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
      */
 
     var DistinctValidator = function (data, options, optionRules, lang, internal) {
-        abv.UniqueValidator.call(this, data, {
+        sogv.UniqueValidator.call(this, data, {
             message: 'The %%attribute%% field has a duplicate value.'
         }, {}, lang, internal);
 
         this.name = 'DistinctValidator';
     };
-    DistinctValidator.prototype = Object.create(abv.UniqueValidator.prototype);
+    DistinctValidator.prototype = Object.create(sogv.UniqueValidator.prototype);
     DistinctValidator.prototype.constructor = DistinctValidator;
 
     Object.defineProperty(DistinctValidator.prototype, 'alias', {
         get: function () {
-            return 'distinct';
+            return [
+                'distinct'
+            ];
         }
     });
 
@@ -47,14 +54,14 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.DistinctValidator#__beforeValidate
+         * @name sogv.DistinctValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
-            abv.UniqueValidator.prototype.__beforeValidate.call(this);
+            sogv.UniqueValidator.prototype.__beforeValidate.call(this);
 
             // Check if value is array
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":["array","iterable"]}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":["array","iterable"]}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -64,7 +71,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.DigitsValidator#__messageParameters
+         * @name sogv.DigitsValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -80,4 +87,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.DistinctValidator);
+sogv.registry(sogv.DistinctValidator);

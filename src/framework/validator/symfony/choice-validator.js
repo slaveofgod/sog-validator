@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.ChoiceValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.ChoiceValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is <code>blank</code> - meaning equal to an empty <code>string</code> or <code>null</code>.</p>
      * @description
@@ -14,8 +14,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>choice</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.ChoiceValidator(["Liam", "Noah", "William", "James"], {
+     * var validator = new sogv.ChoiceValidator(["Liam", "Noah", "William", "James"], {
      *     'choice': {
      *         "choices": [
      *             "Liam", "Noah", "William", "James", "Logan", "Benjamin", "Mason", "Elijah",
@@ -35,13 +40,13 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.ChoiceValidator#callback
+     * @name sogv.ChoiceValidator#callback
      * @type {String|Array|Closure}
      * @description This is a callback method that can be used instead of the choices option to return the choices array.
      */
 
     /**
-     * @name abv.ChoiceValidator#choices
+     * @name sogv.ChoiceValidator#choices
      * @type {Array}
      * @description
      * <p>A required option (unless callback is specified) - this is the array of options that should be considered in the valid set.</p>
@@ -49,7 +54,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.ChoiceValidator#max
+     * @name sogv.ChoiceValidator#max
      * @type {Integer}
      * @description
      * <p>If the multiple option is true, then you can use the max option to force no more than XX number of values to be selected.</p>
@@ -57,7 +62,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.ChoiceValidator#maxMessage
+     * @name sogv.ChoiceValidator#maxMessage
      * @type {String}
      * @description
      * <p>This is the validation error message that's displayed when the user chooses too many options per the max option.</p>
@@ -88,7 +93,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.ChoiceValidator#message
+     * @name sogv.ChoiceValidator#message
      * @type {String}
      * @description
      * <p>This is the message that you will receive if the multiple option is set to false and the underlying value is not in the valid array of choices.</p>
@@ -111,7 +116,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.ChoiceValidator#min
+     * @name sogv.ChoiceValidator#min
      * @type {Integer}
      * @description
      * If the multiple option is true, then you can use the min option to force at least XX number of values to be selected.
@@ -119,7 +124,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.ChoiceValidator#minMessage
+     * @name sogv.ChoiceValidator#minMessage
      * @type {String}
      * @description
      * <p>This is the validation error message that's displayed when the user chooses too few choices per the min option.</p>
@@ -150,7 +155,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.ChoiceValidator#multiple
+     * @name sogv.ChoiceValidator#multiple
      * @type {Boolean}
      * @description
      * If this option is true, the input value is expected to be an array instead of a single, scalar value.
@@ -160,7 +165,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.ChoiceValidator#multipleMessage
+     * @name sogv.ChoiceValidator#multipleMessage
      * @type {String}
      * @description
      * <p>This is the message that you will receive if the multiple option is set to true and one of the values on the underlying array being checked is not in the array of valid choices.</p>
@@ -183,7 +188,7 @@ Object.assign(abv, function () {
      */
 
     var ChoiceValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             callback: optionRules.callback || 'type:{"type":["string","array","callable"],"any":true}',
             choices: optionRules.choices || 'type:{"type":"array"}',
             max: optionRules.max || 'type:{"type":"numeric"}',
@@ -208,7 +213,7 @@ Object.assign(abv, function () {
 
         this.name = 'ChoiceValidator';
     };
-    ChoiceValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    ChoiceValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     ChoiceValidator.prototype.constructor = ChoiceValidator;
 
     Object.defineProperty(ChoiceValidator.prototype, 'alias', {
@@ -243,7 +248,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.ChoiceValidator#__validate
+         * @name sogv.ChoiceValidator#__validate
          * @description Validate data
          */
         __validate: function () {
@@ -277,11 +282,11 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.ChoiceValidator#__beforeValidate
+         * @name sogv.ChoiceValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
-            if (false === abv.isType('array', this.choices) && 'undefined' === typeof this.callback) {
+            if (false === sogv.isType('array', this.choices) && 'undefined' === typeof this.callback) {
                 throw new Error('Either "choices" or "callback" must be specified on constraint Choice');
             }
 
@@ -291,8 +296,8 @@ Object.assign(abv, function () {
                 return ;
             }
 
-            if (true === this.multiple && false === abv.isType('array', this.data)) {
-                this.__setErrorMessage(abv.sprintf("Expected argument of type '%s', '%s' given", 'Array', abv.getType(this.data)));
+            if (true === this.multiple && false === sogv.isType('array', this.data)) {
+                this.__setErrorMessage(sogv.sprintf("Expected argument of type '%s', '%s' given", 'Array', sogv.getType(this.data)));
                 this.__skip = true;
                 return ;
             }
@@ -309,7 +314,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.ChoiceValidator#__multipleMessageParameters
+         * @name sogv.ChoiceValidator#__multipleMessageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -322,7 +327,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.ChoiceValidator#__minMessageParameters
+         * @name sogv.ChoiceValidator#__minMessageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -337,7 +342,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.ChoiceValidator#__maxMessageParameters
+         * @name sogv.ChoiceValidator#__maxMessageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -352,7 +357,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.ChoiceValidator#__messageParameters
+         * @name sogv.ChoiceValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -368,4 +373,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.ChoiceValidator);
+sogv.registry(sogv.ChoiceValidator);

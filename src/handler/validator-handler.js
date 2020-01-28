@@ -1,9 +1,9 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**add
      * @constructor
-     * @name abv.ValidatorHandler
+     * @name sogv.ValidatorHandler
      * @classdesc This service provides handling validation of form
      * @description
      * <p>Create a new validator handler.</p>
@@ -18,11 +18,11 @@ Object.assign(abv, function () {
     Object.assign(ValidatorHandler.prototype, {
         /**
          * @function
-         * @name abv.ValidatorHandler#add
+         * @name sogv.ValidatorHandler#add
          * @description
          * <p>Add new validator for field.</p>
          * @param {String} key Field key
-         * @param {abv.AllValidator} validator Validator
+         * @param {sogv.AllValidator} validator Validator
          */
         add: function (key, validator) {
             this.__validators.push({
@@ -33,11 +33,11 @@ Object.assign(abv, function () {
 
         /**
          * @function
-         * @name abv.ValidatorHandler#get
+         * @name sogv.ValidatorHandler#get
          * @description
          * <p>Get validator for field.</p>
          * @param {String} key Field key
-         * @returns {abv.AllValidator}
+         * @returns {sogv.AllValidator}
          */
         get: function (key) {
             for (var i = 0; i < this.__validators.length; i ++) {
@@ -51,7 +51,7 @@ Object.assign(abv, function () {
 
         /**
          * @function
-         * @name abv.ValidatorHandler#isValid
+         * @name sogv.ValidatorHandler#isValid
          * @description
          * <p>Check if data valid.</p>
          * @returns {Boolean} Validation status
@@ -68,7 +68,7 @@ Object.assign(abv, function () {
 
         /**
          * @function
-         * @name abv.ValidatorHandler#isValidWithErrorMessage
+         * @name sogv.ValidatorHandler#isValidWithErrorMessage
          * @description
          * <p>Check if data valid.</p>
          * @returns {Boolean} Validation status

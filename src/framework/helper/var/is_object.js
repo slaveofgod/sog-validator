@@ -1,4 +1,4 @@
-abv.is_object = function (mixedVar) {
+sogv.is_object = function (mixedVar) {
     // eslint-disable-line camelcase
     //  discuss at: https://locutus.io/php/is_object/
     // original by: Kevin van Zonneveld (https://kvz.io)

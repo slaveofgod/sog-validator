@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.LanguageValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.LanguageValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is a valid <code>language</code> Unicode language identifier (e.g. <code>fr</code> or <code>ar-dz</code>).</p>
      * <p>Available languages:</p>
@@ -16,8 +16,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>language</code>', '<code>lang</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.LanguageValidator(data);
+     * var validator = new sogv.LanguageValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -26,7 +31,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.LanguageValidator#message
+     * @name sogv.LanguageValidator#message
      * @type {String}
      * @description
      * <p>This message is shown if the string is not a valid language code.</p>
@@ -49,7 +54,7 @@ Object.assign(abv, function () {
      */
 
     var LanguageValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -59,12 +64,15 @@ Object.assign(abv, function () {
 
         this.name = 'LanguageValidator';
     };
-    LanguageValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    LanguageValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     LanguageValidator.prototype.constructor = LanguageValidator;
 
     Object.defineProperty(LanguageValidator.prototype, 'alias', {
         get: function () {
-            return 'language';
+            return [
+                'language',
+                'lang'
+            ];
         }
     });
 
@@ -78,7 +86,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LanguageValidator#__validate
+         * @name sogv.LanguageValidator#__validate
          * @description
          * <p>Validate data.</p>
          */
@@ -93,7 +101,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LanguageValidator#__beforeValidate
+         * @name sogv.LanguageValidator#__beforeValidate
          * @description
          * <p>Execute before validation is running.</p>
          */
@@ -105,7 +113,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -125,7 +133,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LanguageValidator#__messageParameters
+         * @name sogv.LanguageValidator#__messageParameters
          * @description
          * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
@@ -142,4 +150,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.LanguageValidator);
+sogv.registry(sogv.LanguageValidator);

@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v2.0 revision 444ff92
+ * SOG Validator Library v0.9.7 revision f7b1879
  * Copyright 2011-2020 SOG Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var abv = {version:"2.0", revision:"444ff92", config:{}, common:{}, validators:{}, registry:function(validator) {
+var sogv = {version:"0.9.7", revision:"f7b1879", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -29,23 +29,23 @@ var abv = {version:"2.0", revision:"444ff92", config:{}, common:{}, validators:{
     throw new Error('The validator has to have "alias" property');
   }
   if ("AbstractValidator" !== __validator.base) {
-    throw new Error('The validator has to extend "abv.AbstractValidator" abstract class');
+    throw new Error('The validator has to extend "sogv.AbstractValidator" abstract class');
   }
   if ("undefined" === typeof __validator.__validate) {
     throw new Error('The validator has to implement "__validate" method');
   }
-  if (false === abv.isType("string", alias) && false === abv.isType("array", alias)) {
-    throw new Error('The alias must be type of "string" or "array", "' + abv.getType(alias) + '" given');
+  if (false === sogv.isType("string", alias) && false === sogv.isType("array", alias)) {
+    throw new Error('The alias must be type of "string" or "array", "' + sogv.getType(alias) + '" given');
   }
-  if (!options || false === abv.isType("array", options)) {
-    throw new Error('The options must be type of "array", "' + abv.getType(options) + '" given');
+  if (!options || false === sogv.isType("array", options)) {
+    throw new Error('The options must be type of "array", "' + sogv.getType(options) + '" given');
   }
   if ("string" === typeof alias) {
     alias = [alias];
   }
   alias.forEach(function(element) {
-    if ("undefined" === typeof abv.validators[element]) {
-      abv.validators[element] = validator;
+    if ("undefined" === typeof sogv.validators[element]) {
+      sogv.validators[element] = validator;
     }
   });
 }, getType:function(data) {
@@ -75,7 +75,7 @@ var abv = {version:"2.0", revision:"444ff92", config:{}, common:{}, validators:{
     case "real":
     case "scalar":
     case "string":
-      return abv["is_" + type](data);
+      return sogv["is_" + type](data);
       break;
     case "alnum":
     case "alpha":
@@ -88,7 +88,7 @@ var abv = {version:"2.0", revision:"444ff92", config:{}, common:{}, validators:{
     case "space":
     case "upper":
     case "xdigit":
-      return abv["ctype_" + type](data);
+      return sogv["ctype_" + type](data);
       break;
     case "aldash":
       return /^[a-zA-Z0-9_-]+$/.test(data);
@@ -109,35 +109,35 @@ var abv = {version:"2.0", revision:"444ff92", config:{}, common:{}, validators:{
   }
   return false;
 }, makeValidator:function(data, validator, options, optionRules, lang, internal) {
-  if ("undefined" === typeof abv.validators[validator]) {
+  if ("undefined" === typeof sogv.validators[validator]) {
     throw new Error('Validator with alias "' + validator + '" is not registered');
   }
-  return new abv.validators[validator](data, options, optionRules, lang, internal);
+  return new sogv.validators[validator](data, options, optionRules, lang, internal);
 }, isValid:function(data, rules, internal) {
-  var engine = new abv.Application({internal:internal});
+  var engine = new sogv.Application({internal:internal});
   var validator = engine.makeSingle(data, rules);
   return validator.isValid();
 }, isValidWithErrorMessage:function(data, rules, internal) {
-  var engine = new abv.Application({internal:internal});
+  var engine = new sogv.Application({internal:internal});
   var validator = engine.makeSingle(data, rules);
   return true === validator.isValid() ? null : validator.errors().first();
 }};
 if (typeof exports !== "undefined") {
-  exports.abv = abv;
+  exports.sogv = sogv;
 }
-;Object.assign(abv, function() {
+;Object.assign(sogv, function() {
   var AbstractValidator = function(data, options, optionRules, lang, internal) {
     var __data = data;
     this.data = __data;
     this.lang = lang || "en";
     this.__options = options || {};
-    this.__errorService = new abv.ErrorHandler({"lang":lang, "internal":internal});
+    this.__errorService = new sogv.ErrorHandler({"lang":lang, "internal":internal});
     this.__internal = true === internal;
-    this.__moment = abv.moment;
+    this.__moment = sogv.moment;
     this.__name = null;
     this.__skip = false;
     this.__moment.locale(this.lang);
-    abv.setlocale("LC_ALL", this.lang);
+    sogv.setlocale("LC_ALL", this.lang);
     if (false === this.__internal) {
       this.__validateOptions(optionRules);
     }
@@ -169,7 +169,7 @@ if (typeof exports !== "undefined") {
       if (!rules.hasOwnProperty(key)) {
         continue;
       }
-      var message = abv.isValidWithErrorMessage(this.__options[key], rules[key], true);
+      var message = sogv.isValidWithErrorMessage(this.__options[key], rules[key], true);
       if (null !== message) {
         throw new Error("[option:" + key + "]: " + message);
       }
@@ -181,16 +181,16 @@ if (typeof exports !== "undefined") {
   }, __isEmptyData:function() {
     return "undefined" === typeof this.data || null === this.data || "" === this.data;
   }, __formattedData:function(data) {
-    if (true === abv.isType("numeric", data)) {
+    if (true === sogv.isType("numeric", data)) {
       return data;
     }
-    if (true === abv.isType("bool", data)) {
+    if (true === sogv.isType("bool", data)) {
       return data;
     }
-    if (true === abv.isType("array", data)) {
+    if (true === sogv.isType("array", data)) {
       return JSON.stringify(data);
     }
-    if (true === abv.isType("object", data) && "Date" !== abv.getType(data)) {
+    if (true === sogv.isType("object", data) && "Date" !== sogv.getType(data)) {
       return JSON.stringify(data);
     }
     if (true === this.__moment(data).isValid()) {
@@ -198,17 +198,17 @@ if (typeof exports !== "undefined") {
     }
     return data;
   }, __convertDataToValueType:function() {
-    if (abv.getType(this.data) === abv.getType(this.value)) {
+    if (sogv.getType(this.data) === sogv.getType(this.value)) {
       return this.data;
     }
-    switch(abv.getType(this.value)) {
+    switch(sogv.getType(this.value)) {
       case "Date":
         return new Date(this.data);
         break;
     }
     return this.data;
   }, __prepareDataForComparing:function(data) {
-    switch(abv.getType(data)) {
+    switch(sogv.getType(data)) {
       case "Date":
         return data.getTime();
         break;
@@ -228,13 +228,13 @@ if (typeof exports !== "undefined") {
   }});
   return {AbstractValidator:AbstractValidator};
 }());
-Object.assign(abv, function() {
+Object.assign(sogv, function() {
   var AbstractComparisonValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, optionRules, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, optionRules, lang, internal);
     this.value = this.__options.value;
     this.name = "AbstractComparisonValidator";
   };
-  AbstractComparisonValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  AbstractComparisonValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   AbstractComparisonValidator.prototype.constructor = AbstractComparisonValidator;
   Object.assign(AbstractComparisonValidator.prototype, {__validate:function() {
     if ("undefined" === typeof this.data || null === this.data || "" === this.data) {
@@ -252,12 +252,12 @@ Object.assign(abv, function() {
   }});
   return {AbstractComparisonValidator:AbstractComparisonValidator};
 }());
-Object.assign(abv, function() {
+Object.assign(sogv, function() {
   var I18n = function(lang) {
     this.lang = lang || "en";
   };
   Object.assign(I18n.prototype, {translate:function(message, parameters) {
-    var translation = abv.I18nHandler.get(this.lang, message);
+    var translation = sogv.I18nHandler.get(this.lang, message);
     if (null === translation) {
       translation = message;
     }
@@ -269,14 +269,14 @@ Object.assign(abv, function() {
         translation = translations[1];
       }
     }
-    return abv.I18nHandler.prepare(translation, parameters);
+    return sogv.I18nHandler.prepare(translation, parameters);
   }});
   return {I18n:I18n};
 }());
-Object.assign(abv, function() {
+Object.assign(sogv, function() {
   var ErrorHandler = function(options) {
     this.lang = options.lang || "en";
-    this.__translator = new abv.I18n(this.lang);
+    this.__translator = new sogv.I18n(this.lang);
     this.__internal = true === options.internal;
     this.__messages = [];
     this.name = "ErrorHandler";
@@ -299,9 +299,9 @@ Object.assign(abv, function() {
   }});
   return {ErrorHandler:ErrorHandler};
 }());
-abv.I18nResource = [];
-abv.I18nHandler = {add:function(lang, messages) {
-  var validationEngine = new abv.Application;
+sogv.I18nResource = [];
+sogv.I18nHandler = {add:function(lang, messages) {
+  var validationEngine = new sogv.Application;
   var form = validationEngine.make({lang:lang, messages:messages}, {lang:"required|language", messages:'required|type:{"type":"iterable"}'});
   var error = form.isValidWithErrorMessage();
   if (null !== error) {
@@ -309,13 +309,13 @@ abv.I18nHandler = {add:function(lang, messages) {
   }
   for (var i = 0; i < messages.length; i++) {
     var message = messages[i];
-    if ("undefined" === typeof abv.I18nResource[lang]) {
-      abv.I18nResource[lang] = [];
+    if ("undefined" === typeof sogv.I18nResource[lang]) {
+      sogv.I18nResource[lang] = [];
     }
-    abv.I18nResource[lang].push(message);
+    sogv.I18nResource[lang].push(message);
   }
 }, get:function(lang, sourceMessage) {
-  var resource = abv.I18nResource[lang];
+  var resource = sogv.I18nResource[lang];
   for (var i = 0; i < resource.length; i++) {
     if (sourceMessage === resource[i]["source"] || resource[i]["source"].includes(sourceMessage)) {
       return resource[i]["target"];
@@ -332,7 +332,7 @@ abv.I18nHandler = {add:function(lang, messages) {
   }
   return message;
 }};
-Object.assign(abv, function() {
+Object.assign(sogv, function() {
   var ValidatorHandler = function(options) {
     this.__validators = [];
     this.name = "ValidatorHandler";
@@ -363,7 +363,7 @@ Object.assign(abv, function() {
   }});
   return {ValidatorHandler:ValidatorHandler};
 }());
-abv.ValidationSettingsHandler = {parse:function(settings) {
+sogv.ValidationSettingsHandler = {parse:function(settings) {
   var validators = settings;
   if ("string" === typeof settings) {
     validators = this.__parseJsonFormat(settings);
@@ -414,12 +414,12 @@ abv.ValidationSettingsHandler = {parse:function(settings) {
   }
   return validators;
 }};
-Object.assign(abv, function() {
+Object.assign(sogv, function() {
   var Application = function(options) {
     options = options || {};
     this.lang = options.lang || "en";
     this.internal = true === options.internal;
-    abv.app = this;
+    sogv.app = this;
     this.name = "Application";
   };
   Application.prototype.constructor = Application;
@@ -427,21 +427,21 @@ Object.assign(abv, function() {
     return "Application";
   }});
   Object.assign(Application.prototype, {make:function(data, rules) {
-    var validators = new abv.ValidatorHandler;
+    var validators = new sogv.ValidatorHandler;
     for (var key in rules) {
       if (!rules.hasOwnProperty(key)) {
         continue;
       }
-      validators.add(key, new abv.AllValidator(data[key], rules[key], {lang:this.lang, internal:this.internal}));
+      validators.add(key, new sogv.AllValidator(data[key], rules[key], {lang:this.lang, internal:this.internal}));
     }
     return validators;
   }, makeSingle:function(data, rules) {
-    var validator = new abv.AllValidator(data, rules, {lang:this.lang, internal:this.internal});
+    var validator = new sogv.AllValidator(data, rules, {lang:this.lang, internal:this.internal});
     return validator;
   }});
   return {Application:Application};
 }());
-abv.moment = function() {
+sogv.moment = function() {
   var hookCallback;
   function hooks() {
     return hookCallback.apply(null, arguments);
@@ -1798,6 +1798,10 @@ abv.moment = function() {
     if (!locales[name] && typeof module !== "undefined" && module && module.exports) {
       try {
         oldLocale = globalLocale._abbr;
+        if ("undefined" === typeof require) {
+          var require = function() {
+          };
+        }
         var aliasedRequire = require;
         aliasedRequire("./locale/" + name);
         getSetGlobalLocale(oldLocale);
@@ -7280,7 +7284,7 @@ abv.moment = function() {
   hooks.locale("en");
   return hooks;
 }();
-abv.moment.createFromInputFallback = function(config) {
+sogv.moment.createFromInputFallback = function(config) {
   config._d = new Date(NaN);
 };
 (function(moment) {
@@ -7873,22 +7877,22 @@ abv.moment.createFromInputFallback = function(config) {
   "Pacific/Easter|Chile/EasterIsland", "Pacific/Gambier|Etc/GMT+9", "Pacific/Guadalcanal|Etc/GMT-11", "Pacific/Guadalcanal|Pacific/Pohnpei", "Pacific/Guadalcanal|Pacific/Ponape", "Pacific/Guam|Pacific/Saipan", "Pacific/Honolulu|HST", "Pacific/Honolulu|Pacific/Johnston", "Pacific/Honolulu|US/Hawaii", "Pacific/Kwajalein|Kwajalein", "Pacific/Pago_Pago|Pacific/Midway", "Pacific/Pago_Pago|Pacific/Samoa", "Pacific/Pago_Pago|US/Samoa", "Pacific/Palau|Etc/GMT-9", "Pacific/Port_Moresby|Antarctica/DumontDUrville", 
   "Pacific/Port_Moresby|Etc/GMT-10", "Pacific/Port_Moresby|Pacific/Chuuk", "Pacific/Port_Moresby|Pacific/Truk", "Pacific/Port_Moresby|Pacific/Yap", "Pacific/Tahiti|Etc/GMT+10", "Pacific/Tarawa|Etc/GMT-12", "Pacific/Tarawa|Pacific/Funafuti", "Pacific/Tarawa|Pacific/Majuro", "Pacific/Tarawa|Pacific/Wake", "Pacific/Tarawa|Pacific/Wallis"]});
   return moment;
-})(abv.moment);
-abv.hexdec = function(hexString) {
+})(sogv.moment);
+sogv.hexdec = function(hexString) {
   hexString = (hexString + "").replace(/[^a-f0-9]/gi, "");
   return parseInt(hexString, 16);
 };
-abv.fmod = function(a, b) {
+sogv.fmod = function(a, b) {
   return Number((a - Math.floor(a / b) * b).toPrecision(8));
 };
-abv.re = {not_string:/[^s]/, not_bool:/[^t]/, not_type:/[^T]/, not_primitive:/[^v]/, number:/[diefg]/, numeric_arg:/[bcdiefguxX]/, json:/[j]/, not_json:/[^j]/, text:/^[^\x25]+/, modulo:/^\x25{2}/, placeholder:/^\x25(?:([1-9]\d*)\$|\(([^)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-gijostTuvxX])/, key:/^([a-z_][a-z_\d]*)/i, key_access:/^\.([a-z_][a-z_\d]*)/i, index_access:/^\[(\d+)\]/, sign:/^[+-]/};
-abv.sprintf = function(key) {
-  return abv.sprintf_format(abv.sprintf_parse(key), arguments);
+sogv.re = {not_string:/[^s]/, not_bool:/[^t]/, not_type:/[^T]/, not_primitive:/[^v]/, number:/[diefg]/, numeric_arg:/[bcdiefguxX]/, json:/[j]/, not_json:/[^j]/, text:/^[^\x25]+/, modulo:/^\x25{2}/, placeholder:/^\x25(?:([1-9]\d*)\$|\(([^)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-gijostTuvxX])/, key:/^([a-z_][a-z_\d]*)/i, key_access:/^\.([a-z_][a-z_\d]*)/i, index_access:/^\[(\d+)\]/, sign:/^[+-]/};
+sogv.sprintf = function(key) {
+  return sogv.sprintf_format(sogv.sprintf_parse(key), arguments);
 };
-abv.vsprintf = function(fmt, argv) {
-  return abv.sprintf.apply(null, [fmt].concat(argv || []));
+sogv.vsprintf = function(fmt, argv) {
+  return sogv.sprintf.apply(null, [fmt].concat(argv || []));
 };
-abv.sprintf_format = function(parse_tree, argv) {
+sogv.sprintf_format = function(parse_tree, argv) {
   var cursor = 1, tree_length = parse_tree.length, arg, output = "", i, k, ph, pad, pad_character, pad_length, is_positive, sign;
   for (i = 0; i < tree_length; i++) {
     if (typeof parse_tree[i] === "string") {
@@ -7900,7 +7904,7 @@ abv.sprintf_format = function(parse_tree, argv) {
           arg = argv[cursor];
           for (k = 0; k < ph.keys.length; k++) {
             if (arg == undefined) {
-              throw new Error(abv.sprintf('[sprintf] Cannot access property "%s" of undefined value "%s"', ph.keys[k], ph.keys[k - 1]));
+              throw new Error(sogv.sprintf('[sprintf] Cannot access property "%s" of undefined value "%s"', ph.keys[k], ph.keys[k - 1]));
             }
             arg = arg[ph.keys[k]];
           }
@@ -7911,13 +7915,13 @@ abv.sprintf_format = function(parse_tree, argv) {
             arg = argv[cursor++];
           }
         }
-        if (abv.re.not_type.test(ph.type) && abv.re.not_primitive.test(ph.type) && arg instanceof Function) {
+        if (sogv.re.not_type.test(ph.type) && sogv.re.not_primitive.test(ph.type) && arg instanceof Function) {
           arg = arg();
         }
-        if (abv.re.numeric_arg.test(ph.type) && (typeof arg !== "number" && isNaN(arg))) {
-          throw new TypeError(abv.sprintf("[sprintf] expecting number but found %T", arg));
+        if (sogv.re.numeric_arg.test(ph.type) && (typeof arg !== "number" && isNaN(arg))) {
+          throw new TypeError(sogv.sprintf("[sprintf] expecting number but found %T", arg));
         }
-        if (abv.re.number.test(ph.type)) {
+        if (sogv.re.number.test(ph.type)) {
           is_positive = arg >= 0;
         }
         switch(ph.type) {
@@ -7972,12 +7976,12 @@ abv.sprintf_format = function(parse_tree, argv) {
             arg = (parseInt(arg, 10) >>> 0).toString(16).toUpperCase();
             break;
         }
-        if (abv.re.json.test(ph.type)) {
+        if (sogv.re.json.test(ph.type)) {
           output += arg;
         } else {
-          if (abv.re.number.test(ph.type) && (!is_positive || ph.sign)) {
+          if (sogv.re.number.test(ph.type) && (!is_positive || ph.sign)) {
             sign = is_positive ? "+" : "-";
-            arg = arg.toString().replace(abv.re.sign, "");
+            arg = arg.toString().replace(sogv.re.sign, "");
           } else {
             sign = "";
           }
@@ -7991,30 +7995,30 @@ abv.sprintf_format = function(parse_tree, argv) {
   }
   return output;
 };
-abv.sprintf_cache = Object.create(null);
-abv.sprintf_parse = function(fmt) {
-  if (abv.sprintf_cache[fmt]) {
-    return abv.sprintf_cache[fmt];
+sogv.sprintf_cache = Object.create(null);
+sogv.sprintf_parse = function(fmt) {
+  if (sogv.sprintf_cache[fmt]) {
+    return sogv.sprintf_cache[fmt];
   }
   var _fmt = fmt, match, parse_tree = [], arg_names = 0;
   while (_fmt) {
-    if ((match = abv.re.text.exec(_fmt)) !== null) {
+    if ((match = sogv.re.text.exec(_fmt)) !== null) {
       parse_tree.push(match[0]);
     } else {
-      if ((match = abv.re.modulo.exec(_fmt)) !== null) {
+      if ((match = sogv.re.modulo.exec(_fmt)) !== null) {
         parse_tree.push("%");
       } else {
-        if ((match = abv.re.placeholder.exec(_fmt)) !== null) {
+        if ((match = sogv.re.placeholder.exec(_fmt)) !== null) {
           if (match[2]) {
             arg_names |= 1;
             var field_list = [], replacement_field = match[2], field_match = [];
-            if ((field_match = abv.re.key.exec(replacement_field)) !== null) {
+            if ((field_match = sogv.re.key.exec(replacement_field)) !== null) {
               field_list.push(field_match[1]);
               while ((replacement_field = replacement_field.substring(field_match[0].length)) !== "") {
-                if ((field_match = abv.re.key_access.exec(replacement_field)) !== null) {
+                if ((field_match = sogv.re.key_access.exec(replacement_field)) !== null) {
                   field_list.push(field_match[1]);
                 } else {
-                  if ((field_match = abv.re.index_access.exec(replacement_field)) !== null) {
+                  if ((field_match = sogv.re.index_access.exec(replacement_field)) !== null) {
                     field_list.push(field_match[1]);
                   } else {
                     throw new SyntaxError("[sprintf] failed to parse named argument key");
@@ -8039,12 +8043,12 @@ abv.sprintf_parse = function(fmt) {
     }
     _fmt = _fmt.substring(match[0].length);
   }
-  return abv.sprintf_cache[fmt] = parse_tree;
+  return sogv.sprintf_cache[fmt] = parse_tree;
 };
-abv.checkdate = function(m, d, y) {
+sogv.checkdate = function(m, d, y) {
   return m > 0 && m < 13 && y > 0 && y < 32768 && d > 0 && d <= (new Date(y, m, 0)).getDate();
 };
-abv.filter_var = function(input, filter, options) {
+sogv.filter_var = function(input, filter, options) {
   function is(val, type) {
     if (val == null) {
       return type === "null";
@@ -8204,14 +8208,20 @@ abv.filter_var = function(input, filter, options) {
       return false;
   }
 };
-abv.getenv = function(varname) {
+sogv.getenv = function(varname) {
   if (typeof process !== "undefined" || !process.env || !process.env[varname]) {
     return false;
   }
   return process.env[varname];
 };
-abv.ini_get = function(varname) {
-  var $global = typeof window !== "undefined" ? window : global;
+sogv.ini_get = function(varname) {
+  var __global;
+  if ("undefined" === typeof global) {
+    var __global = global;
+  } else {
+    var __global = global;
+  }
+  var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
   $locutus.php = $locutus.php || {};
@@ -8224,7 +8234,7 @@ abv.ini_get = function(varname) {
   }
   return "";
 };
-abv.setlocale = function(category, locale) {
+sogv.setlocale = function(category, locale) {
   var categ = "";
   var cats = [];
   var i = 0;
@@ -8252,7 +8262,13 @@ abv.setlocale = function(category, locale) {
   var _nplurals2b = function(n) {
     return n > 1 ? 1 : 0;
   };
-  var $global = typeof window !== "undefined" ? window : global;
+  var __global;
+  if ("undefined" === typeof global) {
+    var __global = global;
+  } else {
+    var __global = global;
+  }
+  var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
   $locutus.php = $locutus.php || {};
@@ -8330,7 +8346,7 @@ abv.setlocale = function(category, locale) {
     $locutus.php.localeCategories = {"LC_COLLATE":$locutus.php.locale, "LC_CTYPE":$locutus.php.locale, "LC_MONETARY":$locutus.php.locale, "LC_NUMERIC":$locutus.php.locale, "LC_TIME":$locutus.php.locale, "LC_MESSAGES":$locutus.php.locale};
   }
   if (locale === null || locale === "") {
-    locale = abv.getenv(category) || abv.getenv("LANG");
+    locale = sogv.getenv(category) || sogv.getenv("LANG");
   } else {
     if (Object.prototype.toString.call(locale) === "[object Array]") {
       for (i = 0; i < locale.length; i++) {
@@ -8366,7 +8382,7 @@ abv.setlocale = function(category, locale) {
   }
   return locale;
 };
-abv.str_split = function(str, split_length) {
+sogv.str_split = function(str, split_length) {
   if (split_length == null) {
     split_length = 1;
   }
@@ -8389,7 +8405,7 @@ abv.str_split = function(str, split_length) {
   }
   return res;
 };
-abv.ord = function(string) {
+sogv.ord = function(string) {
   var str = string + "";
   var code = str.charCodeAt(0);
   if (code >= 55296 && code <= 56319) {
@@ -8405,128 +8421,194 @@ abv.ord = function(string) {
   }
   return code;
 };
-abv.ctype_alnum = function(text) {
+sogv.ctype_alnum = function(text) {
   if (typeof text !== "string") {
     return false;
   }
-  abv.setlocale("LC_ALL", 0);
-  var $global = typeof window !== "undefined" ? window : global;
+  sogv.setlocale("LC_ALL", 0);
+  var __global;
+  if ("undefined" === typeof global) {
+    var __global = global;
+  } else {
+    var __global = global;
+  }
+  var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
   var p = $locutus.php;
   return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.an) !== -1;
 };
-abv.ctype_alpha = function(text) {
+sogv.ctype_alpha = function(text) {
   if (typeof text !== "string") {
     return false;
   }
-  abv.setlocale("LC_ALL", 0);
-  var $global = typeof window !== "undefined" ? window : global;
+  sogv.setlocale("LC_ALL", 0);
+  var __global;
+  if ("undefined" === typeof global) {
+    var __global = global;
+  } else {
+    var __global = global;
+  }
+  var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
   var p = $locutus.php;
   return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.al) !== -1;
 };
-abv.ctype_cntrl = function(text) {
+sogv.ctype_cntrl = function(text) {
   if (typeof text !== "string") {
     return false;
   }
-  abv.setlocale("LC_ALL", 0);
-  var $global = typeof window !== "undefined" ? window : global;
+  sogv.setlocale("LC_ALL", 0);
+  var __global;
+  if ("undefined" === typeof global) {
+    var __global = global;
+  } else {
+    var __global = global;
+  }
+  var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
   var p = $locutus.php;
   return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.ct) !== -1;
 };
-abv.ctype_digit = function(text) {
+sogv.ctype_digit = function(text) {
   if (typeof text !== "string") {
     return false;
   }
-  abv.setlocale("LC_ALL", 0);
-  var $global = typeof window !== "undefined" ? window : global;
+  sogv.setlocale("LC_ALL", 0);
+  var __global;
+  if ("undefined" === typeof global) {
+    var __global = global;
+  } else {
+    var __global = global;
+  }
+  var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
   var p = $locutus.php;
   return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.dg) !== -1;
 };
-abv.ctype_graph = function(text) {
+sogv.ctype_graph = function(text) {
   if (typeof text !== "string") {
     return false;
   }
-  abv.setlocale("LC_ALL", 0);
-  var $global = typeof window !== "undefined" ? window : global;
+  sogv.setlocale("LC_ALL", 0);
+  var __global;
+  if ("undefined" === typeof global) {
+    var __global = global;
+  } else {
+    var __global = global;
+  }
+  var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
   var p = $locutus.php;
   return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.gr) !== -1;
 };
-abv.ctype_lower = function(text) {
+sogv.ctype_lower = function(text) {
   if (typeof text !== "string") {
     return false;
   }
-  abv.setlocale("LC_ALL", 0);
-  var $global = typeof window !== "undefined" ? window : global;
+  sogv.setlocale("LC_ALL", 0);
+  var __global;
+  if ("undefined" === typeof global) {
+    var __global = global;
+  } else {
+    var __global = global;
+  }
+  var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
   var p = $locutus.php;
   return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.lw) !== -1;
 };
-abv.ctype_print = function(text) {
+sogv.ctype_print = function(text) {
   if (typeof text !== "string") {
     return false;
   }
-  abv.setlocale("LC_ALL", 0);
-  var $global = typeof window !== "undefined" ? window : global;
+  sogv.setlocale("LC_ALL", 0);
+  var __global;
+  if ("undefined" === typeof global) {
+    var __global = global;
+  } else {
+    var __global = global;
+  }
+  var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
   var p = $locutus.php;
   return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.pr) !== -1;
 };
-abv.ctype_punct = function(text) {
+sogv.ctype_punct = function(text) {
   if (typeof text !== "string") {
     return false;
   }
-  abv.setlocale("LC_ALL", 0);
-  var $global = typeof window !== "undefined" ? window : global;
+  sogv.setlocale("LC_ALL", 0);
+  var __global;
+  if ("undefined" === typeof global) {
+    var __global = global;
+  } else {
+    var __global = global;
+  }
+  var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
   var p = $locutus.php;
   return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.pu) !== -1;
 };
-abv.ctype_space = function(text) {
+sogv.ctype_space = function(text) {
   if (typeof text !== "string") {
     return false;
   }
-  abv.setlocale("LC_ALL", 0);
-  var $global = typeof window !== "undefined" ? window : global;
+  sogv.setlocale("LC_ALL", 0);
+  var __global;
+  if ("undefined" === typeof global) {
+    var __global = global;
+  } else {
+    var __global = global;
+  }
+  var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
   var p = $locutus.php;
   return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.sp) !== -1;
 };
-abv.ctype_upper = function(text) {
+sogv.ctype_upper = function(text) {
   if (typeof text !== "string") {
     return false;
   }
-  abv.setlocale("LC_ALL", 0);
-  var $global = typeof window !== "undefined" ? window : global;
+  sogv.setlocale("LC_ALL", 0);
+  var __global;
+  if ("undefined" === typeof global) {
+    var __global = global;
+  } else {
+    var __global = global;
+  }
+  var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
   var p = $locutus.php;
   return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.up) !== -1;
 };
-abv.ctype_xdigit = function(text) {
+sogv.ctype_xdigit = function(text) {
   if (typeof text !== "string") {
     return false;
   }
-  abv.setlocale("LC_ALL", 0);
-  var $global = typeof window !== "undefined" ? window : global;
+  sogv.setlocale("LC_ALL", 0);
+  var __global;
+  if ("undefined" === typeof global) {
+    var __global = global;
+  } else {
+    var __global = global;
+  }
+  var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
   var p = $locutus.php;
   return text.search(p.locales[p.localeCategories.LC_CTYPE].LC_CTYPE.xd) !== -1;
 };
-abv.is_array = function(mixedVar) {
+sogv.is_array = function(mixedVar) {
   var _getFuncName = function(fn) {
     var name = /\W*function\s+([\w$]+)\s*\(/.exec(fn);
     if (!name) {
@@ -8554,7 +8636,7 @@ abv.is_array = function(mixedVar) {
   if (isArray) {
     return true;
   }
-  var iniVal = (typeof require !== "undefined" ? abv.ini_get("locutus.objectsAsArrays") : undefined) || "on";
+  var iniVal = (typeof require !== "undefined" ? sogv.ini_get("locutus.objectsAsArrays") : undefined) || "on";
   if (iniVal === "on") {
     var asString = Object.prototype.toString.call(mixedVar);
     var asFunc = _getFuncName(mixedVar.constructor);
@@ -8564,20 +8646,26 @@ abv.is_array = function(mixedVar) {
   }
   return false;
 };
-abv.is_binary = function(vr) {
+sogv.is_binary = function(vr) {
   return typeof vr === "string";
 };
-abv.is_bool = function(mixedVar) {
+sogv.is_bool = function(mixedVar) {
   return mixedVar === true || mixedVar === false;
 };
-abv.is_boolean = function(mixedVar) {
-  return abv.is_bool(mixedVar);
+sogv.is_boolean = function(mixedVar) {
+  return sogv.is_bool(mixedVar);
 };
-abv.is_buffer = function(vr) {
+sogv.is_buffer = function(vr) {
   return typeof vr === "string";
 };
-abv.is_callable = function(mixedVar, syntaxOnly, callableName) {
-  var $global = typeof window !== "undefined" ? window : global;
+sogv.is_callable = function(mixedVar, syntaxOnly, callableName) {
+  var __global;
+  if ("undefined" === typeof global) {
+    var __global = global;
+  } else {
+    var __global = global;
+  }
+  var $global = typeof window !== "undefined" ? window : __global;
   var validJSFunctionNamePattern = /^[_$a-zA-Z\xA0-\uFFFF][_$a-zA-Z0-9\xA0-\uFFFF]*$/;
   var name = "";
   var obj = {};
@@ -8623,44 +8711,44 @@ abv.is_callable = function(mixedVar, syntaxOnly, callableName) {
   }
   return false;
 };
-abv.is_double = function(mixedVar) {
-  return abv.is_float(mixedVar);
+sogv.is_double = function(mixedVar) {
+  return sogv.is_float(mixedVar);
 };
-abv.is_float = function is_float(mixedVar) {
+sogv.is_float = function is_float(mixedVar) {
   return +mixedVar === mixedVar && (!isFinite(mixedVar) || !!(mixedVar % 1));
 };
-abv.is_integer = function(mixedVar) {
-  return abv.is_int(mixedVar);
+sogv.is_integer = function(mixedVar) {
+  return sogv.is_int(mixedVar);
 };
-abv.is_int = function(mixedVar) {
+sogv.is_int = function(mixedVar) {
   return mixedVar === +mixedVar && isFinite(mixedVar) && !(mixedVar % 1);
 };
-abv.is_long = function(mixedVar) {
-  return abv.is_float(mixedVar);
+sogv.is_long = function(mixedVar) {
+  return sogv.is_float(mixedVar);
 };
-abv.is_null = function(mixedVar) {
+sogv.is_null = function(mixedVar) {
   return mixedVar === null;
 };
-abv.is_numeric = function(mixedVar) {
+sogv.is_numeric = function(mixedVar) {
   var whitespace = [" ", "\n", "\r", "\t", "\f", "\x0B", "\u00a0", "\u2000", "\u2001", "\u2002", "\u2003", "\u2004", "\u2005", "\u2006", "\u2007", "\u2008", "\u2009", "\u200a", "\u200b", "\u2028", "\u2029", "\u3000"].join("");
   return (typeof mixedVar === "number" || typeof mixedVar === "string" && whitespace.indexOf(mixedVar.slice(-1)) === -1) && mixedVar !== "" && !isNaN(mixedVar);
 };
-abv.is_object = function(mixedVar) {
+sogv.is_object = function(mixedVar) {
   if (Object.prototype.toString.call(mixedVar) === "[object Array]") {
     return false;
   }
   return mixedVar !== null && typeof mixedVar === "object";
 };
-abv.is_real = function(mixedVar) {
-  return abv.is_float(mixedVar);
+sogv.is_real = function(mixedVar) {
+  return sogv.is_float(mixedVar);
 };
-abv.is_scalar = function(mixedVar) {
+sogv.is_scalar = function(mixedVar) {
   return /boolean|number|string/.test(typeof mixedVar);
 };
-abv.is_string = function(mixedVar) {
+sogv.is_string = function(mixedVar) {
   return typeof mixedVar === "string";
 };
-abv.is_unicode = function(vr) {
+sogv.is_unicode = function(vr) {
   if (typeof vr !== "string") {
     return false;
   }
@@ -8683,34 +8771,34 @@ abv.is_unicode = function(vr) {
   }
   return true;
 };
-abv.is_iterable = function(mixedVar) {
+sogv.is_iterable = function(mixedVar) {
   return mixedVar && "function" === typeof mixedVar[Symbol.iterator] ? true : false;
 };
-abv.array_sum = function(arr) {
+sogv.array_sum = function(arr) {
   var sum = 0;
   for (var arrKey in arr) {
     sum += arr[arrKey] * 1;
   }
   return sum;
 };
-Object.assign(abv, function() {
+Object.assign(sogv, function() {
   var AllValidator = function(data, rules, options) {
-    abv.AbstractValidator.call(this, data, options, null, options && options["lang"] ? options["lang"] : null, options && true === options["internal"]);
+    sogv.AbstractValidator.call(this, data, options, null, options && options["lang"] ? options["lang"] : null, options && true === options["internal"]);
     this.rules = rules;
     this.__validatorCollection = [];
     this.name = "AllValidator";
     this.__configure();
   };
-  AllValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  AllValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   AllValidator.prototype.constructor = AllValidator;
   Object.defineProperty(AllValidator.prototype, "alias", {get:function() {
-    return "all";
+    return ["all"];
   }});
   Object.defineProperty(AllValidator.prototype, "options", {get:function() {
     return [];
   }});
   Object.assign(AllValidator.prototype, {__configure:function() {
-    var validationRules = abv.ValidationSettingsHandler.parse(this.rules);
+    var validationRules = sogv.ValidationSettingsHandler.parse(this.rules);
     for (var key in validationRules) {
       if (!validationRules.hasOwnProperty(key)) {
         continue;
@@ -8718,7 +8806,7 @@ Object.assign(abv, function() {
       this.add(key, validationRules[key]);
     }
   }, add:function(name, options) {
-    var validator = abv.makeValidator(this.data, name, options, {}, this.lang, this.__internal);
+    var validator = sogv.makeValidator(this.data, name, options, {}, this.lang, this.__internal);
     this.__validatorCollection.push(validator);
   }, __validate:function() {
     for (var key in this.__validatorCollection) {
@@ -8733,18 +8821,18 @@ Object.assign(abv, function() {
   }});
   return {AllValidator:AllValidator};
 }());
-Object.assign(abv, function() {
+Object.assign(sogv, function() {
   var NotBlankValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.allowNull = !this.__options.allowNull || false === this.__options.allowNull ? false : true;
     this.message = this.__options.message || "This value should not be blank.";
     this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
     this.name = "NotBlankValidator";
   };
-  NotBlankValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  NotBlankValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   NotBlankValidator.prototype.constructor = NotBlankValidator;
   Object.defineProperty(NotBlankValidator.prototype, "alias", {get:function() {
-    return "not-blank";
+    return ["not-blank", "not-empty"];
   }});
   Object.defineProperty(NotBlankValidator.prototype, "options", {get:function() {
     return [];
@@ -8778,17 +8866,17 @@ Object.assign(abv, function() {
   }});
   return {NotBlankValidator:NotBlankValidator};
 }());
-abv.registry(abv.NotBlankValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.NotBlankValidator);
+Object.assign(sogv, function() {
   var BlankValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value should be blank.";
     this.name = "BlankValidator";
   };
-  BlankValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  BlankValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   BlankValidator.prototype.constructor = BlankValidator;
   Object.defineProperty(BlankValidator.prototype, "alias", {get:function() {
-    return "blank";
+    return ["blank", "empty"];
   }});
   Object.defineProperty(BlankValidator.prototype, "options", {get:function() {
     return [];
@@ -8803,14 +8891,14 @@ Object.assign(abv, function() {
   }});
   return {BlankValidator:BlankValidator};
 }());
-abv.registry(abv.BlankValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.BlankValidator);
+Object.assign(sogv, function() {
   var IsNullValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value should be null.";
     this.name = "IsNullValidator";
   };
-  IsNullValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  IsNullValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   IsNullValidator.prototype.constructor = IsNullValidator;
   Object.defineProperty(IsNullValidator.prototype, "alias", {get:function() {
     return ["is-null", "null", "nullable"];
@@ -8828,14 +8916,14 @@ Object.assign(abv, function() {
   }});
   return {IsNullValidator:IsNullValidator};
 }());
-abv.registry(abv.IsNullValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.IsNullValidator);
+Object.assign(sogv, function() {
   var NotNullValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value should not be null.";
     this.name = "NotNullValidator";
   };
-  NotNullValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  NotNullValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   NotNullValidator.prototype.constructor = NotNullValidator;
   Object.defineProperty(NotNullValidator.prototype, "alias", {get:function() {
     return ["not-null", "required", "present"];
@@ -8857,14 +8945,14 @@ Object.assign(abv, function() {
   }});
   return {NotNullValidator:NotNullValidator};
 }());
-abv.registry(abv.NotNullValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.NotNullValidator);
+Object.assign(sogv, function() {
   var IsTrueValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value should be true.";
     this.name = "IsTrueValidator";
   };
-  IsTrueValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  IsTrueValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   IsTrueValidator.prototype.constructor = IsTrueValidator;
   Object.defineProperty(IsTrueValidator.prototype, "alias", {get:function() {
     return ["is-true", "true"];
@@ -8882,14 +8970,14 @@ Object.assign(abv, function() {
   }});
   return {IsTrueValidator:IsTrueValidator};
 }());
-abv.registry(abv.IsTrueValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.IsTrueValidator);
+Object.assign(sogv, function() {
   var IsFalseValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value should be false.";
     this.name = "IsFalseValidator";
   };
-  IsFalseValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  IsFalseValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   IsFalseValidator.prototype.constructor = IsFalseValidator;
   Object.defineProperty(IsFalseValidator.prototype, "alias", {get:function() {
     return ["is-false", "false"];
@@ -8907,20 +8995,20 @@ Object.assign(abv, function() {
   }});
   return {IsFalseValidator:IsFalseValidator};
 }());
-abv.registry(abv.IsFalseValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.IsFalseValidator);
+Object.assign(sogv, function() {
   var TypeValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {type:optionRules.type || 'type:{"type":["string","array"],"any":true}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', any:optionRules.any || 'type:{"type":"boolean"}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {type:optionRules.type || 'type:{"type":["string","array"],"any":true}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', any:optionRules.any || 'type:{"type":"boolean"}'}, lang, internal);
     this.type = this.__options.type || "string";
     this.message = this.__options.message || "This value should be of type %%type%%.";
     this.any = true === this.__options.any;
     this.name = "TypeValidator";
     this.__invalidType = null;
   };
-  TypeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  TypeValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   TypeValidator.prototype.constructor = TypeValidator;
   Object.defineProperty(TypeValidator.prototype, "alias", {get:function() {
-    return "type";
+    return ["type"];
   }});
   Object.defineProperty(TypeValidator.prototype, "options", {get:function() {
     return [{"name":"any", "type":"boolean"}, {"name":"type", "type":"array"}];
@@ -8943,7 +9031,7 @@ Object.assign(abv, function() {
       if (!types.hasOwnProperty(key)) {
         continue;
       }
-      if (false === abv.isType(types[key], this.data)) {
+      if (false === sogv.isType(types[key], this.data)) {
         this.__invalidType = types[key];
         this.__setErrorMessage(this.message, this.__messageParameters());
         return;
@@ -8955,7 +9043,7 @@ Object.assign(abv, function() {
       if (!types.hasOwnProperty(key)) {
         continue;
       }
-      if (true === abv.isType(types[key], this.data)) {
+      if (true === sogv.isType(types[key], this.data)) {
         return;
       }
     }
@@ -8972,10 +9060,10 @@ Object.assign(abv, function() {
   }});
   return {TypeValidator:TypeValidator};
 }());
-abv.registry(abv.TypeValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.TypeValidator);
+Object.assign(sogv, function() {
   var EmailValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', mode:optionRules.mode || 'type:{"type":"string"}|length:{"min":2,"max":20}', normalize:optionRules.normalize || 'type:{"type":"bool"}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', mode:optionRules.mode || 'type:{"type":"string"}|length:{"min":2,"max":20}', normalize:optionRules.normalize || 'type:{"type":"bool"}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid email address.";
     this.mode = ["loose", "strict", "html5"].includes(this.__options.mode) ? this.__options.mode : "html5";
     this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
@@ -8983,10 +9071,10 @@ Object.assign(abv, function() {
     this.__patternHtml5 = /^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
     this.name = "EmailValidator";
   };
-  EmailValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  EmailValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   EmailValidator.prototype.constructor = EmailValidator;
   Object.defineProperty(EmailValidator.prototype, "alias", {get:function() {
-    return "email";
+    return ["email"];
   }});
   Object.defineProperty(EmailValidator.prototype, "options", {get:function() {
     return [{"name":"mode", "type":"string"}];
@@ -9022,7 +9110,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9040,10 +9128,10 @@ Object.assign(abv, function() {
   }});
   return {EmailValidator:EmailValidator};
 }());
-abv.registry(abv.EmailValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.EmailValidator);
+Object.assign(sogv, function() {
   var LengthValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {allowEmptyString:optionRules.allowEmptyString || 'type:{"type":"bool"}', charset:optionRules.charset || 'length:{"min":2,"max":10}', charsetMessage:optionRules.charsetMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', exactMessage:optionRules.exactMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', max:optionRules.max || 'type:{"type":"integer"}', maxMessage:optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', 
+    sogv.AbstractValidator.call(this, data, options, {allowEmptyString:optionRules.allowEmptyString || 'type:{"type":"bool"}', charset:optionRules.charset || 'length:{"min":2,"max":10}', charsetMessage:optionRules.charsetMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', exactMessage:optionRules.exactMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', max:optionRules.max || 'type:{"type":"integer"}', maxMessage:optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', 
     min:optionRules.min || 'type:{"type":"integer"}', minMessage:optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:optionRules.normalize || 'type:{"type":"bool"}'}, lang, internal);
     this.allowEmptyString = !this.__options.allowEmptyString || false === this.__options.allowEmptyString ? false : true;
     this.exactMessage = this.__options.exactMessage || "This value should have exactly %%limit%% characters.";
@@ -9054,10 +9142,10 @@ Object.assign(abv, function() {
     this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
     this.name = "LengthValidator";
   };
-  LengthValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  LengthValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   LengthValidator.prototype.constructor = LengthValidator;
   Object.defineProperty(LengthValidator.prototype, "alias", {get:function() {
-    return "length";
+    return ["length", "len"];
   }});
   Object.defineProperty(LengthValidator.prototype, "options", {get:function() {
     return [{"name":"max", "type":"numeric"}, {"name":"min", "type":"numeric"}];
@@ -9082,7 +9170,7 @@ Object.assign(abv, function() {
     if (!this.min && !this.max) {
       throw new Error('Either option "min" or "max" must be given for constraint');
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9104,10 +9192,10 @@ Object.assign(abv, function() {
   }});
   return {LengthValidator:LengthValidator};
 }());
-abv.registry(abv.LengthValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.LengthValidator);
+Object.assign(sogv, function() {
   var UrlValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:optionRules.normalize || 'type:{"type":"bool"}', protocols:optionRules.protocols || 'type:{"type":["string","array"],"any":true}', relativeProtocol:optionRules.relativeProtocol || 'type:{"type":"bool"}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:optionRules.normalize || 'type:{"type":"bool"}', protocols:optionRules.protocols || 'type:{"type":["string","array"],"any":true}', relativeProtocol:optionRules.relativeProtocol || 'type:{"type":"bool"}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid URL.";
     this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
     this.protocols = this.__options.protocols || ["http", "https", "ftp"];
@@ -9116,10 +9204,10 @@ Object.assign(abv, function() {
     this.__pattern = "^((((%s):(?:\\/\\/)?)(?:[\\-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9\\.\\-]+|(?:www\\.|[\\-;:&=\\+\\$,\\w]+@)[A-Za-z0-9\\.\\-]+)((?:\\/[\\+~%\\/\\.\\w\\-_]*)?\\??(?:[\\-\\+=&;%@\\.\\w_]*)#?(?:[\\.\\!\\/\\\\\\w]*))?)$";
     this.__configure();
   };
-  UrlValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  UrlValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   UrlValidator.prototype.constructor = UrlValidator;
   Object.defineProperty(UrlValidator.prototype, "alias", {get:function() {
-    return "url";
+    return ["url"];
   }});
   Object.defineProperty(UrlValidator.prototype, "options", {get:function() {
     return [{"name":"relativeProtocol", "type":"boolean"}, {"name":"protocols", "type":"array"}];
@@ -9148,7 +9236,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9161,7 +9249,7 @@ Object.assign(abv, function() {
       this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.protocols, 'type:{"type":"array"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.protocols, 'type:{"type":"array"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9171,20 +9259,20 @@ Object.assign(abv, function() {
   }});
   return {UrlValidator:UrlValidator};
 }());
-abv.registry(abv.UrlValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.UrlValidator);
+Object.assign(sogv, function() {
   var RegexValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {match:optionRules.match || 'type:{"type": "bool"}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', pattern:optionRules.pattern || "required", normalize:optionRules.normalize || 'type:{"type": "bool"}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {match:optionRules.match || 'type:{"type": "bool"}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', pattern:optionRules.pattern || "required", normalize:optionRules.normalize || 'type:{"type": "bool"}'}, lang, internal);
     this.match = false === this.__options.match ? false : true;
     this.message = this.__options.message || "This value is not valid.";
     this.pattern = this.__options.pattern;
     this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
     this.name = "RegexValidator";
   };
-  RegexValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  RegexValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   RegexValidator.prototype.constructor = RegexValidator;
   Object.defineProperty(RegexValidator.prototype, "alias", {get:function() {
-    return "regex";
+    return ["regex"];
   }});
   Object.defineProperty(RegexValidator.prototype, "options", {get:function() {
     return [{"name":"match", "type":"boolean"}, {"name":"pattern", "type":"any"}];
@@ -9207,7 +9295,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9225,10 +9313,10 @@ Object.assign(abv, function() {
   }});
   return {RegexValidator:RegexValidator};
 }());
-abv.registry(abv.RegexValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.RegexValidator);
+Object.assign(sogv, function() {
   var IpValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:optionRules.normalize || 'type:{"type":"bool"}', version:optionRules.version || 'type:{"type":["string","numeric"],"any":true}|length:{"min":1,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:optionRules.normalize || 'type:{"type":"bool"}', version:optionRules.version || 'type:{"type":["string","numeric"],"any":true}|length:{"min":1,"max":255}'}, lang, internal);
     this.V4 = "4";
     this.V6 = "6";
     this.ALL = "all";
@@ -9251,10 +9339,10 @@ Object.assign(abv, function() {
     this.version = [this.V4, this.V6, this.ALL, this.V4_NO_PRIV, this.V6_NO_PRIV, this.ALL_NO_PRIV, this.V4_NO_RES, this.V6_NO_RES, this.ALL_NO_RES, this.V4_ONLY_PUBLIC, this.V6_ONLY_PUBLIC, this.ALL_ONLY_PUBLIC].includes(this.__options.mode) ? this.__options.mode : "4";
     this.name = "IpValidator";
   };
-  IpValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  IpValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   IpValidator.prototype.constructor = IpValidator;
   Object.defineProperty(IpValidator.prototype, "alias", {get:function() {
-    return "ip";
+    return ["ip"];
   }});
   Object.defineProperty(IpValidator.prototype, "options", {get:function() {
     return [{"name":"version", "type":"string"}];
@@ -9306,7 +9394,7 @@ Object.assign(abv, function() {
         flag = null;
         break;
     }
-    if (!abv.filter_var(this.data, this.FILTER_VALIDATE_IP, flag)) {
+    if (!sogv.filter_var(this.data, this.FILTER_VALIDATE_IP, flag)) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
@@ -9315,7 +9403,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9333,17 +9421,17 @@ Object.assign(abv, function() {
   }});
   return {IpValidator:IpValidator};
 }());
-abv.registry(abv.IpValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.IpValidator);
+Object.assign(sogv, function() {
   var JsonValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value should be valid JSON.";
     this.name = "JsonValidator";
   };
-  JsonValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  JsonValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   JsonValidator.prototype.constructor = JsonValidator;
   Object.defineProperty(JsonValidator.prototype, "alias", {get:function() {
-    return "json";
+    return ["json"];
   }});
   Object.defineProperty(JsonValidator.prototype, "options", {get:function() {
     return [];
@@ -9360,7 +9448,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9378,10 +9466,10 @@ Object.assign(abv, function() {
   }});
   return {JsonValidator:JsonValidator};
 }());
-abv.registry(abv.JsonValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.JsonValidator);
+Object.assign(sogv, function() {
   var UuidValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:optionRules.normalize || 'type:{"type":"bool"}', versions:optionRules.versions || 'type:{"type":"array"}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:optionRules.normalize || 'type:{"type":"bool"}', versions:optionRules.versions || 'type:{"type":"array"}'}, lang, internal);
     this.V1_MAC1 = 1;
     this.V2_DCE = 2;
     this.V3_MD5 = 3;
@@ -9401,10 +9489,10 @@ Object.assign(abv, function() {
     this.versions = this.__checkVersions() ? this.__options.versions : this.__versions;
     this.name = "UuidValidator";
   };
-  UuidValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  UuidValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   UuidValidator.prototype.constructor = UuidValidator;
   Object.defineProperty(UuidValidator.prototype, "alias", {get:function() {
-    return "uuid";
+    return ["uuid"];
   }});
   Object.defineProperty(UuidValidator.prototype, "options", {get:function() {
     return [{"name":"versions", "type":"array"}];
@@ -9443,7 +9531,7 @@ Object.assign(abv, function() {
         h += 4;
         --l;
       }
-      if (false === abv.isType("xdigit", trimmed[i])) {
+      if (false === sogv.isType("xdigit", trimmed[i])) {
         this.__setErrorMessage(this.message, this.__messageParameters());
         return;
       }
@@ -9469,7 +9557,7 @@ Object.assign(abv, function() {
         }
         continue;
       }
-      if (false === abv.isType("xdigit", this.data[i])) {
+      if (false === sogv.isType("xdigit", this.data[i])) {
         this.__setErrorMessage(this.message, this.__messageParameters());
         return;
       }
@@ -9486,7 +9574,7 @@ Object.assign(abv, function() {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
-    if (8 !== (abv.hexdec(this.data[this.STRICT_VARIANT_POSITION]) & 12)) {
+    if (8 !== (sogv.hexdec(this.data[this.STRICT_VARIANT_POSITION]) & 12)) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
@@ -9495,7 +9583,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9513,7 +9601,7 @@ Object.assign(abv, function() {
     if (!versions || 0 === versions.length) {
       return false;
     }
-    if (true === abv.isType("array", versions)) {
+    if (true === sogv.isType("array", versions)) {
       for (var key in versions) {
         if (!versions.hasOwnProperty(key)) {
           continue;
@@ -9530,14 +9618,14 @@ Object.assign(abv, function() {
   }});
   return {UuidValidator:UuidValidator};
 }());
-abv.registry(abv.UuidValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.UuidValidator);
+Object.assign(sogv, function() {
   var EqualToValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || "required"}, lang, internal);
+    sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || "required"}, lang, internal);
     this.message = this.__options.message || "This value should be equal to %%compared_value%%.";
     this.name = "EqualToValidator";
   };
-  EqualToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  EqualToValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   EqualToValidator.prototype.constructor = EqualToValidator;
   Object.defineProperty(EqualToValidator.prototype, "alias", {get:function() {
     return ["equal-to", "equal", "same"];
@@ -9548,18 +9636,18 @@ Object.assign(abv, function() {
   Object.assign(EqualToValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value == comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":sogv.getType(this.value)};
   }});
   return {EqualToValidator:EqualToValidator};
 }());
-abv.registry(abv.EqualToValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.EqualToValidator);
+Object.assign(sogv, function() {
   var NotEqualToValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || "required"}, lang, internal);
+    sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || "required"}, lang, internal);
     this.message = this.__options.message || "This value should not be equal to %%compared_value%%.";
     this.name = "NotEqualToValidator";
   };
-  NotEqualToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  NotEqualToValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   NotEqualToValidator.prototype.constructor = NotEqualToValidator;
   Object.defineProperty(NotEqualToValidator.prototype, "alias", {get:function() {
     return ["not-equal-to", "not-equal"];
@@ -9570,21 +9658,21 @@ Object.assign(abv, function() {
   Object.assign(NotEqualToValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value != comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":sogv.getType(this.value)};
   }});
   return {NotEqualToValidator:NotEqualToValidator};
 }());
-abv.registry(abv.NotEqualToValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.NotEqualToValidator);
+Object.assign(sogv, function() {
   var IdenticalToValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || "required"}, lang, internal);
+    sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || "required"}, lang, internal);
     this.message = this.__options.message || "This value should be identical to %%compared_value_type%% %%compared_value%%.";
     this.name = "IdenticalToValidator";
   };
-  IdenticalToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  IdenticalToValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   IdenticalToValidator.prototype.constructor = IdenticalToValidator;
   Object.defineProperty(IdenticalToValidator.prototype, "alias", {get:function() {
-    return "identical-to";
+    return ["identical-to", "identical"];
   }});
   Object.defineProperty(IdenticalToValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"any"}];
@@ -9592,21 +9680,21 @@ Object.assign(abv, function() {
   Object.assign(IdenticalToValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value === comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":sogv.getType(this.value)};
   }});
   return {IdenticalToValidator:IdenticalToValidator};
 }());
-abv.registry(abv.IdenticalToValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.IdenticalToValidator);
+Object.assign(sogv, function() {
   var NotIdenticalToValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || "required"}, lang, internal);
+    sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || "required"}, lang, internal);
     this.message = this.__options.message || "This value should not be identical to %%compared_value_type%% %%compared_value%%.";
     this.name = "NotIdenticalToValidator";
   };
-  NotIdenticalToValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  NotIdenticalToValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   NotIdenticalToValidator.prototype.constructor = NotIdenticalToValidator;
   Object.defineProperty(NotIdenticalToValidator.prototype, "alias", {get:function() {
-    return "not-identical-to";
+    return ["not-identical-to", "not-identical"];
   }});
   Object.defineProperty(NotIdenticalToValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"any"}];
@@ -9614,21 +9702,21 @@ Object.assign(abv, function() {
   Object.assign(NotIdenticalToValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value !== comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":sogv.getType(this.value)};
   }});
   return {NotIdenticalToValidator:NotIdenticalToValidator};
 }());
-abv.registry(abv.NotIdenticalToValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.NotIdenticalToValidator);
+Object.assign(sogv, function() {
   var LessThanValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+    sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
     this.message = this.__options.message || "This value should be less than %%compared_value%%.";
     this.name = "LessThanValidator";
   };
-  LessThanValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  LessThanValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   LessThanValidator.prototype.constructor = LessThanValidator;
   Object.defineProperty(LessThanValidator.prototype, "alias", {get:function() {
-    return "less-than";
+    return ["less-than", "less"];
   }});
   Object.defineProperty(LessThanValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"scalar|date"}];
@@ -9636,18 +9724,18 @@ Object.assign(abv, function() {
   Object.assign(LessThanValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value < comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":sogv.getType(this.value)};
   }});
   return {LessThanValidator:LessThanValidator};
 }());
-abv.registry(abv.LessThanValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.LessThanValidator);
+Object.assign(sogv, function() {
   var LessThanOrEqualValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+    sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
     this.message = this.__options.message || "This value should be less than or equal to %%compared_value%%.";
     this.name = "LessThanOrEqualValidator";
   };
-  LessThanOrEqualValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  LessThanOrEqualValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   LessThanOrEqualValidator.prototype.constructor = LessThanOrEqualValidator;
   Object.defineProperty(LessThanOrEqualValidator.prototype, "alias", {get:function() {
     return ["less-than-or-equal", "max"];
@@ -9658,21 +9746,21 @@ Object.assign(abv, function() {
   Object.assign(LessThanOrEqualValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value <= comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":sogv.getType(this.value)};
   }});
   return {LessThanOrEqualValidator:LessThanOrEqualValidator};
 }());
-abv.registry(abv.LessThanOrEqualValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.LessThanOrEqualValidator);
+Object.assign(sogv, function() {
   var GreaterThanValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+    sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
     this.message = this.__options.message || "This value should be greater than %%compared_value%%.";
     this.name = "GreaterThanValidator";
   };
-  GreaterThanValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  GreaterThanValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   GreaterThanValidator.prototype.constructor = GreaterThanValidator;
   Object.defineProperty(GreaterThanValidator.prototype, "alias", {get:function() {
-    return "greater-than";
+    return ["greater-than", "greater"];
   }});
   Object.defineProperty(GreaterThanValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"scalar|date"}];
@@ -9680,18 +9768,18 @@ Object.assign(abv, function() {
   Object.assign(GreaterThanValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value > comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":sogv.getType(this.value)};
   }});
   return {GreaterThanValidator:GreaterThanValidator};
 }());
-abv.registry(abv.GreaterThanValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.GreaterThanValidator);
+Object.assign(sogv, function() {
   var GreaterThanOrEqualValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+    sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
     this.message = this.__options.message || "This value should be greater than or equal to %%compared_value%%.";
     this.name = "GreaterThanOrEqualValidator";
   };
-  GreaterThanOrEqualValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  GreaterThanOrEqualValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   GreaterThanOrEqualValidator.prototype.constructor = GreaterThanOrEqualValidator;
   Object.defineProperty(GreaterThanOrEqualValidator.prototype, "alias", {get:function() {
     return ["greater-than-or-equal", "min"];
@@ -9702,14 +9790,14 @@ Object.assign(abv, function() {
   Object.assign(GreaterThanOrEqualValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value >= comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":sogv.getType(this.value)};
   }});
   return {GreaterThanOrEqualValidator:GreaterThanOrEqualValidator};
 }());
-abv.registry(abv.GreaterThanOrEqualValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.GreaterThanOrEqualValidator);
+Object.assign(sogv, function() {
   var RangeValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {invalidMessage:optionRules.invalidMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', max:optionRules.max || 'required|type:{"type":["numeric","date-string"],"any":true}', maxMessage:optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', min:optionRules.min || 'required|type:{"type":["numeric","date-string"],"any":true}', minMessage:optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', 
+    sogv.AbstractValidator.call(this, data, options, {invalidMessage:optionRules.invalidMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', max:optionRules.max || 'required|type:{"type":["numeric","date-string"],"any":true}', maxMessage:optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', min:optionRules.min || 'required|type:{"type":["numeric","date-string"],"any":true}', minMessage:optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', 
     notInRangeMessage:optionRules.notInRangeMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.invalidMessage = this.__options.invalidMessage || "This value should be a valid number.";
     this.max = this.__options.max;
@@ -9721,10 +9809,10 @@ Object.assign(abv, function() {
     this.originMax = this.max;
     this.name = "RangeValidator";
   };
-  RangeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  RangeValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   RangeValidator.prototype.constructor = RangeValidator;
   Object.defineProperty(RangeValidator.prototype, "alias", {get:function() {
-    return "range";
+    return ["range"];
   }});
   Object.defineProperty(RangeValidator.prototype, "options", {get:function() {
     return [{"name":"max", "type":"numeric|date-string"}, {"name":"min", "type":"numeric|date-string"}];
@@ -9749,19 +9837,19 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    if (false === abv.isType("numeric", this.data) && false === abv.isType("date-string", this.data)) {
+    if (false === sogv.isType("numeric", this.data) && false === sogv.isType("date-string", this.data)) {
       this.__setErrorMessage(this.invalidMessage, this.__invalidMessageParameters());
       return;
     }
-    if (false === abv.isType("numeric", this.data) && true === abv.isType("date-string", this.data)) {
+    if (false === sogv.isType("numeric", this.data) && true === sogv.isType("date-string", this.data)) {
       var date = new Date(this.data);
       this.data = date.getTime();
     }
-    if (false === abv.isType("numeric", this.min) && true === abv.isType("date-string", this.min)) {
+    if (false === sogv.isType("numeric", this.min) && true === sogv.isType("date-string", this.min)) {
       var date = new Date(this.min);
       this.min = date.getTime();
     }
-    if (false === abv.isType("numeric", this.max) && true === abv.isType("date-string", this.max)) {
+    if (false === sogv.isType("numeric", this.max) && true === sogv.isType("date-string", this.max)) {
       var date = new Date(this.max);
       this.max = date.getTime();
     }
@@ -9776,53 +9864,53 @@ Object.assign(abv, function() {
   }});
   return {RangeValidator:RangeValidator};
 }());
-abv.registry(abv.RangeValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.RangeValidator);
+Object.assign(sogv, function() {
   var DivisibleByValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
+    sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
     this.message = this.__options.message || "This value should be a multiple of %%compared_value%%.";
     this.name = "DivisibleByValidator";
   };
-  DivisibleByValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  DivisibleByValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   DivisibleByValidator.prototype.constructor = DivisibleByValidator;
   Object.defineProperty(DivisibleByValidator.prototype, "alias", {get:function() {
-    return "divisible-by";
+    return ["divisible-by"];
   }});
   Object.defineProperty(DivisibleByValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"date"}];
   }});
   Object.assign(DivisibleByValidator.prototype, {__compareValues:function(value, comparedValue) {
-    if (abv.isType("integer", value) && abv.isType("integer", comparedValue)) {
+    if (sogv.isType("integer", value) && sogv.isType("integer", comparedValue)) {
       return 0 === value % comparedValue;
     }
-    var remainder = abv.fmod(value, comparedValue);
+    var remainder = sogv.fmod(value, comparedValue);
     if (true === remainder) {
       return true;
     }
-    return abv.sprintf("%.12e", comparedValue) === abv.sprintf("%.12e", remainder);
+    return sogv.sprintf("%.12e", comparedValue) === sogv.sprintf("%.12e", remainder);
   }, __messageParameters:function() {
-    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":sogv.getType(this.value)};
   }});
   return {DivisibleByValidator:DivisibleByValidator};
 }());
-abv.registry(abv.DivisibleByValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.DivisibleByValidator);
+Object.assign(sogv, function() {
   var UniqueValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This collection should contain only unique elements.";
     this.__repeated = [];
     this.name = "UniqueValidator";
   };
-  UniqueValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  UniqueValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   UniqueValidator.prototype.constructor = UniqueValidator;
   Object.defineProperty(UniqueValidator.prototype, "alias", {get:function() {
-    return "unique";
+    return ["unique"];
   }});
   Object.defineProperty(UniqueValidator.prototype, "options", {get:function() {
     return [];
   }});
   Object.assign(UniqueValidator.prototype, {__validate:function() {
-    if (true === abv.isType("string", this.data) || true === abv.isType("array", this.data)) {
+    if (true === sogv.isType("string", this.data) || true === sogv.isType("array", this.data)) {
       this.__validateArray();
     }
     if (this.__repeated.length > 0) {
@@ -9846,7 +9934,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9856,18 +9944,18 @@ Object.assign(abv, function() {
   }});
   return {UniqueValidator:UniqueValidator};
 }());
-abv.registry(abv.UniqueValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.UniqueValidator);
+Object.assign(sogv, function() {
   var PositiveValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.value = 0;
     this.message = this.__options.message || "This value should be positive.";
     this.name = "PositiveValidator";
   };
-  PositiveValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  PositiveValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   PositiveValidator.prototype.constructor = PositiveValidator;
   Object.defineProperty(PositiveValidator.prototype, "alias", {get:function() {
-    return "positive";
+    return ["positive"];
   }});
   Object.defineProperty(PositiveValidator.prototype, "options", {get:function() {
     return [];
@@ -9875,22 +9963,22 @@ Object.assign(abv, function() {
   Object.assign(PositiveValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value > comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":sogv.getType(this.value)};
   }});
   return {PositiveValidator:PositiveValidator};
 }());
-abv.registry(abv.PositiveValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.PositiveValidator);
+Object.assign(sogv, function() {
   var PositiveOrZeroValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.value = 0;
     this.message = this.__options.message || "This value should be either positive or zero.";
     this.name = "PositiveOrZeroValidator";
   };
-  PositiveOrZeroValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  PositiveOrZeroValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   PositiveOrZeroValidator.prototype.constructor = PositiveOrZeroValidator;
   Object.defineProperty(PositiveOrZeroValidator.prototype, "alias", {get:function() {
-    return "positive-or-zero";
+    return ["positive-or-zero"];
   }});
   Object.defineProperty(PositiveOrZeroValidator.prototype, "options", {get:function() {
     return [];
@@ -9898,22 +9986,22 @@ Object.assign(abv, function() {
   Object.assign(PositiveOrZeroValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value >= comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":sogv.getType(this.value)};
   }});
   return {PositiveOrZeroValidator:PositiveOrZeroValidator};
 }());
-abv.registry(abv.PositiveOrZeroValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.PositiveOrZeroValidator);
+Object.assign(sogv, function() {
   var NegativeValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.value = 0;
     this.message = this.__options.message || "This value should be negative.";
     this.name = "NegativeValidator";
   };
-  NegativeValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  NegativeValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   NegativeValidator.prototype.constructor = NegativeValidator;
   Object.defineProperty(NegativeValidator.prototype, "alias", {get:function() {
-    return "negative";
+    return ["negative"];
   }});
   Object.defineProperty(NegativeValidator.prototype, "options", {get:function() {
     return [];
@@ -9921,22 +10009,22 @@ Object.assign(abv, function() {
   Object.assign(NegativeValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value < comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":sogv.getType(this.value)};
   }});
   return {NegativeValidator:NegativeValidator};
 }());
-abv.registry(abv.NegativeValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.NegativeValidator);
+Object.assign(sogv, function() {
   var NegativeOrZeroValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.value = 0;
     this.message = this.__options.message || "This value should be either negative or zero.";
     this.name = "NegativeOrZeroValidator";
   };
-  NegativeOrZeroValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  NegativeOrZeroValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   NegativeOrZeroValidator.prototype.constructor = NegativeOrZeroValidator;
   Object.defineProperty(NegativeOrZeroValidator.prototype, "alias", {get:function() {
-    return "negative-or-zero";
+    return ["negative-or-zero"];
   }});
   Object.defineProperty(NegativeOrZeroValidator.prototype, "options", {get:function() {
     return [];
@@ -9944,22 +10032,22 @@ Object.assign(abv, function() {
   Object.assign(NegativeOrZeroValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value <= comparedValue;
   }, __messageParameters:function() {
-    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":abv.getType(this.value)};
+    return {"value":this.__formattedData(this.data), "compared_value":this.__formattedData(this.value), "compared_value_type":sogv.getType(this.value)};
   }});
   return {NegativeOrZeroValidator:NegativeOrZeroValidator};
 }());
-abv.registry(abv.NegativeOrZeroValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.NegativeOrZeroValidator);
+Object.assign(sogv, function() {
   var DateValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid date.";
     this.format = this.__options.format || "YYYY-MM-DD";
     this.name = "DateValidator";
   };
-  DateValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  DateValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   DateValidator.prototype.constructor = DateValidator;
   Object.defineProperty(DateValidator.prototype, "alias", {get:function() {
-    return "date";
+    return ["date"];
   }});
   Object.defineProperty(DateValidator.prototype, "options", {get:function() {
     return [];
@@ -9974,7 +10062,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9992,15 +10080,15 @@ Object.assign(abv, function() {
   }});
   return {DateValidator:DateValidator};
 }());
-abv.registry(abv.DateValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.DateValidator);
+Object.assign(sogv, function() {
   var DateTimeValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', format:optionRules.format || 'type:{"type":"string"}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', format:optionRules.format || 'type:{"type":"string"}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid datetime.";
     this.format = this.__options.format || "YYYY-MM-DD HH:mm:ss";
     this.name = "DateTimeValidator";
   };
-  DateTimeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  DateTimeValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   DateTimeValidator.prototype.constructor = DateTimeValidator;
   Object.defineProperty(DateTimeValidator.prototype, "alias", {get:function() {
     return ["date-time", "date_format", "date-format"];
@@ -10009,7 +10097,7 @@ Object.assign(abv, function() {
     return [{"name":"format", "type":"string"}];
   }});
   Object.assign(DateTimeValidator.prototype, {__validate:function() {
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"date-string"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"date-string"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10023,7 +10111,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10041,18 +10129,18 @@ Object.assign(abv, function() {
   }});
   return {DateTimeValidator:DateTimeValidator};
 }());
-abv.registry(abv.DateTimeValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.DateTimeValidator);
+Object.assign(sogv, function() {
   var TimeValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid time.";
     this.format = this.__options.format || "HH:mm:ss";
     this.name = "TimeValidator";
   };
-  TimeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  TimeValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   TimeValidator.prototype.constructor = TimeValidator;
   Object.defineProperty(TimeValidator.prototype, "alias", {get:function() {
-    return "time";
+    return ["time"];
   }});
   Object.defineProperty(TimeValidator.prototype, "options", {get:function() {
     return [];
@@ -10067,7 +10155,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10085,17 +10173,17 @@ Object.assign(abv, function() {
   }});
   return {TimeValidator:TimeValidator};
 }());
-abv.registry(abv.TimeValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.TimeValidator);
+Object.assign(sogv, function() {
   var TimezoneValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid timezone.";
     this.name = "TimezoneValidator";
   };
-  TimezoneValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  TimezoneValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   TimezoneValidator.prototype.constructor = TimezoneValidator;
   Object.defineProperty(TimezoneValidator.prototype, "alias", {get:function() {
-    return "timezone";
+    return ["timezone", "tz"];
   }});
   Object.defineProperty(TimezoneValidator.prototype, "options", {get:function() {
     return [];
@@ -10111,7 +10199,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10129,10 +10217,10 @@ Object.assign(abv, function() {
   }});
   return {TimezoneValidator:TimezoneValidator};
 }());
-abv.registry(abv.TimezoneValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.TimezoneValidator);
+Object.assign(sogv, function() {
   var ChoiceValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {callback:optionRules.callback || 'type:{"type":["string","array","callable"],"any":true}', choices:optionRules.choices || 'type:{"type":"array"}', max:optionRules.max || 'type:{"type":"numeric"}', maxMessage:optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', min:optionRules.min || 'type:{"type":"numeric"}', minMessage:optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', multiple:optionRules.multiple || 
+    sogv.AbstractValidator.call(this, data, options, {callback:optionRules.callback || 'type:{"type":["string","array","callable"],"any":true}', choices:optionRules.choices || 'type:{"type":"array"}', max:optionRules.max || 'type:{"type":"numeric"}', maxMessage:optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', min:optionRules.min || 'type:{"type":"numeric"}', minMessage:optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', multiple:optionRules.multiple || 
     'type:{"type":"bool"}', multipleMessage:optionRules.multipleMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.callback = this.__options.callback;
     this.choices = this.__options.choices;
@@ -10146,7 +10234,7 @@ Object.assign(abv, function() {
     this.__currentInvalidDataItem = null;
     this.name = "ChoiceValidator";
   };
-  ChoiceValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  ChoiceValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   ChoiceValidator.prototype.constructor = ChoiceValidator;
   Object.defineProperty(ChoiceValidator.prototype, "alias", {get:function() {
     return ["choice"];
@@ -10182,15 +10270,15 @@ Object.assign(abv, function() {
       }
     }
   }, __beforeValidate:function() {
-    if (false === abv.isType("array", this.choices) && "undefined" === typeof this.callback) {
+    if (false === sogv.isType("array", this.choices) && "undefined" === typeof this.callback) {
       throw new Error('Either "choices" or "callback" must be specified on constraint Choice');
     }
     if (true === this.__isEmptyData()) {
       this.__skip = true;
       return;
     }
-    if (true === this.multiple && false === abv.isType("array", this.data)) {
-      this.__setErrorMessage(abv.sprintf("Expected argument of type '%s', '%s' given", "Array", abv.getType(this.data)));
+    if (true === this.multiple && false === sogv.isType("array", this.data)) {
+      this.__setErrorMessage(sogv.sprintf("Expected argument of type '%s', '%s' given", "Array", sogv.getType(this.data)));
       this.__skip = true;
       return;
     }
@@ -10212,10 +10300,10 @@ Object.assign(abv, function() {
   }});
   return {ChoiceValidator:ChoiceValidator};
 }());
-abv.registry(abv.ChoiceValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.ChoiceValidator);
+Object.assign(sogv, function() {
   var LanguageValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid language.";
     this.__languages = ["aa", "ab", "ace", "ach", "ada", "ady", "ae", "aeb", "af", "afh", "agq", "ain", "ak", "akk", "akz", "ale", "aln", "alt", "am", "an", "ang", "anp", "ar", "arc", "arn", "aro", "arp", "arq", "ars", "arw", "ary", "arz", "as", "asa", "ase", "ast", "av", "avk", "awa", "ay", "az", "ba", "bal", "ban", "bar", "bas", "bax", "bbc", "bbj", "be", "bej", "bem", "bew", "bez", "bfd", "bfq", "bg", "bgn", "bho", "bi", "bik", "bin", "bjn", "bkm", "bla", "bm", "bn", "bo", "bpy", "bqi", "br", 
     "bra", "brh", "brx", "bs", "bss", "bua", "bug", "bum", "byn", "byv", "ca", "cad", "car", "cay", "cch", "ccp", "ce", "ceb", "cgg", "ch", "chb", "chg", "chk", "chm", "chn", "cho", "chp", "chr", "chy", "cic", "ckb", "co", "cop", "cps", "cr", "crh", "crs", "cs", "csb", "cu", "cv", "cy", "da", "dak", "dar", "dav", "de", "del", "den", "dgr", "din", "dje", "doi", "dsb", "dtp", "dua", "dum", "dv", "dyo", "dyu", "dz", "dzg", "ebu", "ee", "efi", "egl", "egy", "eka", "el", "elx", "en", "enm", "eo", "es", 
@@ -10227,10 +10315,10 @@ Object.assign(abv, function() {
     "tk", "tkl", "tkr", "tl", "tlh", "tli", "tly", "tmh", "tn", "to", "tog", "tpi", "tr", "tru", "trv", "ts", "tsd", "tsi", "tt", "ttt", "tum", "tvl", "tw", "twq", "ty", "tyv", "tzm", "udm", "ug", "uga", "uk", "umb", "ur", "uz", "vai", "ve", "vec", "vep", "vi", "vls", "vmf", "vo", "vot", "vro", "vun", "wa", "wae", "wal", "war", "was", "wbp", "wo", "wuu", "xal", "xh", "xmf", "xog", "yao", "yap", "yav", "ybb", "yi", "yo", "yrl", "yue", "za", "zap", "zbl", "zea", "zen", "zgh", "zh", "zu", "zun", "zza"];
     this.name = "LanguageValidator";
   };
-  LanguageValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  LanguageValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   LanguageValidator.prototype.constructor = LanguageValidator;
   Object.defineProperty(LanguageValidator.prototype, "alias", {get:function() {
-    return "language";
+    return ["language", "lang"];
   }});
   Object.defineProperty(LanguageValidator.prototype, "options", {get:function() {
     return [];
@@ -10246,7 +10334,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10264,10 +10352,10 @@ Object.assign(abv, function() {
   }});
   return {LanguageValidator:LanguageValidator};
 }());
-abv.registry(abv.LanguageValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.LanguageValidator);
+Object.assign(sogv, function() {
   var LocaleValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid locale.";
     this.__locales = {"eu":"Basque", "hr_BA":"Croatian (Bosnia & Herzegovina)", "en_CM":"English (Cameroon)", "en_BI":"English (Burundi)", "rw_RW":"Kinyarwanda (Rwanda)", "ast":"Asturian", "en_SZ":"English (Swaziland)", "he_IL":"Hebrew (Israel)", "ar":"Uzbek (Arabic)", "Arabicuz_Arab":"Uzbek (Arabic)", "en_PN":"English (Pitcairn Islands)", "as":"Assamese", "en_NF":"English (Norfolk Island)", "ks_IN":"Kashmiri (India)", "rwk_TZ":"Rwa (Tanzania)", "zh_Hant_TW":"Chinese (Traditional, Taiwan)", "en_CN":"English (China)", 
     "gsw_LI":"Swiss German (Liechtenstein)", "ta_IN":"Tamil (India)", "th_TH":"Thai (Thailand)", "es_EA":"Spanish (Ceuta & Melilla)", "fr_GF":"French (French Guiana)", "ar_001":"Arabic (World)", "en_RW":"English (Rwanda)", "tr_TR":"Turkish (Turkey)", "de_CH":"German (Switzerland)", "ee_TG":"Ewe (Togo)", "en_NG":"English (Nigeria)", "fr_TG":"French (Togo)", "az":"Azerbaijani", "fr_SC":"French (Seychelles)", "es_HN":"Spanish (Honduras)", "en_AG":"English (Antigua & Barbuda)", "ru_KZ":"Russian (Kazakhstan)", 
@@ -10312,10 +10400,10 @@ Object.assign(abv, function() {
     "am":"Amharic", "es":"Spanish", "et":"Estonian", "uk_UA":"Ukrainian (Ukraine)"};
     this.name = "LocaleValidator";
   };
-  LocaleValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  LocaleValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   LocaleValidator.prototype.constructor = LocaleValidator;
   Object.defineProperty(LocaleValidator.prototype, "alias", {get:function() {
-    return "locale";
+    return ["locale"];
   }});
   Object.defineProperty(LocaleValidator.prototype, "options", {get:function() {
     return [];
@@ -10330,7 +10418,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10348,10 +10436,10 @@ Object.assign(abv, function() {
   }});
   return {LocaleValidator:LocaleValidator};
 }());
-abv.registry(abv.LocaleValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.LocaleValidator);
+Object.assign(sogv, function() {
   var CountryValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid country.";
     this.__countries = {"AF":"Afghanistan", "AX":"Aland Islands", "AL":"Albania", "DZ":"Algeria", "AS":"American Samoa", "AD":"Andorra", "AO":"Angola", "AI":"Anguilla", "AQ":"Antarctica", "AG":"Antigua And Barbuda", "AR":"Argentina", "AM":"Armenia", "AW":"Aruba", "AU":"Australia", "AT":"Austria", "AZ":"Azerbaijan", "BS":"Bahamas", "BH":"Bahrain", "BD":"Bangladesh", "BB":"Barbados", "BY":"Belarus", "BE":"Belgium", "BZ":"Belize", "BJ":"Benin", "BM":"Bermuda", "BT":"Bhutan", "BO":"Bolivia", "BA":"Bosnia And Herzegovina", 
     "BW":"Botswana", "BV":"Bouvet Island", "BR":"Brazil", "IO":"British Indian Ocean Territory", "BN":"Brunei Darussalam", "BG":"Bulgaria", "BF":"Burkina Faso", "BI":"Burundi", "KH":"Cambodia", "CM":"Cameroon", "CA":"Canada", "CV":"Cape Verde", "KY":"Cayman Islands", "CF":"Central African Republic", "TD":"Chad", "CL":"Chile", "CN":"China", "CX":"Christmas Island", "CC":"Cocos (Keeling) Islands", "CO":"Colombia", "KM":"Comoros", "CG":"Congo", "CD":"Congo, Democratic Republic", "CK":"Cook Islands", 
@@ -10365,10 +10453,10 @@ Object.assign(abv, function() {
     "VU":"Vanuatu", "VE":"Venezuela", "VN":"Vietnam", "VG":"Virgin Islands, British", "VI":"Virgin Islands, U.S.", "WF":"Wallis And Futuna", "EH":"Western Sahara", "YE":"Yemen", "ZM":"Zambia", "ZW":"Zimbabwe"};
     this.name = "CountryValidator";
   };
-  CountryValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  CountryValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   CountryValidator.prototype.constructor = CountryValidator;
   Object.defineProperty(CountryValidator.prototype, "alias", {get:function() {
-    return "country";
+    return ["country"];
   }});
   Object.defineProperty(CountryValidator.prototype, "options", {get:function() {
     return [];
@@ -10383,7 +10471,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10401,20 +10489,20 @@ Object.assign(abv, function() {
   }});
   return {CountryValidator:CountryValidator};
 }());
-abv.registry(abv.CountryValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.CountryValidator);
+Object.assign(sogv, function() {
   var BicValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {iban:optionRules.iban || 'type:{"type":"string"}|length:{"min":3,"max":255}', ibanMessage:optionRules.ibanMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {iban:optionRules.iban || 'type:{"type":"string"}|length:{"min":3,"max":255}', ibanMessage:optionRules.ibanMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.BIC_COUNTRY_TO_IBAN_COUNTRY_MAP = {"GF":"FR", "PF":"FR", "TF":"FR", "GP":"FR", "MQ":"FR", "YT":"FR", "NC":"FR", "RE":"FR", "PM":"FR", "WF":"FR", "JE":"GB", "IM":"GB", "GG":"GB", "VG":"GB"};
     this.iban = this.__options.iban || null;
     this.ibanMessage = this.__options.ibanMessage || "This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.";
     this.message = this.__options.message || "This is not a valid Business Identifier Code (BIC).";
     this.name = "BicValidator";
   };
-  BicValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  BicValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   BicValidator.prototype.constructor = BicValidator;
   Object.defineProperty(BicValidator.prototype, "alias", {get:function() {
-    return "bic";
+    return ["bic"];
   }});
   Object.defineProperty(BicValidator.prototype, "options", {get:function() {
     return [{"name":"iban", "type":"string"}];
@@ -10425,15 +10513,15 @@ Object.assign(abv, function() {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
-    if (false === abv.isType("alnum", canonicalize)) {
+    if (false === sogv.isType("alnum", canonicalize)) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
-    if (false === abv.isType("alpha", canonicalize.substr(0, 4))) {
+    if (false === sogv.isType("alpha", canonicalize.substr(0, 4))) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
-    if (null !== abv.isValidWithErrorMessage(canonicalize.substr(4, 2), "country", true)) {
+    if (null !== sogv.isValidWithErrorMessage(canonicalize.substr(4, 2), "country", true)) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
@@ -10445,7 +10533,7 @@ Object.assign(abv, function() {
       return;
     }
     var ibanCountryCode = this.iban.substr(0, 2);
-    if (true === abv.isType("alpha", ibanCountryCode) && this.__bicAndIbanCountriesMatch(canonicalize.substr(4, 2), ibanCountryCode)) {
+    if (true === sogv.isType("alpha", ibanCountryCode) && this.__bicAndIbanCountriesMatch(canonicalize.substr(4, 2), ibanCountryCode)) {
       this.__setErrorMessage(this.ibanMessage, this.__ibanMessageParameters());
       return;
     }
@@ -10456,7 +10544,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10476,26 +10564,26 @@ Object.assign(abv, function() {
   }});
   return {BicValidator:BicValidator};
 }());
-abv.registry(abv.BicValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.BicValidator);
+Object.assign(sogv, function() {
   var CardSchemeValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', schemes:optionRules.schemes || 'required|type:{"type":["string","array"],"any":true}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', schemes:optionRules.schemes || 'required|type:{"type":["string","array"],"any":true}'}, lang, internal);
     this.__schemes = {"AMEX":[/^3[47][0-9]{13}$/], "CHINA_UNIONPAY":[/^62[0-9]{14,17}$/], "DINERS":[/^3(?:0[0-5]|[68][0-9])[0-9]{11}$/], "DISCOVER":[/^6011[0-9]{12}$/, /^64[4-9][0-9]{13}$/, /^65[0-9]{14}$/, /^622(12[6-9]|1[3-9][0-9]|[2-8][0-9][0-9]|91[0-9]|92[0-5])[0-9]{10}$/], "INSTAPAYMENT":[/^63[7-9][0-9]{13}$/], "JCB":[/^(?:2131|1800|35[0-9]{3})[0-9]{11}$/], "LASER":[/^(6304|670[69]|6771)[0-9]{12,15}$/], "MAESTRO":[/^(6759[0-9]{2})[0-9]{6,13}$/, /^(50[0-9]{4})[0-9]{6,13}$/, /^5[6-9][0-9]{10,17}$/, 
     /^6[0-9]{11,18}$/], "MASTERCARD":[/^5[1-5][0-9]{14}$/, /^2(22[1-9][0-9]{12}|2[3-9][0-9]{13}|[3-6][0-9]{14}|7[0-1][0-9]{13}|720[0-9]{12})$/], "MIR":[/^220[0-4][0-9]{12}$/], "UATP":[/^1[0-9]{14}$/], "VISA":[/^4([0-9]{12}|[0-9]{15}|[0-9]{18})$/]};
     this.message = this.__options.message || "Unsupported card type or invalid card number.";
     this.schemes = "string" === typeof this.__options.schemes ? [this.__options.schemes] : this.__options.schemes;
     this.name = "CardSchemeValidator";
   };
-  CardSchemeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  CardSchemeValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   CardSchemeValidator.prototype.constructor = CardSchemeValidator;
   Object.defineProperty(CardSchemeValidator.prototype, "alias", {get:function() {
-    return "card-scheme";
+    return ["card-scheme"];
   }});
   Object.defineProperty(CardSchemeValidator.prototype, "options", {get:function() {
     return [{"name":"schemes", "type":"array"}];
   }});
   Object.assign(CardSchemeValidator.prototype, {__validate:function() {
-    if (false === abv.isType("numeric", this.data)) {
+    if (false === sogv.isType("numeric", this.data)) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
@@ -10516,7 +10604,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10534,10 +10622,10 @@ Object.assign(abv, function() {
   }});
   return {CardSchemeValidator:CardSchemeValidator};
 }());
-abv.registry(abv.CardSchemeValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.CardSchemeValidator);
+Object.assign(sogv, function() {
   var CurrencyValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid currency.";
     this.__currencies = [{"Alphabetic_Code":"AFN", "Currency":"Afghani", "Entity":"AFGHANISTAN", "Minor_Unit":2, "Numeric_Code":"971", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"\u00c5LAND ISLANDS", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"ALL", "Currency":"Lek", "Entity":"ALBANIA", "Minor_Unit":2, "Numeric_Code":"008", "Withdrawal_Date":null, "Withdrawal_Interval":null}, 
     {"Alphabetic_Code":"DZD", "Currency":"Algerian Dinar", "Entity":"ALGERIA", "Minor_Unit":2, "Numeric_Code":"012", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"USD", "Currency":"US Dollar", "Entity":"AMERICAN SAMOA", "Minor_Unit":2, "Numeric_Code":"840", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"EUR", "Currency":"Euro", "Entity":"ANDORRA", "Minor_Unit":2, "Numeric_Code":"978", "Withdrawal_Date":null, "Withdrawal_Interval":null}, {"Alphabetic_Code":"AOA", 
@@ -10690,10 +10778,10 @@ Object.assign(abv, function() {
     "Numeric_Code":null, "Withdrawal_Date":"1999-11-06", "Withdrawal_Interval":null}, {"Alphabetic_Code":"XFU", "Currency":"UIC-Franc", "Entity":"ZZ05_UIC-Franc", "Minor_Unit":null, "Numeric_Code":null, "Withdrawal_Date":"2013-11-06", "Withdrawal_Interval":null}];
     this.name = "CurrencyValidator";
   };
-  CurrencyValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  CurrencyValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   CurrencyValidator.prototype.constructor = CurrencyValidator;
   Object.defineProperty(CurrencyValidator.prototype, "alias", {get:function() {
-    return "currency";
+    return ["currency"];
   }});
   Object.defineProperty(CurrencyValidator.prototype, "options", {get:function() {
     return [];
@@ -10711,7 +10799,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10729,23 +10817,23 @@ Object.assign(abv, function() {
   }});
   return {CurrencyValidator:CurrencyValidator};
 }());
-abv.registry(abv.CurrencyValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.CurrencyValidator);
+Object.assign(sogv, function() {
   var LuhnValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "Invalid card number.";
     this.name = "LuhnValidator";
   };
-  LuhnValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  LuhnValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   LuhnValidator.prototype.constructor = LuhnValidator;
   Object.defineProperty(LuhnValidator.prototype, "alias", {get:function() {
-    return "luhn";
+    return ["luhn"];
   }});
   Object.defineProperty(LuhnValidator.prototype, "options", {get:function() {
     return [];
   }});
   Object.assign(LuhnValidator.prototype, {__validate:function() {
-    if (false === abv.isType("digit", this.data)) {
+    if (false === sogv.isType("digit", this.data)) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
@@ -10755,7 +10843,7 @@ Object.assign(abv, function() {
       checkSum += this.data[i] * 1;
     }
     for (var i = length - 2; i >= 0; i -= 2) {
-      checkSum += abv.array_sum(abv.str_split(this.data[i] * 2));
+      checkSum += sogv.array_sum(sogv.str_split(this.data[i] * 2));
     }
     if (0 === checkSum || 0 !== checkSum % 10) {
       this.__setErrorMessage(this.message, this.__messageParameters());
@@ -10766,7 +10854,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10784,10 +10872,10 @@ Object.assign(abv, function() {
   }});
   return {LuhnValidator:LuhnValidator};
 }());
-abv.registry(abv.LuhnValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.LuhnValidator);
+Object.assign(sogv, function() {
   var IbanValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.message = this.__options.message || "This is not a valid International Bank Account Number (IBAN).";
     this.__formats = {"AD":/^AD\d{2}\d{4}\d{4}[\dA-Z]{12}$/, "AE":/^AE\d{2}\d{3}\d{16}$/, "AL":/^AL\d{2}\d{8}[\dA-Z]{16}$/, "AO":/^AO\d{2}\d{21}$/, "AT":/^AT\d{2}\d{5}\d{11}$/, "AX":/^FI\d{2}\d{6}\d{7}\d{1}$/, "AZ":/^AZ\d{2}[A-Z]{4}[\dA-Z]{20}$/, "BA":/^BA\d{2}\d{3}\d{3}\d{8}\d{2}$/, "BE":/^BE\d{2}\d{3}\d{7}\d{2}$/, "BF":/^BF\d{2}\d{23}$/, "BG":/^BG\d{2}[A-Z]{4}\d{4}\d{2}[\dA-Z]{8}$/, "BH":/^BH\d{2}[A-Z]{4}[\dA-Z]{14}$/, "BI":/^BI\d{2}\d{12}$/, "BJ":/^BJ\d{2}[A-Z]{1}\d{23}$/, "BY":/^BY\d{2}[\dA-Z]{4}\d{4}[\dA-Z]{16}$/, 
     "BL":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "BR":/^BR\d{2}\d{8}\d{5}\d{10}[A-Z][\dA-Z]$/, "CG":/^CG\d{2}\d{23}$/, "CH":/^CH\d{2}\d{5}[\dA-Z]{12}$/, "CI":/^CI\d{2}[A-Z]{1}\d{23}$/, "CM":/^CM\d{2}\d{23}$/, "CR":/^CR\d{2}0\d{3}\d{14}$/, "CV":/^CV\d{2}\d{21}$/, "CY":/^CY\d{2}\d{3}\d{5}[\dA-Z]{16}$/, "CZ":/^CZ\d{2}\d{20}$/, "DE":/^DE\d{2}\d{8}\d{10}$/, "DO":/^DO\d{2}[\dA-Z]{4}\d{20}$/, "DK":/^DK\d{2}\d{4}\d{10}$/, "DZ":/^DZ\d{2}\d{20}$/, "EE":/^EE\d{2}\d{2}\d{2}\d{11}\d{1}$/, "ES":/^ES\d{2}\d{4}\d{4}\d{1}\d{1}\d{10}$/, 
@@ -10798,22 +10886,22 @@ Object.assign(abv, function() {
     "SN":/^SN\d{2}[A-Z]{1}\d{23}$/, "TF":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "TL":/^TL\d{2}\d{3}\d{14}\d{2}$/, "TN":/^TN59\d{2}\d{3}\d{13}\d{2}$/, "TR":/^TR\d{2}\d{5}[\dA-Z]{1}[\dA-Z]{16}$/, "UA":/^UA\d{2}\d{6}[\dA-Z]{19}$/, "VA":/^VA\d{2}\d{3}\d{15}$/, "VG":/^VG\d{2}[A-Z]{4}\d{16}$/, "WF":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/, "XK":/^XK\d{2}\d{4}\d{10}\d{2}$/, "YT":/^FR\d{2}\d{5}\d{5}[\dA-Z]{11}\d{2}$/};
     this.name = "IbanValidator";
   };
-  IbanValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  IbanValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   IbanValidator.prototype.constructor = IbanValidator;
   Object.defineProperty(IbanValidator.prototype, "alias", {get:function() {
-    return "iban";
+    return ["iban"];
   }});
   Object.defineProperty(IbanValidator.prototype, "options", {get:function() {
     return [];
   }});
   Object.assign(IbanValidator.prototype, {__validate:function() {
     var canonicalized = this.data.split(" ").join("");
-    if (false === abv.isType("alnum", canonicalized)) {
+    if (false === sogv.isType("alnum", canonicalized)) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
     var countryCode = canonicalized.substr(0, 2);
-    if (false === abv.isType("alpha", countryCode)) {
+    if (false === sogv.isType("alpha", countryCode)) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
@@ -10832,18 +10920,18 @@ Object.assign(abv, function() {
       return;
     }
   }, __toBigInt:function(string) {
-    var chars = abv.str_split(string);
+    var chars = sogv.str_split(string);
     var bigInt = "";
     for (var i = 0; i < chars.length; i++) {
-      if (true === abv.isType("upper", chars[i])) {
-        bigInt += abv.ord(chars[i]) - 55;
+      if (true === sogv.isType("upper", chars[i])) {
+        bigInt += sogv.ord(chars[i]) - 55;
         continue;
       }
       bigInt += chars[i];
     }
     return bigInt;
   }, __bigModulo97:function(bigInt) {
-    var parts = abv.str_split(bigInt, 7);
+    var parts = sogv.str_split(bigInt, 7);
     var rest = 0;
     for (var i = 0; i < parts.length; i++) {
       rest = (rest + parts[i]) % 97;
@@ -10854,7 +10942,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10872,10 +10960,10 @@ Object.assign(abv, function() {
   }});
   return {IbanValidator:IbanValidator};
 }());
-abv.registry(abv.IbanValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.IbanValidator);
+Object.assign(sogv, function() {
   var IsbnValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {bothIsbnMessage:optionRules.bothIsbnMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', isbn10Message:optionRules.isbn10Message || 'type:{"type":"string"}|length:{"min":3,"max":255}', isbn13Message:optionRules.isbn13Message || 'type:{"type":"string"}|length:{"min":3,"max":255}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', type:optionRules.type || 'type:{"type":"string"}|length:{"min":1,"max":255}'}, 
+    sogv.AbstractValidator.call(this, data, options, {bothIsbnMessage:optionRules.bothIsbnMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', isbn10Message:optionRules.isbn10Message || 'type:{"type":"string"}|length:{"min":3,"max":255}', isbn13Message:optionRules.isbn13Message || 'type:{"type":"string"}|length:{"min":3,"max":255}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', type:optionRules.type || 'type:{"type":"string"}|length:{"min":1,"max":255}'}, 
     lang, internal);
     this.bothIsbnMessage = this.__options.bothIsbnMessage || "This value is neither a valid ISBN-10 nor a valid ISBN-13.";
     this.isbn10Message = this.__options.isbn10Message || "This value is not a valid ISBN-10.";
@@ -10884,10 +10972,10 @@ Object.assign(abv, function() {
     this.type = this.__options.type || null;
     this.name = "IsbnValidator";
   };
-  IsbnValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  IsbnValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   IsbnValidator.prototype.constructor = IsbnValidator;
   Object.defineProperty(IsbnValidator.prototype, "alias", {get:function() {
-    return "isbn";
+    return ["isbn"];
   }});
   Object.defineProperty(IsbnValidator.prototype, "options", {get:function() {
     return [{"name":"type", "type":"string"}];
@@ -10928,7 +11016,7 @@ Object.assign(abv, function() {
       if ("X" === isbn[i]) {
         digit = 10;
       } else {
-        if (true === abv.isType("digit", isbn[i])) {
+        if (true === sogv.isType("digit", isbn[i])) {
           digit = isbn[i];
         } else {
           return false;
@@ -10941,7 +11029,7 @@ Object.assign(abv, function() {
     }
     return 0 === checkSum % 11 ? true : false;
   }, __validateIsbn13:function(isbn) {
-    if (false === abv.isType("digit", isbn)) {
+    if (false === sogv.isType("digit", isbn)) {
       return false;
     }
     var length = isbn.length;
@@ -10977,7 +11065,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10995,19 +11083,19 @@ Object.assign(abv, function() {
   }});
   return {IsbnValidator:IsbnValidator};
 }());
-abv.registry(abv.IsbnValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.IsbnValidator);
+Object.assign(sogv, function() {
   var IssnValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {caseSensitive:optionRules.caseSensitive || 'type:{"type":"bool"}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', requireHyphen:optionRules.requireHyphen || 'type:{"type":"bool"}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {caseSensitive:optionRules.caseSensitive || 'type:{"type":"bool"}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', requireHyphen:optionRules.requireHyphen || 'type:{"type":"bool"}'}, lang, internal);
     this.caseSensitive = true === this.__options.caseSensitive;
     this.message = this.__options.message || "This value is not a valid ISSN.";
     this.requireHyphen = true === this.__options.requireHyphen;
     this.name = "IssnValidator";
   };
-  IssnValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  IssnValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   IssnValidator.prototype.constructor = IssnValidator;
   Object.defineProperty(IssnValidator.prototype, "alias", {get:function() {
-    return "issn";
+    return ["issn"];
   }});
   Object.defineProperty(IssnValidator.prototype, "options", {get:function() {
     return [{"name":"caseSensitive", "type":"boolean"}, {"name":"requireHyphen", "type":"boolean"}];
@@ -11032,11 +11120,11 @@ Object.assign(abv, function() {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
-    if (false === abv.isType("digit", canonical.substr(0, 7))) {
+    if (false === sogv.isType("digit", canonical.substr(0, 7))) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
-    if (false === abv.isType("digit", canonical[7]) && "x" !== canonical[7] && "X" !== canonical[7]) {
+    if (false === sogv.isType("digit", canonical[7]) && "x" !== canonical[7] && "X" !== canonical[7]) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
@@ -11057,7 +11145,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -11075,10 +11163,10 @@ Object.assign(abv, function() {
   }});
   return {IssnValidator:IssnValidator};
 }());
-abv.registry(abv.IssnValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.IssnValidator);
+Object.assign(sogv, function() {
   var CountValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {exactMessage:optionRules.exactMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', max:optionRules.max || 'type:{"type":"numeric"}', maxMessage:optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', min:optionRules.min || 'type:{"type":"numeric"}', minMessage:optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {exactMessage:optionRules.exactMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', max:optionRules.max || 'type:{"type":"numeric"}', maxMessage:optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', min:optionRules.min || 'type:{"type":"numeric"}', minMessage:optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.exactMessage = this.__options.exactMessage || "This collection should contain exactly %%limit%% elements.";
     this.max = this.__options.max || null;
     this.maxMessage = this.__options.maxMessage || "This collection should contain %%limit%% elements or less.";
@@ -11086,10 +11174,10 @@ Object.assign(abv, function() {
     this.minMessage = this.__options.minMessage || "This collection should contain %%limit%% elements or more.";
     this.name = "CountValidator";
   };
-  CountValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  CountValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   CountValidator.prototype.constructor = CountValidator;
   Object.defineProperty(CountValidator.prototype, "alias", {get:function() {
-    return "count";
+    return ["count"];
   }});
   Object.defineProperty(CountValidator.prototype, "options", {get:function() {
     return [{"name":"max", "type":"numeric"}, {"name":"min", "type":"numeric"}];
@@ -11113,7 +11201,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -11132,16 +11220,16 @@ Object.assign(abv, function() {
   }});
   return {CountValidator:CountValidator};
 }());
-abv.registry(abv.CountValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.CountValidator);
+Object.assign(sogv, function() {
   var AcceptedValidator = function(data, options, optionRules, lang, internal) {
-    abv.ChoiceValidator.call(this, data, {choices:["yes", "on", 1, true, "1", "true"], message:"The %%attribute%% must be accepted."}, {}, lang, internal);
+    sogv.ChoiceValidator.call(this, data, {choices:["yes", "on", 1, true, "1", "true"], message:"The %%attribute%% must be accepted."}, {}, lang, internal);
     this.name = "AcceptedValidator";
   };
-  AcceptedValidator.prototype = Object.create(abv.ChoiceValidator.prototype);
+  AcceptedValidator.prototype = Object.create(sogv.ChoiceValidator.prototype);
   AcceptedValidator.prototype.constructor = AcceptedValidator;
   Object.defineProperty(AcceptedValidator.prototype, "alias", {get:function() {
-    return "accepted";
+    return ["accepted"];
   }});
   Object.defineProperty(AcceptedValidator.prototype, "options", {get:function() {
     return [];
@@ -11151,13 +11239,13 @@ Object.assign(abv, function() {
   }});
   return {AcceptedValidator:AcceptedValidator};
 }());
-abv.registry(abv.AcceptedValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.AcceptedValidator);
+Object.assign(sogv, function() {
   var ActiveUrlValidator = function(data, options, optionRules, lang, internal) {
-    abv.UrlValidator.call(this, data, {message:"The %%attribute%% is not a valid URL."}, {}, lang, internal);
+    sogv.UrlValidator.call(this, data, {message:"The %%attribute%% is not a valid URL."}, {}, lang, internal);
     this.name = "ActiveUrlValidator";
   };
-  ActiveUrlValidator.prototype = Object.create(abv.UrlValidator.prototype);
+  ActiveUrlValidator.prototype = Object.create(sogv.UrlValidator.prototype);
   ActiveUrlValidator.prototype.constructor = ActiveUrlValidator;
   Object.defineProperty(ActiveUrlValidator.prototype, "alias", {get:function() {
     return ["active_url", "active-url"];
@@ -11170,16 +11258,16 @@ Object.assign(abv, function() {
   }});
   return {ActiveUrlValidator:ActiveUrlValidator};
 }());
-abv.registry(abv.ActiveUrlValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.ActiveUrlValidator);
+Object.assign(sogv, function() {
   var AfterValidator = function(data, options, optionRules, lang, internal) {
-    abv.GreaterThanValidator.call(this, data, {message:"The %%attribute%% must be a date after %%date%%.", value:options.value}, {value:'required|type:{"type":["date","date-string"],"any":true}'}, lang, internal);
+    sogv.GreaterThanValidator.call(this, data, {message:"The %%attribute%% must be a date after %%date%%.", value:options.value}, {value:'required|type:{"type":["date","date-string"],"any":true}'}, lang, internal);
     this.name = "AfterValidator";
   };
-  AfterValidator.prototype = Object.create(abv.GreaterThanValidator.prototype);
+  AfterValidator.prototype = Object.create(sogv.GreaterThanValidator.prototype);
   AfterValidator.prototype.constructor = AfterValidator;
   Object.defineProperty(AfterValidator.prototype, "alias", {get:function() {
-    return "after";
+    return ["after"];
   }});
   Object.defineProperty(AfterValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"date"}];
@@ -11189,13 +11277,13 @@ Object.assign(abv, function() {
   }});
   return {AfterValidator:AfterValidator};
 }());
-abv.registry(abv.AfterValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.AfterValidator);
+Object.assign(sogv, function() {
   var AfterOrEqualValidator = function(data, options, optionRules, lang, internal) {
-    abv.GreaterThanOrEqualValidator.call(this, data, {message:"The %%attribute%% must be a date after or equal to %%date%%.", value:options.value}, {value:'required|type:{"type":["date","date-string"],"any":true}'}, lang, internal);
+    sogv.GreaterThanOrEqualValidator.call(this, data, {message:"The %%attribute%% must be a date after or equal to %%date%%.", value:options.value}, {value:'required|type:{"type":["date","date-string"],"any":true}'}, lang, internal);
     this.name = "AfterOrEqualValidator";
   };
-  AfterOrEqualValidator.prototype = Object.create(abv.GreaterThanOrEqualValidator.prototype);
+  AfterOrEqualValidator.prototype = Object.create(sogv.GreaterThanOrEqualValidator.prototype);
   AfterOrEqualValidator.prototype.constructor = AfterOrEqualValidator;
   Object.defineProperty(AfterOrEqualValidator.prototype, "alias", {get:function() {
     return ["after_or_equal", "after-or-equal"];
@@ -11208,16 +11296,16 @@ Object.assign(abv, function() {
   }});
   return {AfterOrEqualValidator:AfterOrEqualValidator};
 }());
-abv.registry(abv.AfterOrEqualValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.AfterOrEqualValidator);
+Object.assign(sogv, function() {
   var AlphaValidator = function(data, options, optionRules, lang, internal) {
-    abv.TypeValidator.call(this, data, {type:"alpha", message:"The %%attribute%% may only contain letters."}, {}, lang, internal);
+    sogv.TypeValidator.call(this, data, {type:"alpha", message:"The %%attribute%% may only contain letters."}, {}, lang, internal);
     this.name = "AlphaValidator";
   };
-  AlphaValidator.prototype = Object.create(abv.TypeValidator.prototype);
+  AlphaValidator.prototype = Object.create(sogv.TypeValidator.prototype);
   AlphaValidator.prototype.constructor = AlphaValidator;
   Object.defineProperty(AlphaValidator.prototype, "alias", {get:function() {
-    return "alpha";
+    return ["alpha"];
   }});
   Object.defineProperty(AlphaValidator.prototype, "options", {get:function() {
     return [];
@@ -11227,13 +11315,13 @@ Object.assign(abv, function() {
   }});
   return {AlphaValidator:AlphaValidator};
 }());
-abv.registry(abv.AlphaValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.AlphaValidator);
+Object.assign(sogv, function() {
   var AlphaDashValidator = function(data, options, optionRules, lang, internal) {
-    abv.TypeValidator.call(this, data, {type:"aldash", message:"The %%attribute%% may only contain letters, numbers, dashes and underscores."}, {}, lang, internal);
+    sogv.TypeValidator.call(this, data, {type:"aldash", message:"The %%attribute%% may only contain letters, numbers, dashes and underscores."}, {}, lang, internal);
     this.name = "AlphaDashValidator";
   };
-  AlphaDashValidator.prototype = Object.create(abv.TypeValidator.prototype);
+  AlphaDashValidator.prototype = Object.create(sogv.TypeValidator.prototype);
   AlphaDashValidator.prototype.constructor = AlphaDashValidator;
   Object.defineProperty(AlphaDashValidator.prototype, "alias", {get:function() {
     return ["alpha_dash", "alpha-dash"];
@@ -11246,13 +11334,13 @@ Object.assign(abv, function() {
   }});
   return {AlphaDashValidator:AlphaDashValidator};
 }());
-abv.registry(abv.AlphaDashValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.AlphaDashValidator);
+Object.assign(sogv, function() {
   var AlphaNumValidator = function(data, options, optionRules, lang, internal) {
-    abv.TypeValidator.call(this, data, {type:"alnum", message:"The %%attribute%% may only contain letters and numbers."}, {}, lang, internal);
+    sogv.TypeValidator.call(this, data, {type:"alnum", message:"The %%attribute%% may only contain letters and numbers."}, {}, lang, internal);
     this.name = "AlphaNumValidator";
   };
-  AlphaNumValidator.prototype = Object.create(abv.TypeValidator.prototype);
+  AlphaNumValidator.prototype = Object.create(sogv.TypeValidator.prototype);
   AlphaNumValidator.prototype.constructor = AlphaNumValidator;
   Object.defineProperty(AlphaNumValidator.prototype, "alias", {get:function() {
     return ["alpha_num", "alpha-num"];
@@ -11265,16 +11353,16 @@ Object.assign(abv, function() {
   }});
   return {AlphaNumValidator:AlphaNumValidator};
 }());
-abv.registry(abv.AlphaNumValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.AlphaNumValidator);
+Object.assign(sogv, function() {
   var ArrayValidator = function(data, options, optionRules, lang, internal) {
-    abv.TypeValidator.call(this, data, {type:"array", message:"The %%attribute%% must be an array."}, {}, lang, internal);
+    sogv.TypeValidator.call(this, data, {type:"array", message:"The %%attribute%% must be an array."}, {}, lang, internal);
     this.name = "ArrayValidator";
   };
-  ArrayValidator.prototype = Object.create(abv.TypeValidator.prototype);
+  ArrayValidator.prototype = Object.create(sogv.TypeValidator.prototype);
   ArrayValidator.prototype.constructor = ArrayValidator;
   Object.defineProperty(ArrayValidator.prototype, "alias", {get:function() {
-    return "array";
+    return ["array", "arr"];
   }});
   Object.defineProperty(ArrayValidator.prototype, "options", {get:function() {
     return [];
@@ -11284,16 +11372,16 @@ Object.assign(abv, function() {
   }});
   return {ArrayValidator:ArrayValidator};
 }());
-abv.registry(abv.ArrayValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.ArrayValidator);
+Object.assign(sogv, function() {
   var BeforeValidator = function(data, options, optionRules, lang, internal) {
-    abv.LessThanValidator.call(this, data, {message:"The %%attribute%% must be a date before %%date%%.", value:options.value}, {value:'required|type:{"type":["date","date-string"],"any":true}'}, lang, internal);
+    sogv.LessThanValidator.call(this, data, {message:"The %%attribute%% must be a date before %%date%%.", value:options.value}, {value:'required|type:{"type":["date","date-string"],"any":true}'}, lang, internal);
     this.name = "BeforeValidator";
   };
-  BeforeValidator.prototype = Object.create(abv.LessThanValidator.prototype);
+  BeforeValidator.prototype = Object.create(sogv.LessThanValidator.prototype);
   BeforeValidator.prototype.constructor = BeforeValidator;
   Object.defineProperty(BeforeValidator.prototype, "alias", {get:function() {
-    return "before";
+    return ["before"];
   }});
   Object.defineProperty(BeforeValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"date"}];
@@ -11303,13 +11391,13 @@ Object.assign(abv, function() {
   }});
   return {BeforeValidator:BeforeValidator};
 }());
-abv.registry(abv.BeforeValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.BeforeValidator);
+Object.assign(sogv, function() {
   var BeforeOrEqualValidator = function(data, options, optionRules, lang, internal) {
-    abv.LessThanOrEqualValidator.call(this, data, {message:"The %%attribute%% must be a date before or equal to %%date%%.", value:options.value}, {value:'required|type:{"type":["date","date-string"],"any":true}'}, lang, internal);
+    sogv.LessThanOrEqualValidator.call(this, data, {message:"The %%attribute%% must be a date before or equal to %%date%%.", value:options.value}, {value:'required|type:{"type":["date","date-string"],"any":true}'}, lang, internal);
     this.name = "BeforeOrEqualValidator";
   };
-  BeforeOrEqualValidator.prototype = Object.create(abv.LessThanOrEqualValidator.prototype);
+  BeforeOrEqualValidator.prototype = Object.create(sogv.LessThanOrEqualValidator.prototype);
   BeforeOrEqualValidator.prototype.constructor = BeforeOrEqualValidator;
   Object.defineProperty(BeforeOrEqualValidator.prototype, "alias", {get:function() {
     return ["before_or_equal", "before-or-equal"];
@@ -11322,10 +11410,10 @@ Object.assign(abv, function() {
   }});
   return {BeforeOrEqualValidator:BeforeOrEqualValidator};
 }());
-abv.registry(abv.BeforeOrEqualValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.BeforeOrEqualValidator);
+Object.assign(sogv, function() {
   var BetweenValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {max:optionRules.max || 'required|type:{"type":["numeric","date-string"],"any":true}', min:optionRules.min || 'required|type:{"type":["numeric","date-string"],"any":true}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {max:optionRules.max || 'required|type:{"type":["numeric","date-string"],"any":true}', min:optionRules.min || 'required|type:{"type":["numeric","date-string"],"any":true}'}, lang, internal);
     this.max = this.__options.max;
     this.min = this.__options.min;
     this.dateMessage = "The %%attribute%% must be between %%min%% and %%max%% date.";
@@ -11334,23 +11422,23 @@ Object.assign(abv, function() {
     this.arrayMessage = "The %%attribute%% must have between %%min%% and %%max%% items.";
     this.name = "BetweenValidator";
   };
-  BetweenValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  BetweenValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   BetweenValidator.prototype.constructor = BetweenValidator;
   Object.defineProperty(BetweenValidator.prototype, "alias", {get:function() {
-    return "between";
+    return ["between"];
   }});
   Object.defineProperty(BetweenValidator.prototype, "options", {get:function() {
     return [{"name":"max", "type":"numeric|date-string"}, {"name":"min", "type":"numeric|date-string"}];
   }});
   Object.assign(BetweenValidator.prototype, {__validate:function() {
-    if (true === abv.isType("numeric", this.min)) {
-      if (true === abv.isType("numeric", this.data)) {
+    if (true === sogv.isType("numeric", this.min)) {
+      if (true === sogv.isType("numeric", this.data)) {
         this.__validateNumeric();
       } else {
-        if (true === abv.isType("array", this.data)) {
+        if (true === sogv.isType("array", this.data)) {
           this.__validateArray();
         } else {
-          if (true === abv.isType("string", this.data)) {
+          if (true === sogv.isType("string", this.data)) {
             this.__validateString();
           } else {
             this.__setErrorMessage("Data type " + typeof this.data + " does not supported");
@@ -11359,30 +11447,30 @@ Object.assign(abv, function() {
         }
       }
     } else {
-      if (true === abv.isType("date-string", this.min) || true === abv.isType("datetime", this.min)) {
+      if (true === sogv.isType("date-string", this.min) || true === sogv.isType("datetime", this.min)) {
         this.__validateDateTime();
       }
     }
   }, __validateNumeric:function() {
-    var status = abv.isValid(this.data, {"range":{"min":this.min, "max":this.max}});
+    var status = sogv.isValid(this.data, {"range":{"min":this.min, "max":this.max}});
     if (false === status) {
       this.__setErrorMessage(this.numericMessage, this.__messageParameters());
       return;
     }
   }, __validateDateTime:function() {
-    var status = abv.isValid(this.data, {"range":{"min":this.min, "max":this.max}});
+    var status = sogv.isValid(this.data, {"range":{"min":this.min, "max":this.max}});
     if (false === status) {
       this.__setErrorMessage(this.dateMessage, this.__messageParameters());
       return;
     }
   }, __validateArray:function() {
-    var status = abv.isValid(this.data, {"count":{"min":this.min, "max":this.max}});
+    var status = sogv.isValid(this.data, {"count":{"min":this.min, "max":this.max}});
     if (false === status) {
       this.__setErrorMessage(this.arrayMessage, this.__messageParameters());
       return;
     }
   }, __validateString:function() {
-    var status = abv.isValid(this.data, {"length":{"min":this.min, "max":this.max}});
+    var status = sogv.isValid(this.data, {"length":{"min":this.min, "max":this.max}});
     if (false === status) {
       this.__setErrorMessage(this.stringMessage, this.__messageParameters());
       return;
@@ -11397,14 +11485,14 @@ Object.assign(abv, function() {
   }});
   return {BetweenValidator:BetweenValidator};
 }());
-abv.registry(abv.BetweenValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.BetweenValidator);
+Object.assign(sogv, function() {
   var BooleanValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+    sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
     this.message = "The %%attribute%% field must be true or false.";
     this.name = "BooleanValidator";
   };
-  BooleanValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  BooleanValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   BooleanValidator.prototype.constructor = BooleanValidator;
   Object.defineProperty(BooleanValidator.prototype, "alias", {get:function() {
     return ["bool", "boolean"];
@@ -11413,7 +11501,7 @@ Object.assign(abv, function() {
     return [];
   }});
   Object.assign(BooleanValidator.prototype, {__validate:function() {
-    if (false === abv.isValid(this.data, "false") && false === abv.isValid(this.data, "true")) {
+    if (false === sogv.isValid(this.data, "false") && false === sogv.isValid(this.data, "true")) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
@@ -11422,7 +11510,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -11432,14 +11520,14 @@ Object.assign(abv, function() {
   }});
   return {BooleanValidator:BooleanValidator};
 }());
-abv.registry(abv.BooleanValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.BooleanValidator);
+Object.assign(sogv, function() {
   var DateEqualsValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractComparisonValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["date-string","datetime"],"any":true}'}, lang, internal);
+    sogv.AbstractComparisonValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["date-string","datetime"],"any":true}'}, lang, internal);
     this.message = "The %%attribute%% must be a date equal to %%date%%.";
     this.name = "DateEqualsValidator";
   };
-  DateEqualsValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+  DateEqualsValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   DateEqualsValidator.prototype.constructor = DateEqualsValidator;
   Object.defineProperty(DateEqualsValidator.prototype, "alias", {get:function() {
     return ["date_equals", "date-equals"];
@@ -11454,7 +11542,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":["datetime","date-string"],"any":true}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":["datetime","date-string"],"any":true}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -11464,15 +11552,15 @@ Object.assign(abv, function() {
   }});
   return {DateEqualsValidator:DateEqualsValidator};
 }());
-abv.registry(abv.DateEqualsValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.DateEqualsValidator);
+Object.assign(sogv, function() {
   var DigitsValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', length:optionRules.length || 'required|type:{"type":"integer"}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', length:optionRules.length || 'required|type:{"type":"integer"}'}, lang, internal);
     this.message = "The %%attribute%% must be %%digits%% digits.";
     this.length = this.__options.length;
     this.name = "DigitsValidator";
   };
-  DigitsValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  DigitsValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   DigitsValidator.prototype.constructor = DigitsValidator;
   Object.defineProperty(DigitsValidator.prototype, "alias", {get:function() {
     return ["digits"];
@@ -11481,7 +11569,7 @@ Object.assign(abv, function() {
     return [{"name":"length", "type":"integer"}];
   }});
   Object.assign(DigitsValidator.prototype, {__validate:function() {
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"numeric"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"numeric"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage);
       return;
@@ -11495,7 +11583,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -11513,16 +11601,16 @@ Object.assign(abv, function() {
   }});
   return {DigitsValidator:DigitsValidator};
 }());
-abv.registry(abv.DigitsValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.DigitsValidator);
+Object.assign(sogv, function() {
   var DigitsBetweenValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', max:optionRules.max || 'type:{"type":"integer"}', min:optionRules.min || 'type:{"type":"integer"}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', max:optionRules.max || 'type:{"type":"integer"}', min:optionRules.min || 'type:{"type":"integer"}'}, lang, internal);
     this.max = this.__options.max;
     this.min = this.__options.min;
     this.message = "The %%attribute%% must be between %%min%% and %%max%% digits.";
     this.name = "DigitsBetweenValidator";
   };
-  DigitsBetweenValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  DigitsBetweenValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   DigitsBetweenValidator.prototype.constructor = DigitsBetweenValidator;
   Object.defineProperty(DigitsBetweenValidator.prototype, "alias", {get:function() {
     return ["digits_between", "digits-between"];
@@ -11531,7 +11619,7 @@ Object.assign(abv, function() {
     return [{"name":"min", "type":"numeric"}, {"name":"max", "type":"numeric"}];
   }});
   Object.assign(DigitsBetweenValidator.prototype, {__validate:function() {
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"numeric"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"numeric"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage);
       return;
@@ -11552,7 +11640,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -11570,23 +11658,23 @@ Object.assign(abv, function() {
   }});
   return {DigitsBetweenValidator:DigitsBetweenValidator};
 }());
-abv.registry(abv.DigitsBetweenValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.DigitsBetweenValidator);
+Object.assign(sogv, function() {
   var DistinctValidator = function(data, options, optionRules, lang, internal) {
-    abv.UniqueValidator.call(this, data, {message:"The %%attribute%% field has a duplicate value."}, {}, lang, internal);
+    sogv.UniqueValidator.call(this, data, {message:"The %%attribute%% field has a duplicate value."}, {}, lang, internal);
     this.name = "DistinctValidator";
   };
-  DistinctValidator.prototype = Object.create(abv.UniqueValidator.prototype);
+  DistinctValidator.prototype = Object.create(sogv.UniqueValidator.prototype);
   DistinctValidator.prototype.constructor = DistinctValidator;
   Object.defineProperty(DistinctValidator.prototype, "alias", {get:function() {
-    return "distinct";
+    return ["distinct"];
   }});
   Object.defineProperty(DistinctValidator.prototype, "options", {get:function() {
     return [];
   }});
   Object.assign(DistinctValidator.prototype, {__beforeValidate:function() {
-    abv.UniqueValidator.prototype.__beforeValidate.call(this);
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":["array","iterable"]}', true);
+    sogv.UniqueValidator.prototype.__beforeValidate.call(this);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":["array","iterable"]}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -11596,15 +11684,15 @@ Object.assign(abv, function() {
   }});
   return {DistinctValidator:DistinctValidator};
 }());
-abv.registry(abv.DistinctValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.DistinctValidator);
+Object.assign(sogv, function() {
   var EndsWithValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {pattern:optionRules.pattern || 'length:{"min":3,"max":255}', ends:optionRules.ends || 'type:{"type":["iterable","string"],"any":true}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {pattern:optionRules.pattern || 'length:{"min":3,"max":255}', ends:optionRules.ends || 'type:{"type":["iterable","string"],"any":true}'}, lang, internal);
     this.message = this.__options.message || "The %%attribute%% must end with one of the following: %%values%%.";
     this.ends = this.__options.ends;
     this.name = "EndsWithValidator";
   };
-  EndsWithValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  EndsWithValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   EndsWithValidator.prototype.constructor = EndsWithValidator;
   Object.defineProperty(EndsWithValidator.prototype, "alias", {get:function() {
     return ["ends_with", "ends-with"];
@@ -11625,7 +11713,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -11638,7 +11726,7 @@ Object.assign(abv, function() {
       this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
-    if (true === abv.isType("string", this.ends)) {
+    if (true === sogv.isType("string", this.ends)) {
       this.ends = [this.ends];
     }
   }, __messageParameters:function() {
@@ -11646,16 +11734,16 @@ Object.assign(abv, function() {
   }});
   return {EndsWithValidator:EndsWithValidator};
 }());
-abv.registry(abv.EndsWithValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.EndsWithValidator);
+Object.assign(sogv, function() {
   var FilledValidator = function(data, options, optionRules, lang, internal) {
-    abv.NotBlankValidator.call(this, data, {message:"The %%attribute%% field must have a value."}, optionRules, lang, internal);
+    sogv.NotBlankValidator.call(this, data, {message:"The %%attribute%% field must have a value."}, optionRules, lang, internal);
     this.name = "FilledValidator";
   };
-  FilledValidator.prototype = Object.create(abv.NotBlankValidator.prototype);
+  FilledValidator.prototype = Object.create(sogv.NotBlankValidator.prototype);
   FilledValidator.prototype.constructor = FilledValidator;
   Object.defineProperty(FilledValidator.prototype, "alias", {get:function() {
-    return "filled";
+    return ["filled"];
   }});
   Object.defineProperty(FilledValidator.prototype, "options", {get:function() {
     return [];
@@ -11665,10 +11753,10 @@ Object.assign(abv, function() {
   }});
   return {FilledValidator:FilledValidator};
 }());
-abv.registry(abv.FilledValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.FilledValidator);
+Object.assign(sogv, function() {
   var GtValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["numeric","datetime","date-string","boolean"],"any":true}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["numeric","datetime","date-string","boolean"],"any":true}'}, lang, internal);
     this.value = this.__options.value;
     this.dateMessage = "The %%attribute%% must be greater than %%value%% date.";
     this.numericMessage = "The %%attribute%% must be greater than %%value%%.";
@@ -11676,24 +11764,24 @@ Object.assign(abv, function() {
     this.arrayMessage = "The %%attribute%% must have more than %%value%% items.";
     this.name = "GtValidator";
   };
-  GtValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  GtValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   GtValidator.prototype.constructor = GtValidator;
   Object.defineProperty(GtValidator.prototype, "alias", {get:function() {
-    return "gt";
+    return ["gt"];
   }});
   Object.defineProperty(GtValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"boolean|string|numeric|array|datetime"}];
   }});
   Object.assign(GtValidator.prototype, {__validate:function() {
-    if (true === abv.isType("integer", this.value) && (true === abv.isType("array", this.data) || true === abv.isType("string", this.data))) {
+    if (true === sogv.isType("integer", this.value) && (true === sogv.isType("array", this.data) || true === sogv.isType("string", this.data))) {
       if (this.data.length < this.value) {
-        this.__setErrorMessage(true === abv.isType("string", this.data) ? this.stringMessage : this.arrayMessage, this.__messageParameters());
+        this.__setErrorMessage(true === sogv.isType("string", this.data) ? this.stringMessage : this.arrayMessage, this.__messageParameters());
         return;
       }
     } else {
-      if (false === abv.isValid(this.data, {"greater-than":{"value":this.value}}, true)) {
+      if (false === sogv.isValid(this.data, {"greater-than":{"value":this.value}}, true)) {
         var __message = this.dateMessage;
-        if (true === abv.isType("numeric", this.value) || true === abv.isType("boolean", this.value)) {
+        if (true === sogv.isType("numeric", this.value) || true === sogv.isType("boolean", this.value)) {
           __message = this.numericMessage;
         }
         this.__setErrorMessage(__message, this.__messageParameters());
@@ -11710,10 +11798,10 @@ Object.assign(abv, function() {
   }});
   return {GtValidator:GtValidator};
 }());
-abv.registry(abv.GtValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.GtValidator);
+Object.assign(sogv, function() {
   var GteValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["numeric","datetime","date-string","boolean"],"any":true}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["numeric","datetime","date-string","boolean"],"any":true}'}, lang, internal);
     this.value = this.__options.value;
     this.dateMessage = "The %%attribute%% must be greater than or equal %%value%% date.";
     this.numericMessage = "The %%attribute%% must be greater than or equal %%value%%.";
@@ -11721,24 +11809,24 @@ Object.assign(abv, function() {
     this.arrayMessage = "The %%attribute%% must have %%value%% items or more.";
     this.name = "GteValidator";
   };
-  GteValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  GteValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   GteValidator.prototype.constructor = GteValidator;
   Object.defineProperty(GteValidator.prototype, "alias", {get:function() {
-    return "gte";
+    return ["gte"];
   }});
   Object.defineProperty(GteValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"boolean|string|numeric|array|datetime"}];
   }});
   Object.assign(GteValidator.prototype, {__validate:function() {
-    if (true === abv.isType("integer", this.value) && (true === abv.isType("array", this.data) || true === abv.isType("string", this.data))) {
+    if (true === sogv.isType("integer", this.value) && (true === sogv.isType("array", this.data) || true === sogv.isType("string", this.data))) {
       if (this.data.length <= this.value) {
-        this.__setErrorMessage(true === abv.isType("string", this.data) ? this.stringMessage : this.arrayMessage, this.__messageParameters());
+        this.__setErrorMessage(true === sogv.isType("string", this.data) ? this.stringMessage : this.arrayMessage, this.__messageParameters());
         return;
       }
     } else {
-      if (false === abv.isValid(this.data, {"greater-than-or-equal":{"value":this.value}}, true)) {
+      if (false === sogv.isValid(this.data, {"greater-than-or-equal":{"value":this.value}}, true)) {
         var __message = this.dateMessage;
-        if (true === abv.isType("numeric", this.value) || true === abv.isType("boolean", this.value)) {
+        if (true === sogv.isType("numeric", this.value) || true === sogv.isType("boolean", this.value)) {
           __message = this.numericMessage;
         }
         this.__setErrorMessage(__message, this.__messageParameters());
@@ -11755,10 +11843,10 @@ Object.assign(abv, function() {
   }});
   return {GteValidator:GteValidator};
 }());
-abv.registry(abv.GteValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.GteValidator);
+Object.assign(sogv, function() {
   var LtValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["numeric","datetime","date-string","boolean"],"any":true}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["numeric","datetime","date-string","boolean"],"any":true}'}, lang, internal);
     this.value = this.__options.value;
     this.dateMessage = "The %%attribute%% must be less than %%value%% date.";
     this.numericMessage = "The %%attribute%% must be less than %%value%%.";
@@ -11766,24 +11854,24 @@ Object.assign(abv, function() {
     this.arrayMessage = "The %%attribute%% must have less than %%value%% items.";
     this.name = "LtValidator";
   };
-  LtValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  LtValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   LtValidator.prototype.constructor = LtValidator;
   Object.defineProperty(LtValidator.prototype, "alias", {get:function() {
-    return "lt";
+    return ["lt"];
   }});
   Object.defineProperty(LtValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"boolean|string|numeric|array|datetime"}];
   }});
   Object.assign(LtValidator.prototype, {__validate:function() {
-    if (true === abv.isType("integer", this.value) && (true === abv.isType("array", this.data) || true === abv.isType("string", this.data))) {
+    if (true === sogv.isType("integer", this.value) && (true === sogv.isType("array", this.data) || true === sogv.isType("string", this.data))) {
       if (this.data.length > this.value) {
-        this.__setErrorMessage(true === abv.isType("string", this.data) ? this.stringMessage : this.arrayMessage, this.__messageParameters());
+        this.__setErrorMessage(true === sogv.isType("string", this.data) ? this.stringMessage : this.arrayMessage, this.__messageParameters());
         return;
       }
     } else {
-      if (false === abv.isValid(this.data, {"less-than":{"value":this.value}}, true)) {
+      if (false === sogv.isValid(this.data, {"less-than":{"value":this.value}}, true)) {
         var __message = this.dateMessage;
-        if (true === abv.isType("numeric", this.value) || true === abv.isType("boolean", this.value)) {
+        if (true === sogv.isType("numeric", this.value) || true === sogv.isType("boolean", this.value)) {
           __message = this.numericMessage;
         }
         this.__setErrorMessage(__message, this.__messageParameters());
@@ -11800,10 +11888,10 @@ Object.assign(abv, function() {
   }});
   return {LtValidator:LtValidator};
 }());
-abv.registry(abv.LtValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.LtValidator);
+Object.assign(sogv, function() {
   var LteValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["numeric","datetime","date-string","boolean"],"any":true}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["numeric","datetime","date-string","boolean"],"any":true}'}, lang, internal);
     this.value = this.__options.value;
     this.dateMessage = "The %%attribute%% must be less than or equal %%value%% date.";
     this.numericMessage = "The %%attribute%% must be less than or equal %%value%%.";
@@ -11811,24 +11899,24 @@ Object.assign(abv, function() {
     this.arrayMessage = "The %%attribute%% must not have more than %%value%% items.";
     this.name = "LteValidator";
   };
-  LteValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  LteValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   LteValidator.prototype.constructor = LteValidator;
   Object.defineProperty(LteValidator.prototype, "alias", {get:function() {
-    return "lte";
+    return ["lte"];
   }});
   Object.defineProperty(LteValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"boolean|string|numeric|array|datetime"}];
   }});
   Object.assign(LteValidator.prototype, {__validate:function() {
-    if (true === abv.isType("integer", this.value) && (true === abv.isType("array", this.data) || true === abv.isType("string", this.data))) {
+    if (true === sogv.isType("integer", this.value) && (true === sogv.isType("array", this.data) || true === sogv.isType("string", this.data))) {
       if (this.data.length >= this.value) {
-        this.__setErrorMessage(true === abv.isType("string", this.data) ? this.stringMessage : this.arrayMessage, this.__messageParameters());
+        this.__setErrorMessage(true === sogv.isType("string", this.data) ? this.stringMessage : this.arrayMessage, this.__messageParameters());
         return;
       }
     } else {
-      if (false === abv.isValid(this.data, {"less-than-or-equal":{"value":this.value}}, true)) {
+      if (false === sogv.isValid(this.data, {"less-than-or-equal":{"value":this.value}}, true)) {
         var __message = this.dateMessage;
-        if (true === abv.isType("numeric", this.value) || true === abv.isType("boolean", this.value)) {
+        if (true === sogv.isType("numeric", this.value) || true === sogv.isType("boolean", this.value)) {
           __message = this.numericMessage;
         }
         this.__setErrorMessage(__message, this.__messageParameters());
@@ -11845,16 +11933,16 @@ Object.assign(abv, function() {
   }});
   return {LteValidator:LteValidator};
 }());
-abv.registry(abv.LteValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.LteValidator);
+Object.assign(sogv, function() {
   var NumericValidator = function(data, options, optionRules, lang, internal) {
-    abv.TypeValidator.call(this, data, {type:"numeric", message:"The %%attribute%% must be a number."}, {}, lang, internal);
+    sogv.TypeValidator.call(this, data, {type:"numeric", message:"The %%attribute%% must be a number."}, {}, lang, internal);
     this.name = "NumericValidator";
   };
-  NumericValidator.prototype = Object.create(abv.TypeValidator.prototype);
+  NumericValidator.prototype = Object.create(sogv.TypeValidator.prototype);
   NumericValidator.prototype.constructor = NumericValidator;
   Object.defineProperty(NumericValidator.prototype, "alias", {get:function() {
-    return ["numeric"];
+    return ["numeric", "num"];
   }});
   Object.defineProperty(NumericValidator.prototype, "options", {get:function() {
     return [];
@@ -11864,16 +11952,16 @@ Object.assign(abv, function() {
   }});
   return {NumericValidator:NumericValidator};
 }());
-abv.registry(abv.NumericValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.NumericValidator);
+Object.assign(sogv, function() {
   var StringValidator = function(data, options, optionRules, lang, internal) {
-    abv.TypeValidator.call(this, data, {type:"string", message:"The %%attribute%% must be a string."}, {}, lang, internal);
+    sogv.TypeValidator.call(this, data, {type:"string", message:"The %%attribute%% must be a string."}, {}, lang, internal);
     this.name = "StringValidator";
   };
-  StringValidator.prototype = Object.create(abv.TypeValidator.prototype);
+  StringValidator.prototype = Object.create(sogv.TypeValidator.prototype);
   StringValidator.prototype.constructor = StringValidator;
   Object.defineProperty(StringValidator.prototype, "alias", {get:function() {
-    return ["string"];
+    return ["string", "str"];
   }});
   Object.defineProperty(StringValidator.prototype, "options", {get:function() {
     return [];
@@ -11883,16 +11971,16 @@ Object.assign(abv, function() {
   }});
   return {StringValidator:StringValidator};
 }());
-abv.registry(abv.StringValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.StringValidator);
+Object.assign(sogv, function() {
   var IntegerValidator = function(data, options, optionRules, lang, internal) {
-    abv.TypeValidator.call(this, data, {type:"integer", message:"The %%attribute%% must be an integer."}, {}, lang, internal);
+    sogv.TypeValidator.call(this, data, {type:"integer", message:"The %%attribute%% must be an integer."}, {}, lang, internal);
     this.name = "IntegerValidator";
   };
-  IntegerValidator.prototype = Object.create(abv.TypeValidator.prototype);
+  IntegerValidator.prototype = Object.create(sogv.TypeValidator.prototype);
   IntegerValidator.prototype.constructor = IntegerValidator;
   Object.defineProperty(IntegerValidator.prototype, "alias", {get:function() {
-    return ["integer"];
+    return ["integer", "int"];
   }});
   Object.defineProperty(IntegerValidator.prototype, "options", {get:function() {
     return [];
@@ -11902,16 +11990,16 @@ Object.assign(abv, function() {
   }});
   return {IntegerValidator:IntegerValidator};
 }());
-abv.registry(abv.IntegerValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.IntegerValidator);
+Object.assign(sogv, function() {
   var Ipv4Validator = function(data, options, optionRules, lang, internal) {
-    abv.IpValidator.call(this, data, {version:4, message:"The %%attribute%% must be a valid IPv4 address."}, optionRules, lang, internal);
+    sogv.IpValidator.call(this, data, {version:4, message:"The %%attribute%% must be a valid IPv4 address."}, optionRules, lang, internal);
     this.name = "Ipv4Validator";
   };
-  Ipv4Validator.prototype = Object.create(abv.IpValidator.prototype);
+  Ipv4Validator.prototype = Object.create(sogv.IpValidator.prototype);
   Ipv4Validator.prototype.constructor = Ipv4Validator;
   Object.defineProperty(Ipv4Validator.prototype, "alias", {get:function() {
-    return "ipv4";
+    return ["ipv4"];
   }});
   Object.defineProperty(Ipv4Validator.prototype, "options", {get:function() {
     return [];
@@ -11921,16 +12009,16 @@ Object.assign(abv, function() {
   }});
   return {Ipv4Validator:Ipv4Validator};
 }());
-abv.registry(abv.Ipv4Validator);
-Object.assign(abv, function() {
+sogv.registry(sogv.Ipv4Validator);
+Object.assign(sogv, function() {
   var Ipv6Validator = function(data, options, optionRules, lang, internal) {
-    abv.IpValidator.call(this, data, {version:6, message:"The %%attribute%% must be a valid IPv6 address."}, optionRules, lang, internal);
+    sogv.IpValidator.call(this, data, {version:6, message:"The %%attribute%% must be a valid IPv6 address."}, optionRules, lang, internal);
     this.name = "Ipv6Validator";
   };
-  Ipv6Validator.prototype = Object.create(abv.IpValidator.prototype);
+  Ipv6Validator.prototype = Object.create(sogv.IpValidator.prototype);
   Ipv6Validator.prototype.constructor = Ipv6Validator;
   Object.defineProperty(Ipv6Validator.prototype, "alias", {get:function() {
-    return "ipv6";
+    return ["ipv6"];
   }});
   Object.defineProperty(Ipv6Validator.prototype, "options", {get:function() {
     return [];
@@ -11940,18 +12028,18 @@ Object.assign(abv, function() {
   }});
   return {Ipv6Validator:Ipv6Validator};
 }());
-abv.registry(abv.Ipv6Validator);
-Object.assign(abv, function() {
+sogv.registry(sogv.Ipv6Validator);
+Object.assign(sogv, function() {
   var StartsWithValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {pattern:optionRules.pattern || 'length:{"min":3,"max":255}', starts:optionRules.starts || 'type:{"type":["iterable","string"],"any":true}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {pattern:optionRules.pattern || 'length:{"min":3,"max":255}', starts:optionRules.starts || 'type:{"type":["iterable","string"],"any":true}'}, lang, internal);
     this.message = this.__options.message || "The %%attribute%% must start with one of the following: %%values%%.";
     this.starts = this.__options.starts;
     this.name = "StartsWithValidator";
   };
-  StartsWithValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  StartsWithValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   StartsWithValidator.prototype.constructor = StartsWithValidator;
   Object.defineProperty(StartsWithValidator.prototype, "alias", {get:function() {
-    return ["starts_with", "starts-with"];
+    return ["starts_with", "starts-with", "starts"];
   }});
   Object.defineProperty(StartsWithValidator.prototype, "options", {get:function() {
     return [{"name":"ends", "type":"array"}];
@@ -11969,7 +12057,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -11982,7 +12070,7 @@ Object.assign(abv, function() {
       this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
-    if (true === abv.isType("string", this.starts)) {
+    if (true === sogv.isType("string", this.starts)) {
       this.starts = [this.starts];
     }
   }, __messageParameters:function() {
@@ -11990,16 +12078,16 @@ Object.assign(abv, function() {
   }});
   return {StartsWithValidator:StartsWithValidator};
 }());
-abv.registry(abv.StartsWithValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.StartsWithValidator);
+Object.assign(sogv, function() {
   var InValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', choices:optionRules.choices || 'required|type:{"type":"array"}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', choices:optionRules.choices || 'required|type:{"type":"array"}'}, lang, internal);
     this.message = this.__options.message || "The selected %%attribute%% is invalid.";
     this.choices = this.__options.choices;
     this.min = 1;
     this.name = "InValidator";
   };
-  InValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  InValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   InValidator.prototype.constructor = InValidator;
   Object.defineProperty(InValidator.prototype, "alias", {get:function() {
     return ["in"];
@@ -12008,7 +12096,7 @@ Object.assign(abv, function() {
     return [{"name":"choices", "type":"array"}];
   }});
   Object.assign(InValidator.prototype, {__validate:function() {
-    var status = abv.isValid(this.data, {"choice":{"choices":this.choices, "min":this.min}}, true);
+    var status = sogv.isValid(this.data, {"choice":{"choices":this.choices, "min":this.min}}, true);
     if (false === status) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
@@ -12018,7 +12106,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -12036,16 +12124,16 @@ Object.assign(abv, function() {
   }});
   return {InValidator:InValidator};
 }());
-abv.registry(abv.InValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.InValidator);
+Object.assign(sogv, function() {
   var NotInValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', choices:optionRules.choices || 'required|type:{"type":"array"}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', choices:optionRules.choices || 'required|type:{"type":"array"}'}, lang, internal);
     this.message = this.__options.message || "The selected %%attribute%% is invalid.";
     this.choices = this.__options.choices;
     this.min = 1;
     this.name = "NotInValidator";
   };
-  NotInValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  NotInValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   NotInValidator.prototype.constructor = NotInValidator;
   Object.defineProperty(NotInValidator.prototype, "alias", {get:function() {
     return ["not_in", "not-in"];
@@ -12054,7 +12142,7 @@ Object.assign(abv, function() {
     return [{"name":"choices", "type":"array"}];
   }});
   Object.assign(NotInValidator.prototype, {__validate:function() {
-    var status = abv.isValid(this.data, {"choice":{"choices":this.choices, "min":this.min}}, true);
+    var status = sogv.isValid(this.data, {"choice":{"choices":this.choices, "min":this.min}}, true);
     if (true === status) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
@@ -12064,7 +12152,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -12082,38 +12170,38 @@ Object.assign(abv, function() {
   }});
   return {NotInValidator:NotInValidator};
 }());
-abv.registry(abv.NotInValidator);
-Object.assign(abv, function() {
+sogv.registry(sogv.NotInValidator);
+Object.assign(sogv, function() {
   var SizeValidator = function(data, options, optionRules, lang, internal) {
-    abv.AbstractValidator.call(this, data, options, {value:optionRules.max || 'required|type:{"type":"numeric"}', message:optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    sogv.AbstractValidator.call(this, data, options, {value:optionRules.max || 'required|type:{"type":"numeric"}', message:optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
     this.value = this.__options.value;
     this.numericMessage = "The %%attribute%% must be %%size%%.";
     this.stringMessage = "The %%attribute%% must be %%size%% characters.";
     this.arrayMessage = "The %%attribute%% must contain %%size%% items.";
     this.name = "SizeValidator";
   };
-  SizeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+  SizeValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   SizeValidator.prototype.constructor = SizeValidator;
   Object.defineProperty(SizeValidator.prototype, "alias", {get:function() {
-    return "size";
+    return ["size"];
   }});
   Object.defineProperty(SizeValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"integer"}];
   }});
   Object.assign(SizeValidator.prototype, {__validate:function() {
-    if (true === abv.isType("numeric", this.data)) {
+    if (true === sogv.isType("numeric", this.data)) {
       if (this.data !== this.value) {
         this.__setErrorMessage(this.numericMessage, this.__numericMessageParameters());
         return;
       }
     } else {
-      if (true === abv.isType("string", this.data)) {
+      if (true === sogv.isType("string", this.data)) {
         if (this.data.length !== this.value) {
           this.__setErrorMessage(this.stringMessage, this.__stringMessageParameters());
           return;
         }
       } else {
-        if (true === abv.isType("array", this.data)) {
+        if (true === sogv.isType("array", this.data)) {
           if (this.data.length !== this.value) {
             this.__setErrorMessage(this.arrayMessage, this.__arrayMessageParameters());
             return;
@@ -12126,7 +12214,7 @@ Object.assign(abv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":["string","numeric","array"],"any":true}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":["string","numeric","array"],"any":true}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -12140,8 +12228,8 @@ Object.assign(abv, function() {
   }});
   return {SizeValidator:SizeValidator};
 }());
-abv.registry(abv.SizeValidator);
-abv.I18nHandler.add("af", [{"@id":"1", "source":"This value should be false.", "target":"Hierdie waarde moet vals wees."}, {"@id":"2", "source":"This value should be true.", "target":"Hierdie waarde moet waar wees."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Hierdie waarde moet van die soort {{type}} wees."}, {"@id":"4", "source":"This value should be blank.", "target":"Hierdie waarde moet leeg wees."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
+sogv.registry(sogv.SizeValidator);
+sogv.I18nHandler.add("af", [{"@id":"1", "source":"This value should be false.", "target":"Hierdie waarde moet vals wees."}, {"@id":"2", "source":"This value should be true.", "target":"Hierdie waarde moet waar wees."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Hierdie waarde moet van die soort {{type}} wees."}, {"@id":"4", "source":"This value should be blank.", "target":"Hierdie waarde moet leeg wees."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Die waarde wat jy gekies het is nie 'n geldige keuse nie."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Jy moet ten minste %%limit%% kies.|Jy moet ten minste %%limit%% keuses kies."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Jy moet by die meeste %%limit%% keuse kies.|Jy moet by die meeste %%limit%% keuses kies."}, {"@id":"8", "source":"One or more of the given values is invalid.", 
 "target":"Een of meer van die gegewe waardes is ongeldig."}, {"@id":"9", "source":"This field was not expected.", "target":"Die veld is nie verwag nie."}, {"@id":"10", "source":"This field is missing.", "target":"Hierdie veld ontbreek."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Hierdie waarde is nie 'n geldige datum nie."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Hierdie waarde is nie 'n geldige datum en tyd nie."}, {"@id":"13", "source":"This value is not a valid email address.", 
 "target":"Hierdie waarde is nie 'n geldige e-pos adres nie."}, {"@id":"14", "source":"The file could not be found.", "target":"Die l\u00eaer kon nie gevind word nie."}, {"@id":"15", "source":"The file is not readable.", "target":"Die l\u00eaer kan nie gelees word nie."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"Die l\u00eaer is te groot (%%size%% %%suffix%%). Toegelaat maksimum grootte is %%limit%% %%suffix%%."}, 
@@ -12165,7 +12253,7 @@ abv.I18nHandler.add("af", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"78", "source":"An empty file is not allowed.", "target":"'n Le\u00eb l\u00eaer word nie toegelaat nie."}, {"@id":"79", "source":"The host could not be resolved.", "target":"Die gasheer kon nie opgelos word nie."}, {"@id":"80", "source":"This value does not match the expected %%charset%% charset.", "target":"Die waarde stem nie ooreen met die verwagte %%charset%% karakterstel nie."}, {"@id":"81", "source":"This is not a valid Business Identifier Code (BIC).", "target":"Hierdie is nie 'n geldige Besigheids Identifikasie Kode (BIC) nie."}, 
 {"@id":"82", "source":"Error", "target":"Fout"}, {"@id":"83", "source":"This is not a valid UUID.", "target":"Hierdie is nie 'n geldige UUID nie."}, {"@id":"84", "source":"This value should be a multiple of %%compared_value%%.", "target":"Hierdie waarde moet 'n veelvoud van %%compared_value%% wees."}, {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"Hierdie Besigheids Identifikasie Kode (BIK) is nie geassosieer met IBAN %%iban%% nie."}, 
 {"@id":"86", "source":"This value should be valid JSON.", "target":"Hierdie waarde moet geldige JSON wees."}]);
-abv.I18nHandler.add("ar", [{"@id":"1", "source":"This value should be false.", "target":"\u0647\u0630\u0647 \u0627\u0644\u0642\u064a\u0645\u0629 \u064a\u062c\u0628 \u0623\u0646 \u062a\u0643\u0648\u0646 \u062e\u0627\u0637\u0626\u0629."}, {"@id":"2", "source":"This value should be true.", "target":"\u0647\u0630\u0647 \u0627\u0644\u0642\u064a\u0645\u0629 \u064a\u062c\u0628 \u0623\u0646 \u062a\u0643\u0648\u0646 \u062d\u0642\u064a\u0642\u064a\u0629."}, {"@id":"3", "source":"This value should be of type %%type%%.", 
+sogv.I18nHandler.add("ar", [{"@id":"1", "source":"This value should be false.", "target":"\u0647\u0630\u0647 \u0627\u0644\u0642\u064a\u0645\u0629 \u064a\u062c\u0628 \u0623\u0646 \u062a\u0643\u0648\u0646 \u062e\u0627\u0637\u0626\u0629."}, {"@id":"2", "source":"This value should be true.", "target":"\u0647\u0630\u0647 \u0627\u0644\u0642\u064a\u0645\u0629 \u064a\u062c\u0628 \u0623\u0646 \u062a\u0643\u0648\u0646 \u062d\u0642\u064a\u0642\u064a\u0629."}, {"@id":"3", "source":"This value should be of type %%type%%.", 
 "target":"\u0647\u0630\u0647 \u0627\u0644\u0642\u064a\u0645\u0629 \u064a\u062c\u0628 \u0627\u0646 \u062a\u0643\u0648\u0646 \u0645\u0646 \u0646\u0648\u0639 %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"\u0647\u0630\u0647 \u0627\u0644\u0642\u064a\u0645\u0629 \u064a\u062c\u0628 \u0627\u0646 \u062a\u0643\u0648\u0646 \u0641\u0627\u0631\u063a\u0629."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"\u0627\u0644\u0642\u064a\u0645\u0629 \u0627\u0644\u0645\u062e\u062a\u0627\u0631\u0629 \u0644\u064a\u0633\u062a \u062e\u064a\u0627\u0631\u0627 \u0635\u062d\u064a\u062d\u0627."}, 
 {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"\u064a\u062c\u0628 \u0627\u0646 \u062a\u062e\u062a\u0627\u0631 %%limit%% \u0627\u062e\u062a\u064a\u0627\u0631 \u0639\u0644\u0649 \u0627\u0644\u0627\u0642\u0644.|\u064a\u062c\u0628 \u0627\u0646 \u062a\u062e\u062a\u0627\u0631 %%limit%% \u0627\u062e\u062a\u064a\u0627\u0631 \u0639\u0644\u0649 \u0627\u0644\u0627\u0642\u0644.|\u064a\u062c\u0628 \u0627\u0646 \u062a\u062e\u062a\u0627\u0631 %%limit%% \u0627\u062e\u062a\u064a\u0627\u0631\u0627\u062a \u0639\u0644\u0649 \u0627\u0644\u0627\u0642\u0644.|\u064a\u062c\u0628 \u0627\u0646 \u062a\u062e\u062a\u0627\u0631 %%limit%% \u0627\u062e\u062a\u064a\u0627\u0631 \u0639\u0644\u0649 \u0627\u0644\u0627\u0642\u0644.|\u064a\u062c\u0628 \u0627\u0646 \u062a\u062e\u062a\u0627\u0631 %%limit%% \u0627\u062e\u062a\u064a\u0627\u0631 \u0639\u0644\u0649 \u0627\u0644\u0627\u0642\u0644.|\u064a\u062c\u0628 \u0627\u0646 \u062a\u062e\u062a\u0627\u0631 %%limit%% \u0627\u062e\u062a\u064a\u0627\u0631 \u0639\u0644\u0649 \u0627\u0644\u0627\u0642\u0644."}, 
 {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"\u064a\u062c\u0628 \u0627\u0646 \u062a\u062e\u062a\u0627\u0631 %%limit%% \u0627\u062e\u062a\u064a\u0627\u0631 \u0639\u0644\u0649 \u0627\u0644\u0627\u0643\u062b\u0631.|\u064a\u062c\u0628 \u0627\u0646 \u062a\u062e\u062a\u0627\u0631 %%limit%% \u0627\u062e\u062a\u064a\u0627\u0631 \u0639\u0644\u0649 \u0627\u0644\u0627\u0643\u062b\u0631.|\u064a\u062c\u0628 \u0627\u0646 \u062a\u062e\u062a\u0627\u0631 %%limit%% \u0627\u062e\u062a\u064a\u0627\u0631\u0627\u062a \u0639\u0644\u0649 \u0627\u0644\u0627\u0643\u062b\u0631.|\u064a\u062c\u0628 \u0627\u0646 \u062a\u062e\u062a\u0627\u0631 %%limit%% \u0627\u062e\u062a\u064a\u0627\u0631 \u0639\u0644\u0649 \u0627\u0644\u0627\u0643\u062b\u0631.|\u064a\u062c\u0628 \u0627\u0646 \u062a\u062e\u062a\u0627\u0631 %%limit%% \u0627\u062e\u062a\u064a\u0627\u0631 \u0639\u0644\u0649 \u0627\u0644\u0627\u0643\u062b\u0631.|\u064a\u062c\u0628 \u0627\u0646 \u062a\u062e\u062a\u0627\u0631 %%limit%% \u0627\u062e\u062a\u064a\u0627\u0631 \u0639\u0644\u0649 \u0627\u0644\u0627\u0643\u062b\u0631."}, 
@@ -12210,7 +12298,7 @@ abv.I18nHandler.add("ar", [{"@id":"1", "source":"This value should be false.", "
 "source":"This value should be negative.", "target":"\u064a\u062c\u0628 \u0623\u0646 \u062a\u0643\u0648\u0646 \u0647\u0630\u0647 \u0627\u0644\u0642\u064a\u0645\u0629 \u0633\u0627\u0644\u0628\u0629."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"\u064a\u062c\u0628 \u0623\u0646 \u062a\u0643\u0648\u0646 \u0647\u0630\u0647 \u0627\u0644\u0642\u064a\u0645\u0629 \u0625\u0645\u0627 \u0633\u0627\u0644\u0628\u0629 \u0627\u0648 \u0635\u0641\u0631."}, {"@id":"92", "source":"This value is not a valid timezone.", 
 "target":"\u0647\u0630\u0647 \u0627\u0644\u0642\u064a\u0645\u0629 \u0644\u064a\u0633\u062a \u0645\u0646\u0637\u0642\u0629 \u0632\u0645\u0646\u064a\u0629 \u0635\u062d\u064a\u062d\u0629."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"\u062a\u0645 \u062a\u0633\u0631\u064a\u0628 \u0643\u0644\u0645\u0629 \u0627\u0644\u0645\u0631\u0648\u0631 \u0647\u0630\u0647 \u0641\u064a \u062e\u0631\u0642 \u0644\u0644\u0628\u064a\u0627\u0646\u0627\u062a\u060c \u0648\u064a\u062c\u0628 \u0639\u062f\u0645 \u0627\u0633\u062a\u062e\u062f\u0627\u0645\u0647\u0627. \u064a\u0631\u062c\u064a \u0627\u0633\u062a\u062e\u062f\u0627\u0645 \u0643\u0644\u0645\u0629 \u0645\u0631\u0648\u0631 \u0623\u062e\u0631\u064a."}, 
 {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"\u064a\u062c\u0628 \u0623\u0646 \u062a\u0643\u0648\u0646 \u0647\u0630\u0647 \u0627\u0644\u0642\u064a\u0645\u0629 \u0628\u064a\u0646 %%min%% \u0648 %%max%%."}]);
-abv.I18nHandler.add("az", [{"@id":"1", "source":"This value should be false.", "target":"Bu d\u0259y\u0259r false olmal\u0131d\u0131r."}, {"@id":"2", "source":"This value should be true.", "target":"Bu d\u0259y\u0259r true olmal\u0131d\u0131r."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Bu d\u0259y\u0259rin tipi %%type%% olmal\u0131d\u0131r."}, {"@id":"4", "source":"This value should be blank.", "target":"Bu d\u0259y\u0259r bo\u015f olmal\u0131d\u0131r."}, {"@id":"5", 
+sogv.I18nHandler.add("az", [{"@id":"1", "source":"This value should be false.", "target":"Bu d\u0259y\u0259r false olmal\u0131d\u0131r."}, {"@id":"2", "source":"This value should be true.", "target":"Bu d\u0259y\u0259r true olmal\u0131d\u0131r."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Bu d\u0259y\u0259rin tipi %%type%% olmal\u0131d\u0131r."}, {"@id":"4", "source":"This value should be blank.", "target":"Bu d\u0259y\u0259r bo\u015f olmal\u0131d\u0131r."}, {"@id":"5", 
 "source":"The value you selected is not a valid choice.", "target":"Se\u00e7diyiniz d\u0259y\u0259r d\u00fczg\u00fcn bir se\u00e7im de\u011fil."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"\u018fn az %%limit%% se\u00e7im qeyd edilm\u0259lidir."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"\u018fn \u00e7ox %%limit%% se\u00e7im qeyd edilm\u0259lidir."}, 
 {"@id":"8", "source":"One or more of the given values is invalid.", "target":"T\u0259qdim edil\u0259n d\u0259y\u0259rl\u0259rd\u0259n bir v\u0259 ya bir ne\u00e7\u0259si yanl\u0131\u015fd\u0131r."}, {"@id":"9", "source":"This field was not expected.", "target":"Bu sah\u0259 g\u00f6zl\u0259nilmirdi."}, {"@id":"10", "source":"This field is missing.", "target":"Bu sah\u0259 \u0259ksikdir."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Bu d\u0259y\u0259r d\u00fczg\u00fcn bir tarix deyil."}, 
 {"@id":"12", "source":"This value is not a valid datetime.", "target":"Bu d\u0259y\u0259r d\u00fczg\u00fcn bir tarixsaat deyil."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"Bu d\u0259y\u0259r d\u00fczg\u00fcn bir e-po\u00e7t adresi deyil."}, {"@id":"14", "source":"The file could not be found.", "target":"Fayl tap\u0131lmad\u0131."}, {"@id":"15", "source":"The file is not readable.", "target":"Fayl oxunabil\u0259n deyil."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", 
@@ -12238,7 +12326,7 @@ abv.I18nHandler.add("az", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"86", "source":"This value should be valid JSON.", "target":"Bu d\u0259y\u0259r do\u011fru bir JSON olmal\u0131d\u0131r."}, {"@id":"87", "source":"This collection should contain only unique elements.", "target":"Bu kolleksiyada sad\u0259c\u0259 unikal elementl\u0259r olmal\u0131d\u0131r."}, {"@id":"88", "source":"This value should be positive.", "target":"Bu d\u0259y\u0259r m\u00fcsb\u0259t olmal\u0131d\u0131r."}, {"@id":"89", "source":"This value should be either positive or zero.", "target":"Bu d\u0259y\u0259r m\u00fcsb\u0259t v\u0259 ya s\u0131f\u0131r olmal\u0131d\u0131r."}, 
 {"@id":"90", "source":"This value should be negative.", "target":"Bu d\u0259y\u0259r m\u0259nfi olmald\u0131r."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"Bu d\u0259y\u0259r m\u0259nfi v\u0259 ya s\u0131f\u0131r olmald\u0131r."}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"Bu d\u0259y\u0259r do\u011fru bir zaman zola\u011f\u0131 deyil."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", 
 "target":"Bu parol data o\u011furlu\u011funda tap\u0131ld\u0131\u011f\u0131 \u00fc\u00e7\u00fcn i\u015fl\u0259dilm\u0259m\u0259lidir. Z\u0259hm\u0259t olmasa, ba\u015fqa parol se\u00e7in."}, {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"Bu d\u0259y\u0259r %%min%% v\u0259 %%max%% aras\u0131nda olmald\u0131r."}]);
-abv.I18nHandler.add("be", [{"@id":"1", "source":"This value should be false.", "target":"\u0417\u043d\u0430\u0447\u044d\u043d\u043d\u0435 \u043f\u0430\u0432\u0456\u043d\u043d\u0430 \u0431\u044b\u0446\u044c \u041d\u0435."}, {"@id":"2", "source":"This value should be true.", "target":"\u0417\u043d\u0430\u0447\u044d\u043d\u043d\u0435 \u043f\u0430\u0432\u0456\u043d\u043d\u0430 \u0431\u044b\u0446\u044c \u0422\u0430\u043a."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u0422\u044b\u043f \u0437\u043d\u0430\u0447\u044d\u043d\u043d\u044f \u043f\u0430\u0432\u0456\u043d\u0435\u043d \u0431\u044b\u0446\u044c %%type%%."}, 
+sogv.I18nHandler.add("be", [{"@id":"1", "source":"This value should be false.", "target":"\u0417\u043d\u0430\u0447\u044d\u043d\u043d\u0435 \u043f\u0430\u0432\u0456\u043d\u043d\u0430 \u0431\u044b\u0446\u044c \u041d\u0435."}, {"@id":"2", "source":"This value should be true.", "target":"\u0417\u043d\u0430\u0447\u044d\u043d\u043d\u0435 \u043f\u0430\u0432\u0456\u043d\u043d\u0430 \u0431\u044b\u0446\u044c \u0422\u0430\u043a."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u0422\u044b\u043f \u0437\u043d\u0430\u0447\u044d\u043d\u043d\u044f \u043f\u0430\u0432\u0456\u043d\u0435\u043d \u0431\u044b\u0446\u044c %%type%%."}, 
 {"@id":"4", "source":"This value should be blank.", "target":"\u0417\u043d\u0430\u0447\u044d\u043d\u043d\u0435 \u043f\u0430\u0432\u0456\u043d\u043d\u0430 \u0431\u044b\u0446\u044c \u043f\u0443\u0441\u0442\u044b\u043c."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"\u0410\u0431\u0440\u0430\u043d\u0430\u0435 \u0432\u0430\u043c\u0456 \u0437\u043d\u0430\u0447\u044d\u043d\u043d\u0435 \u043d\u0435 \u0441\u0430\u043f\u0440\u0430\u045e\u0434\u043d\u0430\u0435."}, {"@id":"6", 
 "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"\u0412\u044b \u043f\u0430\u0432\u0456\u043d\u043d\u044b \u0432\u044b\u0431\u0440\u0430\u0446\u044c \u0445\u0430\u0446\u044f \u0431 %%limit%% \u0432\u0430\u0440\u044b\u044f\u043d\u0442.|\u0412\u044b \u043f\u0430\u0432\u0456\u043d\u043d\u044b \u0432\u044b\u0431\u0440\u0430\u0446\u044c \u0445\u0430\u0446\u044f \u0431 %%limit%% \u0432\u0430\u0440\u044b\u044f\u043d\u0442\u0430\u045e."}, {"@id":"7", 
 "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"\u0412\u044b \u043f\u0430\u0432\u0456\u043d\u043d\u044b \u0432\u044b\u0431\u0440\u0430\u0446\u044c \u043d\u0435 \u0431\u043e\u043b\u044c\u0448 \u0437\u0430 %%limit%% \u0432\u0430\u0440\u044b\u044f\u043d\u0442.|\u0412\u044b \u043f\u0430\u0432\u0456\u043d\u043d\u044b \u0432\u044b\u0431\u0440\u0430\u0446\u044c \u043d\u0435 \u0431\u043e\u043b\u044c\u0448 \u0437\u0430 %%limit%% \u0432\u0430\u0440\u044b\u044f\u043d\u0442\u0430\u045e."}, 
@@ -12286,7 +12374,7 @@ abv.I18nHandler.add("be", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"88", "source":"This value should be positive.", "target":"\u0417\u043d\u0430\u0447\u044d\u043d\u043d\u0435 \u043f\u0430\u0432\u0456\u043d\u043d\u0430 \u0431\u044b\u0446\u044c \u0434\u0430\u0434\u0430\u0442\u043d\u044b\u043c."}, {"@id":"89", "source":"This value should be either positive or zero.", "target":"\u0417\u043d\u0430\u0447\u044d\u043d\u043d\u0435 \u043f\u0430\u0432\u0456\u043d\u043d\u0430 \u0431\u044b\u0446\u044c \u0434\u0430\u0434\u0430\u0442\u043d\u044b\u043c \u0446\u0456 \u043d\u0443\u043b\u044c."}, 
 {"@id":"90", "source":"This value should be negative.", "target":"\u0417\u043d\u0430\u0447\u044d\u043d\u043d\u0435 \u043f\u0430\u0432\u0456\u043d\u043d\u0430 \u0431\u044b\u0446\u044c \u0430\u0434\u043c\u043e\u045e\u043d\u044b\u043c."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"\u0417\u043d\u0430\u0447\u044d\u043d\u043d\u0435 \u043f\u0430\u0432\u0456\u043d\u043d\u0430 \u0431\u044b\u0446\u044c \u0430\u0434\u043c\u043e\u045e\u043d\u044b\u043c \u0446\u0456 \u043d\u0443\u043b\u044c."}, 
 {"@id":"92", "source":"This value is not a valid timezone.", "target":"\u0417\u043d\u0430\u0447\u044d\u043d\u043d\u0435 \u043d\u0435 \u0437'\u044f\u045e\u043b\u044f\u0435\u0446\u0446\u0430 \u0441\u0430\u043f\u0440\u0430\u045e\u0434\u043d\u044b\u043c \u0433\u0430\u0434\u0437\u0456\u043d\u043d\u044b\u043c \u043f\u043e\u044f\u0441\u0430\u043c."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"\u0413\u044d\u0442\u044b \u043f\u0430\u0440\u043e\u043b\u044c \u0431\u044b\u045e \u0432\u044b\u043a\u0440\u0430\u0434\u0437\u0435\u043d\u044b \u045e \u0432\u044b\u043d\u0456\u043a\u0443 \u045e\u0437\u043b\u043e\u043c\u0443 \u0434\u0430\u0434\u0437\u0435\u043d\u044b\u0445, \u0442\u0430\u043c\u0443 \u044f\u0433\u043e \u043d\u0435\u043b\u044c\u0433\u0430 \u0432\u044b\u043a\u0430\u0440\u044b\u0441\u0442\u043e\u045e\u0432\u0430\u0446\u044c. \u041a\u0430\u043b\u0456 \u043b\u0430\u0441\u043a\u0430, \u0432\u044b\u043a\u0430\u0440\u044b\u0441\u0442\u043e\u045e\u0432\u0430\u0439\u0446\u0435 \u0456\u043d\u0448\u044b \u043f\u0430\u0440\u043e\u043b\u044c."}]);
-abv.I18nHandler.add("bg", [{"@id":"1", "source":"This value should be false.", "target":"\u0421\u0442\u043e\u0439\u043d\u043e\u0441\u0442\u0442\u0430 \u0442\u0440\u044f\u0431\u0432\u0430 \u0434\u0430 \u0431\u044a\u0434\u0435 \u043b\u044a\u0436\u0430 (false)."}, {"@id":"2", "source":"This value should be true.", "target":"\u0421\u0442\u043e\u0439\u043d\u043e\u0441\u0442\u0442\u0430 \u0442\u0440\u044f\u0431\u0432\u0430 \u0434\u0430 \u0431\u044a\u0434\u0435 \u0438\u0441\u0442\u0438\u043d\u0430 (true)."}, 
+sogv.I18nHandler.add("bg", [{"@id":"1", "source":"This value should be false.", "target":"\u0421\u0442\u043e\u0439\u043d\u043e\u0441\u0442\u0442\u0430 \u0442\u0440\u044f\u0431\u0432\u0430 \u0434\u0430 \u0431\u044a\u0434\u0435 \u043b\u044a\u0436\u0430 (false)."}, {"@id":"2", "source":"This value should be true.", "target":"\u0421\u0442\u043e\u0439\u043d\u043e\u0441\u0442\u0442\u0430 \u0442\u0440\u044f\u0431\u0432\u0430 \u0434\u0430 \u0431\u044a\u0434\u0435 \u0438\u0441\u0442\u0438\u043d\u0430 (true)."}, 
 {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u0421\u0442\u043e\u0439\u043d\u043e\u0441\u0442\u0442\u0430 \u0442\u0440\u044f\u0431\u0432\u0430 \u0434\u0430 \u0431\u044a\u0434\u0435 \u043e\u0442 \u0442\u0438\u043f %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"\u0421\u0442\u043e\u0439\u043d\u043e\u0441\u0442\u0442\u0430 \u0442\u0440\u044f\u0431\u0432\u0430 \u0434\u0430 \u0431\u044a\u0434\u0435 \u043f\u0440\u0430\u0437\u043d\u0430."}, {"@id":"5", 
 "source":"The value you selected is not a valid choice.", "target":"\u0418\u0437\u0431\u0440\u0430\u043d\u0430\u0442\u0430 \u0441\u0442\u043e\u0439\u043d\u043e\u0441\u0442 \u0435 \u043d\u0435\u0432\u0430\u043b\u0438\u0434\u043d\u0430."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"\u0422\u0440\u044f\u0431\u0432\u0430 \u0434\u0430 \u0438\u0437\u0431\u0435\u0440\u0435\u0442\u0435 \u043f\u043e\u043d\u0435 %%limit%% \u043e\u043f\u0446\u0438\u044f.|\u0422\u0440\u044f\u0431\u0432\u0430 \u0434\u0430 \u0438\u0437\u0431\u0435\u0440\u0435\u0442\u0435 \u043f\u043e\u043d\u0435 %%limit%% \u043e\u043f\u0446\u0438\u0438."}, 
 {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"\u0422\u0440\u044f\u0431\u0432\u0430 \u0434\u0430 \u0438\u0437\u0431\u0435\u0440\u0435\u0442\u0435 \u043d\u0430\u0439-\u043c\u043d\u043e\u0433\u043e %%limit%% \u043e\u043f\u0446\u0438\u044f.|\u0422\u0440\u044f\u0431\u0432\u0430 \u0434\u0430 \u0438\u0437\u0431\u0435\u0440\u0435\u0442\u0435 \u043d\u0430\u0439-\u043c\u043d\u043e\u0433\u043e %%limit%% \u043e\u043f\u0446\u0438\u0438."}, 
@@ -12333,7 +12421,7 @@ abv.I18nHandler.add("bg", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"81", "source":"This is not a valid Business Identifier Code (BIC).", "target":"\u0422\u043e\u0432\u0430 \u043d\u0435 \u0435 \u0432\u0430\u043b\u0438\u0434\u0435\u043d \u0411\u0438\u0437\u043d\u0435\u0441 \u0438\u0434\u0435\u043d\u0442\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u043e\u043d\u0435\u043d \u043a\u043e\u0434 (BIC)."}, {"@id":"82", "source":"Error", "target":"\u0413\u0440\u0435\u0448\u043a\u0430"}, {"@id":"83", "source":"This is not a valid UUID.", "target":"\u0422\u043e\u0432\u0430 \u043d\u0435 \u0435 \u0432\u0430\u043b\u0438\u0434\u0435\u043d UUID."}, 
 {"@id":"84", "source":"This value should be a multiple of %%compared_value%%.", "target":"\u0421\u0442\u043e\u0439\u043d\u043e\u0441\u0442\u0442\u0430 \u0442\u0440\u044f\u0431\u0432\u0430 \u0434\u0430 \u0431\u044a\u0434\u0435 \u043a\u0440\u0430\u0442\u043d\u043e \u0447\u0438\u0441\u043b\u043e \u043d\u0430 %%compared_value%%."}, {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"\u0411\u0438\u0437\u043d\u0435\u0441 \u0438\u0434\u0435\u043d\u0442\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u043e\u043d\u043d\u0438\u044f \u043a\u043e\u0434 (BIC) \u043d\u0435 \u0435 \u0441\u0432\u044a\u0440\u0437\u0430\u043d \u0441 IBAN %%iban%%."}, 
 {"@id":"86", "source":"This value should be valid JSON.", "target":"\u0421\u0442\u043e\u0439\u043d\u043e\u0441\u0442\u0442\u0430 \u0442\u0440\u044f\u0431\u0432\u0430 \u0434\u0430 \u0435 \u0432\u0430\u043b\u0438\u0434\u0435\u043d JSON."}]);
-abv.I18nHandler.add("ca", [{"@id":"1", "source":"This value should be false.", "target":"Aquest valor hauria de ser fals."}, {"@id":"2", "source":"This value should be true.", "target":"Aquest valor hauria de ser cert."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Aquest valor hauria de ser del tipus %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Aquest valor hauria d'estar buit."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
+sogv.I18nHandler.add("ca", [{"@id":"1", "source":"This value should be false.", "target":"Aquest valor hauria de ser fals."}, {"@id":"2", "source":"This value should be true.", "target":"Aquest valor hauria de ser cert."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Aquest valor hauria de ser del tipus %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Aquest valor hauria d'estar buit."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"El valor seleccionat no \u00e9s una opci\u00f3 v\u00e0lida."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Ha de seleccionar almenys %%limit%% opci\u00f3.|Ha de seleccionar almenys %%limit%% opcions."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Ha de seleccionar com a m\u00e0xim %%limit%% opci\u00f3.|Ha de seleccionar com a m\u00e0xim %%limit%% opcions."}, 
 {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Un o m\u00e9s dels valors facilitats s\u00f3n incorrectes."}, {"@id":"9", "source":"This field was not expected.", "target":"Aquest camp no s'esperava."}, {"@id":"10", "source":"This field is missing.", "target":"Aquest camp est\u00e0 desaparegut."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Aquest valor no \u00e9s una data v\u00e0lida."}, {"@id":"12", "source":"This value is not a valid datetime.", 
 "target":"Aquest valor no \u00e9s una data i hora v\u00e0lida."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"Aquest valor no \u00e9s una adre\u00e7a d'email v\u00e0lida."}, {"@id":"14", "source":"The file could not be found.", "target":"No s'ha pogut trobar l'arxiu."}, {"@id":"15", "source":"The file is not readable.", "target":"No es pot llegir l'arxiu."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", 
@@ -12357,7 +12445,7 @@ abv.I18nHandler.add("ca", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"76", "source":"The image is landscape oriented (%%width%%x%%height%%px). Landscape oriented images are not allowed.", "target":"L'imatge est\u00e0 orientada horitzontalment (%%width%%x%%height%%px). Les imatges orientades horitzontalment no estan permeses."}, {"@id":"77", "source":"The image is portrait oriented (%%width%%x%%height%%px). Portrait oriented images are not allowed.", "target":"L'imatge est\u00e0 orientada verticalment (%%width%%x%%height%%px). Les imatges orientades verticalment no estan permeses."}, 
 {"@id":"78", "source":"An empty file is not allowed.", "target":"No est\u00e0 perm\u00e8s un fixter buit."}, {"@id":"79", "source":"The host could not be resolved.", "target":"No s'ha pogut resoldre l'amfitri\u00f3."}, {"@id":"80", "source":"This value does not match the expected %%charset%% charset.", "target":"Aquest valor no coincideix amb l'esperat %%charset%% joc de car\u00e0cters."}, {"@id":"81", "source":"This is not a valid Business Identifier Code (BIC).", "target":"Aquest no \u00e9s un codi d'identificaci\u00f3 bancari (BIC) v\u00e0lid."}, 
 {"@id":"82", "source":"Error", "target":"Error"}, {"@id":"83", "source":"This is not a valid UUID.", "target":"Aquest valor no \u00e9s un UUID v\u00e0lid."}, {"@id":"84", "source":"This value should be a multiple of %%compared_value%%.", "target":"Aquest valor ha de ser m\u00faltiple de %%compared_value%%."}, {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"Aquest Codi d'identificaci\u00f3 bancari (BIC) no est\u00e0 associat amb l'IBAN %%iban%%."}]);
-abv.I18nHandler.add("cs", [{"@id":"1", "source":"This value should be false.", "target":"Tato hodnota mus\u00ed b\u00fdt nepravdiv\u00e1 (false)."}, {"@id":"2", "source":"This value should be true.", "target":"Tato hodnota mus\u00ed b\u00fdt pravdiv\u00e1 (true)."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Tato hodnota mus\u00ed b\u00fdt typu %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Tato hodnota mus\u00ed b\u00fdt pr\u00e1zdn\u00e1."}, 
+sogv.I18nHandler.add("cs", [{"@id":"1", "source":"This value should be false.", "target":"Tato hodnota mus\u00ed b\u00fdt nepravdiv\u00e1 (false)."}, {"@id":"2", "source":"This value should be true.", "target":"Tato hodnota mus\u00ed b\u00fdt pravdiv\u00e1 (true)."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Tato hodnota mus\u00ed b\u00fdt typu %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Tato hodnota mus\u00ed b\u00fdt pr\u00e1zdn\u00e1."}, 
 {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"Vybran\u00e1 hodnota nen\u00ed platnou mo\u017enost\u00ed."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Mus\u00ed b\u00fdt vybr\u00e1na nejm\u00e9n\u011b %%limit%% mo\u017enost.|Mus\u00ed b\u00fdt vybr\u00e1ny nejm\u00e9n\u011b %%limit%% mo\u017enosti.|Mus\u00ed b\u00fdt vybr\u00e1no nejm\u00e9n\u011b %%limit%% mo\u017enost\u00ed."}, {"@id":"7", 
 "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Mus\u00ed b\u00fdt vybr\u00e1na maxim\u00e1ln\u011b %%limit%% mo\u017enost.|Mus\u00ed b\u00fdt vybr\u00e1ny maxim\u00e1ln\u011b %%limit%% mo\u017enosti.|Mus\u00ed b\u00fdt vybr\u00e1no maxim\u00e1ln\u011b %%limit%% mo\u017enost\u00ed."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"N\u011bkter\u00e9 z uveden\u00fdch hodnot jsou neplatn\u00e9."}, {"@id":"9", "source":"This field was not expected.", 
 "target":"Toto pole nebylo o\u010dek\u00e1v\u00e1no."}, {"@id":"10", "source":"This field is missing.", "target":"Toto pole chyb\u00ed."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Tato hodnota nen\u00ed platn\u00e9 datum."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Tato hodnota nen\u00ed platn\u00e9 datum s \u010dasov\u00fdm \u00fadajem."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"Tato hodnota nen\u00ed platn\u00e1 e-mailov\u00e1 adresa."}, 
@@ -12384,7 +12472,7 @@ abv.I18nHandler.add("cs", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"77", "source":"The image is portrait oriented (%%width%%x%%height%%px). Portrait oriented images are not allowed.", "target":"Obr\u00e1zek je orientovan\u00fd na v\u00fd\u0161ku (%%width%%x%%height%%px). Obr\u00e1zky orientovan\u00e9 na v\u00fd\u0161ku nejsou povolen\u00e9."}, {"@id":"78", "source":"An empty file is not allowed.", "target":"Soubor nesm\u00ed b\u00fdt pr\u00e1zdn\u00fd."}, {"@id":"79", "source":"The host could not be resolved.", "target":"Hostitele nebylo mo\u017en\u00e9 rozpoznat."}, 
 {"@id":"80", "source":"This value does not match the expected %%charset%% charset.", "target":"Tato hodnota neodpov\u00edd\u00e1 o\u010dek\u00e1van\u00e9 znakov\u00e9 sad\u011b %%charset%%."}, {"@id":"81", "source":"This is not a valid Business Identifier Code (BIC).", "target":"Tato hodnota nen\u00ed platn\u00fd identifika\u010dn\u00ed k\u00f3d podniku (BIC)."}, {"@id":"82", "source":"Error", "target":"Chyba"}, {"@id":"83", "source":"This is not a valid UUID.", "target":"Tato hodnota nen\u00ed platn\u00e9 UUID."}, 
 {"@id":"84", "source":"This value should be a multiple of %%compared_value%%.", "target":"Tato hodnota mus\u00ed b\u00fdt n\u00e1sobek hodnoty %%compared_value%%."}, {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"Bankovn\u00ed identifika\u010dn\u00ed k\u00f3d (BIC) neodpov\u00edd\u00e1 mezin\u00e1rodn\u00edmu \u010d\u00edslu \u00fa\u010dtu (IBAN) %%iban%%."}, {"@id":"86", "source":"This value should be valid JSON.", "target":"Tato hodnota mus\u00ed b\u00fdt validn\u00ed JSON."}]);
-abv.I18nHandler.add("cy", [{"@id":"1", "source":"This value should be false.", "target":"Dylid bod y gwerth hwn yn ffug."}, {"@id":"2", "source":"This value should be true.", "target":"Dylid bod y gwerth hwn yn wir."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Dylid bod y gwerth hwn bod o fath %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Dylid bod y gwerth hwn yn wag."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
+sogv.I18nHandler.add("cy", [{"@id":"1", "source":"This value should be false.", "target":"Dylid bod y gwerth hwn yn ffug."}, {"@id":"2", "source":"This value should be true.", "target":"Dylid bod y gwerth hwn yn wir."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Dylid bod y gwerth hwn bod o fath %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Dylid bod y gwerth hwn yn wag."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Nid yw'r gwerth \u00e2 ddewiswyd yn ddilys."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Rhaid dewis o leiaf %%limit%% opsiwn."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Rhaid dewis dim mwy na %%limit%% opsiwn."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Mae un neu fwy o'r gwerthoedd a roddwyd yn annilys."}, 
 {"@id":"9", "source":"This field was not expected.", "target":"Nid oedd disgwyl y maes hwn."}, {"@id":"10", "source":"This field is missing.", "target":"Mae'r maes hwn ar goll."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Nid yw'r gwerth yn ddyddiad dilys."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Nid yw'r gwerth yn datetime dilys."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"Nid yw'r gwerth yn gyfeiriad ebost dilys."}, 
 {"@id":"14", "source":"The file could not be found.", "target":"Ni ddarganfyddwyd y ffeil."}, {"@id":"15", "source":"The file is not readable.", "target":"Ni ellir darllen y ffeil."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"Mae'r ffeil yn rhy fawr (%%size%% %%suffix%%). Yr uchafswm \u00e2 ganiateir yw %%limit%% %%suffix%%."}, {"@id":"17", "source":"The mime type of the file is invalid (%%type%%). Allowed mime types are %%types%%.", 
@@ -12407,7 +12495,7 @@ abv.I18nHandler.add("cy", [{"@id":"1", "source":"This value should be false.", "
 "target":"Mae'r ddelwedd mewn fformat portread (%%width%%x%%height%%px). Ni chaniateir delweddau mewn fformat portread."}, {"@id":"78", "source":"An empty file is not allowed.", "target":"Ni chaniateir ffeil wag."}, {"@id":"79", "source":"The host could not be resolved.", "target":"Ni fu modd datrys y gwesteiwr."}, {"@id":"80", "source":"This value does not match the expected %%charset%% charset.", "target":"Nid yw'r gwerth hwn yn cyfateb \u00e2'r %%charset%% set nodau ddisgwyliedig."}, {"@id":"81", 
 "source":"This is not a valid Business Identifier Code (BIC).", "target":"Nid yw hwn yn God Adnabod Busnes (BIC) dilys."}, {"@id":"82", "source":"Error", "target":"Gwall"}, {"@id":"83", "source":"This is not a valid UUID.", "target":"Nid yw hyn yn UUID dilys."}, {"@id":"84", "source":"This value should be a multiple of %%compared_value%%.", "target":"Dylai'r gwerth hwn fod yn luosrif o %%compared_value%%."}, {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", 
 "target":"Nid yw'r Cod Adnabod Busnes (BIC) hwn yn gysylltiedig ag IBAN %%iban%%."}]);
-abv.I18nHandler.add("da", [{"@id":"1", "source":"This value should be false.", "target":"V\u00e6rdien skal v\u00e6re falsk."}, {"@id":"2", "source":"This value should be true.", "target":"V\u00e6rdien skal v\u00e6re sand."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"V\u00e6rdien skal v\u00e6re af typen %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"V\u00e6rdien skal v\u00e6re blank."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
+sogv.I18nHandler.add("da", [{"@id":"1", "source":"This value should be false.", "target":"V\u00e6rdien skal v\u00e6re falsk."}, {"@id":"2", "source":"This value should be true.", "target":"V\u00e6rdien skal v\u00e6re sand."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"V\u00e6rdien skal v\u00e6re af typen %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"V\u00e6rdien skal v\u00e6re blank."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Den valgte v\u00e6rdi er ikke gyldig."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Du skal v\u00e6lge mindst \u00e9n mulighed.|Du skal v\u00e6lge mindst %%limit%% muligheder."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Du kan h\u00f8jst v\u00e6lge \u00e9n mulighed.|Du kan h\u00f8jst v\u00e6lge %%limit%% muligheder."}, {"@id":"8", "source":"One or more of the given values is invalid.", 
 "target":"En eller flere af de angivne v\u00e6rdier er ugyldige."}, {"@id":"9", "source":"This field was not expected.", "target":"Feltet blev ikke forventet."}, {"@id":"10", "source":"This field is missing.", "target":"Dette felt mangler."}, {"@id":"11", "source":"This value is not a valid date.", "target":"V\u00e6rdien er ikke en gyldig dato."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"V\u00e6rdien er ikke et gyldigt tidspunkt."}, {"@id":"13", "source":"This value is not a valid email address.", 
 "target":"V\u00e6rdien er ikke en gyldig e-mailadresse."}, {"@id":"14", "source":"The file could not be found.", "target":"Filen kunne ikke findes."}, {"@id":"15", "source":"The file is not readable.", "target":"Filen kan ikke l\u00e6ses."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"Filen er for stor (%%size%% %%suffix%%). Maksimale tilladte st\u00f8rrelse er %%limit%% %%suffix%%."}, {"@id":"17", "source":"The mime type of the file is invalid (%%type%%). Allowed mime types are %%types%%.", 
@@ -12433,8 +12521,8 @@ abv.I18nHandler.add("da", [{"@id":"1", "source":"This value should be false.", "
 "source":"This value should be valid JSON.", "target":"Denne v\u00e6rdi skal v\u00e6re gyldig JSON."}, {"@id":"87", "source":"This collection should contain only unique elements.", "target":"Denne samling b\u00f8r kun indeholde unikke elementer."}, {"@id":"88", "source":"This value should be positive.", "target":"Denne v\u00e6rdi skal v\u00e6re positiv."}, {"@id":"89", "source":"This value should be either positive or zero.", "target":"Denne v\u00e6rdi skal v\u00e6re enten positiv eller nul."}, {"@id":"90", 
 "source":"This value should be negative.", "target":"Denne v\u00e6rdi skal v\u00e6re negativ."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"Denne v\u00e6rdi skal v\u00e6re enten negativ eller nul."}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"Denne v\u00e6rdi er ikke en gyldig tidszone."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"Denne adgangskode er blevet l\u00e6kket i et databrud, det m\u00e5 ikke bruges. Brug venligst en anden adgangskode."}, 
 {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"V\u00e6rdien skal v\u00e6re mellem %%min%% og %%max%%."}]);
-abv.I18nHandler.add("de", [{"@id":"1", "source":"This value should be false.", "target":"Dieser Wert sollte false sein."}, {"@id":"2", "source":"This value should be true.", "target":"Dieser Wert sollte true sein."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Dieser Wert sollte vom Typ %%type%% sein."}, {"@id":"4", "source":"This value should be blank.", "target":"Dieser Wert sollte leer sein."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"Sie haben einen ung\u00fcltigen Wert ausgew\u00e4hlt."}, 
-{"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Sie m\u00fcssen mindestens %%limit%% M\u00f6glichkeit w\u00e4hlen.|Sie m\u00fcssen mindestens %%limit%% M\u00f6glichkeiten w\u00e4hlen."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Sie d\u00fcrfen h\u00f6chstens %%limit%% M\u00f6glichkeit w\u00e4hlen.|Sie d\u00fcrfen h\u00f6chstens %%limit%% M\u00f6glichkeiten w\u00e4hlen."}, 
+sogv.I18nHandler.add("de", [{"@id":"1", "source":"This value should be false.", "target":"Dieser Wert sollte false sein."}, {"@id":"2", "source":"This value should be true.", "target":"Dieser Wert sollte true sein."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Dieser Wert sollte vom Typ %%type%% sein."}, {"@id":"4", "source":"This value should be blank.", "target":"Dieser Wert sollte leer sein."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
+"target":"Sie haben einen ung\u00fcltigen Wert ausgew\u00e4hlt."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Sie m\u00fcssen mindestens %%limit%% M\u00f6glichkeit w\u00e4hlen.|Sie m\u00fcssen mindestens %%limit%% M\u00f6glichkeiten w\u00e4hlen."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Sie d\u00fcrfen h\u00f6chstens %%limit%% M\u00f6glichkeit w\u00e4hlen.|Sie d\u00fcrfen h\u00f6chstens %%limit%% M\u00f6glichkeiten w\u00e4hlen."}, 
 {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Einer oder mehrere der angegebenen Werte sind ung\u00fcltig."}, {"@id":"9", "source":"This field was not expected.", "target":"Dieses Feld wurde nicht erwartet."}, {"@id":"10", "source":"This field is missing.", "target":"Dieses Feld fehlt."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Dieser Wert entspricht keiner g\u00fcltigen Datumsangabe."}, {"@id":"12", "source":"This value is not a valid datetime.", 
 "target":"Dieser Wert entspricht keiner g\u00fcltigen Datums- und Zeitangabe."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"Dieser Wert ist keine g\u00fcltige E-Mail-Adresse."}, {"@id":"14", "source":"The file could not be found.", "target":"Die Datei wurde nicht gefunden."}, {"@id":"15", "source":"The file is not readable.", "target":"Die Datei ist nicht lesbar."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", 
 "target":"Die Datei ist zu gro\u00df (%%size%% %%suffix%%). Die maximal zul\u00e4ssige Gr\u00f6\u00dfe betr\u00e4gt %%limit%% %%suffix%%."}, {"@id":"17", "source":"The mime type of the file is invalid (%%type%%). Allowed mime types are %%types%%.", "target":"Der Dateityp ist ung\u00fcltig (%%type%%). Erlaubte Dateitypen sind %%types%%."}, {"@id":"18", "source":"This value should be %%limit%% or less.", "target":"Dieser Wert sollte kleiner oder gleich %%limit%% sein."}, {"@id":"19", "source":"This value is too long. It should have %%limit%% character or less.|This value is too long. It should have %%limit%% characters or less.", 
@@ -12460,7 +12548,7 @@ abv.I18nHandler.add("de", [{"@id":"1", "source":"This value should be false.", "
 "target":"Dieser Wert sollte g\u00fcltiges JSON sein."}, {"@id":"87", "source":"This collection should contain only unique elements.", "target":"Diese Sammlung darf keine doppelten Elemente enthalten."}, {"@id":"88", "source":"This value should be positive.", "target":"Diese Zahl sollte positiv sein."}, {"@id":"89", "source":"This value should be either positive or zero.", "target":"Diese Zahl sollte entweder positiv oder 0 sein."}, {"@id":"90", "source":"This value should be negative.", "target":"Diese Zahl sollte negativ sein."}, 
 {"@id":"91", "source":"This value should be either negative or zero.", "target":"Diese Zahl sollte entweder negativ oder 0 sein."}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"Dieser Wert ist keine g\u00fcltige Zeitzone."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"Dieses Passwort ist Teil eines Datenlecks, es darf nicht verwendet werden."}, {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", 
 "target":"Dieser Wert sollte zwischen %%min%% und %%max%% sein."}, {"@id":"95", "source":"This value is not a valid hostname.", "target":"Dieser Wert ist kein g\u00fcltiger Hostname."}]);
-abv.I18nHandler.add("el", [{"@id":"1", "source":"This value should be false.", "target":"\u0391\u03c5\u03c4\u03ae \u03b7 \u03c4\u03b9\u03bc\u03ae \u03c0\u03c1\u03ad\u03c0\u03b5\u03b9 \u03bd\u03b1 \u03b5\u03af\u03bd\u03b1\u03b9 \u03c8\u03b5\u03c5\u03b4\u03ae\u03c2."}, {"@id":"2", "source":"This value should be true.", "target":"\u0391\u03c5\u03c4\u03ae \u03b7 \u03c4\u03b9\u03bc\u03ae \u03c0\u03c1\u03ad\u03c0\u03b5\u03b9 \u03bd\u03b1 \u03b5\u03af\u03bd\u03b1\u03b9 \u03b1\u03bb\u03b7\u03b8\u03ae\u03c2."}, 
+sogv.I18nHandler.add("el", [{"@id":"1", "source":"This value should be false.", "target":"\u0391\u03c5\u03c4\u03ae \u03b7 \u03c4\u03b9\u03bc\u03ae \u03c0\u03c1\u03ad\u03c0\u03b5\u03b9 \u03bd\u03b1 \u03b5\u03af\u03bd\u03b1\u03b9 \u03c8\u03b5\u03c5\u03b4\u03ae\u03c2."}, {"@id":"2", "source":"This value should be true.", "target":"\u0391\u03c5\u03c4\u03ae \u03b7 \u03c4\u03b9\u03bc\u03ae \u03c0\u03c1\u03ad\u03c0\u03b5\u03b9 \u03bd\u03b1 \u03b5\u03af\u03bd\u03b1\u03b9 \u03b1\u03bb\u03b7\u03b8\u03ae\u03c2."}, 
 {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u0391\u03c5\u03c4\u03ae \u03b7 \u03c4\u03b9\u03bc\u03ae \u03c0\u03c1\u03ad\u03c0\u03b5\u03b9 \u03bd\u03b1 \u03b5\u03af\u03bd\u03b1\u03b9 \u03c4\u03cd\u03c0\u03bf\u03c5 %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"\u0391\u03c5\u03c4\u03ae \u03b7 \u03c4\u03b9\u03bc\u03ae \u03c0\u03c1\u03ad\u03c0\u03b5\u03b9 \u03bd\u03b1 \u03b5\u03af\u03bd\u03b1\u03b9 \u03ba\u03b5\u03bd\u03ae."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"\u0397 \u03c4\u03b9\u03bc\u03ae \u03c0\u03bf\u03c5 \u03b5\u03c0\u03b9\u03bb\u03ad\u03c7\u03b8\u03b7\u03ba\u03b5 \u03b4\u03b5\u03bd \u03b1\u03bd\u03c4\u03b9\u03c3\u03c4\u03bf\u03b9\u03c7\u03b5\u03af \u03c3\u03b5 \u03ad\u03b3\u03ba\u03c5\u03c1\u03b7 \u03b5\u03c0\u03b9\u03bb\u03bf\u03b3\u03ae."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"\u03a0\u03c1\u03ad\u03c0\u03b5\u03b9 \u03bd\u03b1 \u03b5\u03c0\u03b9\u03bb\u03ad\u03be\u03b5\u03c4\u03b5 \u03c4\u03bf\u03c5\u03bb\u03ac\u03c7\u03b9\u03c3\u03c4\u03bf\u03bd %%limit%% \u03b5\u03c0\u03b9\u03bb\u03bf\u03b3\u03ae.|\u03a0\u03c1\u03ad\u03c0\u03b5\u03b9 \u03bd\u03b1 \u03b5\u03c0\u03b9\u03bb\u03ad\u03be\u03b5\u03c4\u03b5 \u03c4\u03bf\u03c5\u03bb\u03ac\u03c7\u03b9\u03c3\u03c4\u03bf\u03bd %%limit%% \u03b5\u03c0\u03b9\u03bb\u03bf\u03b3\u03ad\u03c2."}, 
 {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"\u03a0\u03c1\u03ad\u03c0\u03b5\u03b9 \u03bd\u03b1 \u03b5\u03c0\u03b9\u03bb\u03ad\u03be\u03b5\u03c4\u03b5 \u03c4\u03bf \u03c0\u03bf\u03bb\u03cd %%limit%% \u03b5\u03c0\u03b9\u03bb\u03bf\u03b3\u03ae.|\u03a0\u03c1\u03ad\u03c0\u03b5\u03b9 \u03bd\u03b1 \u03b5\u03c0\u03b9\u03bb\u03ad\u03be\u03b5\u03c4\u03b5 \u03c4\u03bf \u03c0\u03bf\u03bb\u03cd %%limit%% \u03b5\u03c0\u03b9\u03bb\u03bf\u03b3\u03ad\u03c2."}, 
@@ -12506,7 +12594,7 @@ abv.I18nHandler.add("el", [{"@id":"1", "source":"This value should be false.", "
 "target":"\u0391\u03c5\u03c4\u03ae \u03b7 \u03c4\u03b9\u03bc\u03ae \u03b4\u03b5\u03bd \u03c4\u03b1\u03b9\u03c1\u03b9\u03ac\u03b6\u03b5\u03b9 \u03c3\u03c4\u03bf \u03b1\u03bd\u03b1\u03bc\u03b5\u03bd\u03cc\u03bc\u03b5\u03bd\u03bf %%charset%% \u03c3\u03cd\u03bd\u03bf\u03bb\u03bf \u03c7\u03b1\u03c1\u03b1\u03ba\u03c4\u03ae\u03c1\u03c9\u03bd."}, {"@id":"81", "source":"This is not a valid Business Identifier Code (BIC).", "target":"\u0391\u03c5\u03c4\u03cc\u03c2 \u03b4\u03b5\u03bd \u03ad\u03b9\u03bd\u03b1\u03b9 \u03ad\u03bd\u03b1\u03c2 \u03ad\u03b3\u03ba\u03c5\u03c1\u03bf\u03c2 \u03ba\u03c9\u03b4\u03b9\u03ba\u03cc\u03c2 BIC."}, 
 {"@id":"82", "source":"Error", "target":"\u03a3\u03c6\u03ac\u03bb\u03bc\u03b1"}, {"@id":"83", "source":"This is not a valid UUID.", "target":"\u0391\u03c5\u03c4\u03cc \u03b4\u03b5\u03bd \u03b5\u03af\u03bd\u03b1\u03b9 \u03ad\u03bd\u03b1 \u03ad\u03b3\u03ba\u03c5\u03c1\u03bf UUID."}, {"@id":"84", "source":"This value should be a multiple of %%compared_value%%.", "target":"\u0391\u03c5\u03c4\u03ae \u03b7 \u03c4\u03b9\u03bc\u03ae \u03b8\u03b1 \u03ad\u03c0\u03c1\u03b5\u03c0\u03b5 \u03bd\u03b1 \u03b5\u03af\u03bd\u03b1\u03b9 \u03c0\u03bf\u03bb\u03bb\u03b1\u03c0\u03bb\u03ac\u03c3\u03b9\u03bf \u03c4\u03bf\u03c5 %%compared_value%%."}, 
 {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"\u0391\u03c5\u03c4\u03cc\u03c2 \u03bf \u03ba\u03c9\u03b4\u03b9\u03ba\u03cc\u03c2 BIC \u03b4\u03b5\u03bd \u03c3\u03c7\u03b5\u03c4\u03af\u03b6\u03b5\u03c4\u03b1\u03b9 \u03bc\u03b5 \u03c4\u03bf IBAN %%iban%%."}]);
-abv.I18nHandler.add("en", [{"@id":"1", "source":"This value should be false.", "target":"This value should be false."}, {"@id":"2", "source":"This value should be true.", "target":"This value should be true."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"This value should be of type %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"This value should be blank."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"The value you selected is not a valid choice."}, 
+sogv.I18nHandler.add("en", [{"@id":"1", "source":"This value should be false.", "target":"This value should be false."}, {"@id":"2", "source":"This value should be true.", "target":"This value should be true."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"This value should be of type %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"This value should be blank."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"The value you selected is not a valid choice."}, 
 {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"One or more of the given values is invalid."}, 
 {"@id":"9", "source":"This field was not expected.", "target":"This field was not expected."}, {"@id":"10", "source":"This field is missing.", "target":"This field is missing."}, {"@id":"11", "source":"This value is not a valid date.", "target":"This value is not a valid date."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"This value is not a valid datetime."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"This value is not a valid email address."}, 
 {"@id":"14", "source":"The file could not be found.", "target":"The file could not be found."}, {"@id":"15", "source":"The file is not readable.", "target":"The file is not readable."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%."}, {"@id":"17", "source":"The mime type of the file is invalid (%%type%%). Allowed mime types are %%types%%.", 
@@ -12531,7 +12619,7 @@ abv.I18nHandler.add("en", [{"@id":"1", "source":"This value should be false.", "
 "target":"This value should be a multiple of %%compared_value%%."}, {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%."}, {"@id":"86", "source":"This value should be valid JSON.", "target":"This value should be valid JSON."}, {"@id":"87", "source":"This collection should contain only unique elements.", "target":"This collection should contain only unique elements."}, 
 {"@id":"88", "source":"This value should be positive.", "target":"This value should be positive."}, {"@id":"89", "source":"This value should be either positive or zero.", "target":"This value should be either positive or zero."}, {"@id":"90", "source":"This value should be negative.", "target":"This value should be negative."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"This value should be either negative or zero."}, {"@id":"92", "source":"This value is not a valid timezone.", 
 "target":"This value is not a valid timezone."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"This password has been leaked in a data breach, it must not be used. Please use another password."}, {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"This value should be between %%min%% and %%max%%."}, {"@id":"95", "source":"This value is not a valid hostname.", "target":"This value is not a valid hostname."}]);
-abv.I18nHandler.add("es", [{"@id":"1", "source":"This value should be false.", "target":"Este valor deber\u00eda ser falso."}, {"@id":"2", "source":"This value should be true.", "target":"Este valor deber\u00eda ser verdadero."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Este valor deber\u00eda ser de tipo %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Este valor deber\u00eda estar vac\u00edo."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
+sogv.I18nHandler.add("es", [{"@id":"1", "source":"This value should be false.", "target":"Este valor deber\u00eda ser falso."}, {"@id":"2", "source":"This value should be true.", "target":"Este valor deber\u00eda ser verdadero."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Este valor deber\u00eda ser de tipo %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Este valor deber\u00eda estar vac\u00edo."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"El valor seleccionado no es una opci\u00f3n v\u00e1lida."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Debe seleccionar al menos %%limit%% opci\u00f3n.|Debe seleccionar al menos %%limit%% opciones."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Debe seleccionar como m\u00e1ximo %%limit%% opci\u00f3n.|Debe seleccionar como m\u00e1ximo %%limit%% opciones."}, 
 {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Uno o m\u00e1s de los valores indicados no son v\u00e1lidos."}, {"@id":"9", "source":"This field was not expected.", "target":"Este campo no se esperaba."}, {"@id":"10", "source":"This field is missing.", "target":"Este campo est\u00e1 desaparecido."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Este valor no es una fecha v\u00e1lida."}, {"@id":"12", "source":"This value is not a valid datetime.", 
 "target":"Este valor no es una fecha y hora v\u00e1lidas."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"Este valor no es una direcci\u00f3n de email v\u00e1lida."}, {"@id":"14", "source":"The file could not be found.", "target":"No se pudo encontrar el archivo."}, {"@id":"15", "source":"The file is not readable.", "target":"No se puede leer el archivo."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", 
@@ -12558,7 +12646,7 @@ abv.I18nHandler.add("es", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"86", "source":"This value should be valid JSON.", "target":"Este valor deber\u00eda ser un JSON v\u00e1lido."}, {"@id":"87", "source":"This collection should contain only unique elements.", "target":"Esta colecci\u00f3n deber\u00eda tener exclusivamente elementos \u00fanicos."}, {"@id":"88", "source":"This value should be positive.", "target":"Este valor deber\u00eda ser positivo."}, {"@id":"89", "source":"This value should be either positive or zero.", "target":"Este valor deber\u00eda ser positivo o igual a cero."}, 
 {"@id":"90", "source":"This value should be negative.", "target":"Este valor deber\u00eda ser negativo."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"Este valor deber\u00eda ser negativo o igual a cero."}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"Este valor no es una zona horaria v\u00e1lida."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"Esta contrase\u00f1a no se puede utilizar porque est\u00e1 incluida en un listado de contrase\u00f1as p\u00fablicas obtenido gracias a fallos de seguridad de otros sitios y aplicaciones. Por favor utilice otra contrase\u00f1a."}, 
 {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"Este valor debe estar entre %%min%% y %%max%%."}]);
-abv.I18nHandler.add("et", [{"@id":"1", "source":"This value should be false.", "target":"V\u00e4\u00e4rtus peaks olema v\u00e4\u00e4r."}, {"@id":"2", "source":"This value should be true.", "target":"V\u00e4\u00e4rtus peaks oleme t\u00f5ene."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"V\u00e4\u00e4rtus peaks olema %%type%%-t\u00fc\u00fcpi."}, {"@id":"4", "source":"This value should be blank.", "target":"V\u00e4\u00e4rtus peaks olema t\u00fchi."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
+sogv.I18nHandler.add("et", [{"@id":"1", "source":"This value should be false.", "target":"V\u00e4\u00e4rtus peaks olema v\u00e4\u00e4r."}, {"@id":"2", "source":"This value should be true.", "target":"V\u00e4\u00e4rtus peaks oleme t\u00f5ene."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"V\u00e4\u00e4rtus peaks olema %%type%%-t\u00fc\u00fcpi."}, {"@id":"4", "source":"This value should be blank.", "target":"V\u00e4\u00e4rtus peaks olema t\u00fchi."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"V\u00e4\u00e4rtus peaks olema \u00fcks etteantud valikutest."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Valima peaks v\u00e4hemalt %%limit%% valikut."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Valima peaks mitte rohkem kui  %%limit%% valikut."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"One or more of the given values is invalid."}, 
 {"@id":"9", "source":"This field was not expected.", "target":"See v\u00e4li ei oodatud."}, {"@id":"10", "source":"This field is missing.", "target":"See v\u00e4li on puudu."}, {"@id":"11", "source":"This value is not a valid date.", "target":"V\u00e4\u00e4rtus pole korrektne kuup\u00e4ev."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"V\u00e4\u00e4rtus pole korrektne kuup\u00e4ev ja kellaeg."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"V\u00e4\u00e4rtus pole korrektne e-maili aadress."}, 
 {"@id":"14", "source":"The file could not be found.", "target":"Faili ei leita."}, {"@id":"15", "source":"The file is not readable.", "target":"Fail ei ole loetav."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"Fail on liiga suur (%%size%% %%suffix%%). Suurim lubatud suurus on %%limit%% %%suffix%%."}, {"@id":"17", "source":"The mime type of the file is invalid (%%type%%). Allowed mime types are %%types%%.", "target":"Faili sisut\u00fc\u00fcp on vigane (%%type%%). Lubatud sisut\u00fc\u00fcbid on %%types%%."}, 
@@ -12578,7 +12666,7 @@ abv.I18nHandler.add("et", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"69", "source":"This value should be less than %%compared_value%%.", "target":"V\u00e4\u00e4rtus peaks olema v\u00e4iksem kui %%compared_value%%."}, {"@id":"70", "source":"This value should be less than or equal to %%compared_value%%.", "target":"V\u00e4\u00e4rtus peaks olema v\u00e4iksem kui v\u00f5i v\u00f5rduma %%compared_value%%-ga."}, {"@id":"71", "source":"This value should not be equal to %%compared_value%%.", "target":"V\u00e4\u00e4rtus ei tohiks v\u00f5rduda %%compared_value%%-ga."}, 
 {"@id":"72", "source":"This value should not be identical to %%compared_value_type%% %%compared_value%%.", "target":"V\u00e4\u00e4rtus ei tohiks olla identne v\u00e4\u00e4rtusega %%compared_value_type%% %%compared_value%%."}, {"@id":"73", "source":"The image ratio is too big (%%ratio%%). Allowed maximum ratio is %%max_ratio%%.", "target":"Kuvasuhe on liiga suur (%%ratio%%). Lubatud maksimaalne suhe on %%max_ratio%%."}, {"@id":"74", "source":"The image ratio is too small (%%ratio%%). Minimum ratio expected is %%min_ratio%%.", 
 "target":"Kuvasuhe on liiga v\u00e4ike (%%ratio%%). Oodatav minimaalne suhe on %%min_ratio%%."}, {"@id":"75", "source":"The image is square (%%width%%x%%height%%px). Square images are not allowed.", "target":"Pilt on ruudukujuline (%%width%%x%%height%%px). Ruudukujulised pildid pole lubatud."}]);
-abv.I18nHandler.add("eu", [{"@id":"1", "source":"This value should be false.", "target":"Balio hau faltsua izan beharko litzateke."}, {"@id":"2", "source":"This value should be true.", "target":"Balio hau egia izan beharko litzateke."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Balio hau %%type%% motakoa izan beharko litzateke."}, {"@id":"4", "source":"This value should be blank.", "target":"Balio hau hutsik egon beharko litzateke."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
+sogv.I18nHandler.add("eu", [{"@id":"1", "source":"This value should be false.", "target":"Balio hau faltsua izan beharko litzateke."}, {"@id":"2", "source":"This value should be true.", "target":"Balio hau egia izan beharko litzateke."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Balio hau %%type%% motakoa izan beharko litzateke."}, {"@id":"4", "source":"This value should be blank.", "target":"Balio hau hutsik egon beharko litzateke."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Hautatu duzun balioa ez da aukera egoki bat."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Gutxienez aukera %%limit%% hautatu behar duzu.|Gutxienez %%limit%% aukera hautatu behar dituzu."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Gehienez aukera %%limit%% hautatu behar duzu.|Gehienez %%limit%% aukera hautatu behar dituzu."}, {"@id":"8", 
 "source":"One or more of the given values is invalid.", "target":"Emandako balioetatik gutxienez bat ez da egokia."}, {"@id":"9", "source":"This field was not expected.", "target":"Eremu hau ez zen espero."}, {"@id":"10", "source":"This field is missing.", "target":"Eremu hau falta da."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Balio hau ez da data egoki bat."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Balio hau ez da data-ordu egoki bat."}, 
 {"@id":"13", "source":"This value is not a valid email address.", "target":"Balio hau ez da posta elektroniko egoki bat."}, {"@id":"14", "source":"The file could not be found.", "target":"Ezin izan da fitxategia aurkitu."}, {"@id":"15", "source":"The file is not readable.", "target":"Fitxategia ez da irakurgarria."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"Fitxategia handiegia da (%%size%% %%suffix%%). Baimendutako tamaina handiena %%limit%% %%suffix%% da."}, 
@@ -12602,7 +12690,7 @@ abv.I18nHandler.add("eu", [{"@id":"1", "source":"This value should be false.", "
 "target":"Irudia horizontalki bideratua dago (%%width%%x%%height%%px). Horizontalki bideratutako irudiak ez dira onartzen."}, {"@id":"77", "source":"The image is portrait oriented (%%width%%x%%height%%px). Portrait oriented images are not allowed.", "target":"Irudia bertikalki bideratua dago (%%width%%x%%height%%px). Bertikalki bideratutako irudiak ez dira onartzen."}, {"@id":"78", "source":"An empty file is not allowed.", "target":"Hutsik dagoen fitxategia ez da onartzen."}, {"@id":"79", "source":"The host could not be resolved.", 
 "target":"Host-a ezin da ebatzi."}, {"@id":"80", "source":"This value does not match the expected %%charset%% charset.", "target":"Balio honen karaktere kodea ez da esperotakoa %%charset%%."}, {"@id":"81", "source":"This is not a valid Business Identifier Code (BIC).", "target":"Ez da balizko Banku Identifikazioko Kodea (BIC)."}, {"@id":"82", "source":"Error", "target":"Errore"}, {"@id":"83", "source":"This is not a valid UUID.", "target":"Balio hau ez da onartutako UUID bat."}, {"@id":"84", "source":"This value should be a multiple of %%compared_value%%.", 
 "target":"Balio honek %%compared_value%%-ren multiploa izan beharko luke."}, {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"Banku Identifikazioko Kode hau ez dago lotuta %%IBAN%% IBAN-rekin."}]);
-abv.I18nHandler.add("fa", [{"@id":"1", "source":"This value should be false.", "target":{"@state":"needs-review-translation", "#text":"\u0627\u06cc\u0646 \u0645\u0642\u062f\u0627\u0631 \u0628\u0627\u06cc\u062f \u0646\u0627\u062f\u0631\u0633\u062a(False) \u0628\u0627\u0634\u062f."}}, {"@id":"2", "source":"This value should be true.", "target":"\u0627\u06cc\u0646 \u0645\u0642\u062f\u0627\u0631 \u0628\u0627\u06cc\u062f \u062f\u0631\u0633\u062a(True) \u0628\u0627\u0634\u062f."}, {"@id":"3", "source":"This value should be of type %%type%%.", 
+sogv.I18nHandler.add("fa", [{"@id":"1", "source":"This value should be false.", "target":{"@state":"needs-review-translation", "#text":"\u0627\u06cc\u0646 \u0645\u0642\u062f\u0627\u0631 \u0628\u0627\u06cc\u062f \u0646\u0627\u062f\u0631\u0633\u062a(False) \u0628\u0627\u0634\u062f."}}, {"@id":"2", "source":"This value should be true.", "target":"\u0627\u06cc\u0646 \u0645\u0642\u062f\u0627\u0631 \u0628\u0627\u06cc\u062f \u062f\u0631\u0633\u062a(True) \u0628\u0627\u0634\u062f."}, {"@id":"3", "source":"This value should be of type %%type%%.", 
 "target":"\u0627\u06cc\u0646 \u0645\u0642\u062f\u0627\u0631 \u0628\u0627\u06cc\u062f \u0627\u0632 \u0646\u0648\u0639 %%type%% \u0628\u0627\u0634\u062f."}, {"@id":"4", "source":"This value should be blank.", "target":"\u0627\u06cc\u0646 \u0645\u0642\u062f\u0627\u0631 \u0628\u0627\u06cc\u062f \u062e\u0627\u0644\u06cc \u0628\u0627\u0634\u062f."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"\u0645\u0642\u062f\u0627\u0631 \u0627\u0646\u062a\u062e\u0627\u0628 \u0634\u062f\u0647 \u0634\u0627\u0645\u0644 \u06af\u0632\u06cc\u0646\u0647 \u0647\u0627\u06cc \u0645\u0639\u062a\u0628\u0631 \u0646\u0645\u06cc \u0628\u0627\u0634\u062f."}, 
 {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"\u0628\u0627\u06cc\u062f \u062d\u062f\u0627\u0642\u0644 %%limit%% \u06af\u0632\u06cc\u0646\u0647 \u0627\u0646\u062a\u062e\u0627\u0628 \u0646\u0645\u0627\u06cc\u06cc\u062f.|\u0628\u0627\u06cc\u062f \u062d\u062f\u0627\u0642\u0644 %%limit%% \u06af\u0632\u06cc\u0646\u0647 \u0627\u0646\u062a\u062e\u0627\u0628 \u0646\u0645\u0627\u06cc\u06cc\u062f."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", 
 "target":"\u062d\u062f\u0627\u06a9\u062b\u0631 %%limit%% \u06af\u0632\u06cc\u0646\u0647 \u0645\u06cc \u062a\u0648\u0627\u0646\u06cc\u062f \u0627\u0646\u062a\u062e\u0627\u0628 \u0646\u0645\u0627\u06cc\u06cc\u062f.|\u062d\u062f\u0627\u06a9\u062b\u0631 %%limit%% \u06af\u0632\u06cc\u0646\u0647 \u0645\u06cc \u062a\u0648\u0627\u0646\u06cc\u062f \u0627\u0646\u062a\u062e\u0627\u0628 \u0646\u0645\u0627\u06cc\u06cc\u062f."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"\u06cc\u06a9 \u06cc\u0627 \u0686\u0646\u062f \u0645\u0642\u062f\u0627\u0631 \u0646\u0627\u0645\u0639\u062a\u0628\u0631 \u0648\u062c\u0648\u062f \u062f\u0627\u0631\u062f."}, 
@@ -12645,7 +12733,7 @@ abv.I18nHandler.add("fa", [{"@id":"1", "source":"This value should be false.", "
 "source":"The host could not be resolved.", "target":"\u0645\u06cc\u0632\u0628\u0627\u0646 \u0642\u0627\u0628\u0644 \u062d\u0644 \u0646\u0645\u06cc \u0628\u0627\u0634\u062f."}, {"@id":"80", "source":"This value does not match the expected %%charset%% charset.", "target":"\u0627\u06cc\u0646 \u0645\u0642\u062f\u0627\u0631 \u0645\u0637\u0627\u0628\u0642 \u0628\u0627 \u0645\u0642\u062f\u0627\u0631 \u0645\u0648\u0631\u062f \u0627\u0646\u062a\u0638\u0627\u0631 %%charset%% \u0646\u0645\u06cc \u0628\u0627\u0634\u062f."}, 
 {"@id":"81", "source":"This is not a valid Business Identifier Code (BIC).", "target":"\u0627\u06cc\u0646 \u0645\u0642\u062f\u0627\u0631 \u06cc\u06a9(BIC) \u0645\u0639\u062a\u0628\u0631 \u0646\u0645\u06cc \u0628\u0627\u0634\u062f."}, {"@id":"82", "source":"Error", "target":"\u062e\u0637\u0627"}, {"@id":"83", "source":"This is not a valid UUID.", "target":"\u0627\u06cc\u0646 \u0645\u0642\u062f\u0627\u0631 \u06cc\u06a9 UUID \u0645\u0639\u062a\u0628\u0631 \u0646\u0645\u06cc \u0628\u0627\u0634\u062f."}, 
 {"@id":"84", "source":"This value should be a multiple of %%compared_value%%.", "target":"\u0627\u06cc\u0646 \u0645\u0642\u062f\u0627\u0631 \u0628\u0627\u06cc\u062f \u0686\u0646\u062f \u0628\u0631\u0627\u0628\u0631 %%compared_value%% \u0628\u0627\u0634\u062f."}, {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"\u0627\u06cc\u0646(BIC) \u0628\u0627 IBAN \u0627\u0631\u062a\u0628\u0627\u0637\u06cc \u0646\u062f\u0627\u0631\u062f."}]);
-abv.I18nHandler.add("fi", [{"@id":"1", "source":"This value should be false.", "target":"Arvon tulee olla ep\u00e4tosi."}, {"@id":"2", "source":"This value should be true.", "target":"Arvon tulee olla tosi."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Arvon tulee olla tyyppi\u00e4 %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Arvon tulee olla tyhj\u00e4."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"Arvon tulee olla yksi annetuista vaihtoehdoista."}, 
+sogv.I18nHandler.add("fi", [{"@id":"1", "source":"This value should be false.", "target":"Arvon tulee olla ep\u00e4tosi."}, {"@id":"2", "source":"This value should be true.", "target":"Arvon tulee olla tosi."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Arvon tulee olla tyyppi\u00e4 %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Arvon tulee olla tyhj\u00e4."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"Arvon tulee olla yksi annetuista vaihtoehdoista."}, 
 {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Sinun tulee valita v\u00e4hint\u00e4\u00e4n %%limit%% vaihtoehtoa."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Sinun tulee valitan enint\u00e4\u00e4n %%limit%% vaihtoehtoa."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Yksi tai useampi annetuista arvoista on virheellinen."}, 
 {"@id":"9", "source":"This field was not expected.", "target":"T\u00e4ss\u00e4 kent\u00e4ss\u00e4 ei odotettu."}, {"@id":"10", "source":"This field is missing.", "target":"T\u00e4m\u00e4 kentt\u00e4 puuttuu."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Annettu arvo ei ole kelvollinen p\u00e4iv\u00e4m\u00e4\u00e4r\u00e4."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Annettu arvo ei ole kelvollinen p\u00e4iv\u00e4m\u00e4\u00e4r\u00e4 ja kellonaika."}, 
 {"@id":"13", "source":"This value is not a valid email address.", "target":"Annettu arvo ei ole kelvollinen s\u00e4hk\u00f6postiosoite."}, {"@id":"14", "source":"The file could not be found.", "target":"Tiedostoa ei l\u00f6ydy."}, {"@id":"15", "source":"The file is not readable.", "target":"Tiedostoa ei voida lukea."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"Tiedostonkoko (%%size%% %%suffix%%) on liian iso. Suurin sallittu tiedostonkoko on %%limit%% %%suffix%%."}, 
@@ -12671,7 +12759,7 @@ abv.I18nHandler.add("fi", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"86", "source":"This value should be valid JSON.", "target":"Arvon tulee olla kelvollinen JSON."}, {"@id":"87", "source":"This collection should contain only unique elements.", "target":"T\u00e4m\u00e4 ryhm\u00e4 tulisi sis\u00e4lt\u00e4\u00e4 vain yksil\u00f6llisi\u00e4 arvoja."}, {"@id":"88", "source":"This value should be positive.", "target":"Arvon tulisi olla positiivinen."}, {"@id":"89", "source":"This value should be either positive or zero.", "target":"Arvon tulisi olla joko positiivinen tai nolla."}, 
 {"@id":"90", "source":"This value should be negative.", "target":"Arvon tulisi olla negatiivinen."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"Arvon tulisi olla joko negatiivinen tai nolla."}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"Arvo ei ole kelvollinen aikavy\u00f6hyke."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"T\u00e4m\u00e4 salasana on vuotanut tietomurrossa, sit\u00e4 ei saa k\u00e4ytt\u00e4\u00e4. K\u00e4yt\u00e4 toista salasanaa."}, 
 {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"Arvon tulisi olla v\u00e4lill\u00e4 %%min%% - %%max%%."}]);
-abv.I18nHandler.add("fr", [{"@id":"1", "source":"This value should be false.", "target":"Cette valeur doit \u00eatre fausse."}, {"@id":"2", "source":"This value should be true.", "target":"Cette valeur doit \u00eatre vraie."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Cette valeur doit \u00eatre de type %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Cette valeur doit \u00eatre vide."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
+sogv.I18nHandler.add("fr", [{"@id":"1", "source":"This value should be false.", "target":"Cette valeur doit \u00eatre fausse."}, {"@id":"2", "source":"This value should be true.", "target":"Cette valeur doit \u00eatre vraie."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Cette valeur doit \u00eatre de type %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Cette valeur doit \u00eatre vide."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Cette valeur doit \u00eatre l'un des choix propos\u00e9s."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Vous devez s\u00e9lectionner au moins %%limit%% choix.|Vous devez s\u00e9lectionner au moins %%limit%% choix."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Vous devez s\u00e9lectionner au maximum %%limit%% choix.|Vous devez s\u00e9lectionner au maximum %%limit%% choix."}, 
 {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Une ou plusieurs des valeurs soumises sont invalides."}, {"@id":"9", "source":"This field was not expected.", "target":"Ce champ n'a pas \u00e9t\u00e9 pr\u00e9vu."}, {"@id":"10", "source":"This field is missing.", "target":"Ce champ est manquant."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Cette valeur n'est pas une date valide."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Cette valeur n'est pas une date valide."}, 
 {"@id":"13", "source":"This value is not a valid email address.", "target":"Cette valeur n'est pas une adresse email valide."}, {"@id":"14", "source":"The file could not be found.", "target":"Le fichier n'a pas \u00e9t\u00e9 trouv\u00e9."}, {"@id":"15", "source":"The file is not readable.", "target":"Le fichier n'est pas lisible."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"Le fichier est trop volumineux (%%size%% %%suffix%%). Sa taille ne doit pas d\u00e9passer %%limit%% %%suffix%%."}, 
@@ -12698,7 +12786,7 @@ abv.I18nHandler.add("fr", [{"@id":"1", "source":"This value should be false.", "
 "target":"Ce code d'identification d'entreprise (BIC) n'est pas associ\u00e9 \u00e0 l'IBAN %%iban%%."}, {"@id":"86", "source":"This value should be valid JSON.", "target":"Cette valeur doit \u00eatre un JSON valide."}, {"@id":"87", "source":"This collection should contain only unique elements.", "target":"Cette collection ne doit pas comporter de doublons."}, {"@id":"88", "source":"This value should be positive.", "target":"Cette valeur doit \u00eatre strictement positive."}, {"@id":"89", "source":"This value should be either positive or zero.", 
 "target":"Cette valeur doit \u00eatre sup\u00e9rieure ou \u00e9gale \u00e0 z\u00e9ro."}, {"@id":"90", "source":"This value should be negative.", "target":"Cette valeur doit \u00eatre strictement n\u00e9gative."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"Cette valeur doit \u00eatre inf\u00e9rieure ou \u00e9gale \u00e0 z\u00e9ro."}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"Cette valeur n'est pas un fuseau horaire valide."}, {"@id":"93", 
 "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"Ce mot de passe a \u00e9t\u00e9 divulgu\u00e9 lors d'une fuite de donn\u00e9es, il ne doit plus \u00eatre utilis\u00e9. Veuillez utiliser un autre mot de passe."}, {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"Cette valeur doit \u00eatre comprise entre %%min%% et %%max%%."}, {"@id":"95", "source":"This value is not a valid hostname.", "target":"Cette valeur n'est pas un nom d'h\u00f4te valide."}]);
-abv.I18nHandler.add("gl", [{"@id":"1", "source":"This value should be false.", "target":"Este valor deber\u00eda ser falso."}, {"@id":"2", "source":"This value should be true.", "target":"Este valor deber\u00eda ser verdadeiro."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Este valor deber\u00eda ser de tipo %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Este valor deber\u00eda estar baleiro."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
+sogv.I18nHandler.add("gl", [{"@id":"1", "source":"This value should be false.", "target":"Este valor deber\u00eda ser falso."}, {"@id":"2", "source":"This value should be true.", "target":"Este valor deber\u00eda ser verdadeiro."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Este valor deber\u00eda ser de tipo %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Este valor deber\u00eda estar baleiro."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"O valor seleccionado non \u00e9 unha opci\u00f3n v\u00e1lida."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Debe seleccionar polo menos %%limit%% opci\u00f3n.|Debe seleccionar polo menos %%limit%% opcions."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Debe seleccionar como m\u00e1ximo %%limit%% opci\u00f3n.|Debe seleccionar como m\u00e1ximo %%limit%% opcions."}, 
 {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Un ou m\u00e1is dos valores indicados non son v\u00e1lidos."}, {"@id":"9", "source":"This field was not expected.", "target":"Este campo non era esperado."}, {"@id":"10", "source":"This field is missing.", "target":"Este campo falta."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Este valor non \u00e9 unha data v\u00e1lida."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Este valor non \u00e9 unha data e hora v\u00e1lidas."}, 
 {"@id":"13", "source":"This value is not a valid email address.", "target":"Este valor non \u00e9 unha direcci\u00f3n de correo electr\u00f3nico v\u00e1lida."}, {"@id":"14", "source":"The file could not be found.", "target":"Non se puido atopar o arquivo."}, {"@id":"15", "source":"The file is not readable.", "target":"O arquivo non se pode ler."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"O arquivo \u00e9 demasiado grande (%%size%% %%suffix%%). O tama\u00f1o m\u00e1ximo permitido \u00e9 %%limit%% %%suffix%%."}, 
@@ -12722,7 +12810,7 @@ abv.I18nHandler.add("gl", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"77", "source":"The image is portrait oriented (%%width%%x%%height%%px). Portrait oriented images are not allowed.", "target":"A imaxe est\u00e1 orientada verticalmente (%%width%%x%%height%%px). As im\u00e1xenes orientadas verticalmente non est\u00e1n permitidas."}, {"@id":"78", "source":"An empty file is not allowed.", "target":"Non est\u00e1 permitido un arquivo baleiro."}, {"@id":"79", "source":"The host could not be resolved.", "target":"Non se puido resolver o host."}, {"@id":"80", "source":"This value does not match the expected %%charset%% charset.", 
 "target":"A codificaci\u00f3n de caracteres para este valor deber\u00eda ser %%charset%%."}, {"@id":"81", "source":"This is not a valid Business Identifier Code (BIC).", "target":"Non \u00e9 un C\u00f3digo de Identificaci\u00f3n Bancaria (BIC) v\u00e1lido."}, {"@id":"82", "source":"Error", "target":"Erro"}, {"@id":"83", "source":"This is not a valid UUID.", "target":"Isto non \u00e9 un UUID v\u00e1lido."}, {"@id":"84", "source":"This value should be a multiple of %%compared_value%%.", "target":"Este valor deber\u00eda ser multiplo de %%compared_value%%."}, 
 {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"Este C\u00f3digo de identificaci\u00f3n bancaria (BIC) non est\u00e1 asociado co IBAN %%iban%%."}]);
-abv.I18nHandler.add("he", [{"@id":"1", "source":"This value should be false.", "target":"\u05d4\u05e2\u05e8\u05da \u05e6\u05e8\u05d9\u05da \u05dc\u05d4\u05d9\u05d5\u05ea \u05e9\u05e7\u05e8."}, {"@id":"2", "source":"This value should be true.", "target":"\u05d4\u05e2\u05e8\u05da \u05e6\u05e8\u05d9\u05da \u05dc\u05d4\u05d9\u05d5\u05ea \u05d0\u05de\u05ea."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u05d4\u05e2\u05e8\u05da \u05e6\u05e8\u05d9\u05da \u05dc\u05d4\u05d9\u05d5\u05ea \u05de\u05e1\u05d5\u05d2 %%type%%."}, 
+sogv.I18nHandler.add("he", [{"@id":"1", "source":"This value should be false.", "target":"\u05d4\u05e2\u05e8\u05da \u05e6\u05e8\u05d9\u05da \u05dc\u05d4\u05d9\u05d5\u05ea \u05e9\u05e7\u05e8."}, {"@id":"2", "source":"This value should be true.", "target":"\u05d4\u05e2\u05e8\u05da \u05e6\u05e8\u05d9\u05da \u05dc\u05d4\u05d9\u05d5\u05ea \u05d0\u05de\u05ea."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u05d4\u05e2\u05e8\u05da \u05e6\u05e8\u05d9\u05da \u05dc\u05d4\u05d9\u05d5\u05ea \u05de\u05e1\u05d5\u05d2 %%type%%."}, 
 {"@id":"4", "source":"This value should be blank.", "target":"\u05d4\u05e2\u05e8\u05da \u05e6\u05e8\u05d9\u05da \u05dc\u05d4\u05d9\u05d5\u05ea \u05e8\u05d9\u05e7."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"\u05d4\u05e2\u05e8\u05da \u05e9\u05d1\u05d7\u05e8\u05ea \u05d0\u05d9\u05e0\u05d5 \u05d7\u05d5\u05e7\u05d9."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"\u05d0\u05ea\u05d4 \u05e6\u05e8\u05d9\u05da \u05dc\u05d1\u05d7\u05d5\u05e8 \u05dc\u05e4\u05d7\u05d5\u05ea %%limit%% \u05d0\u05e4\u05e9\u05e8\u05d5\u05d9\u05d5\u05ea.|\u05d0\u05ea\u05d4 \u05e6\u05e8\u05d9\u05da \u05dc\u05d1\u05d7\u05d5\u05e8 \u05dc\u05e4\u05d7\u05d5\u05ea %%limit%% \u05d0\u05e4\u05e9\u05e8\u05d5\u05d9\u05d5\u05ea."}, 
 {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"\u05d0\u05ea\u05d4 \u05e6\u05e8\u05d9\u05da \u05dc\u05d1\u05d7\u05d5\u05e8 \u05dc\u05db\u05dc \u05d4\u05d9\u05d5\u05ea\u05e8 %%limit%% \u05d0\u05e4\u05e9\u05e8\u05d5\u05d9\u05d5\u05ea.|\u05d0\u05ea\u05d4 \u05e6\u05e8\u05d9\u05da \u05dc\u05d1\u05d7\u05d5\u05e8 \u05dc\u05db\u05dc \u05d4\u05d9\u05d5\u05ea\u05e8 %%limit%% \u05d0\u05e4\u05e9\u05e8\u05d5\u05d9\u05d5\u05ea."}, {"@id":"8", 
 "source":"One or more of the given values is invalid.", "target":"\u05d0\u05d7\u05d3 \u05d0\u05d5 \u05d9\u05d5\u05ea\u05e8 \u05de\u05d4\u05e2\u05e8\u05db\u05d9\u05dd \u05d0\u05d9\u05e0\u05d5 \u05d7\u05d5\u05e7\u05d9."}, {"@id":"9", "source":"This field was not expected.", "target":"\u05e9\u05d3\u05d4 \u05d6\u05d4 \u05dc\u05d0 \u05d4\u05d9\u05d4 \u05e6\u05e4\u05d5\u05d9"}, {"@id":"10", "source":"This field is missing.", "target":"\u05e9\u05d3\u05d4 \u05d6\u05d4 \u05d7\u05e1\u05e8."}, {"@id":"11", 
@@ -12763,7 +12851,7 @@ abv.I18nHandler.add("he", [{"@id":"1", "source":"This value should be false.", "
 "target":"\u05d4\u05e2\u05e8\u05da \u05d7\u05d9\u05d9\u05d1 \u05dc\u05d4\u05d9\u05d5\u05ea \u05d7\u05d9\u05d5\u05d1\u05d9 \u05d0\u05d5 \u05d0\u05e4\u05e1."}, {"@id":"90", "source":"This value should be negative.", "target":"\u05d4\u05e2\u05e8\u05da \u05d7\u05d9\u05d9\u05d1 \u05dc\u05d4\u05d9\u05d5\u05ea \u05e9\u05dc\u05d9\u05dc\u05d9."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"\u05d4\u05e2\u05e8\u05da \u05d7\u05d9\u05d9\u05d1 \u05dc\u05d4\u05d9\u05d5\u05ea \u05e9\u05dc\u05d9\u05dc\u05d9 \u05d0\u05d5 \u05d0\u05e4\u05e1."}, 
 {"@id":"92", "source":"This value is not a valid timezone.", "target":"\u05d4\u05e2\u05e8\u05da \u05d0\u05d9\u05e0\u05d5 \u05d0\u05d6\u05d5\u05e8 \u05d6\u05de\u05df \u05ea\u05e7\u05d9\u05df."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"\u05e1\u05d9\u05e1\u05de\u05d0 \u05d6\u05d5 \u05d4\u05d5\u05d3\u05dc\u05e4\u05d4 \u05d1\u05d4\u05d3\u05dc\u05e4\u05ea \u05de\u05d9\u05d3\u05e2, \u05d0\u05e1\u05d5\u05e8 \u05dc\u05d4\u05e9\u05ea\u05de\u05e9 \u05d1\u05d4. \u05d0\u05e0\u05d0 \u05d4\u05e9\u05ea\u05de\u05e9 \u05d1\u05e1\u05d9\u05e1\u05de\u05d4 \u05d0\u05d7\u05e8\u05ea."}, 
 {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"\u05d4\u05e2\u05e8\u05da \u05d7\u05d9\u05d9\u05d1 \u05dc\u05d4\u05d9\u05d5\u05ea \u05d1\u05d9\u05df %%min%% \u05d5- %%max%%."}]);
-abv.I18nHandler.add("hr", [{"@id":"1", "source":"This value should be false.", "target":"Ova vrijednost treba biti neto\u010dna (false)."}, {"@id":"2", "source":"This value should be true.", "target":"Ova vrijednost treba biti to\u010dna (true)."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Ova vrijednost treba biti tipa %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Ova vrijednost treba biti prazna."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
+sogv.I18nHandler.add("hr", [{"@id":"1", "source":"This value should be false.", "target":"Ova vrijednost treba biti neto\u010dna (false)."}, {"@id":"2", "source":"This value should be true.", "target":"Ova vrijednost treba biti to\u010dna (true)."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Ova vrijednost treba biti tipa %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Ova vrijednost treba biti prazna."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Ova vrijednost nije valjan izbor."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Izaberite barem %%limit%% mogu\u0107nosti."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Izaberite najvi\u0161e %%limit%% mogu\u0107nosti."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Jedna ili vi\u0161e danih vrijednosti nije ispravna."}, 
 {"@id":"9", "source":"This field was not expected.", "target":"Ovo polje nije o\u010dekivano."}, {"@id":"10", "source":"This field is missing.", "target":"Ovo polje nedostaje."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Ova vrijednost nije ispravan datum."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Ova vrijednost nije ispravnog datum-vrijeme formata."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"Ova vrijednost nije ispravna e-mail adresa."}, 
 {"@id":"14", "source":"The file could not be found.", "target":"Datoteka ne mo\u017ee biti prona\u0111ena."}, {"@id":"15", "source":"The file is not readable.", "target":"Datoteka nije \u010ditljiva."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"Datoteka je prevelika (%%size%% %%suffix%%). Najve\u0107a dozvoljena veli\u010dina je %%limit%% %%suffix%%."}, {"@id":"17", "source":"The mime type of the file is invalid (%%type%%). Allowed mime types are %%types%%.", 
@@ -12788,7 +12876,7 @@ abv.I18nHandler.add("hr", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"82", "source":"Error", "target":"Gre\u0161ka"}, {"@id":"83", "source":"This is not a valid UUID.", "target":"Ovo nije validan UUID."}, {"@id":"84", "source":"This value should be a multiple of %%compared_value%%.", "target":"Ova vrijednost treba biti vi\u0161ekratnik od %%compared_value%%."}, {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"Poslovni identifikacijski broj (BIC) nije povezan sa IBAN brojem %%iban%%."}, {"@id":"86", 
 "source":"This value should be valid JSON.", "target":"Ova vrijednost treba biti validan JSON."}, {"@id":"87", "source":"This collection should contain only unique elements.", "target":"Ova kolekcija treba sadr\u017eavati samo unikatne elemente."}, {"@id":"88", "source":"This value should be positive.", "target":"Ova vrijednost treba biti pozitivna."}, {"@id":"89", "source":"This value should be either positive or zero.", "target":"Ova vrijednost treba biti pozitivna ili jednaka nuli."}, {"@id":"90", 
 "source":"This value should be negative.", "target":"Ova vrijednost treba biti negativna."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"Ova vrijednost treba biti negativna ili jednaka nuli."}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"Ova vrijednost nije validna vremenska zona."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"Ova lozinka je procurila u nekom od sigurnosnih propusta, te je potrebno koristiti drugu lozinku."}]);
-abv.I18nHandler.add("hu", [{"@id":"1", "source":"This value should be false.", "target":"Ennek az \u00e9rt\u00e9knek hamisnak kell lennie."}, {"@id":"2", "source":"This value should be true.", "target":"Ennek az \u00e9rt\u00e9knek igaznak kell lennie."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Ennek az \u00e9rt\u00e9knek %%type%% t\u00edpus\u00fanak kell lennie."}, {"@id":"4", "source":"This value should be blank.", "target":"Ennek az \u00e9rt\u00e9knek \u00fcresnek kell lennie."}, 
+sogv.I18nHandler.add("hu", [{"@id":"1", "source":"This value should be false.", "target":"Ennek az \u00e9rt\u00e9knek hamisnak kell lennie."}, {"@id":"2", "source":"This value should be true.", "target":"Ennek az \u00e9rt\u00e9knek igaznak kell lennie."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Ennek az \u00e9rt\u00e9knek %%type%% t\u00edpus\u00fanak kell lennie."}, {"@id":"4", "source":"This value should be blank.", "target":"Ennek az \u00e9rt\u00e9knek \u00fcresnek kell lennie."}, 
 {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"A v\u00e1lasztott \u00e9rt\u00e9k \u00e9rv\u00e9nytelen."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Legal\u00e1bb %%limit%% \u00e9rt\u00e9ket kell kiv\u00e1lasztani.|Legal\u00e1bb %%limit%% \u00e9rt\u00e9ket kell kiv\u00e1lasztani."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", 
 "target":"Legfeljebb %%limit%% \u00e9rt\u00e9ket lehet kiv\u00e1lasztani.|Legfeljebb %%limit%% \u00e9rt\u00e9ket lehet kiv\u00e1lasztani."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"A megadott \u00e9rt\u00e9kek k\u00f6z\u00fcl legal\u00e1bb egy \u00e9rv\u00e9nytelen."}, {"@id":"9", "source":"This field was not expected.", "target":"Nem v\u00e1rt mez\u0151."}, {"@id":"10", "source":"This field is missing.", "target":"Ez a mez\u0151 hi\u00e1nyzik."}, {"@id":"11", 
 "source":"This value is not a valid date.", "target":"Ez az \u00e9rt\u00e9k nem egy \u00e9rv\u00e9nyes d\u00e1tum."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Ez az \u00e9rt\u00e9k nem egy \u00e9rv\u00e9nyes id\u0151pont."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"Ez az \u00e9rt\u00e9k nem egy \u00e9rv\u00e9nyes e-mail c\u00edm."}, {"@id":"14", "source":"The file could not be found.", "target":"A f\u00e1jl nem tal\u00e1lhat\u00f3."}, 
@@ -12817,7 +12905,7 @@ abv.I18nHandler.add("hu", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"86", "source":"This value should be valid JSON.", "target":"Ez az \u00e9rt\u00e9k \u00e9rv\u00e9nyes JSON kell, hogy legyen."}, {"@id":"87", "source":"This value should be positive.", "target":"Ennek az \u00e9rt\u00e9knek pozit\u00edvnak kell lennie."}, {"@id":"88", "source":"This value should be either positive or zero.", "target":"Ennek az \u00e9rt\u00e9knek pozit\u00edvnak vagy null\u00e1nak kell lennie."}, {"@id":"89", "source":"This value should be negative.", "target":"Ennek az \u00e9rt\u00e9knek negat\u00edvnak kell lennie."}, 
 {"@id":"90", "source":"This value should be either negative or zero.", "target":"Ennek az \u00e9rt\u00e9knek negat\u00edvnak vagy null\u00e1nak kell lennie."}, {"@id":"91", "source":"This collection should contain only unique elements.", "target":"Ez a gy\u0171jtem\u00e9ny csak egyedi elemeket tartalmazhat."}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"Ez az \u00e9rt\u00e9k nem egy \u00e9rv\u00e9nyes id\u0151z\u00f3na."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", 
 "target":"Ez a jelsz\u00f3 kor\u00e1bban egy adatv\u00e9delmi incidens sor\u00e1n illet\u00e9ktelenek kez\u00e9be ker\u00fclt, \u00edgy nem haszn\u00e1lhat\u00f3. K\u00e9rj\u00fck, haszn\u00e1ljon m\u00e1sik jelsz\u00f3t."}, {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"Ennek az \u00e9rt\u00e9knek %%min%% \u00e9s %%max%% k\u00f6z\u00f6tt kell lennie."}]);
-abv.I18nHandler.add("hy", [{"@id":"1", "source":"This value should be false.", "target":"\u0531\u0580\u056a\u0565\u0584\u0568 \u057a\u0565\u057f\u0584 \u0567 \u056c\u056b\u0576\u056b \u057d\u056d\u0561\u056c\u0589"}, {"@id":"2", "source":"This value should be true.", "target":"\u0531\u0580\u056a\u0565\u0584\u0568 \u057a\u0565\u057f\u0584 \u0567 \u056c\u056b\u0576\u056b \u0573\u056b\u0577\u057f\u0589"}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u0531\u0580\u056a\u0565\u0584\u0568 \u057a\u0565\u057f\u0584 \u0567 \u056c\u056b\u0576\u056b %%type%% \u057f\u0565\u057d\u0561\u056f\u056b\u0589"}, 
+sogv.I18nHandler.add("hy", [{"@id":"1", "source":"This value should be false.", "target":"\u0531\u0580\u056a\u0565\u0584\u0568 \u057a\u0565\u057f\u0584 \u0567 \u056c\u056b\u0576\u056b \u057d\u056d\u0561\u056c\u0589"}, {"@id":"2", "source":"This value should be true.", "target":"\u0531\u0580\u056a\u0565\u0584\u0568 \u057a\u0565\u057f\u0584 \u0567 \u056c\u056b\u0576\u056b \u0573\u056b\u0577\u057f\u0589"}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u0531\u0580\u056a\u0565\u0584\u0568 \u057a\u0565\u057f\u0584 \u0567 \u056c\u056b\u0576\u056b %%type%% \u057f\u0565\u057d\u0561\u056f\u056b\u0589"}, 
 {"@id":"4", "source":"This value should be blank.", "target":"\u0531\u0580\u056a\u0565\u0584\u0568 \u057a\u0565\u057f\u0584 \u0567 \u056c\u056b\u0576\u056b \u0564\u0561\u057f\u0561\u0580\u056f\u0589"}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"\u0541\u0565\u0580 \u0568\u0576\u057f\u0580\u0561\u056e \u0561\u0580\u056a\u0565\u0584\u0568 \u0561\u0576\u057e\u0561\u057e\u0565\u0580 \u0568\u0576\u057f\u0580\u0578\u0582\u0569\u0575\u0578\u0582\u0576 \u0567\u0589"}, 
 {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"\u0534\u0578\u0582\u0584 \u057a\u0565\u057f\u0584 \u0567 \u0568\u0576\u057f\u0580\u0565\u0584 \u0561\u0574\u0565\u0576\u0561\u0584\u056b\u0579\u0568 %%limit%% \u057f\u0561\u0580\u0562\u0565\u0580\u0561\u056f\u0576\u0565\u0580\u0589"}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"\u0534\u0578\u0582\u0584 \u057a\u0565\u057f\u0584 \u0567 \u0568\u0576\u057f\u0580\u0565\u0584 \u0578\u0579 \u0561\u057e\u0565\u056c\u056b \u0584\u0561\u0576 %%limit%% \u057f\u0561\u0580\u0562\u0565\u0580\u0561\u056f\u0576\u0565\u0580\u0589"}, 
 {"@id":"8", "source":"One or more of the given values is invalid.", "target":"\u0544\u0565\u056f \u056f\u0561\u0574 \u0561\u057e\u0565\u056c\u056b \u057f\u0580\u057e\u0561\u056e \u0561\u0580\u056a\u0565\u0584\u0576\u0565\u0580\u0568 \u0561\u0576\u057e\u0561\u057e\u0565\u0580 \u0565\u0576\u0589"}, {"@id":"9", "source":"This field was not expected.", "target":"\u0531\u0575\u057d \u0564\u0561\u0577\u057f\u0568 \u0579\u056b \u057d\u057a\u0561\u057d\u057e\u0578\u0582\u0574\u0589"}, {"@id":"10", "source":"This field is missing.", 
@@ -12861,7 +12949,7 @@ abv.I18nHandler.add("hy", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"90", "source":"This value should be negative.", "target":"\u0531\u0575\u057d \u0561\u0580\u056a\u0565\u0584\u0568 \u057a\u0565\u057f\u0584 \u0567 \u056c\u056b\u0576\u056b \u0562\u0561\u0581\u0561\u057d\u0561\u056f\u0561\u0576:"}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"\u0531\u0575\u057d \u0561\u0580\u056a\u0565\u0584\u0568 \u057a\u0565\u057f\u0584 \u0567 \u056c\u056b\u0576\u056b \u0562\u0561\u0581\u0561\u057d\u0561\u056f\u0561\u0576 \u056f\u0561\u0574 \u0566\u0580\u0578\u0575\u0561\u056f\u0561\u0576:"}, 
 {"@id":"92", "source":"This value is not a valid timezone.", "target":"\u0531\u0575\u057d \u0561\u0580\u056a\u0565\u0584\u0568 \u057e\u0561\u057e\u0565\u0580 \u056a\u0561\u0574\u0561\u0576\u0561\u056f\u056b \u0563\u0578\u057f\u056b \u0579\u0567:"}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"\u0531\u0575\u057d \u0563\u0561\u0572\u057f\u0576\u0561\u0562\u0561\u057c\u0576 \u0561\u0580\u057f\u0561\u0570\u0578\u057d\u057e\u0565\u056c \u0567 \u057f\u057e\u0575\u0561\u056c\u0576\u0565\u0580\u056b \u056d\u0561\u056d\u057f\u0574\u0561\u0576 \u0574\u0565\u057b, \u0561\u0575\u0576 \u0579\u057a\u0565\u057f\u0584 \u0567 \u0585\u0563\u057f\u0561\u0563\u0578\u0580\u056e\u057e\u056b: \u053d\u0576\u0564\u0580\u0578\u0582\u0574 \u0565\u0576\u0584 \u0585\u0563\u057f\u0561\u0563\u0578\u0580\u056e\u0565\u056c \u0574\u0565\u056f \u0561\u0575\u056c \u0563\u0561\u0572\u057f\u0576\u0561\u0562\u0561\u057c:"}, 
 {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"\u0531\u0575\u057d \u0561\u0580\u056a\u0565\u0584\u0568 \u057a\u0565\u057f\u0584 \u0567 \u056c\u056b\u0576\u056b \u0574\u056b\u057b\u0587 %%min%% \u0587 %%max%%."}]);
-abv.I18nHandler.add("id", [{"@id":"1", "source":"This value should be false.", "target":"Nilai ini harus bernilai salah."}, {"@id":"2", "source":"This value should be true.", "target":"Nilai ini harus bernilai benar."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Nilai ini harus bertipe %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Nilai ini harus kosong."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"Nilai yang dipilih tidak tepat."}, 
+sogv.I18nHandler.add("id", [{"@id":"1", "source":"This value should be false.", "target":"Nilai ini harus bernilai salah."}, {"@id":"2", "source":"This value should be true.", "target":"Nilai ini harus bernilai benar."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Nilai ini harus bertipe %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Nilai ini harus kosong."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"Nilai yang dipilih tidak tepat."}, 
 {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Anda harus memilih paling tidak %%limit%% pilihan."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Anda harus memilih paling banyak %%limit%% pilihan."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Satu atau lebih nilai yang diberikan tidak sah."}, {"@id":"9", "source":"This field was not expected.", 
 "target":"Ruas ini tidak diharapkan."}, {"@id":"10", "source":"This field is missing.", "target":"Ruas ini hilang."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Nilai ini bukan merupakan tanggal yang sah."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Nilai ini bukan merupakan tanggal dan waktu yang sah."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"Nilai ini bukan alamat surel yang sah."}, {"@id":"14", "source":"The file could not be found.", 
 "target":"Berkas tidak dapat ditemukan."}, {"@id":"15", "source":"The file is not readable.", "target":"Berkas tidak dapat dibaca."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"Ukuran berkas terlalu besar (%%size%% %%suffix%%). Ukuran maksimum yang diizinkan adalah %%limit%% %%suffix%%."}, {"@id":"17", "source":"The mime type of the file is invalid (%%type%%). Allowed mime types are %%types%%.", "target":"Jenis berkas (%%type%%) tidak sah. Jenis berkas yang diizinkan adalah %%types%%."}, 
@@ -12883,7 +12971,7 @@ abv.I18nHandler.add("id", [{"@id":"1", "source":"This value should be false.", "
 "target":"Citra berorientasi lanskap (%%width%%x%%height%%px). Citra berorientasi lanskap tidak diizinkan."}, {"@id":"77", "source":"The image is portrait oriented (%%width%%x%%height%%px). Portrait oriented images are not allowed.", "target":"Citra berorientasi potret (%%width%%x%%height%%px). Citra berorientasi potret tidak diizinkan."}, {"@id":"78", "source":"An empty file is not allowed.", "target":"Berkas kosong tidak diizinkan."}, {"@id":"79", "source":"The host could not be resolved.", "target":"Host tidak dapat diselesaikan."}, 
 {"@id":"80", "source":"This value does not match the expected %%charset%% charset.", "target":"Nilai ini tidak memenuhi set karakter %%charset%% yang diharapkan."}, {"@id":"81", "source":"This is not a valid Business Identifier Code (BIC).", "target":"Ini bukan Business Identifier Code (BIC) yang sah."}, {"@id":"82", "source":"Error", "target":"Galat"}, {"@id":"83", "source":"This is not a valid UUID.", "target":"Ini bukan UUID yang sah."}, {"@id":"84", "source":"This value should be a multiple of %%compared_value%%.", 
 "target":"Nilai ini harus kelipatan dari %%compared_value%%."}, {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"Business Identifier Code (BIC) ini tidak terkait dengan IBAN %%iban%%."}]);
-abv.I18nHandler.add("it", [{"@id":"1", "source":"This value should be false.", "target":"Questo valore dovrebbe essere falso."}, {"@id":"2", "source":"This value should be true.", "target":"Questo valore dovrebbe essere vero."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Questo valore dovrebbe essere di tipo %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Questo valore dovrebbe essere vuoto."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
+sogv.I18nHandler.add("it", [{"@id":"1", "source":"This value should be false.", "target":"Questo valore dovrebbe essere falso."}, {"@id":"2", "source":"This value should be true.", "target":"Questo valore dovrebbe essere vero."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Questo valore dovrebbe essere di tipo %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Questo valore dovrebbe essere vuoto."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Questo valore dovrebbe essere una delle opzioni disponibili."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Si dovrebbe selezionare almeno %%limit%% opzione.|Si dovrebbero selezionare almeno %%limit%% opzioni."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Si dovrebbe selezionare al massimo %%limit%% opzione.|Si dovrebbero selezionare al massimo %%limit%% opzioni."}, 
 {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Uno o pi\u00f9 valori inseriti non sono validi."}, {"@id":"9", "source":"This field was not expected.", "target":"Questo campo non \u00e8 stato previsto."}, {"@id":"10", "source":"This field is missing.", "target":"Questo campo \u00e8 mancante."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Questo valore non \u00e8 una data valida."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Questo valore non \u00e8 una data e ora valida."}, 
 {"@id":"13", "source":"This value is not a valid email address.", "target":"Questo valore non \u00e8 un indirizzo email valido."}, {"@id":"14", "source":"The file could not be found.", "target":"Non \u00e8 stato possibile trovare il file."}, {"@id":"15", "source":"The file is not readable.", "target":"Il file non \u00e8 leggibile."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"Il file \u00e8 troppo grande (%%size%% %%suffix%%). La dimensione massima consentita \u00e8 %%limit%% %%suffix%%."}, 
@@ -12909,7 +12997,7 @@ abv.I18nHandler.add("it", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"Questo codice identificativo bancario (BIC) non \u00e8 associato all'IBAN %%iban%%."}, {"@id":"86", "source":"This value should be valid JSON.", "target":"Questo valore dovrebbe essere un JSON valido."}, {"@id":"87", "source":"This collection should contain only unique elements.", "target":"Questa collezione dovrebbe contenere solo elementi unici."}, {"@id":"88", "source":"This value should be positive.", 
 "target":"Questo valore dovrebbe essere positivo."}, {"@id":"89", "source":"This value should be either positive or zero.", "target":"Questo valore dovrebbe essere positivo oppure zero."}, {"@id":"90", "source":"This value should be negative.", "target":"Questo valore dovrebbe essere negativo."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"Questo valore dovrebbe essere negativo oppure zero."}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"Questo valore non \u00e8 un fuso orario valido."}, 
 {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"Questa password \u00e8 trapelata durante una compromissione di dati, non deve essere usata. Si prega di usare una password diversa."}, {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"Questo valore dovrebbe essere compreso tra %%min%% e %%max%%."}]);
-abv.I18nHandler.add("ja", [{"@id":"1", "source":"This value should be false.", "target":"false\u3067\u306a\u3051\u308c\u3070\u306a\u308a\u307e\u305b\u3093\u3002"}, {"@id":"2", "source":"This value should be true.", "target":"true\u3067\u306a\u3051\u308c\u3070\u306a\u308a\u307e\u305b\u3093\u3002"}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u578b\u306f%%type%%\u3067\u306a\u3051\u308c\u3070\u306a\u308a\u307e\u305b\u3093\u3002"}, {"@id":"4", "source":"This value should be blank.", 
+sogv.I18nHandler.add("ja", [{"@id":"1", "source":"This value should be false.", "target":"false\u3067\u306a\u3051\u308c\u3070\u306a\u308a\u307e\u305b\u3093\u3002"}, {"@id":"2", "source":"This value should be true.", "target":"true\u3067\u306a\u3051\u308c\u3070\u306a\u308a\u307e\u305b\u3093\u3002"}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u578b\u306f%%type%%\u3067\u306a\u3051\u308c\u3070\u306a\u308a\u307e\u305b\u3093\u3002"}, {"@id":"4", "source":"This value should be blank.", 
 "target":"\u7a7a\u3067\u306a\u3051\u308c\u3070\u306a\u308a\u307e\u305b\u3093\u3002"}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"\u6709\u52b9\u306a\u9078\u629e\u80a2\u3067\u306f\u3042\u308a\u307e\u305b\u3093\u3002"}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"%%limit%%\u500b\u4ee5\u4e0a\u9078\u629e\u3057\u3066\u304f\u3060\u3055\u3044\u3002"}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", 
 "target":"%%limit%%\u500b\u4ee5\u5185\u3067\u9078\u629e\u3057\u3066\u304f\u3060\u3055\u3044\u3002"}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"\u7121\u52b9\u306a\u9078\u629e\u80a2\u304c\u542b\u307e\u308c\u3066\u3044\u307e\u3059\u3002"}, {"@id":"9", "source":"This field was not expected.", "target":"\u3053\u306e\u30d5\u30a3\u30fc\u30eb\u30c9\u306f\u4e88\u671f\u3055\u308c\u3066\u3044\u307e\u305b\u3093\u3067\u3057\u305f\u3002"}, {"@id":"10", "source":"This field is missing.", 
 "target":"\u3053\u306e\u30d5\u30a3\u30fc\u30eb\u30c9\u306f\u3001\u6b20\u843d\u3057\u3066\u3044\u307e\u3059\u3002"}, {"@id":"11", "source":"This value is not a valid date.", "target":"\u6709\u52b9\u306a\u65e5\u4ed8\u3067\u306f\u3042\u308a\u307e\u305b\u3093\u3002"}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"\u6709\u52b9\u306a\u65e5\u6642\u3067\u306f\u3042\u308a\u307e\u305b\u3093\u3002"}, {"@id":"13", "source":"This value is not a valid email address.", "target":"\u6709\u52b9\u306a\u30e1\u30fc\u30eb\u30a2\u30c9\u30ec\u30b9\u3067\u306f\u3042\u308a\u307e\u305b\u3093\u3002"}, 
@@ -12942,7 +13030,7 @@ abv.I18nHandler.add("ja", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"88", "source":"This value should be positive.", "target":"\u6b63\u306e\u6570\u3067\u306a\u3051\u308c\u3070\u306a\u308a\u307e\u305b\u3093\u3002"}, {"@id":"89", "source":"This value should be either positive or zero.", "target":"\u6b63\u306e\u6570\u3001\u307e\u305f\u306f0\u3067\u306a\u3051\u308c\u3070\u306a\u308a\u307e\u305b\u3093\u3002"}, {"@id":"90", "source":"This value should be negative.", "target":"\u8ca0\u306e\u6570\u3067\u306a\u3051\u308c\u3070\u306a\u308a\u307e\u305b\u3093\u3002"}, 
 {"@id":"91", "source":"This value should be either negative or zero.", "target":"\u8ca0\u306e\u6570\u3001\u307e\u305f\u306f0\u3067\u306a\u3051\u308c\u3070\u306a\u308a\u307e\u305b\u3093\u3002"}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"\u6709\u52b9\u306a\u30bf\u30a4\u30e0\u30be\u30fc\u30f3\u3067\u306f\u3042\u308a\u307e\u305b\u3093\u3002"}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"\u3053\u306e\u30d1\u30b9\u30ef\u30fc\u30c9\u306f\u6f0f\u6d29\u3057\u3066\u3044\u308b\u70ba\u4f7f\u7528\u3067\u304d\u307e\u305b\u3093\u3002"}, 
 {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"%%min%%\u4ee5\u4e0a%%max%%\u4ee5\u4e0b\u3067\u306a\u3051\u308c\u3070\u306a\u308a\u307e\u305b\u3093\u3002"}]);
-abv.I18nHandler.add("lb", [{"@id":"1", "source":"This value should be false.", "target":"D\u00ebse W\u00e4ert sollt falsch sinn."}, {"@id":"2", "source":"This value should be true.", "target":"D\u00ebse W\u00e4ert sollt wouer sinn."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"D\u00ebse W\u00e4ert sollt vum Typ %%type%% sinn."}, {"@id":"4", "source":"This value should be blank.", "target":"D\u00ebse W\u00e4ert sollt eidel sinn."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
+sogv.I18nHandler.add("lb", [{"@id":"1", "source":"This value should be false.", "target":"D\u00ebse W\u00e4ert sollt falsch sinn."}, {"@id":"2", "source":"This value should be true.", "target":"D\u00ebse W\u00e4ert sollt wouer sinn."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"D\u00ebse W\u00e4ert sollt vum Typ %%type%% sinn."}, {"@id":"4", "source":"This value should be blank.", "target":"D\u00ebse W\u00e4ert sollt eidel sinn."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"D\u00ebse W\u00e4ert sollt enger vun de Wielm\u00e9iglechkeeten entspriechen."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Et muss mindestens %%limit%% M\u00e9iglechkeet ausgewielt ginn.|Et musse mindestens %%limit%% M\u00e9iglechkeeten ausgewielt ginn."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Et dierf h\u00e9chstens %%limit%% M\u00e9iglechkeet ausgewielt ginn.|Et dierfen h\u00e9chstens %%limit%% M\u00e9iglechkeeten ausgewielt ginn."}, 
 {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Een oder m\u00e9i vun de W\u00e4erter ass ong\u00eblteg."}, {"@id":"9", "source":"The fields %%fields%% were not expected.", "target":"D'Felder %%fields%% goufen net erwaart."}, {"@id":"10", "source":"The fields %%fields%% are missing.", "target":"D'Felder %%fields%% feelen."}, {"@id":"11", "source":"This value is not a valid date.", "target":"D\u00ebse W\u00e4ert entspr\u00e9cht kenger g\u00eblteger Datumsangab."}, {"@id":"12", 
 "source":"This value is not a valid datetime.", "target":"D\u00ebse W\u00e4ert entspr\u00e9cht kenger g\u00eblteger Datums- an Z\u00e4itangab."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"D\u00ebse W\u00e4ert ass keng g\u00eblteg Email-Adress."}, {"@id":"14", "source":"The file could not be found.", "target":"De Fichier gouf net fonnt."}, {"@id":"15", "source":"The file is not readable.", "target":"De Fichier ass net liesbar."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", 
@@ -12967,7 +13055,7 @@ abv.I18nHandler.add("lb", [{"@id":"1", "source":"This value should be false.", "
 "target":"En eidele Fichier ass net erlaabt."}, {"@id":"79", "source":"The host could not be resolved.", "target":"Den Host-Numm konnt net opgel\u00e9ist ginn."}, {"@id":"80", "source":"This value does not match the expected %%charset%% charset.", "target":"D\u00ebse W\u00e4ert entspr\u00e9cht net dem erwaarten Zeechesaz %%charset%%."}, {"@id":"81", "source":"This is not a valid Business Identifier Code (BIC).", "target":'D\u00ebst ass kee g\u00ebltege "Business Identifier Code" (BIC).'}, {"@id":"82", 
 "source":"Error", "target":"Feeler"}, {"@id":"83", "source":"This is not a valid UUID.", "target":"D\u00ebst ass keng g\u00eblteg UUID."}, {"@id":"84", "source":"This value should be a multiple of %%compared_value%%.", "target":"D\u00ebse W\u00e4ert sollt e puer vun %%compared_value%% sinn."}, {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":'D\u00ebse "Business Identifier Code" (BIC) ass net mat IBAN verbonnen %%iban%%.'}, {"@id":"86", "source":"This value should be valid JSON.", 
 "target":"D\u00ebse W\u00e4ert sollt g\u00eblteg JSON."}]);
-abv.I18nHandler.add("lt", [{"@id":"1", "source":"This value should be false.", "target":"Reik\u0161m\u0117 turi b\u016bti neigiama."}, {"@id":"2", "source":"This value should be true.", "target":"Reik\u0161m\u0117 turi b\u016bti teigiama."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u0160ios reik\u0161m\u0117s tipas turi b\u016bti %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"\u0160i reik\u0161m\u0117 turi b\u016bti tu\u0161\u010dia."}, 
+sogv.I18nHandler.add("lt", [{"@id":"1", "source":"This value should be false.", "target":"Reik\u0161m\u0117 turi b\u016bti neigiama."}, {"@id":"2", "source":"This value should be true.", "target":"Reik\u0161m\u0117 turi b\u016bti teigiama."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u0160ios reik\u0161m\u0117s tipas turi b\u016bti %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"\u0160i reik\u0161m\u0117 turi b\u016bti tu\u0161\u010dia."}, 
 {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"Neteisingas pasirinkimas."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Turite pasirinkti bent %%limit%% variant\u0105.|Turite pasirinkti bent %%limit%% variantus.|Turite pasirinkti bent %%limit%% variant\u0173."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Turite pasirinkti ne daugiau kaip %%limit%% variant\u0105.|Turite pasirinkti ne daugiau kaip %%limit%% variantus.|Turite pasirinkti ne daugiau kaip %%limit%% variant\u0173."}, 
 {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Viena ar daugiau \u012fvest\u0173 reik\u0161mi\u0173 yra netinkamos."}, {"@id":"9", "source":"This field was not expected.", "target":"Nebuvo tikimasi \u0160is laukas."}, {"@id":"10", "source":"This field is missing.", "target":"\u0160iame lauke yra ding\u0119s."}, {"@id":"11", "source":"This value is not a valid date.", "target":"\u0160i reik\u0161m\u0117 n\u0117ra data."}, {"@id":"12", "source":"This value is not a valid datetime.", 
 "target":"\u0160i reik\u0161m\u0117 nera data ir laikas."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"\u0160i reik\u0161m\u0117 n\u0117ra tinkamas el. pa\u0161to adresas."}, {"@id":"14", "source":"The file could not be found.", "target":"Byla nerasta."}, {"@id":"15", "source":"The file is not readable.", "target":"Negalima nuskaityti bylos."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"Byla yra per didel\u0117 (%%size%% %%suffix%%). Maksimalus dydis %%limit%% %%suffix%%."}, 
@@ -12995,7 +13083,7 @@ abv.I18nHandler.add("lt", [{"@id":"1", "source":"This value should be false.", "
 "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"\u0160is bendrov\u0117s identifikavimo kodas (BIC) nesusij\u0119s su IBAN %%iban%%."}, {"@id":"86", "source":"This value should be valid JSON.", "target":"\u0160i reik\u0161m\u0117 turi b\u016bti tinkamo JSON formato."}, {"@id":"87", "source":"This collection should contain only unique elements.", "target":"S\u0105ra\u0161e turi b\u016bti tik unikalios reik\u0161m\u0117s."}, {"@id":"88", "source":"This value should be positive.", 
 "target":"Reik\u0161m\u0117 turi b\u016bti teigiama."}, {"@id":"89", "source":"This value should be either positive or zero.", "target":"Reik\u0161m\u0117 turi b\u016bti teigiama arba lygi nuliui."}, {"@id":"90", "source":"This value should be negative.", "target":"Reik\u0161m\u0117 turi b\u016bti neigiama."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"Reik\u0161m\u0117 turi b\u016bti neigiama arba lygi nuliui."}, {"@id":"92", "source":"This value is not a valid timezone.", 
 "target":"Reik\u0161m\u0117 n\u0117ra tinkama laiko juosta."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"Slapta\u017eodis yra nutek\u0117j\u0119s duomen\u0173 saugumo pa\u017eeidime, jo naudoti negalima. Pra\u0161ome naudoti kit\u0105 slapta\u017eod\u012f."}, {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"\u0160i reik\u0161m\u0117 turi b\u016bti tarp %%min%% ir %%max%%."}]);
-abv.I18nHandler.add("lv", [{"@id":"1", "source":"This value should be false.", "target":"\u0160ai v\u0113rt\u012bbai ir j\u0101b\u016bt nepatiesai."}, {"@id":"2", "source":"This value should be true.", "target":"\u0160ai v\u0113rt\u012bbai ir j\u0101b\u016bt patiesai."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u0160\u012bs v\u0113rt\u012bbas tipam ir j\u0101b\u016bt %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"\u0160ai v\u0113rt\u012bbai ir j\u0101b\u016bt tuk\u0161ai."}, 
+sogv.I18nHandler.add("lv", [{"@id":"1", "source":"This value should be false.", "target":"\u0160ai v\u0113rt\u012bbai ir j\u0101b\u016bt nepatiesai."}, {"@id":"2", "source":"This value should be true.", "target":"\u0160ai v\u0113rt\u012bbai ir j\u0101b\u016bt patiesai."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u0160\u012bs v\u0113rt\u012bbas tipam ir j\u0101b\u016bt %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"\u0160ai v\u0113rt\u012bbai ir j\u0101b\u016bt tuk\u0161ai."}, 
 {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"V\u0113rt\u012bba, kuru j\u016bs izv\u0113l\u0113j\u0101ties nav der\u012bga izv\u0113le."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Jums nav j\u0101veic izv\u0113le.|Jums ir j\u0101veic vismaz %%limit%% izv\u0113le.|Jums ir j\u0101veic vismaz %%limit%% izv\u0113les."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", 
 "target":"Jums nav j\u0101veic izv\u0113le.|Jums ir j\u0101veic ne vair\u0101k k\u0101 %%limit%% izv\u0113le.|Jums ir j\u0101veic ne vair\u0101k k\u0101 %%limit%% izv\u0113les."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Viena vai vair\u0101kas no dotaj\u0101m v\u0113rt\u012bb\u0101m ir neder\u012bgas."}, {"@id":"9", "source":"This field was not expected.", "target":"\u0160is lauks netika gaid\u012bts."}, {"@id":"10", "source":"This field is missing.", "target":"\u0160is lauks ir pazudis."}, 
 {"@id":"11", "source":"This value is not a valid date.", "target":"\u0160\u012b v\u0113rt\u012bba ir neder\u012bgs datums."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"\u0160\u012b v\u0113rt\u012bba ir neder\u012bgs datums un laiks"}, {"@id":"13", "source":"This value is not a valid email address.", "target":"\u0160\u012b v\u0113rt\u012bba ir neder\u012bga e-pasta adrese."}, {"@id":"14", "source":"The file could not be found.", "target":"Fails nav atrasts."}, {"@id":"15", 
@@ -13022,7 +13110,7 @@ abv.I18nHandler.add("lv", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"77", "source":"The image is portrait oriented (%%width%%x%%height%%px). Portrait oriented images are not allowed.", "target":"Att\u0113ls ir orient\u0113ts k\u0101 portrets (%%width%%x%%height%%px). Att\u0113li, kas ir orient\u0113ti k\u0101 portreti nav at\u013cauti."}, {"@id":"78", "source":"An empty file is not allowed.", "target":"Tuk\u0161s fails nav at\u013cauts."}, {"@id":"79", "source":"The host could not be resolved.", "target":"Resursdatora nosaukumu nevar atrisin\u0101t."}, {"@id":"80", 
 "source":"This value does not match the expected %%charset%% charset.", "target":"\u0160\u012b v\u0113rt\u012bba neatbilst sagaid\u0101majai rakstz\u012bmju kopai %%charset%%."}, {"@id":"81", "source":"This is not a valid Business Identifier Code (BIC).", "target":"\u0160\u012b v\u0113rt\u012bba nav der\u012bgs Biznesa Identifik\u0101cijas Kods (BIC)."}, {"@id":"82", "source":"Error", "target":"K\u013c\u016bda"}, {"@id":"83", "source":"This is not a valid UUID.", "target":"\u0160is nav der\u012bgs UUID."}, 
 {"@id":"84", "source":"This value should be a multiple of %%compared_value%%.", "target":"\u0160ai v\u0113rt\u012bbai j\u0101b\u016bt vair\u0101kas reizes atk\u0101rtotai %%compared_value%%."}, {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"\u0160is Biznesa Identifik\u0101cijas Kods (BIC) neatbilst %%iban%% konta numuram (IBAN)."}, {"@id":"86", "source":"This value should be valid JSON.", "target":"\u0160ai v\u0113rt\u012bbai j\u0101b\u016bt der\u012bgam JSON."}]);
-abv.I18nHandler.add("mn", [{"@id":"1", "source":"This value should be false.", "target":"\u042d\u043d\u044d \u0443\u0442\u0433\u0430 \u0431\u0443\u0440\u0443\u0443 \u0431\u0430\u0439\u0445 \u0451\u0441\u0442\u043e\u0439."}, {"@id":"2", "source":"This value should be true.", "target":"\u042d\u043d\u044d \u0443\u0442\u0433\u0430 \u04af\u043d\u044d\u043d \u0431\u0430\u0439\u0445 \u0451\u0441\u0442\u043e\u0439."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u042d\u043d\u044d \u0443\u0442\u0433\u0430  %%type%% -\u043d \u0442\u04e9\u0440\u04e9\u043b \u0431\u0430\u0439\u0445 \u0451\u0441\u0442\u043e\u0439."}, 
+sogv.I18nHandler.add("mn", [{"@id":"1", "source":"This value should be false.", "target":"\u042d\u043d\u044d \u0443\u0442\u0433\u0430 \u0431\u0443\u0440\u0443\u0443 \u0431\u0430\u0439\u0445 \u0451\u0441\u0442\u043e\u0439."}, {"@id":"2", "source":"This value should be true.", "target":"\u042d\u043d\u044d \u0443\u0442\u0433\u0430 \u04af\u043d\u044d\u043d \u0431\u0430\u0439\u0445 \u0451\u0441\u0442\u043e\u0439."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u042d\u043d\u044d \u0443\u0442\u0433\u0430  %%type%% -\u043d \u0442\u04e9\u0440\u04e9\u043b \u0431\u0430\u0439\u0445 \u0451\u0441\u0442\u043e\u0439."}, 
 {"@id":"4", "source":"This value should be blank.", "target":"\u042d\u043d\u044d \u0443\u0442\u0433\u0430 \u0445\u043e\u043e\u0441\u043e\u043d \u0431\u0430\u0439\u0445 \u0451\u0441\u0442\u043e\u0439."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"\u0421\u043e\u043d\u0433\u043e\u0441\u043e\u043d \u0443\u0442\u0433\u0430 \u0431\u0443\u0440\u0443\u0443 \u0431\u0430\u0439\u043d\u0430."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", 
 "target":"\u0425\u0430\u043c\u0433\u0438\u0439\u043d \u0431\u0430\u0433\u0430\u0434\u0430\u0430 %%limit%% \u0443\u0442\u0433\u0430 \u0441\u043e\u043d\u0433\u043e\u0433\u0434\u0441\u043e\u043d \u0431\u0430\u0439\u0445 \u0451\u0441\u0442\u043e\u0439."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"\u0425\u0430\u043c\u0433\u0438\u0439\u043d \u0438\u0445\u0434\u044d\u044d %%limit%% \u0443\u0442\u0433\u0430 \u0441\u043e\u043d\u0433\u043e\u0433\u0434\u043e\u0445 \u0431\u043e\u043b\u043e\u043c\u0436\u0442\u043e\u0439."}, 
 {"@id":"8", "source":"One or more of the given values is invalid.", "target":"\u04e8\u0433\u04e9\u0433\u0434\u0441\u04e9\u043d \u043d\u044d\u0433 \u044d\u0441\u0432\u044d\u043b \u043d\u044d\u0433\u044d\u044d\u0441 \u043e\u043b\u043e\u043d \u0443\u0442\u0433\u0430 \u0431\u0443\u0440\u0443\u0443 \u0431\u0430\u0439\u043d\u0430."}, {"@id":"9", "source":"This field was not expected.", "target":"\u042d\u043d\u044d \u0442\u0430\u043b\u0431\u0430\u0440 \u043d\u044c \u0445\u04af\u043b\u044d\u044d\u0433\u0434\u044d\u0436 \u0431\u0430\u0439\u0441\u0430\u043d \u044e\u043c."}, 
@@ -13038,7 +13126,7 @@ abv.I18nHandler.add("mn", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"33", "source":"The file is too large.", "target":"\u0424\u0430\u0439\u043b \u0445\u044d\u0442\u044d\u0440\u0445\u0438\u0439 \u0442\u043e\u043c \u0431\u0430\u0439\u043d\u0430."}, {"@id":"34", "source":"The file could not be uploaded.", "target":"\u0424\u0430\u0439\u043b upload \u0445\u0438\u0439\u0433\u0434\u0441\u044d\u043d\u0433\u04af\u0439."}, {"@id":"35", "source":"This value should be a valid number.", "target":"\u042d\u043d\u044d \u0443\u0442\u0433\u0430 \u0437\u04e9\u0432\u0445\u04e9\u043d \u0442\u043e\u043e \u0431\u0430\u0439\u043d\u0430."}, 
 {"@id":"36", "source":"This value is not a valid country.", "target":"\u042d\u043d\u044d \u0443\u0442\u0433\u0430 \u04af\u043d\u044d\u043d \u0431\u043e\u0434\u0438\u0442 \u0443\u043b\u0441 \u0431\u0438\u0448 \u0431\u0430\u0439\u043d\u0430."}, {"@id":"37", "source":"This file is not a valid image.", "target":"\u0424\u0430\u0439\u043b \u0437\u0443\u0440\u0430\u0433 \u0431\u0438\u0448 \u0431\u0430\u0439\u043d\u0430."}, {"@id":"38", "source":"This is not a valid IP address.", "target":"IP \u0445\u0430\u044f\u0433 \u0437\u04e9\u0432 \u0431\u0438\u0448 \u0431\u0430\u0439\u043d\u0430."}, 
 {"@id":"39", "source":"This value is not a valid language.", "target":"\u042d\u043d\u044d \u0443\u0442\u0433\u0430 \u04af\u043d\u044d\u043d \u0437\u04e9\u0432 \u0445\u044d\u043b \u0431\u0438\u0448 \u0431\u0430\u0439\u043d\u0430 ."}]);
-abv.I18nHandler.add("nb", [{"@id":"1", "source":"This value should be false.", "target":"Verdien m\u00e5 v\u00e6re usann."}, {"@id":"2", "source":"This value should be true.", "target":"Verdien m\u00e5 v\u00e6re sann."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Verdien skal ha typen %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Verdien skal v\u00e6re blank."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"Den valgte verdien er ikke gyldig."}, 
+sogv.I18nHandler.add("nb", [{"@id":"1", "source":"This value should be false.", "target":"Verdien m\u00e5 v\u00e6re usann."}, {"@id":"2", "source":"This value should be true.", "target":"Verdien m\u00e5 v\u00e6re sann."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Verdien skal ha typen %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Verdien skal v\u00e6re blank."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"Den valgte verdien er ikke gyldig."}, 
 {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Du m\u00e5 velge minst %%limit%% valg."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Du kan maks velge %%limit%% valg."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"En eller flere av de oppgitte verdiene er ugyldige."}, {"@id":"9", "source":"This field was not expected.", 
 "target":"Dette feltet var ikke forventet."}, {"@id":"10", "source":"This field is missing.", "target":"Dette feltet mangler."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Verdien er ikke en gyldig dato."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Verdien er ikke en gyldig dato/tid."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"Verdien er ikke en gyldig e-postadresse."}, {"@id":"14", "source":"The file could not be found.", 
 "target":"Filen kunne ikke finnes."}, {"@id":"15", "source":"The file is not readable.", "target":"Filen er ikke lesbar."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"Filen er for stor (%%size%% %%suffix%%). Tilatte maksimale st\u00f8rrelse %%limit%% %%suffix%%."}, {"@id":"17", "source":"The mime type of the file is invalid (%%type%%). Allowed mime types are %%types%%.", "target":"Mimetypen av filen er ugyldig (%%type%%). Tilatte mimetyper er %%types%%."}, 
@@ -13063,7 +13151,7 @@ abv.I18nHandler.add("nb", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"86", "source":"This value should be valid JSON.", "target":"Verdien er ikke gyldig JSON."}, {"@id":"87", "source":"This collection should contain only unique elements.", "target":"Samlingen kan kun inneholde unike elementer."}, {"@id":"88", "source":"This value should be positive.", "target":"Denne verdien m\u00e5 v\u00e6re positiv."}, {"@id":"89", "source":"This value should be either positive or zero.", "target":"Denne verdien m\u00e5 v\u00e6re positiv eller null."}, {"@id":"90", "source":"This value should be negative.", 
 "target":"Denne verdien m\u00e5 v\u00e6re negativ."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"Denne verdien m\u00e5 v\u00e6re negativ eller null."}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"Verdien er ikke en gyldig tidssone."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"Dette passordet er lekket i et datainnbrudd, det m\u00e5 ikke tas i bruk. Vennligst bruk et annet passord."}, 
 {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"Verdien m\u00e5 v\u00e6re mellom %%min%% og %%max%%."}]);
-abv.I18nHandler.add("nl", [{"@id":"1", "source":"This value should be false.", "target":"Deze waarde moet onwaar zijn."}, {"@id":"2", "source":"This value should be true.", "target":"Deze waarde moet waar zijn."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Deze waarde moet van het type %%type%% zijn."}, {"@id":"4", "source":"This value should be blank.", "target":"Deze waarde moet leeg zijn."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"De geselecteerde waarde is geen geldige optie."}, 
+sogv.I18nHandler.add("nl", [{"@id":"1", "source":"This value should be false.", "target":"Deze waarde moet onwaar zijn."}, {"@id":"2", "source":"This value should be true.", "target":"Deze waarde moet waar zijn."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Deze waarde moet van het type %%type%% zijn."}, {"@id":"4", "source":"This value should be blank.", "target":"Deze waarde moet leeg zijn."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"De geselecteerde waarde is geen geldige optie."}, 
 {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Selecteer ten minste %%limit%% optie.|Selecteer ten minste %%limit%% opties."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Selecteer maximaal %%limit%% optie.|Selecteer maximaal %%limit%% opties."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"E\u00e9n of meer van de ingegeven waarden zijn ongeldig."}, 
 {"@id":"9", "source":"This field was not expected.", "target":"Dit veld werd niet verwacht."}, {"@id":"10", "source":"This field is missing.", "target":"Dit veld ontbreekt."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Deze waarde is geen geldige datum."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Deze waarde is geen geldige datum en tijd."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"Deze waarde is geen geldig e-mailadres."}, 
 {"@id":"14", "source":"The file could not be found.", "target":"Het bestand kon niet gevonden worden."}, {"@id":"15", "source":"The file is not readable.", "target":"Het bestand is niet leesbaar."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"Het bestand is te groot (%%size%% %%suffix%%). Toegestane maximum grootte is %%limit%% %%suffix%%."}, {"@id":"17", "source":"The mime type of the file is invalid (%%type%%). Allowed mime types are %%types%%.", 
@@ -13089,7 +13177,7 @@ abv.I18nHandler.add("nl", [{"@id":"1", "source":"This value should be false.", "
 "target":"Deze waarde moet geldige JSON zijn."}, {"@id":"87", "source":"This collection should contain only unique elements.", "target":"Deze collectie moet alleen unieke elementen bevatten."}, {"@id":"88", "source":"This value should be positive.", "target":"Deze waarde moet positief zijn."}, {"@id":"89", "source":"This value should be either positive or zero.", "target":"Deze waarde moet positief of gelijk aan nul zijn."}, {"@id":"90", "source":"This value should be negative.", "target":"Deze waarde moet negatief zijn."}, 
 {"@id":"91", "source":"This value should be either negative or zero.", "target":"Deze waarde moet negatief of gelijk aan nul zijn."}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"Deze waarde is geen geldige tijdzone."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"Dit wachtwoord is gelekt vanwege een data-inbreuk, het moet niet worden gebruikt. Kies een ander wachtwoord."}, {"@id":"94", 
 "source":"This value should be between %%min%% and %%max%%.", "target":"Deze waarde moet zich tussen %%min%% en %%max%% bevinden."}]);
-abv.I18nHandler.add("nn", [{"@id":"1", "source":"This value should be false.", "target":"Verdien skulle ha vore tom/nei."}, {"@id":"2", "source":"This value should be true.", "target":"Verdien skulla ha vore satt/ja."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Verdien m\u00e5 vere av typen %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Verdien skal vere blank."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"Verdien du valde er ikkje gyldig."}, 
+sogv.I18nHandler.add("nn", [{"@id":"1", "source":"This value should be false.", "target":"Verdien skulle ha vore tom/nei."}, {"@id":"2", "source":"This value should be true.", "target":"Verdien skulla ha vore satt/ja."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Verdien m\u00e5 vere av typen %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Verdien skal vere blank."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"Verdien du valde er ikkje gyldig."}, 
 {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Du m\u00e5 gjere minst %%limit%% val."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Du kan maksimalt gjere %%limit%% val."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Ein eller fleire av dei opplyste verdiane er ugyldige."}, {"@id":"9", "source":"This field was not expected.", 
 "target":"Dette feltet var ikke forventa."}, {"@id":"10", "source":"This field is missing.", "target":"Dette feltet mangler."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Verdien er ikkje ein gyldig dato."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Verdien er ikkje ein gyldig dato og tid."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"Verdien er ikkje ei gyldig e-postadresse."}, {"@id":"14", "source":"The file could not be found.", 
 "target":"Fila er ikkje funnen."}, {"@id":"15", "source":"The file is not readable.", "target":"Fila kan ikkje lesast."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"Fila er for stor (%%size%% %%suffix%%). Maksimal storleik er %%limit%% %%suffix%%."}, {"@id":"17", "source":"The mime type of the file is invalid (%%type%%). Allowed mime types are %%types%%.", "target":"Mime-typen av fila er ugyldig (%%type%%). Tillatne mime-typar er %%types%%."}, 
@@ -13104,7 +13192,7 @@ abv.I18nHandler.add("nn", [{"@id":"1", "source":"This value should be false.", "
 "target":"F\u00f8rebels mappe (tmp) er ikkje konfigurert i php.ini."}, {"@id":"52", "source":"Cannot write temporary file to disk.", "target":"Kan ikkje skrive f\u00f8rebels fil til disk."}, {"@id":"53", "source":"A PHP extension caused the upload to fail.", "target":"Ei PHP-udviding for\u00e5rsaka feil under opplasting."}, {"@id":"54", "source":"This collection should contain %%limit%% element or more.|This collection should contain %%limit%% elements or more.", "target":"Denne samlinga m\u00e5 innehalde %%limit%% element eller meir.|Denne samlinga m\u00e5 innehalde %%limit%% element eller meir."}, 
 {"@id":"55", "source":"This collection should contain %%limit%% element or less.|This collection should contain %%limit%% elements or less.", "target":"Denne samlinga m\u00e5 innehalde %%limit%% element eller f\u00e6rre.|Denne samlinga m\u00e5 innehalde %%limit%% element eller f\u00e6rre."}, {"@id":"56", "source":"This collection should contain exactly %%limit%% element.|This collection should contain exactly %%limit%% elements.", "target":"Denne samlinga m\u00e5 innehalde n\u00f8yaktig %%limit%% element.|Denne samlinga m\u00e5 innehalde n\u00f8yaktig %%limit%% element."}, 
 {"@id":"57", "source":"Invalid card number.", "target":"Ugyldig kortnummer."}, {"@id":"58", "source":"Unsupported card type or invalid card number.", "target":"Korttypen er ikkje st\u00f8tta, eller kortnummeret er ugyldig."}]);
-abv.I18nHandler.add("no", [{"@id":"1", "source":"This value should be false.", "target":"Verdien m\u00e5 v\u00e6re usann."}, {"@id":"2", "source":"This value should be true.", "target":"Verdien m\u00e5 v\u00e6re sann."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Verdien skal ha typen %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Verdien skal v\u00e6re blank."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"Den valgte verdien er ikke gyldig."}, 
+sogv.I18nHandler.add("no", [{"@id":"1", "source":"This value should be false.", "target":"Verdien m\u00e5 v\u00e6re usann."}, {"@id":"2", "source":"This value should be true.", "target":"Verdien m\u00e5 v\u00e6re sann."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Verdien skal ha typen %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Verdien skal v\u00e6re blank."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"Den valgte verdien er ikke gyldig."}, 
 {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Du m\u00e5 velge minst %%limit%% valg."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Du kan maks velge %%limit%% valg."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"En eller flere av de oppgitte verdiene er ugyldige."}, {"@id":"9", "source":"This field was not expected.", 
 "target":"Dette feltet var ikke forventet."}, {"@id":"10", "source":"This field is missing.", "target":"Dette feltet mangler."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Verdien er ikke en gyldig dato."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Verdien er ikke en gyldig dato/tid."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"Verdien er ikke en gyldig e-postadresse."}, {"@id":"14", "source":"The file could not be found.", 
 "target":"Filen kunne ikke finnes."}, {"@id":"15", "source":"The file is not readable.", "target":"Filen er ikke lesbar."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"Filen er for stor (%%size%% %%suffix%%). Tilatte maksimale st\u00f8rrelse %%limit%% %%suffix%%."}, {"@id":"17", "source":"The mime type of the file is invalid (%%type%%). Allowed mime types are %%types%%.", "target":"Mimetypen av filen er ugyldig (%%type%%). Tilatte mimetyper er %%types%%."}, 
@@ -13129,7 +13217,7 @@ abv.I18nHandler.add("no", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"86", "source":"This value should be valid JSON.", "target":"Verdien er ikke gyldig JSON."}, {"@id":"87", "source":"This collection should contain only unique elements.", "target":"Samlingen kan kun inneholde unike elementer."}, {"@id":"88", "source":"This value should be positive.", "target":"Denne verdien m\u00e5 v\u00e6re positiv."}, {"@id":"89", "source":"This value should be either positive or zero.", "target":"Denne verdien m\u00e5 v\u00e6re positiv eller null."}, {"@id":"90", "source":"This value should be negative.", 
 "target":"Denne verdien m\u00e5 v\u00e6re negativ."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"Denne verdien m\u00e5 v\u00e6re negativ eller null."}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"Verdien er ikke en gyldig tidssone."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"Dette passordet er lekket i et datainnbrudd, det m\u00e5 ikke tas i bruk. Vennligst bruk et annet passord."}, 
 {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"Verdien m\u00e5 v\u00e6re mellom %%min%% og %%max%%."}]);
-abv.I18nHandler.add("pl", [{"@id":"1", "source":"This value should be false.", "target":"Ta warto\u015b\u0107 powinna by\u0107 fa\u0142szem."}, {"@id":"2", "source":"This value should be true.", "target":"Ta warto\u015b\u0107 powinna by\u0107 prawd\u0105."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Ta warto\u015b\u0107 powinna by\u0107 typu %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Ta warto\u015b\u0107 powinna by\u0107 pusta."}, {"@id":"5", 
+sogv.I18nHandler.add("pl", [{"@id":"1", "source":"This value should be false.", "target":"Ta warto\u015b\u0107 powinna by\u0107 fa\u0142szem."}, {"@id":"2", "source":"This value should be true.", "target":"Ta warto\u015b\u0107 powinna by\u0107 prawd\u0105."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Ta warto\u015b\u0107 powinna by\u0107 typu %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Ta warto\u015b\u0107 powinna by\u0107 pusta."}, {"@id":"5", 
 "source":"The value you selected is not a valid choice.", "target":"Ta warto\u015b\u0107 powinna by\u0107 jedn\u0105 z podanych opcji."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Powiniene\u015b wybra\u0107 co najmniej %%limit%% opcj\u0119.|Powiniene\u015b wybra\u0107 co najmniej %%limit%% opcje.|Powiniene\u015b wybra\u0107 co najmniej %%limit%% opcji."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", 
 "target":"Powiniene\u015b wybra\u0107 maksymalnie %%limit%% opcj\u0119.|Powiniene\u015b wybra\u0107 maksymalnie %%limit%% opcje.|Powiniene\u015b wybra\u0107 maksymalnie %%limit%% opcji."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Jedna lub wi\u0119cej z podanych warto\u015bci jest nieprawid\u0142owa."}, {"@id":"9", "source":"This field was not expected.", "target":"Tego pola si\u0119 nie spodziewano."}, {"@id":"10", "source":"This field is missing.", "target":"Tego pola brakuje."}, 
 {"@id":"11", "source":"This value is not a valid date.", "target":"Ta warto\u015b\u0107 nie jest prawid\u0142ow\u0105 dat\u0105."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Ta warto\u015b\u0107 nie jest prawid\u0142ow\u0105 dat\u0105 i czasem."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"Ta warto\u015b\u0107 nie jest prawid\u0142owym adresem email."}, {"@id":"14", "source":"The file could not be found.", "target":"Plik nie m\u00f3g\u0142 zosta\u0107 odnaleziony."}, 
@@ -13156,7 +13244,7 @@ abv.I18nHandler.add("pl", [{"@id":"1", "source":"This value should be false.", "
 "target":"Plik nie mo\u017ce by\u0107 pusty."}, {"@id":"79", "source":"The host could not be resolved.", "target":"Nazwa hosta nie zosta\u0142a rozpoznana."}, {"@id":"80", "source":"This value does not match the expected %%charset%% charset.", "target":"Ta warto\u015b\u0107 nie pasuje do oczekiwanego zestawu znak\u00f3w %%charset%%."}, {"@id":"81", "source":"This is not a valid Business Identifier Code (BIC).", "target":"Ta warto\u015b\u0107 nie jest poprawnym kodem BIC (Business Identifier Code)."}, 
 {"@id":"82", "source":"Error", "target":"B\u0142\u0105d"}, {"@id":"83", "source":"This is not a valid UUID.", "target":"To nie jest poprawne UUID."}, {"@id":"84", "source":"This value should be a multiple of %%compared_value%%.", "target":"Ta warto\u015b\u0107 powinna by\u0107 wielokrotno\u015bci\u0105 %%compared_value%%."}, {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"Ten kod BIC (Business Identifier Code) nie jest powi\u0105zany z mi\u0119dzynarodowym numerem rachunku bankowego (IBAN) %%iban%%."}, 
 {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"Ta warto\u015b\u0107 powinna by\u0107 pomi\u0119dzy %%min%% a %%max%%."}]);
-abv.I18nHandler.add("pt_BR", [{"@id":"1", "source":"This value should be false.", "target":"Este valor deve ser falso."}, {"@id":"2", "source":"This value should be true.", "target":"Este valor deve ser verdadeiro."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Este valor deve ser do tipo %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Este valor deve ser vazio."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"O valor selecionado n\u00e3o \u00e9 uma op\u00e7\u00e3o v\u00e1lida."}, 
+sogv.I18nHandler.add("pt_BR", [{"@id":"1", "source":"This value should be false.", "target":"Este valor deve ser falso."}, {"@id":"2", "source":"This value should be true.", "target":"Este valor deve ser verdadeiro."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Este valor deve ser do tipo %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Este valor deve ser vazio."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"O valor selecionado n\u00e3o \u00e9 uma op\u00e7\u00e3o v\u00e1lida."}, 
 {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Voc\u00ea deve selecionar, no m\u00ednimo, %%limit%% op\u00e7\u00e3o.|Voc\u00ea deve selecionar, no m\u00ednimo, %%limit%% op\u00e7\u00f5es."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Voc\u00ea deve selecionar, no m\u00e1ximo, %%limit%% op\u00e7\u00e3o.|Voc\u00ea deve selecionar, no m\u00e1ximo, %%limit%% op\u00e7\u00f5es."}, 
 {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Um ou mais valores informados s\u00e3o inv\u00e1lidos."}, {"@id":"9", "source":"This field was not expected.", "target":"Este campo n\u00e3o era esperado."}, {"@id":"10", "source":"This field is missing.", "target":"Este campo est\u00e1 ausente."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Este valor n\u00e3o \u00e9 uma data v\u00e1lida."}, {"@id":"12", "source":"This value is not a valid datetime.", 
 "target":"Este valor n\u00e3o \u00e9 uma data e hora v\u00e1lida."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"Este valor n\u00e3o \u00e9 um endere\u00e7o de e-mail v\u00e1lido."}, {"@id":"14", "source":"The file could not be found.", "target":"O arquivo n\u00e3o foi encontrado."}, {"@id":"15", "source":"The file is not readable.", "target":"O arquivo n\u00e3o pode ser lido."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", 
@@ -13181,7 +13269,7 @@ abv.I18nHandler.add("pt_BR", [{"@id":"1", "source":"This value should be false."
 {"@id":"77", "source":"The image is portrait oriented (%%width%%x%%height%%px). Portrait oriented images are not allowed.", "target":"A imagem est\u00e1 orientada ao retrato (%%width%%x%%height%%px). Imagens orientadas ao retrato n\u00e3o s\u00e3o permitidas."}, {"@id":"78", "source":"An empty file is not allowed.", "target":"Arquivo vazio n\u00e3o \u00e9 permitido."}, {"@id":"79", "source":"The host could not be resolved.", "target":"O host n\u00e3o p\u00f4de ser resolvido."}, {"@id":"80", "source":"This value does not match the expected %%charset%% charset.", 
 "target":"Este valor n\u00e3o corresponde ao charset %%charset%% esperado."}, {"@id":"81", "source":"This is not a valid Business Identifier Code (BIC).", "target":"Este n\u00e3o \u00e9 um C\u00f3digo Identificador Banc\u00e1rio (BIC) v\u00e1lido."}, {"@id":"82", "source":"Error", "target":"Erro"}, {"@id":"83", "source":"This is not a valid UUID.", "target":"Este n\u00e3o \u00e9 um UUID v\u00e1lido."}, {"@id":"84", "source":"This value should be a multiple of %%compared_value%%.", "target":"Este valor deve ser m\u00faltiplo de %%compared_value%%."}, 
 {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"Este C\u00f3digo Identificador Banc\u00e1rio (BIC) n\u00e3o est\u00e1 associado ao IBAN %%iban%%."}, {"@id":"86", "source":"This value should be valid JSON.", "target":"Este valor deve ser um JSON v\u00e1lido."}]);
-abv.I18nHandler.add("pt", [{"@id":"1", "source":"This value should be false.", "target":"Este valor deveria ser falso."}, {"@id":"2", "source":"This value should be true.", "target":"Este valor deveria ser verdadeiro."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Este valor deveria ser do tipo %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Este valor deveria ser vazio."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
+sogv.I18nHandler.add("pt", [{"@id":"1", "source":"This value should be false.", "target":"Este valor deveria ser falso."}, {"@id":"2", "source":"This value should be true.", "target":"Este valor deveria ser verdadeiro."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Este valor deveria ser do tipo %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Este valor deveria ser vazio."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"O valor selecionado n\u00e3o \u00e9 uma op\u00e7\u00e3o v\u00e1lida."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Voc\u00ea deveria selecionar %%limit%% op\u00e7\u00e3o no m\u00ednimo.|Voc\u00ea deveria selecionar %%limit%% op\u00e7\u00f5es no m\u00ednimo."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Voc\u00ea deve selecionar, no m\u00e1ximo %%limit%% op\u00e7\u00e3o.|Voc\u00ea deve selecionar, no m\u00e1ximo %%limit%% op\u00e7\u00f5es."}, 
 {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Um ou mais dos valores introduzidos n\u00e3o s\u00e3o v\u00e1lidos."}, {"@id":"9", "source":"This field was not expected.", "target":"Este campo n\u00e3o era esperado."}, {"@id":"10", "source":"This field is missing.", "target":"Este campo est\u00e1 faltando."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Este valor n\u00e3o \u00e9 uma data v\u00e1lida."}, {"@id":"12", "source":"This value is not a valid datetime.", 
 "target":"Este valor n\u00e3o \u00e9 uma data-hora v\u00e1lida."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"Este valor n\u00e3o \u00e9 um endere\u00e7o de e-mail v\u00e1lido."}, {"@id":"14", "source":"The file could not be found.", "target":"O arquivo n\u00e3o p\u00f4de ser encontrado."}, {"@id":"15", "source":"The file is not readable.", "target":"O arquivo n\u00e3o p\u00f4de ser lido."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", 
@@ -13205,7 +13293,7 @@ abv.I18nHandler.add("pt", [{"@id":"1", "source":"This value should be false.", "
 "target":"A imagem est\u00e1 orientada \u00e0 paisagem (%%width%%x%%height%%px). Imagens orientadas \u00e0 paisagem n\u00e3o s\u00e3o permitidas."}, {"@id":"77", "source":"The image is portrait oriented (%%width%%x%%height%%px). Portrait oriented images are not allowed.", "target":"A imagem est\u00e1 orientada ao retrato (%%width%%x%%height%%px). Imagens orientadas ao retrato n\u00e3o s\u00e3o permitidas."}, {"@id":"78", "source":"An empty file is not allowed.", "target":"Ficheiro vazio n\u00e3o \u00e9 permitido."}, 
 {"@id":"79", "source":"The host could not be resolved.", "target":"O host n\u00e3o pode ser resolvido."}, {"@id":"80", "source":"This value does not match the expected %%charset%% charset.", "target":"O valor n\u00e3o corresponde ao conjunto de caracteres %%charset%% esperado."}, {"@id":"81", "source":"This is not a valid Business Identifier Code (BIC).", "target":"O C\u00f3digo de Identifica\u00e7\u00e3o de Empresa (BIC) n\u00e3o \u00e9 v\u00e1lido."}, {"@id":"82", "source":"Error", "target":"Erro"}, 
 {"@id":"83", "source":"This is not a valid UUID.", "target":"Este valor n\u00e3o \u00e9 um UUID v\u00e1lido."}, {"@id":"84", "source":"This value should be a multiple of %%compared_value%%.", "target":"Este valor deve ser um m\u00faltiplo de %%compared_value%%."}, {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"O C\u00f3digo de Identifica\u00e7\u00e3o de Empresa (BIC) n\u00e3o est\u00e1 associado ao IBAN %%iban%%."}]);
-abv.I18nHandler.add("ro", [{"@id":"1", "source":"This value should be false.", "target":"Aceast\u0103 valoare ar trebui s\u0103 fie fals\u0103 (false)."}, {"@id":"2", "source":"This value should be true.", "target":"Aceast\u0103 valoare ar trebui s\u0103 fie adev\u0103rat\u0103 (true)."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Aceast\u0103 valoare ar trebui s\u0103 fie de tipul %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Aceast\u0103 valoare ar trebui sa fie goal\u0103."}, 
+sogv.I18nHandler.add("ro", [{"@id":"1", "source":"This value should be false.", "target":"Aceast\u0103 valoare ar trebui s\u0103 fie fals\u0103 (false)."}, {"@id":"2", "source":"This value should be true.", "target":"Aceast\u0103 valoare ar trebui s\u0103 fie adev\u0103rat\u0103 (true)."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Aceast\u0103 valoare ar trebui s\u0103 fie de tipul %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Aceast\u0103 valoare ar trebui sa fie goal\u0103."}, 
 {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"Valoarea selectat\u0103 nu este o op\u021biune valid\u0103."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Trebuie s\u0103 selecta\u021bi cel pu\u021bin %%limit%% op\u021biune.|Trebuie s\u0103 selecta\u021bi cel pu\u021bin %%limit%% op\u021biuni.|Trebuie s\u0103 selecta\u021bi cel pu\u021bin %%limit%% de op\u021biuni"}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", 
 "target":"Trebuie s\u0103 selecta\u021bi cel mult %%limit%% op\u021biune.|Trebuie s\u0103 selecta\u021bi cel mult %%limit%% op\u021biuni.|Trebuie s\u0103 selecta\u021bi cel mult %%limit%% de op\u021biuni."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Una sau mai multe dintre valorile furnizate sunt invalide."}, {"@id":"9", "source":"This field was not expected.", "target":"Acest c\u00e2mp nu era de a\u015fteptat."}, {"@id":"10", "source":"This field is missing.", 
 "target":"Acest c\u00e2mp este lips\u0103."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Aceast\u0103 valoare nu reprezint\u0103 o dat\u0103 valid\u0103."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Aceast\u0103 valoare nu reprezint\u0103 o dat\u0103 \u0219i or\u0103 valid\u0103."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"Aceast\u0103 valoare nu reprezint\u0103 o adres\u0103 de e-mail valid\u0103."}, {"@id":"14", 
@@ -13232,7 +13320,7 @@ abv.I18nHandler.add("ro", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"78", "source":"An empty file is not allowed.", "target":"Nu se permite un fi\u0219ier gol."}, {"@id":"79", "source":"The host could not be resolved.", "target":"Numele host nu a putut fi rezolvat c\u0103tre o adres\u0103 IP."}, {"@id":"80", "source":"This value does not match the expected %%charset%% charset.", "target":"Aceast\u0103 valoare nu corespunde setului de caractere %%charset%% a\u0219teptat."}, {"@id":"81", "source":"This is not a valid Business Identifier Code (BIC).", "target":"Codul BIC (Business Identifier Code) nu este valid."}, 
 {"@id":"82", "source":"Error", "target":"Eroare"}, {"@id":"83", "source":"This is not a valid UUID.", "target":"Identificatorul universal unic (UUID) nu este valid."}, {"@id":"84", "source":"This value should be a multiple of %%compared_value%%.", "target":"Aceast\u0103 valoare trebuie s\u0103 fie un multiplu de %%compared_value%%."}, {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"Codul BIC (Business Identifier Code) nu este asociat cu codul IBAN %%iban%%."}, 
 {"@id":"86", "source":"This value should be valid JSON.", "target":"Aceast\u0103 valoare trebuie s\u0103 fie un JSON valid."}]);
-abv.I18nHandler.add("ru", [{"@id":"1", "source":"This value should be false.", "target":"\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u0434\u043e\u043b\u0436\u043d\u043e \u0431\u044b\u0442\u044c \u043b\u043e\u0436\u043d\u044b\u043c."}, {"@id":"2", "source":"This value should be true.", "target":"\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u0434\u043e\u043b\u0436\u043d\u043e \u0431\u044b\u0442\u044c \u0438\u0441\u0442\u0438\u043d\u043d\u044b\u043c."}, {"@id":"3", "source":"This value should be of type %%type%%.", 
+sogv.I18nHandler.add("ru", [{"@id":"1", "source":"This value should be false.", "target":"\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u0434\u043e\u043b\u0436\u043d\u043e \u0431\u044b\u0442\u044c \u043b\u043e\u0436\u043d\u044b\u043c."}, {"@id":"2", "source":"This value should be true.", "target":"\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u0434\u043e\u043b\u0436\u043d\u043e \u0431\u044b\u0442\u044c \u0438\u0441\u0442\u0438\u043d\u043d\u044b\u043c."}, {"@id":"3", "source":"This value should be of type %%type%%.", 
 "target":"\u0422\u0438\u043f \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f \u0434\u043e\u043b\u0436\u0435\u043d \u0431\u044b\u0442\u044c %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u0434\u043e\u043b\u0436\u043d\u043e \u0431\u044b\u0442\u044c \u043f\u0443\u0441\u0442\u044b\u043c."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"\u0412\u044b\u0431\u0440\u0430\u043d\u043d\u043e\u0435 \u0412\u0430\u043c\u0438 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u043d\u0435\u0434\u043e\u043f\u0443\u0441\u0442\u0438\u043c\u043e."}, 
 {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"\u0412\u044b \u0434\u043e\u043b\u0436\u043d\u044b \u0432\u044b\u0431\u0440\u0430\u0442\u044c \u0445\u043e\u0442\u044f \u0431\u044b %%limit%% \u0432\u0430\u0440\u0438\u0430\u043d\u0442.|\u0412\u044b \u0434\u043e\u043b\u0436\u043d\u044b \u0432\u044b\u0431\u0440\u0430\u0442\u044c \u0445\u043e\u0442\u044f \u0431\u044b %%limit%% \u0432\u0430\u0440\u0438\u0430\u043d\u0442\u0430.|\u0412\u044b \u0434\u043e\u043b\u0436\u043d\u044b \u0432\u044b\u0431\u0440\u0430\u0442\u044c \u0445\u043e\u0442\u044f \u0431\u044b %%limit%% \u0432\u0430\u0440\u0438\u0430\u043d\u0442\u043e\u0432."}, 
 {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"\u0412\u044b \u0434\u043e\u043b\u0436\u043d\u044b \u0432\u044b\u0431\u0440\u0430\u0442\u044c \u043d\u0435 \u0431\u043e\u043b\u0435\u0435 \u0447\u0435\u043c %%limit%% \u0432\u0430\u0440\u0438\u0430\u043d\u0442.|\u0412\u044b \u0434\u043e\u043b\u0436\u043d\u044b \u0432\u044b\u0431\u0440\u0430\u0442\u044c \u043d\u0435 \u0431\u043e\u043b\u0435\u0435 \u0447\u0435\u043c %%limit%% \u0432\u0430\u0440\u0438\u0430\u043d\u0442\u0430.|\u0412\u044b \u0434\u043e\u043b\u0436\u043d\u044b \u0432\u044b\u0431\u0440\u0430\u0442\u044c \u043d\u0435 \u0431\u043e\u043b\u0435\u0435 \u0447\u0435\u043c %%limit%% \u0432\u0430\u0440\u0438\u0430\u043d\u0442\u043e\u0432."}, 
@@ -13282,7 +13370,7 @@ abv.I18nHandler.add("ru", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"91", "source":"This value should be either negative or zero.", "target":"\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u0434\u043e\u043b\u0436\u043d\u043e \u0431\u044b\u0442\u044c \u043e\u0442\u0440\u0438\u0446\u0430\u0442\u0435\u043b\u044c\u043d\u044b\u043c \u0438\u043b\u0438 \u0440\u0430\u0432\u043d\u044b\u043c \u043d\u0443\u043b\u044e."}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u043d\u0435 \u044f\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u043a\u043e\u0440\u0440\u0435\u043a\u0442\u043d\u044b\u043c \u0447\u0430\u0441\u043e\u0432\u044b\u043c \u043f\u043e\u044f\u0441\u043e\u043c."}, 
 {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"\u0414\u0430\u043d\u043d\u044b\u0439 \u043f\u0430\u0440\u043e\u043b\u044c \u0431\u044b\u043b \u0441\u043a\u043e\u043c\u043f\u0440\u043e\u043c\u0435\u0442\u0438\u0440\u043e\u0432\u0430\u043d \u0432 \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u0435 \u0443\u0442\u0435\u0447\u043a\u0438 \u0434\u0430\u043d\u043d\u044b\u0445 \u0438 \u043d\u0435 \u0434\u043e\u043b\u0436\u0435\u043d \u0431\u044b\u0442\u044c \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d. \u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u0439\u0442\u0435 \u0434\u0440\u0443\u0433\u043e\u0439 \u043f\u0430\u0440\u043e\u043b\u044c."}, 
 {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u0434\u043e\u043b\u0436\u043d\u043e \u0431\u044b\u0442\u044c \u043c\u0435\u0436\u0434\u0443 %%min%% \u0438 %%max%%."}, {"@id":"95", "source":"This value is not a valid hostname.", "target":"\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u043d\u0435 \u044f\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u043a\u043e\u0440\u0440\u0435\u043a\u0442\u043d\u044b\u043c \u0438\u043c\u0435\u043d\u0435\u043c \u0445\u043e\u0441\u0442\u0430."}]);
-abv.I18nHandler.add("sk", [{"@id":"1", "source":"This value should be false.", "target":"T\u00e1to hodnota by mala by\u0165 nastaven\u00e1 na false."}, {"@id":"2", "source":"This value should be true.", "target":"T\u00e1to hodnota by mala by\u0165 nastaven\u00e1 na true."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"T\u00e1to hodnota by mala by\u0165 typu %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"T\u00e1to hodnota by mala by\u0165 pr\u00e1zdna."}, 
+sogv.I18nHandler.add("sk", [{"@id":"1", "source":"This value should be false.", "target":"T\u00e1to hodnota by mala by\u0165 nastaven\u00e1 na false."}, {"@id":"2", "source":"This value should be true.", "target":"T\u00e1to hodnota by mala by\u0165 nastaven\u00e1 na true."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"T\u00e1to hodnota by mala by\u0165 typu %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"T\u00e1to hodnota by mala by\u0165 pr\u00e1zdna."}, 
 {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"T\u00e1to hodnota by mala by\u0165 jednou z poskytnut\u00fdch mo\u017enost\u00ed."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Mali by ste vybra\u0165 minim\u00e1lne %%limit%% mo\u017enos\u0165.|Mali by ste vybra\u0165 minim\u00e1lne %%limit%% mo\u017enosti.|Mali by ste vybra\u0165 minim\u00e1lne %%limit%% mo\u017enost\u00ed."}, {"@id":"7", 
 "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Mali by ste vybra\u0165 najviac %%limit%% mo\u017enos\u0165.|Mali by ste vybra\u0165 najviac %%limit%% mo\u017enosti.|Mali by ste vybra\u0165 najviac %%limit%% mo\u017enost\u00ed."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Niektor\u00e9 z uveden\u00fdch hodn\u00f4t s\u00fa neplatn\u00e9."}, {"@id":"9", "source":"This field was not expected.", "target":"Toto pole sa neo\u010dak\u00e1va."}, 
 {"@id":"10", "source":"This field is missing.", "target":"Toto pole ch\u00fdba."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Tato hodnota nem\u00e1 platn\u00fd form\u00e1t d\u00e1tumu."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"T\u00e1to hodnota nem\u00e1 platn\u00fd form\u00e1t d\u00e1tumu a \u010dasu."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"T\u00e1to hodnota nie je platn\u00e1 emailov\u00e1 adresa."}, 
@@ -13312,7 +13400,7 @@ abv.I18nHandler.add("sk", [{"@id":"1", "source":"This value should be false.", "
 "source":"This collection should contain only unique elements.", "target":"T\u00e1to kolekcia by mala obsahova\u0165 len unik\u00e1tne prkvy."}, {"@id":"88", "source":"This value should be positive.", "target":"T\u00e1to hodnota by mala by\u0165 kladn\u00e1."}, {"@id":"89", "source":"This value should be either positive or zero.", "target":"T\u00e1to hodnota by mala by\u0165 kladn\u00e1 alebo nulov\u00e1."}, {"@id":"90", "source":"This value should be negative.", "target":"T\u00e1to hodnota by mala by\u0165 z\u00e1porn\u00e1."}, 
 {"@id":"91", "source":"This value should be either negative or zero.", "target":"T\u00e1to hodnota by mala by\u0165 z\u00e1porn\u00e1 alebo nulov\u00e1."}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"T\u00e1to hodnota nie je platn\u00e9 \u010dasov\u00e9 p\u00e1smo."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"Toto heslo uniklo pri naru\u0161en\u00ed ochrany d\u00e1t, nie je mo\u017en\u00e9 ho pou\u017ei\u0165. Pros\u00edm, pou\u017eite in\u00e9 heslo."}, 
 {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"T\u00e1to hodnota by mala by\u0165 medzi %%min%% a %%max%%."}]);
-abv.I18nHandler.add("sl", [{"@id":"1", "source":"This value should be false.", "target":"Vrednost bi morala biti nepravilna (false)."}, {"@id":"2", "source":"This value should be true.", "target":"Vrednost bi morala biti pravilna (true)."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Vrednost mora biti naslednjega tipa %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Vrednost mora biti prazna."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
+sogv.I18nHandler.add("sl", [{"@id":"1", "source":"This value should be false.", "target":"Vrednost bi morala biti nepravilna (false)."}, {"@id":"2", "source":"This value should be true.", "target":"Vrednost bi morala biti pravilna (true)."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Vrednost mora biti naslednjega tipa %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Vrednost mora biti prazna."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Vrednost, ki ste jo izbrali, ni veljavna mo\u017enost."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Izbrati morate vsaj %%limit%% mo\u017enost.|Izbrati morate vsaj %%limit%% mo\u017enosti.|Izbrati morate vsaj %%limit%% mo\u017enosti.|Izbrati morate vsaj %%limit%% mo\u017enosti."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Izberete lahko najve\u010d %%limit%% mo\u017enost.|Izberete lahko najve\u010d %%limit%% mo\u017enosti.|Izberete lahko najve\u010d %%limit%% mo\u017enosti.|Izberete lahko najve\u010d %%limit%% mo\u017enosti."}, 
 {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Ena ali ve\u010d podanih vrednosti ni veljavnih."}, {"@id":"9", "source":"This field was not expected.", "target":"To polje ni bilo pri\u010dakovati."}, {"@id":"10", "source":"This field is missing.", "target":"To polje manjka."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Ta vrednost ni veljaven datum."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Ta vrednost ni veljaven datum in \u010das."}, 
 {"@id":"13", "source":"This value is not a valid email address.", "target":"Ta vrednost ni veljaven e-po\u0161tni naslov."}, {"@id":"14", "source":"The file could not be found.", "target":"Datoteke ni mogo\u010de najti."}, {"@id":"15", "source":"The file is not readable.", "target":"Datoteke ni mogo\u010de prebrati."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"Datoteka je prevelika (%%size%% %%suffix%%). Najve\u010dja dovoljena velikost je %%limit%% %%suffix%%."}, 
@@ -13338,7 +13426,7 @@ abv.I18nHandler.add("sl", [{"@id":"1", "source":"This value should be false.", "
 "target":"Ta poslovna identifikacijska koda (BIC) ni povezana z IBAN %%iban%%."}, {"@id":"86", "source":"This value should be valid JSON.", "target":"Ta vrednost bi morala biti veljaven JSON."}, {"@id":"87", "source":"This collection should contain only unique elements.", "target":"Ta zbirka bi morala vsebovati samo edinstvene elemente."}, {"@id":"88", "source":"This value should be positive.", "target":"Ta vrednost bi morala biti pozitivna."}, {"@id":"89", "source":"This value should be either positive or zero.", 
 "target":"Ta vrednost bi morala biti pozitivna ali enaka ni\u010d."}, {"@id":"90", "source":"This value should be negative.", "target":"Ta vrednost bi morala biti negativna."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"Ta vrednost bi morala biti negativna ali enaka ni\u010d."}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"Ta vrednost ni veljaven \u010dasovni pas."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", 
 "target":"To geslo je u\u0161lo pri kr\u0161itvi varnosti podatkov in ga ne smete uporabljati. Prosimo, uporabite drugo geslo."}, {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"Ta vrednost bi morala biti med %%min%% in %%max%%."}]);
-abv.I18nHandler.add("sq", [{"@id":"1", "source":"This value should be false.", "target":"Kjo vler\u00eb duhet t\u00eb jet\u00eb e pav\u00ebrtet\u00eb (false)."}, {"@id":"2", "source":"This value should be true.", "target":"Kjo vler\u00eb duhet t\u00eb jet\u00eb e v\u00ebrtet\u00eb (true)."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Kjo vler\u00eb duhet t\u00eb jet\u00eb e llojit %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Kjo vler\u00eb duhet t\u00eb jet\u00eb e zbraz\u00ebt."}, 
+sogv.I18nHandler.add("sq", [{"@id":"1", "source":"This value should be false.", "target":"Kjo vler\u00eb duhet t\u00eb jet\u00eb e pav\u00ebrtet\u00eb (false)."}, {"@id":"2", "source":"This value should be true.", "target":"Kjo vler\u00eb duhet t\u00eb jet\u00eb e v\u00ebrtet\u00eb (true)."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Kjo vler\u00eb duhet t\u00eb jet\u00eb e llojit %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Kjo vler\u00eb duhet t\u00eb jet\u00eb e zbraz\u00ebt."}, 
 {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"Vlera q\u00eb keni zgjedhur nuk \u00ebsht\u00eb alternativ\u00eb e vlefshme."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Duhet t\u00eb zgjedhni s\u00eb paku %%limit%% alternativ\u00eb.|Duhet t\u00eb zgjedhni s\u00eb paku %%limit%% alternativa."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", 
 "target":"Duhet t\u00eb zgjedhni m\u00eb s\u00eb shumti %%limit%% alternativ\u00eb.|Duhet t\u00eb zgjedhni m\u00eb s\u00eb shumti %%limit%% alternativa."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Nj\u00eb apo m\u00eb shum\u00eb nga vlerat e dh\u00ebna jan\u00eb t\u00eb pavlefshme."}, {"@id":"9", "source":"This field was not expected.", "target":"Kjo fush\u00eb nuk pritej."}, {"@id":"10", "source":"This field is missing.", "target":"Kjo fush\u00eb mungon."}, {"@id":"11", 
 "source":"This value is not a valid date.", "target":"Kjo vler\u00eb nuk \u00ebsht\u00eb dat\u00eb e vlefshme."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Kjo vler\u00eb nuk \u00ebsht\u00eb dat\u00eb-koh\u00eb e vlefshme."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"Kjo vler\u00eb nuk \u00ebsht\u00eb adres\u00eb email-i e vlefshme."}, {"@id":"14", "source":"The file could not be found.", "target":"File nuk mund t\u00eb gjindej."}, {"@id":"15", 
@@ -13365,7 +13453,7 @@ abv.I18nHandler.add("sq", [{"@id":"1", "source":"This value should be false.", "
 "target":"Imazhi \u00ebsht\u00eb i orientuar vertikalisht (%%width%%x%%height%%px). Imazhet orientuara vertikalisht nuk lejohen."}, {"@id":"78", "source":"An empty file is not allowed.", "target":"Nj\u00eb file i zbraz\u00ebt nuk lejohet."}, {"@id":"79", "source":"The host could not be resolved.", "target":"Host-i nuk mund te zbulohej."}, {"@id":"80", "source":"This value does not match the expected %%charset%% charset.", "target":"Kjo vler\u00eb nuk p\u00ebrputhet me kodifikimin e karaktereve %%charset%% q\u00eb pritej."}, 
 {"@id":"81", "source":"This is not a valid Business Identifier Code (BIC).", "target":"Ky nuk \u00ebsht\u00eb nj\u00eb Kod Identifikues i Biznesit (BIC) i vleflshem."}, {"@id":"82", "source":"Error", "target":"Gabim"}, {"@id":"83", "source":"This is not a valid UUID.", "target":"Ky nuk \u00ebsht\u00eb nj\u00eb UUID i vlefsh\u00ebm."}, {"@id":"84", "source":"This value should be a multiple of %%compared_value%%.", "target":"Kjo vler\u00eb duhet t\u00eb jet\u00eb nj\u00eb shum\u00ebfish i %%compared_value%%."}, 
 {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"Ky Kod Identifikues i Biznesit (BIC) nuk \u00ebsht\u00eb i lidhur me IBAN %%iban%%."}]);
-abv.I18nHandler.add("sr_Cyrl", [{"@id":"1", "source":"This value should be false.", "target":"\u0412\u0440\u0435\u0434\u043d\u043e\u0441\u0442 \u0442\u0440\u0435\u0431\u0430 \u0434\u0430 \u0431\u0443\u0434\u0435 \u043d\u0435\u0442\u0430\u0447\u043d\u0430."}, {"@id":"2", "source":"This value should be true.", "target":"\u0412\u0440\u0435\u0434\u043d\u043e\u0441\u0442 \u0442\u0440\u0435\u0431\u0430 \u0434\u0430 \u0431\u0443\u0434\u0435 \u0442\u0430\u0447\u043d\u0430."}, {"@id":"3", "source":"This value should be of type %%type%%.", 
+sogv.I18nHandler.add("sr_Cyrl", [{"@id":"1", "source":"This value should be false.", "target":"\u0412\u0440\u0435\u0434\u043d\u043e\u0441\u0442 \u0442\u0440\u0435\u0431\u0430 \u0434\u0430 \u0431\u0443\u0434\u0435 \u043d\u0435\u0442\u0430\u0447\u043d\u0430."}, {"@id":"2", "source":"This value should be true.", "target":"\u0412\u0440\u0435\u0434\u043d\u043e\u0441\u0442 \u0442\u0440\u0435\u0431\u0430 \u0434\u0430 \u0431\u0443\u0434\u0435 \u0442\u0430\u0447\u043d\u0430."}, {"@id":"3", "source":"This value should be of type %%type%%.", 
 "target":"\u0412\u0440\u0435\u0434\u043d\u043e\u0441\u0442 \u0442\u0440\u0435\u0431\u0430 \u0434\u0430 \u0431\u0443\u0434\u0435 \u0442\u0438\u043f\u0430 %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"\u0412\u0440\u0435\u0434\u043d\u043e\u0441\u0442 \u0442\u0440\u0435\u0431\u0430 \u0434\u0430 \u0431\u0443\u0434\u0435 \u043f\u0440\u0430\u0437\u043d\u0430."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"\u0412\u0440\u0435\u0434\u043d\u043e\u0441\u0442 \u0442\u0440\u0435\u0431\u0430 \u0434\u0430 \u0431\u0443\u0434\u0435 \u0458\u0435\u0434\u043d\u0430 \u043e\u0434 \u043f\u043e\u043d\u0443\u0452\u0435\u043d\u0438\u0445."}, 
 {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"\u0418\u0437\u0430\u0431\u0435\u0440\u0438\u0442\u0435 \u0431\u0430\u0440 %%limit%% \u043c\u043e\u0433\u0443\u045b\u043d\u043e\u0441\u0442.|\u0418\u0437\u0430\u0431\u0435\u0440\u0438\u0442\u0435 \u0431\u0430\u0440 %%limit%% \u043c\u043e\u0433\u0443\u045b\u043d\u043e\u0441\u0442\u0438.|\u0418\u0437\u0430\u0431\u0435\u0440\u0438\u0442\u0435 \u0431\u0430\u0440 %%limit%% \u043c\u043e\u0433\u0443\u045b\u043d\u043e\u0441\u0442\u0438."}, 
 {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"\u0418\u0437\u0430\u0431\u0435\u0440\u0438\u0442\u0435 \u043d\u0430\u0458\u0432\u0438\u0448\u0435 %%limit%% \u043c\u043e\u0433\u0443\u045b\u043d\u043e\u0441\u0442.|\u0418\u0437\u0430\u0431\u0435\u0440\u0438\u0442\u0435 \u043d\u0430\u0458\u0432\u0438\u0448\u0435 %%limit%% \u043c\u043e\u0433\u0443\u045b\u043d\u043e\u0441\u0442\u0438.|\u0418\u0437\u0430\u0431\u0435\u0440\u0438\u0442\u0435 \u043d\u0430\u0458\u0432\u0438\u0448\u0435 %%limit%% \u043c\u043e\u0433\u0443\u045b\u043d\u043e\u0441\u0442\u0438."}, 
@@ -13413,7 +13501,7 @@ abv.I18nHandler.add("sr_Cyrl", [{"@id":"1", "source":"This value should be false
 {"@id":"90", "source":"This value should be negative.", "target":"\u041e\u0432\u0430 \u0432\u0440\u0435\u0434\u043d\u043e\u0441\u0442 \u0431\u0438 \u0442\u0440\u0435\u0431\u0430\u043b\u0430 \u0431\u0438\u0442\u0438 \u043d\u0435\u0433\u0430\u0442\u0438\u0432\u043d\u0430."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"\u041e\u0432\u0430 \u0432\u0440\u0435\u0434\u043d\u043e\u0441\u0442 \u0431\u0438 \u0442\u0440\u0435\u0431\u0430\u043b\u0430 \u0431\u0438\u0442\u0438 \u043f\u043e\u0437\u0438\u0442\u0438\u0432\u043d\u0430 \u0438\u043b\u0438 \u043d\u0443\u043b\u0430."}, 
 {"@id":"92", "source":"This value is not a valid timezone.", "target":"\u041e\u0432\u0430 \u0432\u0440\u0435\u0434\u043d\u043e\u0441\u0442 \u043d\u0438\u0458\u0435 \u0432\u0430\u043b\u0438\u0434\u043d\u0430 \u0432\u0440\u0435\u043c\u0435\u043d\u0441\u043a\u0430 \u0437\u043e\u043d\u0430."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"\u041e\u0432\u0430 \u043b\u043e\u0437\u0438\u043d\u043a\u0430 \u0458\u0435 \u043a\u043e\u043c\u043f\u0440\u043e\u043c\u0438\u0442\u043e\u0432\u0430\u043d\u0430 \u043f\u0440\u0438\u043b\u0438\u043a\u043e\u043c \u043f\u0440\u0435\u0442\u0445\u043e\u0434\u043d\u0438\u0445 \u043d\u0430\u043f\u0430\u0434\u0430, \u043d\u0435\u043c\u043e\u0458\u0442\u0435 \u0458\u0435 \u043a\u043e\u0440\u0438\u0441\u0442\u0438\u0442\u0438. \u041a\u043e\u0440\u0438\u0441\u0442\u0438\u0442\u0435 \u0434\u0440\u0443\u0433\u0443 \u043b\u043e\u0437\u0438\u043d\u043a\u0443."}, 
 {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"\u041e\u0432\u0430 \u0432\u0440\u0435\u0434\u043d\u043e\u0441\u0442 \u0442\u0440\u0435\u0431\u0430 \u0434\u0430 \u0431\u0443\u0434\u0435 \u0438\u0437\u043c\u0435\u0452\u0443 %%min%% \u0438 %%max%%."}]);
-abv.I18nHandler.add("sr_Latn", [{"@id":"1", "source":"This value should be false.", "target":"Vrednost bi trebalo da bude neta\u010dna."}, {"@id":"2", "source":"This value should be true.", "target":"Vrednost bi trebalo da bude ta\u010dna."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Vrednost bi trebalo da bude tipa %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Vrednost bi trebalo da bude prazna."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
+sogv.I18nHandler.add("sr_Latn", [{"@id":"1", "source":"This value should be false.", "target":"Vrednost bi trebalo da bude neta\u010dna."}, {"@id":"2", "source":"This value should be true.", "target":"Vrednost bi trebalo da bude ta\u010dna."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Vrednost bi trebalo da bude tipa %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Vrednost bi trebalo da bude prazna."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Odabrana vrednost nije validan izbor."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Morate odabrati bar %%limit%% mogu\u0107nost.|Morate odabrati bar %%limit%% mogu\u0107nosti."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Morate odabrati najvi\u0161e %%limit%% mogu\u0107nost.|Morate odabrati najvi\u0161e %%limit%% mogu\u0107nosti."}, 
 {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Jedna ili vi\u0161e vrednosti nisu validne."}, {"@id":"9", "source":"This field was not expected.", "target":"Ovo polje nije bilo o\u010dekivano."}, {"@id":"10", "source":"This field is missing.", "target":"Ovo polje nedostaje."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Vrednost nije validan datum."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Vrednost nije validno vreme."}, 
 {"@id":"13", "source":"This value is not a valid email address.", "target":"Vrednost nije validna adresa elektronske po\u0161te."}, {"@id":"14", "source":"The file could not be found.", "target":"Datoteka ne mo\u017ee biti prona\u0111ena."}, {"@id":"15", "source":"The file is not readable.", "target":"Datoteka nije \u010ditljiva."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"Datoteka je prevelika (%%size%% %%suffix%%). Najve\u0107a dozvoljena veli\u010dina je %%limit%% %%suffix%%."}, 
@@ -13439,7 +13527,7 @@ abv.I18nHandler.add("sr_Latn", [{"@id":"1", "source":"This value should be false
 "target":"BIC kod nije povezan sa IBAN %%iban%%."}, {"@id":"86", "source":"This value should be valid JSON.", "target":"Ova vrednost bi trebalo da bude validan JSON."}, {"@id":"87", "source":"This collection should contain only unique elements.", "target":"Ova kolekcija bi trebala da sadr\u017ei samo jedinstvene elemente."}, {"@id":"88", "source":"This value should be positive.", "target":"Ova vrednost bi trebala biti pozitivna."}, {"@id":"89", "source":"This value should be either positive or zero.", 
 "target":"Ova vrednost bi trebala biti pozitivna ili nula."}, {"@id":"90", "source":"This value should be negative.", "target":"Ova vrednost bi trebala biti negativna."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"Ova vrednost bi trebala biti pozitivna ili nula."}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"Ova vrednost nije validna vremenska zona."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", 
 "target":"Ova lozinka je kompromitovana prilikom prethodnih napada, nemojte je koristiti. Koristite drugu lozinku."}, {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"Ova vrednost treba da bude izme\u0111u %%min%% i %%max%%."}]);
-abv.I18nHandler.add("sv", [{"@id":"1", "source":"This value should be false.", "target":"V\u00e4rdet ska vara falskt."}, {"@id":"2", "source":"This value should be true.", "target":"V\u00e4rdet ska vara sant."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"V\u00e4rdet ska vara av typen %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"V\u00e4rdet ska vara tomt."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"V\u00e4rdet ska vara ett av de givna valen."}, 
+sogv.I18nHandler.add("sv", [{"@id":"1", "source":"This value should be false.", "target":"V\u00e4rdet ska vara falskt."}, {"@id":"2", "source":"This value should be true.", "target":"V\u00e4rdet ska vara sant."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"V\u00e4rdet ska vara av typen %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"V\u00e4rdet ska vara tomt."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"V\u00e4rdet ska vara ett av de givna valen."}, 
 {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Du m\u00e5ste v\u00e4lja minst %%limit%% val.|Du m\u00e5ste v\u00e4lja minst %%limit%% val."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Du kan som mest v\u00e4lja %%limit%% val.|Du kan som mest v\u00e4lja %%limit%% val."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Ett eller fler av de angivna v\u00e4rdena \u00e4r ogiltigt."}, 
 {"@id":"9", "source":"This field was not expected.", "target":"Det h\u00e4r f\u00e4ltet f\u00f6rv\u00e4ntades inte."}, {"@id":"10", "source":"This field is missing.", "target":"Det h\u00e4r f\u00e4ltet saknas."}, {"@id":"11", "source":"This value is not a valid date.", "target":"V\u00e4rdet \u00e4r inte ett giltigt datum."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"V\u00e4rdet \u00e4r inte ett giltigt datum med tid."}, {"@id":"13", "source":"This value is not a valid email address.", 
 "target":"V\u00e4rdet \u00e4r inte en giltig e-postadress."}, {"@id":"14", "source":"The file could not be found.", "target":"Filen kunde inte hittas."}, {"@id":"15", "source":"The file is not readable.", "target":"Filen \u00e4r inte l\u00e4sbar."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"Filen \u00e4r f\u00f6r stor (%%size%% %%suffix%%). St\u00f6rsta till\u00e5tna storlek \u00e4r %%limit%% %%suffix%%."}, {"@id":"17", 
@@ -13465,7 +13553,7 @@ abv.I18nHandler.add("sv", [{"@id":"1", "source":"This value should be false.", "
 "target":"Denna BIC-koden \u00e4r inte associerad med IBAN %%iban%%."}, {"@id":"86", "source":"This value should be valid JSON.", "target":"Detta v\u00e4rde ska vara giltig JSON."}, {"@id":"87", "source":"This collection should contain only unique elements.", "target":"Denna samling b\u00f6r endast inneh\u00e5lla unika element."}, {"@id":"88", "source":"This value should be positive.", "target":"Detta v\u00e4rde b\u00f6r vara positivt."}, {"@id":"89", "source":"This value should be either positive or zero.", 
 "target":"Detta v\u00e4rde b\u00f6r vara antingen positivt eller noll."}, {"@id":"90", "source":"This value should be negative.", "target":"Detta v\u00e4rde b\u00f6r vara negativt."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"Detta v\u00e4rde b\u00f6r vara antingen negativt eller noll."}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"Detta v\u00e4rde \u00e4r inte en giltig tidszon."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", 
 "target":"Det h\u00e4r l\u00f6senordet har l\u00e4ckt ut vid ett dataintr\u00e5ng, det f\u00e5r inte anv\u00e4ndas. Anv\u00e4nd ett annat l\u00f6senord."}, {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"Detta v\u00e4rde b\u00f6r ligga mellan %%min%% och %%max%%."}]);
-abv.I18nHandler.add("th", [{"@id":"1", "source":"This value should be false.", "target":"\u0e04\u0e48\u0e32\u0e19\u0e35\u0e49\u0e04\u0e27\u0e23\u0e08\u0e30\u0e40\u0e1b\u0e47\u0e19 false"}, {"@id":"2", "source":"This value should be true.", "target":"\u0e04\u0e48\u0e32\u0e19\u0e35\u0e49\u0e04\u0e27\u0e23\u0e08\u0e30\u0e40\u0e1b\u0e47\u0e19 true"}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u0e04\u0e48\u0e32\u0e19\u0e35\u0e49\u0e04\u0e27\u0e23\u0e08\u0e30\u0e40\u0e1b\u0e47\u0e19\u0e0a\u0e19\u0e34\u0e14 %%type%%"}, 
+sogv.I18nHandler.add("th", [{"@id":"1", "source":"This value should be false.", "target":"\u0e04\u0e48\u0e32\u0e19\u0e35\u0e49\u0e04\u0e27\u0e23\u0e08\u0e30\u0e40\u0e1b\u0e47\u0e19 false"}, {"@id":"2", "source":"This value should be true.", "target":"\u0e04\u0e48\u0e32\u0e19\u0e35\u0e49\u0e04\u0e27\u0e23\u0e08\u0e30\u0e40\u0e1b\u0e47\u0e19 true"}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u0e04\u0e48\u0e32\u0e19\u0e35\u0e49\u0e04\u0e27\u0e23\u0e08\u0e30\u0e40\u0e1b\u0e47\u0e19\u0e0a\u0e19\u0e34\u0e14 %%type%%"}, 
 {"@id":"4", "source":"This value should be blank.", "target":"\u0e04\u0e27\u0e23\u0e08\u0e30\u0e40\u0e1b\u0e47\u0e19\u0e04\u0e48\u0e32\u0e27\u0e48\u0e32\u0e07"}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"\u0e04\u0e38\u0e13\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e04\u0e48\u0e32\u0e17\u0e35\u0e48\u0e44\u0e21\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e1a\u0e15\u0e31\u0e27\u0e40\u0e25\u0e37\u0e2d\u0e01"}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", 
 "target":"\u0e04\u0e38\u0e13\u0e15\u0e49\u0e2d\u0e07\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e2d\u0e22\u0e48\u0e32\u0e07\u0e19\u0e49\u0e2d\u0e22 %%limit%% \u0e15\u0e31\u0e27\u0e40\u0e25\u0e37\u0e2d\u0e01"}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"\u0e04\u0e38\u0e13\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e44\u0e14\u0e49\u0e21\u0e32\u0e01\u0e17\u0e35\u0e48\u0e2a\u0e38\u0e14 %%limit%% \u0e15\u0e31\u0e27\u0e40\u0e25\u0e37\u0e2d\u0e01"}, 
 {"@id":"8", "source":"One or more of the given values is invalid.", "target":"\u0e21\u0e35\u0e1a\u0e32\u0e07\u0e04\u0e48\u0e32\u0e17\u0e35\u0e48\u0e2a\u0e48\u0e07\u0e21\u0e32\u0e44\u0e21\u0e48\u0e16\u0e39\u0e01\u0e15\u0e49\u0e2d\u0e07"}, {"@id":"9", "source":"This field was not expected.", "target":"\u0e1f\u0e34\u0e25\u0e14\u0e4c\u0e19\u0e35\u0e49\u0e17\u0e35\u0e48\u0e44\u0e21\u0e48\u0e44\u0e14\u0e49\u0e04\u0e32\u0e14\u0e2b\u0e27\u0e31\u0e07"}, {"@id":"10", "source":"This field is missing.", "target":"\u0e1f\u0e34\u0e25\u0e14\u0e4c\u0e19\u0e35\u0e49\u0e08\u0e30\u0e2b\u0e32\u0e22\u0e44\u0e1b"}, 
@@ -13508,7 +13596,7 @@ abv.I18nHandler.add("th", [{"@id":"1", "source":"This value should be false.", "
 "target":"\u0e04\u0e48\u0e32\u0e19\u0e35\u0e49\u0e04\u0e27\u0e23\u0e40\u0e1b\u0e47\u0e19\u0e04\u0e48\u0e32\u0e25\u0e1a"}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"\u0e04\u0e48\u0e32\u0e19\u0e35\u0e49\u0e04\u0e27\u0e23\u0e40\u0e1b\u0e47\u0e19\u0e04\u0e48\u0e32\u0e25\u0e1a\u0e2b\u0e23\u0e37\u0e2d\u0e04\u0e48\u0e32\u0e28\u0e39\u0e19\u0e22\u0e4c"}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"\u0e04\u0e48\u0e32\u0e40\u0e02\u0e15\u0e40\u0e27\u0e25\u0e32\u0e44\u0e21\u0e48\u0e16\u0e39\u0e01\u0e15\u0e49\u0e2d\u0e07"}, 
 {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"\u0e23\u0e2b\u0e31\u0e2a\u0e1c\u0e48\u0e32\u0e19\u0e19\u0e35\u0e49\u0e44\u0e14\u0e49\u0e40\u0e04\u0e22\u0e23\u0e31\u0e48\u0e27\u0e44\u0e2b\u0e25\u0e2d\u0e2d\u0e01\u0e44\u0e1b\u0e42\u0e14\u0e22\u0e16\u0e39\u0e01\u0e01\u0e32\u0e23\u0e25\u0e30\u0e40\u0e21\u0e34\u0e14\u0e02\u0e49\u0e2d\u0e21\u0e39\u0e25 \u0e0b\u0e36\u0e48\u0e07\u0e44\u0e21\u0e48\u0e04\u0e27\u0e23\u0e19\u0e33\u0e01\u0e25\u0e31\u0e1a\u0e21\u0e32\u0e43\u0e0a\u0e49 \u0e01\u0e23\u0e38\u0e13\u0e32\u0e43\u0e0a\u0e49\u0e23\u0e2b\u0e31\u0e2a\u0e1c\u0e48\u0e32\u0e19\u0e2d\u0e37\u0e48\u0e19"}, 
 {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"\u0e04\u0e48\u0e32\u0e19\u0e35\u0e49\u0e04\u0e27\u0e23\u0e2d\u0e22\u0e39\u0e48\u0e23\u0e30\u0e2b\u0e27\u0e48\u0e32\u0e07 %%min%% \u0e16\u0e36\u0e07 %%max%%"}]);
-abv.I18nHandler.add("tl", [{"@id":"1", "source":"This value should be false.", "target":"Ang halaga nito ay dapat na huwad."}, {"@id":"2", "source":"This value should be true.", "target":"Ang halaga nito ay dapat totoo."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Ang halaga nito ay dapat sa uri %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Ang halaga nito ay dapat walang laman."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
+sogv.I18nHandler.add("tl", [{"@id":"1", "source":"This value should be false.", "target":"Ang halaga nito ay dapat na huwad."}, {"@id":"2", "source":"This value should be true.", "target":"Ang halaga nito ay dapat totoo."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Ang halaga nito ay dapat sa uri %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Ang halaga nito ay dapat walang laman."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Ang halaga ng iyong pinili ay hindi balidong pagpili."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Kailangan mong pumili ng pinakamababang %%limit%% ng pagpilian.|Kailangan mong pumili ng pinakamababang %%limit%% ng mga pagpipilian."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Kailangan mong pumili ng pinakamataas %%limit%% ng pagpipilian.|Kailangan mong pumili ng pinakamataas %%limit%% ng mga pagpipilian."}, 
 {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Isa o higit pang mga halaga na binigay ay hindi balido."}, {"@id":"9", "source":"This field was not expected.", "target":"Ang larangang ito ay hindi inaasahan."}, {"@id":"10", "source":"This field is missing.", "target":"Ang patlang na ito ay nawawala."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Ang halagang ito ay hindi balidong petsa."}, {"@id":"12", "source":"This value is not a valid datetime.", 
 "target":"Ang halagang ito ay hindi wastong petsa/oras."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"Ang halagang ito ay hindi balidong address ng email."}, {"@id":"14", "source":"The file could not be found.", "target":"Ang file na ito ay hindi makita."}, {"@id":"15", "source":"The file is not readable.", "target":"Ang file na ito ay hindi mabasa."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", 
@@ -13534,7 +13622,7 @@ abv.I18nHandler.add("tl", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"Ang Business Identifier Code (BIC) na ito ay walang kaugnayan sa IBAN %%iban%%."}, {"@id":"86", "source":"This value should be valid JSON.", "target":"Ang halagang ito ay dapat naka wastong JSON."}, {"@id":"87", "source":"This collection should contain only unique elements.", "target":"Ang mga elemento ng koleksyong ito ay dapat magkakaiba."}, {"@id":"88", "source":"This value should be positive.", 
 "target":"Ang halagang ito ay dapat positibo."}, {"@id":"89", "source":"This value should be either positive or zero.", "target":"Ang halagang ito ay dapat positibo o zero."}, {"@id":"90", "source":"This value should be negative.", "target":"Ang halagang ito ay dapat negatibo."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"Ang halagang ito ay dapat negatibo o zero."}, {"@id":"92", "source":"This value is not a valid timezone.", "target":"Ang halagang ito ay hindi wastong timezone."}, 
 {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"Naikalat ang password na ito sa isang data breach at hindi na dapat gamitin. Mangyaring gumamit ng ibang pang password."}]);
-abv.I18nHandler.add("tr", [{"@id":"1", "source":"This value should be false.", "target":"Bu de\u011fer olumsuz olmal\u0131d\u0131r."}, {"@id":"2", "source":"This value should be true.", "target":"Bu de\u011fer olumlu olmal\u0131d\u0131r."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Bu de\u011ferin tipi %%type%% olmal\u0131d\u0131r."}, {"@id":"4", "source":"This value should be blank.", "target":"Bu de\u011fer bo\u015f olmal\u0131d\u0131r."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
+sogv.I18nHandler.add("tr", [{"@id":"1", "source":"This value should be false.", "target":"Bu de\u011fer olumsuz olmal\u0131d\u0131r."}, {"@id":"2", "source":"This value should be true.", "target":"Bu de\u011fer olumlu olmal\u0131d\u0131r."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Bu de\u011ferin tipi %%type%% olmal\u0131d\u0131r."}, {"@id":"4", "source":"This value should be blank.", "target":"Bu de\u011fer bo\u015f olmal\u0131d\u0131r."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Se\u00e7ti\u011finiz de\u011fer ge\u00e7erli bir se\u00e7enek de\u011fil."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"En az %%limit%% se\u00e7enek belirtmelisiniz."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"En \u00e7ok %%limit%% se\u00e7enek belirtmelisiniz."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"Verilen de\u011ferlerden bir veya daha fazlas\u0131 ge\u00e7ersiz."}, 
 {"@id":"9", "source":"This field was not expected.", "target":"Bu alan beklenen olmad\u0131."}, {"@id":"10", "source":"This field is missing.", "target":"Bu alan, eksik"}, {"@id":"11", "source":"This value is not a valid date.", "target":"Bu de\u011fer do\u011fru bir tarih bi\u00e7imi de\u011fildir."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Bu de\u011fer do\u011fru bir tarihsaat bi\u00e7imi de\u011fildir."}, {"@id":"13", "source":"This value is not a valid email address.", 
 "target":"Bu de\u011fer do\u011fru bir e-mail adresi de\u011fildir."}, {"@id":"14", "source":"The file could not be found.", "target":"Dosya bulunamad\u0131."}, {"@id":"15", "source":"The file is not readable.", "target":"Dosya okunabilir de\u011fil."}, {"@id":"16", "source":"The file is too large (%%size%% %%suffix%%). Allowed maximum size is %%limit%% %%suffix%%.", "target":"Dosya \u00e7ok b\u00fcy\u00fck (%%size%% %%suffix%%). \u0130zin verilen en b\u00fcy\u00fck dosya boyutu %%limit%% %%suffix%%."}, 
@@ -13558,7 +13646,7 @@ abv.I18nHandler.add("tr", [{"@id":"1", "source":"This value should be false.", "
 "target":"Resim manzara odakl\u0131 (%%width%%x%%height%%px). Manzara odakl\u0131 resimlere izin verilmiyor."}, {"@id":"77", "source":"The image is portrait oriented (%%width%%x%%height%%px). Portrait oriented images are not allowed.", "target":"Resim portre odakl\u0131 (%%width%%x%%height%%px). Portre odakl\u0131 resimlere izin verilmiyor."}, {"@id":"78", "source":"An empty file is not allowed.", "target":"Bo\u015f bir dosyaya izin verilmiyor."}, {"@id":"79", "source":"The host could not be resolved.", 
 "target":"Sunucu \u00e7\u00f6z\u00fclemedi."}, {"@id":"80", "source":"This value does not match the expected %%charset%% charset.", "target":"Bu de\u011fer beklenen %%charset%% karakter k\u00fcmesiyle e\u015fle\u015fmiyor."}, {"@id":"81", "source":"This is not a valid Business Identifier Code (BIC).", "target":"Bu ge\u00e7erli bir \u0130\u015fletme Tan\u0131mlay\u0131c\u0131 Kodu (BIC) de\u011fildir."}, {"@id":"82", "source":"Error", "target":"Hata"}, {"@id":"83", "source":"This is not a valid UUID.", 
 "target":"Bu ge\u00e7erli bir UUID de\u011fildir."}, {"@id":"84", "source":"This value should be a multiple of %%compared_value%%.", "target":"Bu de\u011fer %%compare_value%% de\u011ferinin katlar\u0131ndan biri olmal\u0131d\u0131r."}, {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"Bu \u0130\u015fletme Tan\u0131mlay\u0131c\u0131 Kodu (BIC), IBAN %%iban%% ile ili\u015fkili de\u011fildir."}]);
-abv.I18nHandler.add("uk", [{"@id":"1", "source":"This value should be false.", "target":"\u0417\u043d\u0430\u0447\u0435\u043d\u043d\u044f \u043f\u043e\u0432\u0438\u043d\u043d\u043e \u0431\u0443\u0442\u0438 \u041d\u0456."}, {"@id":"2", "source":"This value should be true.", "target":"\u0417\u043d\u0430\u0447\u0435\u043d\u043d\u044f \u043f\u043e\u0432\u0438\u043d\u043d\u043e \u0431\u0443\u0442\u0438 \u0422\u0430\u043a."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u0422\u0438\u043f \u0437\u043d\u0430\u0447\u0435\u043d\u043d\u044f \u043f\u043e\u0432\u0438\u043d\u0435\u043d \u0431\u0443\u0442\u0438 %%type%%."}, 
+sogv.I18nHandler.add("uk", [{"@id":"1", "source":"This value should be false.", "target":"\u0417\u043d\u0430\u0447\u0435\u043d\u043d\u044f \u043f\u043e\u0432\u0438\u043d\u043d\u043e \u0431\u0443\u0442\u0438 \u041d\u0456."}, {"@id":"2", "source":"This value should be true.", "target":"\u0417\u043d\u0430\u0447\u0435\u043d\u043d\u044f \u043f\u043e\u0432\u0438\u043d\u043d\u043e \u0431\u0443\u0442\u0438 \u0422\u0430\u043a."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u0422\u0438\u043f \u0437\u043d\u0430\u0447\u0435\u043d\u043d\u044f \u043f\u043e\u0432\u0438\u043d\u0435\u043d \u0431\u0443\u0442\u0438 %%type%%."}, 
 {"@id":"4", "source":"This value should be blank.", "target":"\u0417\u043d\u0430\u0447\u0435\u043d\u043d\u044f \u043f\u043e\u0432\u0438\u043d\u043d\u043e \u0431\u0443\u0442\u0438 \u043f\u0443\u0441\u0442\u0438\u043c."}, {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"\u041e\u0431\u0440\u0430\u043d\u0435 \u0432\u0430\u043c\u0438 \u0437\u043d\u0430\u0447\u0435\u043d\u043d\u044f \u043d\u0435\u0434\u043e\u043f\u0443\u0441\u0442\u0438\u043c\u0435."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", 
 "target":"\u0412\u0438 \u043f\u043e\u0432\u0438\u043d\u043d\u0456 \u043e\u0431\u0440\u0430\u0442\u0438 \u0445\u043e\u0447\u0430 \u0431 %%limit%% \u0432\u0430\u0440\u0456\u0430\u043d\u0442.|\u0412\u0438 \u043f\u043e\u0432\u0438\u043d\u043d\u0456 \u043e\u0431\u0440\u0430\u0442\u0438 \u0445\u043e\u0447\u0430 \u0431 %%limit%% \u0432\u0430\u0440\u0456\u0430\u043d\u0442\u0438.|\u0412\u0438 \u043f\u043e\u0432\u0438\u043d\u043d\u0456 \u043e\u0431\u0440\u0430\u0442\u0438 \u0445\u043e\u0447\u0430 \u0431 %%limit%% \u0432\u0430\u0440\u0456\u0430\u043d\u0442\u0456\u0432."}, 
 {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"\u0412\u0438 \u043f\u043e\u0432\u0438\u043d\u043d\u0456 \u043e\u0431\u0440\u0430\u0442\u0438 \u043d\u0435 \u0431\u0456\u043b\u044c\u0448\u0435 \u043d\u0456\u0436 %%limit%% \u0432\u0430\u0440\u0456\u0430\u043d\u0442\u0456\u0432."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"\u041e\u0434\u043d\u0435 \u0430\u0431\u043e \u043a\u0456\u043b\u044c\u043a\u0430 \u0437\u0430\u0434\u0430\u043d\u0438\u0445 \u0437\u043d\u0430\u0447\u0435\u043d\u044c \u0454 \u043d\u0435\u0434\u043e\u043f\u0443\u0441\u0442\u0438\u043c\u0456."}, 
@@ -13605,7 +13693,7 @@ abv.I18nHandler.add("uk", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"90", "source":"This value should be negative.", "target":"\u0417\u043d\u0430\u0447\u0435\u043d\u043d\u044f \u043c\u0430\u0454 \u0431\u0443\u0442\u0438 \u043d\u0435\u0433\u0430\u0442\u0438\u0432\u043d\u0438\u043c."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"\u0417\u043d\u0430\u0447\u0435\u043d\u043d\u044f \u043c\u0430\u0454 \u0431\u0443\u0442\u0438 \u043d\u0435\u0433\u0430\u0442\u0438\u0432\u043d\u0438\u043c \u0430\u0431\u043e \u0434\u043e\u0440\u0456\u0432\u043d\u044e\u0432\u0430\u0442\u0438 \u043d\u0443\u043b\u044e."}, 
 {"@id":"92", "source":"This value is not a valid timezone.", "target":"\u0417\u043d\u0430\u0447\u0435\u043d\u043d\u044f \u043d\u0435 \u0454 \u0434\u0456\u0439\u0441\u043d\u0438\u043c \u0447\u0430\u0441\u043e\u0432\u0438\u043c \u043f\u043e\u044f\u0441\u043e\u043c."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"\u0426\u0435\u0439 \u043f\u0430\u0440\u043e\u043b\u044c \u0431\u0443\u0432 \u0441\u043a\u043e\u043c\u043f\u0440\u043e\u043c\u0435\u0442\u043e\u0432\u0430\u043d\u0438\u0439 \u0432 \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u0456 \u0432\u0438\u0442\u043e\u043a\u0443 \u0434\u0430\u043d\u0438\u0445 \u0442\u0430 \u043d\u0435 \u043f\u043e\u0432\u0438\u043d\u0435\u043d \u0432\u0438\u043a\u043e\u0440\u0438\u0441\u0442\u043e\u0432\u0443\u0432\u0430\u0442\u0438\u0441\u044f. \u0411\u0443\u0434\u044c \u043b\u0430\u0441\u043a\u0430, \u0432\u0438\u043a\u043e\u0440\u0438\u0441\u0442\u043e\u0432\u0443\u0439\u0442\u0435 \u0456\u043d\u0448\u0438\u0439 \u043f\u0430\u0440\u043e\u043b\u044c."}, 
 {"@id":"94", "source":"This value should be between %%min%% and %%max%%.", "target":"\u0417\u043d\u0430\u0447\u0435\u043d\u043d\u044f \u043c\u0430\u0454 \u0431\u0443\u0442\u0438 \u043c\u0456\u0436 %%min%% \u0442\u0430 %%max%%."}]);
-abv.I18nHandler.add("vi", [{"@id":"1", "source":"This value should be false.", "target":"Gi\u00e1 tr\u1ecb n\u00e0y ph\u1ea3i l\u00e0 sai."}, {"@id":"2", "source":"This value should be true.", "target":"Gi\u00e1 tr\u1ecb n\u00e0y ph\u1ea3i l\u00e0 \u0111\u00fang."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Gi\u00e1 tr\u1ecb n\u00e0y ph\u1ea3i l\u00e0 ki\u1ec3u  %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Gi\u00e1 tr\u1ecb n\u00e0y ph\u1ea3i r\u1ed7ng."}, 
+sogv.I18nHandler.add("vi", [{"@id":"1", "source":"This value should be false.", "target":"Gi\u00e1 tr\u1ecb n\u00e0y ph\u1ea3i l\u00e0 sai."}, {"@id":"2", "source":"This value should be true.", "target":"Gi\u00e1 tr\u1ecb n\u00e0y ph\u1ea3i l\u00e0 \u0111\u00fang."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Gi\u00e1 tr\u1ecb n\u00e0y ph\u1ea3i l\u00e0 ki\u1ec3u  %%type%%."}, {"@id":"4", "source":"This value should be blank.", "target":"Gi\u00e1 tr\u1ecb n\u00e0y ph\u1ea3i r\u1ed7ng."}, 
 {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"Gi\u00e1 tr\u1ecb b\u1ea1n v\u1eeba ch\u1ecdn kh\u00f4ng h\u1ee3p l\u1ec7."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"B\u1ea1n ph\u1ea3i ch\u1ecdn \u00edt nh\u1ea5t %%limit%% l\u1ef1a ch\u1ecdn.|B\u1ea1n ph\u1ea3i ch\u1ecdn \u00edt nh\u1ea5t %%limit%% l\u1ef1a ch\u1ecdn."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", 
 "target":"B\u1ea1n ph\u1ea3i ch\u1ecdn nhi\u1ec1u nh\u1ea5t %%limit%% l\u1ef1a ch\u1ecdn.|B\u1ea1n ph\u1ea3i ch\u1ecdn nhi\u1ec1u  nh\u1ea5t %%limit%% l\u1ef1a ch\u1ecdn."}, {"@id":"8", "source":"One or more of the given values is invalid.", "target":"M\u1ed9t ho\u1eb7c nhi\u1ec1u gi\u00e1 tr\u1ecb \u0111\u01b0\u1ee3c ch\u1ecdn kh\u00f4ng h\u1ee3p l\u1ec7."}, {"@id":"9", "source":"This field was not expected.", "target":"L\u0129nh v\u1ef1c n\u00e0y kh\u00f4ng \u0111\u01b0\u1ee3c d\u1ef1 ki\u1ebfn."}, 
 {"@id":"10", "source":"This field is missing.", "target":"L\u0129nh v\u1ef1c n\u00e0y b\u1ecb thi\u1ebfu."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Gi\u00e1 tr\u1ecb kh\u00f4ng ph\u1ea3i l\u00e0 ng\u00e0y h\u1ee3p l\u1ec7."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Gi\u00e1 tr\u1ecb kh\u00f4ng ph\u1ea3i l\u00e0 ng\u00e0y th\u00e1ng h\u1ee3p l\u1ec7."}, {"@id":"13", "source":"This value is not a valid email address.", "target":"Gi\u00e1 tr\u1ecb n\u00e0y kh\u00f4ng ph\u1ea3i l\u00e0 email h\u1ee3p l\u1ec7."}, 
@@ -13636,7 +13724,7 @@ abv.I18nHandler.add("vi", [{"@id":"1", "source":"This value should be false.", "
 {"@id":"86", "source":"This value should be valid JSON.", "target":"Gi\u00e1 tr\u1ecb n\u00e0y n\u00ean \u0111\u00fang \u0111\u1ecbnh d\u1ea1ng JSON."}, {"@id":"87", "source":"This collection should contain only unique elements.", "target":"Danh s\u00e1ch n\u00e0y ch\u1ec9 n\u00ean ch\u1ee9a c\u00e1c ph\u1ea7n t\u1eed kh\u00e1c nhau."}, {"@id":"88", "source":"This value should be positive.", "target":"Gi\u00e1 tr\u1ecb n\u00e0y c\u00f3 th\u1ec3 th\u1ef1c hi\u1ec7n \u0111\u01b0\u1ee3c."}, {"@id":"89", 
 "source":"This value should be either positive or zero.", "target":"Gi\u00e1 tr\u1ecb n\u00e0y c\u00f3 th\u1ec3 th\u1ef1c hi\u1ec7n \u0111\u01b0\u1ee3c ho\u1eb7c b\u1eb1ng kh\u00f4ng."}, {"@id":"90", "source":"This value should be negative.", "target":"Gi\u00e1 tr\u1ecb n\u00e0y n\u00ean b\u1ecb t\u1eeb ch\u1ed1i."}, {"@id":"91", "source":"This value should be either negative or zero.", "target":"Gi\u00e1 tr\u1ecb n\u00e0y n\u00ean b\u1ecb t\u1eeb ch\u1ed1i ho\u1eb7c b\u1eb1ng kh\u00f4ng."}, {"@id":"92", 
 "source":"This value is not a valid timezone.", "target":"Gi\u00e1 tr\u1ecb n\u00e0y kh\u00f4ng ph\u1ea3i l\u00e0 m\u00fai gi\u1edd h\u1ee3p l\u1ec7."}, {"@id":"93", "source":"This password has been leaked in a data breach, it must not be used. Please use another password.", "target":"M\u1eadt kh\u1ea9u n\u00e0y \u0111\u00e3 b\u1ecb r\u00f2 r\u1ec9 d\u1eef li\u1ec7u, kh\u00f4ng \u0111\u01b0\u1ee3c s\u1eed d\u1ee5ng n\u1eefa. Xin vui l\u00f2ng s\u1eed d\u1ee5ng m\u1eadt kh\u1ea9u kh\u00e1c."}]);
-abv.I18nHandler.add("zh_CN", [{"@id":"1", "source":"This value should be false.", "target":"\u8be5\u53d8\u91cf\u7684\u503c\u5e94\u4e3a false \u3002"}, {"@id":"2", "source":"This value should be true.", "target":"\u8be5\u53d8\u91cf\u7684\u503c\u5e94\u4e3a true \u3002"}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u8be5\u53d8\u91cf\u7684\u7c7b\u578b\u5e94\u4e3a %%type%% \u3002"}, {"@id":"4", "source":"This value should be blank.", "target":"\u8be5\u53d8\u91cf\u503c\u5e94\u4e3a\u7a7a\u3002"}, 
+sogv.I18nHandler.add("zh_CN", [{"@id":"1", "source":"This value should be false.", "target":"\u8be5\u53d8\u91cf\u7684\u503c\u5e94\u4e3a false \u3002"}, {"@id":"2", "source":"This value should be true.", "target":"\u8be5\u53d8\u91cf\u7684\u503c\u5e94\u4e3a true \u3002"}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u8be5\u53d8\u91cf\u7684\u7c7b\u578b\u5e94\u4e3a %%type%% \u3002"}, {"@id":"4", "source":"This value should be blank.", "target":"\u8be5\u53d8\u91cf\u503c\u5e94\u4e3a\u7a7a\u3002"}, 
 {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"\u9009\u5b9a\u53d8\u91cf\u7684\u503c\u4e0d\u662f\u6709\u6548\u7684\u9009\u9879\u3002"}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"\u60a8\u81f3\u5c11\u8981\u9009\u62e9 %%limit%% \u4e2a\u9009\u9879\u3002"}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"\u60a8\u6700\u591a\u80fd\u9009\u62e9 %%limit%% \u4e2a\u9009\u9879\u3002"}, 
 {"@id":"8", "source":"One or more of the given values is invalid.", "target":"\u4e00\u4e2a\u6216\u8005\u591a\u4e2a\u7ed9\u5b9a\u7684\u503c\u65e0\u6548\u3002"}, {"@id":"9", "source":"This field was not expected.", "target":"\u6b64\u5b57\u6bb5\u662f\u591a\u4f59\u7684\u3002"}, {"@id":"10", "source":"This field is missing.", "target":"\u6b64\u5b57\u6bb5\u7f3a\u5931\u3002"}, {"@id":"11", "source":"This value is not a valid date.", "target":"\u8be5\u503c\u4e0d\u662f\u4e00\u4e2a\u6709\u6548\u7684\u65e5\u671f\uff08date\uff09\u3002"}, 
 {"@id":"12", "source":"This value is not a valid datetime.", "target":"\u8be5\u503c\u4e0d\u662f\u4e00\u4e2a\u6709\u6548\u7684\u65e5\u671f\u65f6\u95f4\uff08datetime\uff09\u3002"}, {"@id":"13", "source":"This value is not a valid email address.", "target":"\u8be5\u503c\u4e0d\u662f\u4e00\u4e2a\u6709\u6548\u7684\u90ae\u4ef6\u5730\u5740\u3002"}, {"@id":"14", "source":"The file could not be found.", "target":"\u6587\u4ef6\u672a\u627e\u5230\u3002"}, {"@id":"15", "source":"The file is not readable.", "target":"\u6587\u4ef6\u4e0d\u53ef\u8bfb\u3002"}, 
@@ -13662,7 +13750,7 @@ abv.I18nHandler.add("zh_CN", [{"@id":"1", "source":"This value should be false."
 {"@id":"77", "source":"The image is portrait oriented (%%width%%x%%height%%px). Portrait oriented images are not allowed.", "target":"\u56fe\u7247\u662f\u7eb5\u5411\u7684 (%%width%%x%%height%%px)\u3002\u4e0d\u5141\u8bb8\u4f7f\u7528\u7eb5\u5411\u7684\u56fe\u7247\u3002"}, {"@id":"78", "source":"An empty file is not allowed.", "target":"\u4e0d\u5141\u8bb8\u4f7f\u7528\u7a7a\u6587\u4ef6\u3002"}, {"@id":"79", "source":"The host could not be resolved.", "target":"\u4e3b\u673a\u540d\u65e0\u6cd5\u89e3\u6790\u3002"}, 
 {"@id":"80", "source":"This value does not match the expected %%charset%% charset.", "target":"\u8be5\u503c\u4e0d\u7b26\u5408 %%charset%% \u7f16\u7801\u3002"}, {"@id":"81", "source":"This is not a valid Business Identifier Code (BIC).", "target":"\u8fd9\u4e0d\u662f\u6709\u6548\u7684\u4e1a\u52a1\u6807\u8bc6\u7b26\u4ee3\u7801\uff08BIC)\u3002"}, {"@id":"82", "source":"Error", "target":"\u9519\u8bef"}, {"@id":"83", "source":"This is not a valid UUID.", "target":"\u8fd9\u4e0d\u662f\u6709\u6548\u7684UUID\u3002"}, 
 {"@id":"84", "source":"This value should be a multiple of %%compared_value%%.", "target":"\u6b64\u503c\u5e94\u4e3a %%compared_value%% \u7684\u500d\u6570\u3002"}, {"@id":"85", "source":"This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.", "target":"\u6b64\u4e1a\u52a1\u6807\u8bc6\u7b26\u4ee3\u7801\uff08BIC\uff09\u4e0eIBAN %%iban%% \u65e0\u5173\u3002"}, {"@id":"86", "source":"This value should be valid JSON.", "target":"\u8be5\u503c\u5e94\u8be5\u662f\u6709\u6548\u7684JSON\u3002"}]);
-abv.I18nHandler.add("zh_TW", [{"@id":"1", "source":"This value should be false.", "target":"\u8a72\u8b8a\u6578\u7684\u503c\u61c9\u70ba false \u3002"}, {"@id":"2", "source":"This value should be true.", "target":"\u8a72\u8b8a\u6578\u7684\u503c\u61c9\u70ba true \u3002"}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u8a72\u8b8a\u6578\u7684\u985e\u578b\u61c9\u70ba %%type%% \u3002"}, {"@id":"4", "source":"This value should be blank.", "target":"\u8a72\u8b8a\u6578\u61c9\u70ba\u7a7a\u3002"}, 
+sogv.I18nHandler.add("zh_TW", [{"@id":"1", "source":"This value should be false.", "target":"\u8a72\u8b8a\u6578\u7684\u503c\u61c9\u70ba false \u3002"}, {"@id":"2", "source":"This value should be true.", "target":"\u8a72\u8b8a\u6578\u7684\u503c\u61c9\u70ba true \u3002"}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"\u8a72\u8b8a\u6578\u7684\u985e\u578b\u61c9\u70ba %%type%% \u3002"}, {"@id":"4", "source":"This value should be blank.", "target":"\u8a72\u8b8a\u6578\u61c9\u70ba\u7a7a\u3002"}, 
 {"@id":"5", "source":"The value you selected is not a valid choice.", "target":"\u9078\u5b9a\u8b8a\u6578\u7684\u503c\u4e0d\u662f\u6709\u6548\u7684\u9078\u9805\u3002"}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"\u60a8\u81f3\u5c11\u8981\u9078\u64c7 %%limit%% \u500b\u9078\u9805\u3002"}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"\u60a8\u6700\u591a\u80fd\u9078\u64c7 %%limit%% \u500b\u9078\u9805\u3002"}, 
 {"@id":"8", "source":"One or more of the given values is invalid.", "target":"\u4e00\u500b\u6216\u8005\u591a\u500b\u7d66\u5b9a\u7684\u503c\u7121\u6548\u3002"}, {"@id":"9", "source":"This field was not expected.", "target":"\u6b64\u5b57\u6bb5\u662f\u6c92\u6709\u9810\u6599\u5230\u3002"}, {"@id":"10", "source":"This field is missing.", "target":"\u6b64\u5b57\u6bb5\u7f3a\u5931\u3002"}, {"@id":"11", "source":"This value is not a valid date.", "target":"\u8a72\u503c\u4e0d\u662f\u4e00\u500b\u6709\u6548\u7684\u65e5\u671f\uff08date\uff09\u3002"}, 
 {"@id":"12", "source":"This value is not a valid datetime.", "target":"\u8a72\u503c\u4e0d\u662f\u4e00\u500b\u6709\u6548\u7684\u65e5\u671f\u6642\u9593\uff08datetime\uff09\u3002"}, {"@id":"13", "source":"This value is not a valid email address.", "target":"\u8a72\u503c\u4e0d\u662f\u4e00\u500b\u6709\u6548\u7684\u90f5\u4ef6\u5730\u5740\u3002"}, {"@id":"14", "source":"The file could not be found.", "target":"\u627e\u4e0d\u5230\u6a94\u6848\u3002"}, {"@id":"15", "source":"The file is not readable.", "target":"\u7121\u6cd5\u8b80\u53d6\u6a94\u6848\u3002"}, 
@@ -13693,6 +13781,6 @@ abv.I18nHandler.add("zh_TW", [{"@id":"1", "source":"This value should be false."
 "source":"This value should be between %%min%% and %%max%%.", "target":"\u8a72\u6578\u503c\u61c9\u5728 %%min%% \u548c %%max%% \u4e4b\u9593\u3002"}]);
 
 
-return abv;
+return sogv;
 }));
 

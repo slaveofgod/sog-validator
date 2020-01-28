@@ -1,9 +1,9 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.ErrorHandler
+     * @name sogv.ErrorHandler
      * @classdesc This service provides handling of all error messages
      * @description Create a new error handler.
      * @param {Object} options The setting options.
@@ -12,7 +12,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.RegexValidator#lang
+     * @name sogv.RegexValidator#lang
      * @type {String}
      * @description Language of messages.
      */
@@ -20,7 +20,7 @@ Object.assign(abv, function () {
     var ErrorHandler = function (options) {
         this.lang = options.lang || 'en';
 
-        this.__translator = new abv.I18n(this.lang);
+        this.__translator = new sogv.I18n(this.lang);
         this.__internal = (true === options.internal);
         this.__messages = [];
 
@@ -30,7 +30,7 @@ Object.assign(abv, function () {
     Object.assign(ErrorHandler.prototype, {
         /**
          * @function
-         * @name abv.ErrorHandler#has
+         * @name sogv.ErrorHandler#has
          * @description Check if messages exist
          * @return {Boolean} Status
          */
@@ -40,7 +40,7 @@ Object.assign(abv, function () {
 
         /**
          * @function
-         * @name abv.ErrorHandler#add
+         * @name sogv.ErrorHandler#add
          * @description Add new message
          * @param {String} message Message text
          * @param {Object} parameters Message parameters
@@ -54,7 +54,7 @@ Object.assign(abv, function () {
 
         /**
          * @function
-         * @name abv.ErrorHandler#get
+         * @name sogv.ErrorHandler#get
          * @description Get message by position
          * @param {Integer} position Message position
          * @return {String} Message
@@ -72,7 +72,7 @@ Object.assign(abv, function () {
 
         /**
          * @function
-         * @name abv.ErrorHandler#first
+         * @name sogv.ErrorHandler#first
          * @description Get first message
          * @return {String} Message
          */
@@ -82,7 +82,7 @@ Object.assign(abv, function () {
 
         /**
          * @function
-         * @name abv.ErrorHandler#count
+         * @name sogv.ErrorHandler#count
          * @description Count of messages
          * @return {String} Count
          */

@@ -1,4 +1,4 @@
-abv.is_array = function (mixedVar) {
+sogv.is_array = function (mixedVar) {
     // eslint-disable-line camelcase
     //  discuss at: https://locutus.io/php/is_array/
     // original by: Kevin van Zonneveld (https://kvz.io)
@@ -78,7 +78,7 @@ abv.is_array = function (mixedVar) {
         return true;
     }
 
-    var iniVal = (typeof require !== 'undefined' ? abv.ini_get('locutus.objectsAsArrays') : undefined) || 'on';
+    var iniVal = (typeof require !== 'undefined' ? sogv.ini_get('locutus.objectsAsArrays') : undefined) || 'on';
     if (iniVal === 'on') {
         var asString = Object.prototype.toString.call(mixedVar);
         var asFunc = _getFuncName(mixedVar.constructor);

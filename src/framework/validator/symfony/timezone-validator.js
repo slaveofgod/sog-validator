@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.TimezoneValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.TimezoneValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is a valid timezone identifier (e.g. <code>Europe/Paris</code>).</p>
      * <p>{@link https://en.wikipedia.org/wiki/List_of_tz_database_time_zones|List of tz database time zones}.</p>
@@ -15,8 +15,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>timezone</code>', '<code>tz</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.TimezoneValidator(data);
+     * var validator = new sogv.TimezoneValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -25,7 +30,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.TimezoneValidator#message
+     * @name sogv.TimezoneValidator#message
      * @type {String}
      * @description
      * <p>This message is shown if the underlying data is not a valid timezone identifier.</p>
@@ -48,7 +53,7 @@ Object.assign(abv, function () {
      */
 
     var TimezoneValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -56,12 +61,15 @@ Object.assign(abv, function () {
 
         this.name = 'TimezoneValidator';
     };
-    TimezoneValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    TimezoneValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     TimezoneValidator.prototype.constructor = TimezoneValidator;
 
     Object.defineProperty(TimezoneValidator.prototype, 'alias', {
         get: function () {
-            return 'timezone';
+            return [
+                'timezone',
+                'tz'
+            ];
         }
     });
 
@@ -75,7 +83,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.TimezoneValidator#__validate
+         * @name sogv.TimezoneValidator#__validate
          * @description Validate data
          */
         __validate: function () {
@@ -89,7 +97,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.TimezoneValidator#__beforeValidate
+         * @name sogv.TimezoneValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
@@ -100,7 +108,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -120,7 +128,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.TimezoneValidator#__messageParameters
+         * @name sogv.TimezoneValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -136,4 +144,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.TimezoneValidator);
+sogv.registry(sogv.TimezoneValidator);

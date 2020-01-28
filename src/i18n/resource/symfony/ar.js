@@ -1,4 +1,4 @@
-abv.I18nHandler.add('ar', [
+sogv.I18nHandler.add('ar', [
     {
         "@id": "1",
         "source": "This value should be false.",

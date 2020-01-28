@@ -1,11 +1,11 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @abstract
      * @constructor
-     * @name abv.AbstractComparisonValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.AbstractComparisonValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Abstract base class that implements functionality for validation.</p>
      * <p>Provides a base class for the validation of property comparisons.</p>
@@ -20,20 +20,20 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     var AbstractComparisonValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, optionRules, lang, internal);
+        sogv.AbstractValidator.call(this, data, options, optionRules, lang, internal);
 
         this.value = this.__options.value;
 
         this.name = 'AbstractComparisonValidator';
     };
-    AbstractComparisonValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    AbstractComparisonValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     AbstractComparisonValidator.prototype.constructor = AbstractComparisonValidator;
 
     Object.assign(AbstractComparisonValidator.prototype, {
         /**
          * @private
          * @function
-         * @name abv.AbstractComparisonValidator#__validate
+         * @name sogv.AbstractComparisonValidator#__validate
          * @description Validate data
          */
         __validate: function () {
@@ -54,7 +54,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.AbstractComparisonValidator#__beforeValidate
+         * @name sogv.AbstractComparisonValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {

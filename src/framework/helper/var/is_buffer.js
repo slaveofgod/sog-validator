@@ -1,4 +1,4 @@
-abv.is_buffer = function (vr) {
+sogv.is_buffer = function (vr) {
     // eslint-disable-line camelcase
     //  discuss at: https://locutus.io/php/is_buffer/
     // original by: Brett Zamir (https://brett-zamir.me)

@@ -1,13 +1,13 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.PositiveOrZeroValidator
-     * @extends abv.AbstractComparisonValidator
+     * @name sogv.PositiveOrZeroValidator
+     * @extends sogv.AbstractComparisonValidator
      * @classdesc
      * <p>Validates that a value is a <code>positive</code> number or <code>equal</code> to <code>zero</code>.</p>
-     * <p>If you don't want to allow zero as value, use <code>abv.Positive</code> instead.</p>
+     * <p>If you don't want to allow zero as value, use <code>sogv.Positive</code> instead.</p>
      * @description
      * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
@@ -15,8 +15,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>positive-or-zero</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.PositiveOrZeroValidator(data, {"value": "the value to compare to"});
+     * var validator = new sogv.PositiveOrZeroValidator(data, {"value": "the value to compare to"});
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -25,7 +30,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.PositiveOrZeroValidator#message
+     * @name sogv.PositiveOrZeroValidator#message
      * @type {String}
      * @description
      * <p>The default message supplied when the value is not <code>greater</code> than or <code>equal</code> to <code>zero</code>.</p>
@@ -56,7 +61,7 @@ Object.assign(abv, function () {
      */
 
     var PositiveOrZeroValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractComparisonValidator.call(this, data, options, {
+        sogv.AbstractComparisonValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -65,12 +70,14 @@ Object.assign(abv, function () {
 
         this.name = 'PositiveOrZeroValidator';
     };
-    PositiveOrZeroValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+    PositiveOrZeroValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
     PositiveOrZeroValidator.prototype.constructor = PositiveOrZeroValidator;
 
     Object.defineProperty(PositiveOrZeroValidator.prototype, 'alias', {
         get: function () {
-            return 'positive-or-zero';
+            return [
+                'positive-or-zero'
+            ];
         }
     });
 
@@ -84,7 +91,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.PositiveOrZeroValidator#__compareValues
+         * @name sogv.PositiveOrZeroValidator#__compareValues
          * @description
          * <p>Compare two value.</p>
          * @param {*} value Value
@@ -98,7 +105,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.PositiveOrZeroValidator#__messageParameters
+         * @name sogv.PositiveOrZeroValidator#__messageParameters
          * @description
          * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
@@ -107,7 +114,7 @@ Object.assign(abv, function () {
             return {
                 'value': this.__formattedData(this.data),
                 'compared_value': this.__formattedData(this.value),
-                'compared_value_type': abv.getType(this.value)
+                'compared_value_type': sogv.getType(this.value)
             }
         }
     });
@@ -117,4 +124,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.PositiveOrZeroValidator);
+sogv.registry(sogv.PositiveOrZeroValidator);

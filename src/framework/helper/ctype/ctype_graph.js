@@ -1,4 +1,4 @@
-abv.ctype_graph = function (text) {
+sogv.ctype_graph = function (text) {
     // eslint-disable-line camelcase
     //  discuss at: https://locutus.io/php/ctype_graph/
     // original by: Brett Zamir (https://brett-zamir.me)
@@ -10,9 +10,10 @@ abv.ctype_graph = function (text) {
     }
 
     // ensure setup of localization variables takes place
-    abv.setlocale('LC_ALL', 0);
+    sogv.setlocale('LC_ALL', 0);
 
-    var $global = (typeof window !== 'undefined' ? window : global);
+    var __global; if ('undefined' === typeof global) { var __global = global; } else { var __global = global; }
+    var $global = (typeof window !== 'undefined' ? window : __global);
     $global.$locutus = $global.$locutus || {};
     var $locutus = $global.$locutus;
     var p = $locutus.php;

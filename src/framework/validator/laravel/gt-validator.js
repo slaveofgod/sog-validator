@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.GtValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.GtValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>The data must be <code>greater</code> than the given value.</p>
      * <p><code>Strings</code>, <code>numerics</code>, <code>arrays</code>, and <code>dates</code> are evaluated using the same conventions as the size rule.</p>
@@ -15,8 +15,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>gt</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.GtValidator(data, {"value": 10});
+     * var validator = new sogv.GtValidator(data, {"value": 10});
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -25,7 +30,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.GtValidator#value
+     * @name sogv.GtValidator#value
      * @type {*}
      * @description
      * <p>This option is required.</p>
@@ -34,7 +39,7 @@ Object.assign(abv, function () {
      */
 
     var GtValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             value: optionRules.value || 'required|type:{"type":["numeric","datetime","date-string","boolean"],"any":true}',
         }, lang, internal);
 
@@ -46,12 +51,14 @@ Object.assign(abv, function () {
 
         this.name = 'GtValidator';
     };
-    GtValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    GtValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     GtValidator.prototype.constructor = GtValidator;
 
     Object.defineProperty(GtValidator.prototype, 'alias', {
         get: function () {
-            return 'gt';
+            return [
+                'gt'
+            ];
         }
     });
 
@@ -70,32 +77,32 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.GtValidator#__validate
+         * @name sogv.GtValidator#__validate
          * @description
          * <p>Validate data.</p>
          */
         __validate: function () {
             if (
-                true === abv.isType('integer', this.value)
+                true === sogv.isType('integer', this.value)
                 && (
-                    true === abv.isType('array', this.data)
-                    || true === abv.isType('string', this.data)
+                    true === sogv.isType('array', this.data)
+                    || true === sogv.isType('string', this.data)
                 )
             ) {
                 if (this.data.length < this.value) {
-                    this.__setErrorMessage((true === abv.isType('string', this.data)) ? this.stringMessage : this.arrayMessage, this.__messageParameters());
+                    this.__setErrorMessage((true === sogv.isType('string', this.data)) ? this.stringMessage : this.arrayMessage, this.__messageParameters());
                     return;
                 }
             } else {
-                if (false === abv.isValid(this.data, {
+                if (false === sogv.isValid(this.data, {
                     'greater-than': {
                         "value": this.value
                     }
                 }, true)) {
                     var __message = this.dateMessage;
                     if (
-                        true === abv.isType('numeric', this.value)
-                        || true === abv.isType('boolean', this.value)
+                        true === sogv.isType('numeric', this.value)
+                        || true === sogv.isType('boolean', this.value)
                     ) {
                         __message = this.numericMessage;
                     }
@@ -109,7 +116,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.GtValidator#__beforeValidate
+         * @name sogv.GtValidator#__beforeValidate
          * @description
          * <p>Execute before validation is running</p>
          */
@@ -124,7 +131,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.GtValidator#__messageParameters
+         * @name sogv.GtValidator#__messageParameters
          * @description
          * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
@@ -142,4 +149,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.GtValidator);
+sogv.registry(sogv.GtValidator);

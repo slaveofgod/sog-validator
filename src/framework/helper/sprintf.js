@@ -1,6 +1,6 @@
 'use strict'
 
-abv.re = {
+sogv.re = {
     not_string: /[^s]/,
     not_bool: /[^t]/,
     not_type: /[^T]/,
@@ -18,16 +18,16 @@ abv.re = {
     sign: /^[+-]/
 };
 
-abv.sprintf = function (key) {
+sogv.sprintf = function (key) {
     // `arguments` is not an array, but should be fine for this call
-    return abv.sprintf_format(abv.sprintf_parse(key), arguments);
+    return sogv.sprintf_format(sogv.sprintf_parse(key), arguments);
 };
 
-abv.vsprintf = function (fmt, argv) {
-    return abv.sprintf.apply(null, [fmt].concat(argv || []));
+sogv.vsprintf = function (fmt, argv) {
+    return sogv.sprintf.apply(null, [fmt].concat(argv || []));
 };
 
-abv.sprintf_format = function (parse_tree, argv) {
+sogv.sprintf_format = function (parse_tree, argv) {
     var cursor = 1, tree_length = parse_tree.length, arg, output = '', i, k, ph, pad, pad_character, pad_length, is_positive, sign;
     for (i = 0; i < tree_length; i++) {
         if (typeof parse_tree[i] === 'string') {
@@ -39,7 +39,7 @@ abv.sprintf_format = function (parse_tree, argv) {
                 arg = argv[cursor];
                 for (k = 0; k < ph.keys.length; k++) {
                     if (arg == undefined) {
-                        throw new Error(abv.sprintf('[sprintf] Cannot access property "%s" of undefined value "%s"', ph.keys[k], ph.keys[k-1]));
+                        throw new Error(sogv.sprintf('[sprintf] Cannot access property "%s" of undefined value "%s"', ph.keys[k], ph.keys[k-1]));
                     }
                     arg = arg[ph.keys[k]];
                 }
@@ -51,15 +51,15 @@ abv.sprintf_format = function (parse_tree, argv) {
                 arg = argv[cursor++];
             }
 
-            if (abv.re.not_type.test(ph.type) && abv.re.not_primitive.test(ph.type) && arg instanceof Function) {
+            if (sogv.re.not_type.test(ph.type) && sogv.re.not_primitive.test(ph.type) && arg instanceof Function) {
                 arg = arg();
             }
 
-            if (abv.re.numeric_arg.test(ph.type) && (typeof arg !== 'number' && isNaN(arg))) {
-                throw new TypeError(abv.sprintf('[sprintf] expecting number but found %T', arg));
+            if (sogv.re.numeric_arg.test(ph.type) && (typeof arg !== 'number' && isNaN(arg))) {
+                throw new TypeError(sogv.sprintf('[sprintf] expecting number but found %T', arg));
             }
 
-            if (abv.re.number.test(ph.type)) {
+            if (sogv.re.number.test(ph.type)) {
                 is_positive = arg >= 0;
             }
 
@@ -115,13 +115,13 @@ abv.sprintf_format = function (parse_tree, argv) {
                     arg = (parseInt(arg, 10) >>> 0).toString(16).toUpperCase();
                     break;
             }
-            if (abv.re.json.test(ph.type)) {
+            if (sogv.re.json.test(ph.type)) {
                 output += arg;
             }
             else {
-                if (abv.re.number.test(ph.type) && (!is_positive || ph.sign)) {
+                if (sogv.re.number.test(ph.type) && (!is_positive || ph.sign)) {
                     sign = is_positive ? '+' : '-';
-                    arg = arg.toString().replace(abv.re.sign, '');
+                    arg = arg.toString().replace(sogv.re.sign, '');
                 }
                 else {
                     sign = '';
@@ -136,32 +136,32 @@ abv.sprintf_format = function (parse_tree, argv) {
     return output;
 };
 
-abv.sprintf_cache = Object.create(null);
+sogv.sprintf_cache = Object.create(null);
 
-abv.sprintf_parse = function (fmt) {
-    if (abv.sprintf_cache[fmt]) {
-        return abv.sprintf_cache[fmt];
+sogv.sprintf_parse = function (fmt) {
+    if (sogv.sprintf_cache[fmt]) {
+        return sogv.sprintf_cache[fmt];
     }
 
     var _fmt = fmt, match, parse_tree = [], arg_names = 0;
     while (_fmt) {
-        if ((match = abv.re.text.exec(_fmt)) !== null) {
+        if ((match = sogv.re.text.exec(_fmt)) !== null) {
             parse_tree.push(match[0]);
         }
-        else if ((match = abv.re.modulo.exec(_fmt)) !== null) {
+        else if ((match = sogv.re.modulo.exec(_fmt)) !== null) {
             parse_tree.push('%');
         }
-        else if ((match = abv.re.placeholder.exec(_fmt)) !== null) {
+        else if ((match = sogv.re.placeholder.exec(_fmt)) !== null) {
             if (match[2]) {
                 arg_names |= 1;
                 var field_list = [], replacement_field = match[2], field_match = [];
-                if ((field_match = abv.re.key.exec(replacement_field)) !== null) {
+                if ((field_match = sogv.re.key.exec(replacement_field)) !== null) {
                     field_list.push(field_match[1]);
                     while ((replacement_field = replacement_field.substring(field_match[0].length)) !== '') {
-                        if ((field_match = abv.re.key_access.exec(replacement_field)) !== null) {
+                        if ((field_match = sogv.re.key_access.exec(replacement_field)) !== null) {
                             field_list.push(field_match[1]);
                         }
-                        else if ((field_match = abv.re.index_access.exec(replacement_field)) !== null) {
+                        else if ((field_match = sogv.re.index_access.exec(replacement_field)) !== null) {
                             field_list.push(field_match[1]);
                         }
                         else {
@@ -200,5 +200,5 @@ abv.sprintf_parse = function (fmt) {
         }
         _fmt = _fmt.substring(match[0].length);
     }
-    return abv.sprintf_cache[fmt] = parse_tree;
+    return sogv.sprintf_cache[fmt] = parse_tree;
 };

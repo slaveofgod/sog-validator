@@ -1,4 +1,4 @@
-abv.I18nHandler.add('zh_CN', [
+sogv.I18nHandler.add('zh_CN', [
     {
         "@id": "1",
         "source": "This value should be false.",

@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.CountryValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.CountryValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is a valid {@link https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes/ISO 3166-1 alpha-2} <code>country</code> code.</p>
      * @description
@@ -14,8 +14,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>country</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.CountryValidator(data);
+     * var validator = new sogv.CountryValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -24,7 +29,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.CountryValidator#message
+     * @name sogv.CountryValidator#message
      * @type {String}
      * @description
      * <p>This message is shown if the <code>string</code> is not a valid country code.</p>
@@ -47,7 +52,7 @@ Object.assign(abv, function () {
      */
 
     var CountryValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -57,12 +62,14 @@ Object.assign(abv, function () {
 
         this.name = 'CountryValidator';
     };
-    CountryValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    CountryValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     CountryValidator.prototype.constructor = CountryValidator;
 
     Object.defineProperty(CountryValidator.prototype, 'alias', {
         get: function () {
-            return 'country';
+            return [
+                'country'
+            ];
         }
     });
 
@@ -76,7 +83,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.CountryValidator#__validate
+         * @name sogv.CountryValidator#__validate
          * @description
          * <p>Validate data.</p>
          */
@@ -90,7 +97,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.CountryValidator#__beforeValidate
+         * @name sogv.CountryValidator#__beforeValidate
          * @description
          * <p>Execute before validation is running.</p>
          */
@@ -102,7 +109,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -122,7 +129,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.CountryValidator#__messageParameters
+         * @name sogv.CountryValidator#__messageParameters
          * @description
          * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
@@ -139,4 +146,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.CountryValidator);
+sogv.registry(sogv.CountryValidator);

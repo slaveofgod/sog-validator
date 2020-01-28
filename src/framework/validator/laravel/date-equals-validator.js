@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.DateEqualsValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.DateEqualsValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>The field under validation must be <code>equal</code> to the given <code>date</code>.</p>
      * @description
@@ -14,15 +14,20 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>date_equals</code>', '<code>date-equals</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.DateEqualsValidator(data);
+     * var validator = new sogv.DateEqualsValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
      */
 
     var DateEqualsValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractComparisonValidator.call(this, data, options, {
+        sogv.AbstractComparisonValidator.call(this, data, options, {
             value: optionRules.value || 'required|type:{"type":["date-string","datetime"],"any":true}'
         }, lang, internal);
 
@@ -30,7 +35,7 @@ Object.assign(abv, function () {
 
         this.name = 'DateEqualsValidator';
     };
-    DateEqualsValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+    DateEqualsValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
     DateEqualsValidator.prototype.constructor = DateEqualsValidator;
 
     Object.defineProperty(DateEqualsValidator.prototype, 'alias', {
@@ -52,7 +57,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.DateEqualsValidator#__compareValues
+         * @name sogv.DateEqualsValidator#__compareValues
          * @description Compare two value
          * @param {*} value Value
          * @param {*} comparedValue Compared value
@@ -65,7 +70,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.BetweenValidator#__beforeValidate
+         * @name sogv.BetweenValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
@@ -76,7 +81,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is datetime
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":["datetime","date-string"],"any":true}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":["datetime","date-string"],"any":true}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -86,7 +91,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.DateEqualsValidator#__messageParameters
+         * @name sogv.DateEqualsValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -103,4 +108,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.DateEqualsValidator);
+sogv.registry(sogv.DateEqualsValidator);

@@ -1,4 +1,4 @@
-abv.is_real = function (mixedVar) {
+sogv.is_real = function (mixedVar) {
     // eslint-disable-line camelcase
     //  discuss at: https://locutus.io/php/is_real/
     // original by: Brett Zamir (https://brett-zamir.me)
@@ -7,5 +7,5 @@ abv.is_real = function (mixedVar) {
     //   example 1: is_real(186.31)
     //   returns 1: true
 
-    return abv.is_float(mixedVar);
+    return sogv.is_float(mixedVar);
 };

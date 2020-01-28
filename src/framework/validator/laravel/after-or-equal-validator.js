@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.AfterOrEqualValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.AfterOrEqualValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>The field under validation must be a value <code>after</code> or <code>equal</code> to the given <code>date</code>.</p>
      * <p>For more information, see the after rule.</p>
@@ -15,8 +15,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>after_or_equal</code>', '<code>after-or-equal</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.AfterOrEqualValidator(data, {"value": "the value to compare to"});
+     * var validator = new sogv.AfterOrEqualValidator(data, {"value": "the value to compare to"});
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -25,7 +30,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.AfterOrEqualValidator#value
+     * @name sogv.AfterOrEqualValidator#value
      * @type {*}
      * @description
      * <p>This option is required.<p>
@@ -34,7 +39,7 @@ Object.assign(abv, function () {
      */
 
     var AfterOrEqualValidator = function (data, options, optionRules, lang, internal) {
-        abv.GreaterThanOrEqualValidator.call(this, data, {
+        sogv.GreaterThanOrEqualValidator.call(this, data, {
             message: "The %%attribute%% must be a date after or equal to %%date%%.",
             value: options.value
         }, {
@@ -43,7 +48,7 @@ Object.assign(abv, function () {
 
         this.name = 'AfterOrEqualValidator';
     };
-    AfterOrEqualValidator.prototype = Object.create(abv.GreaterThanOrEqualValidator.prototype);
+    AfterOrEqualValidator.prototype = Object.create(sogv.GreaterThanOrEqualValidator.prototype);
     AfterOrEqualValidator.prototype.constructor = AfterOrEqualValidator;
 
     Object.defineProperty(AfterOrEqualValidator.prototype, 'alias', {
@@ -70,7 +75,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.AfterOrEqualValidator#__messageParameters
+         * @name sogv.AfterOrEqualValidator#__messageParameters
          * @description
          * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
@@ -88,4 +93,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.AfterOrEqualValidator);
+sogv.registry(sogv.AfterOrEqualValidator);

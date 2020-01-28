@@ -1,4 +1,4 @@
-abv.is_integer = function (mixedVar) {
+sogv.is_integer = function (mixedVar) {
     // eslint-disable-line camelcase
     //  discuss at: https://locutus.io/php/is_integer/
     // original by: Paulo Freitas
@@ -9,5 +9,5 @@ abv.is_integer = function (mixedVar) {
     //   example 2: is_integer(12)
     //   returns 2: true
 
-    return abv.is_int(mixedVar);
+    return sogv.is_int(mixedVar);
 };

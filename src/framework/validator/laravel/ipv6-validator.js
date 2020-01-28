@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.Ipv6Validator
-     * @extends abv.AbstractValidator
+     * @name sogv.Ipv6Validator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>The field under validation must be an <code>IPv6</code> address.</p>
      * @description
@@ -14,27 +14,34 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>ipv6</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.Ipv6Validator(data);
+     * var validator = new sogv.Ipv6Validator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
      */
 
     var Ipv6Validator = function (data, options, optionRules, lang, internal) {
-        abv.IpValidator.call(this, data, {
+        sogv.IpValidator.call(this, data, {
             version: 6,
             message: 'The %%attribute%% must be a valid IPv6 address.',
         }, optionRules, lang, internal);
 
         this.name = 'Ipv6Validator';
     };
-    Ipv6Validator.prototype = Object.create(abv.IpValidator.prototype);
+    Ipv6Validator.prototype = Object.create(sogv.IpValidator.prototype);
     Ipv6Validator.prototype.constructor = Ipv6Validator;
 
     Object.defineProperty(Ipv6Validator.prototype, 'alias', {
         get: function () {
-            return 'ipv6';
+            return [
+                'ipv6'
+            ];
         }
     });
 
@@ -48,7 +55,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.Ipv6Validator#__messageParameters
+         * @name sogv.Ipv6Validator#__messageParameters
          * @description
          * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
@@ -65,4 +72,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.Ipv6Validator);
+sogv.registry(sogv.Ipv6Validator);

@@ -1,13 +1,13 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.NegativeValidator
-     * @extends abv.AbstractComparisonValidator
+     * @name sogv.NegativeValidator
+     * @extends sogv.AbstractComparisonValidator
      * @classdesc
      * <p>Validates that a value is a <code>negative</code> number.</p>
-     * <p>Zero is neither positive nor negative, so you must use <code>abv.NegativeOrZero</code> if you want to allow zero as value.</p>
+     * <p>Zero is neither positive nor negative, so you must use <code>sogv.NegativeOrZero</code> if you want to allow zero as value.</p>
      * @description
      * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
@@ -15,8 +15,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>negative</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.NegativeValidator(data, {"value": "the value to compare to"});
+     * var validator = new sogv.NegativeValidator(data, {"value": "the value to compare to"});
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -25,7 +30,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.NegativeValidator#message
+     * @name sogv.NegativeValidator#message
      * @type {String}
      * @description
      * <p>The default message supplied when the value is not less than zero.</p>
@@ -56,7 +61,7 @@ Object.assign(abv, function () {
      */
 
     var NegativeValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractComparisonValidator.call(this, data, options, {
+        sogv.AbstractComparisonValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -65,12 +70,14 @@ Object.assign(abv, function () {
 
         this.name = 'NegativeValidator';
     };
-    NegativeValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+    NegativeValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
     NegativeValidator.prototype.constructor = NegativeValidator;
 
     Object.defineProperty(NegativeValidator.prototype, 'alias', {
         get: function () {
-            return 'negative';
+            return [
+                'negative'
+            ];
         }
     });
 
@@ -84,7 +91,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.NegativeValidator#__compareValues
+         * @name sogv.NegativeValidator#__compareValues
          * @description
          * <p>Compare two value.</p>
          * @param {*} value Value
@@ -98,7 +105,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.NegativeValidator#__messageParameters
+         * @name sogv.NegativeValidator#__messageParameters
          * @description
          * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
@@ -107,7 +114,7 @@ Object.assign(abv, function () {
             return {
                 'value': this.__formattedData(this.data),
                 'compared_value': this.__formattedData(this.value),
-                'compared_value_type': abv.getType(this.value)
+                'compared_value_type': sogv.getType(this.value)
             }
         }
     });
@@ -117,4 +124,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.NegativeValidator);
+sogv.registry(sogv.NegativeValidator);

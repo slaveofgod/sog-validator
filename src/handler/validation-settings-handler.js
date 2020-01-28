@@ -1,16 +1,16 @@
 /**
  * @namespace
- * @name abv.ValidationSettingsHandler
+ * @name sogv.ValidationSettingsHandler
  * @description
  * <p>Validation settings handler.</p>
  * <p>This handler provides different types of validation settings parsers (validator's name and settings).</p>
  * @example
- * var validators = abv.ValidationSettingsHandler.parse('required|email:{"mode":"html5"}');
+ * var validators = sogv.ValidationSettingsHandler.parse('required|email:{"mode":"html5"}');
  */
-abv.ValidationSettingsHandler = {
+sogv.ValidationSettingsHandler = {
     /**
      * @function
-     * @name abv.ValidationSettingsHandler#parse
+     * @name sogv.ValidationSettingsHandler#parse
      * @description Prepare validation settings
      * @param {String|JSON|Object} settings Validation settings
      * @returns {Object} Processed settings
@@ -27,7 +27,7 @@ abv.ValidationSettingsHandler = {
     /**
      * @private
      * @function
-     * @name abv.ValidationSettingsHandler#__parseStringFormat
+     * @name sogv.ValidationSettingsHandler#__parseStringFormat
      * @description Parse validation settings from string (Laravel format)
      * @param {String} settings Validation settings in string format
      * @returns {Object} The roles in array format
@@ -61,7 +61,7 @@ abv.ValidationSettingsHandler = {
     /**
      * @private
      * @function
-     * @name abv.ValidationSettingsHandler#__parseJsonFormat
+     * @name sogv.ValidationSettingsHandler#__parseJsonFormat
      * @description Parse validation settings from string (JSON format)
      * @param {String} settings Validation settings in string format
      * @returns {Object} The roles in array format

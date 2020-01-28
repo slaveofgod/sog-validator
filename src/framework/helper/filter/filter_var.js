@@ -1,4 +1,4 @@
-abv.filter_var = function(input, filter, options) {
+sogv.filter_var = function(input, filter, options) {
     // http://kevin.vanzonneveld.net
     // +   original by: Brett Zamir (http://brett-zamir.me)
     // +   improved by: Rafa?&#x201A; Kukawski (http://kukawski.pl)

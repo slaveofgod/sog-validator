@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.TypeValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.TypeValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is of a specific <code>data</code> type.</p>
      * <p>For example, if a variable should be an array, you can use this constraint with the <code>array</code> type option to validate this.</p>
@@ -15,8 +15,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>type</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.TypeValidator(data, {type: 'array'});
+     * var validator = new sogv.TypeValidator(data, {type: 'array'});
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -25,7 +30,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.TypeValidator#type
+     * @name sogv.TypeValidator#type
      * @type {String|Array}
      * @description
      * This required option defines the type or collection of types allowed for the given value.</p>
@@ -59,7 +64,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.TypeValidator#any
+     * @name sogv.TypeValidator#any
      * @type {Boolean}
      * @description
      * If <code>true</code>, one of data type needs to be valid, otherwise passed data should be valid for all types.</p>
@@ -67,7 +72,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.TypeValidator#message
+     * @name sogv.TypeValidator#message
      * @type {String}
      * @description
      * The message if the underlying data is not of the given type.</p>
@@ -94,7 +99,7 @@ Object.assign(abv, function () {
      */
 
     var TypeValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             type: optionRules.type || 'type:{"type":["string","array"],"any":true}',
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             any: optionRules.any || 'type:{"type":"boolean"}'
@@ -107,12 +112,14 @@ Object.assign(abv, function () {
         this.name = 'TypeValidator';
         this.__invalidType = null;
     };
-    TypeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    TypeValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     TypeValidator.prototype.constructor = TypeValidator;
 
     Object.defineProperty(TypeValidator.prototype, 'alias', {
         get: function () {
-            return 'type';
+            return [
+                'type'
+            ];
         }
     });
 
@@ -134,7 +141,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.TypeValidator#__validate
+         * @name sogv.TypeValidator#__validate
          * @description Validate data
          */
         __validate: function () {
@@ -157,7 +164,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.TypeValidator#__validateAllTypes
+         * @name sogv.TypeValidator#__validateAllTypes
          * @param {Array} types Types
          * @description Check if all types is valid for the data
          */
@@ -165,7 +172,7 @@ Object.assign(abv, function () {
             for (var key in types) {
                 if (!types.hasOwnProperty(key)) continue;
 
-                if (false === abv.isType(types[key], this.data)) {
+                if (false === sogv.isType(types[key], this.data)) {
                     this.__invalidType = types[key];
                     this.__setErrorMessage(this.message, this.__messageParameters());
                     return ;
@@ -178,7 +185,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.TypeValidator#__validateAnyTypes
+         * @name sogv.TypeValidator#__validateAnyTypes
          * @param {Array} types Types
          * @description Check if at least one of the types is valid for the data
          */
@@ -186,7 +193,7 @@ Object.assign(abv, function () {
             for (var key in types) {
                 if (!types.hasOwnProperty(key)) continue;
 
-                if (true === abv.isType(types[key], this.data)) {
+                if (true === sogv.isType(types[key], this.data)) {
                     return ;
                 }
             }
@@ -200,7 +207,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.TimezoneValidator#__beforeValidate
+         * @name sogv.TimezoneValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
@@ -214,7 +221,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.TypeValidator#__messageParameters
+         * @name sogv.TypeValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -231,4 +238,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.TypeValidator);
+sogv.registry(sogv.TypeValidator);

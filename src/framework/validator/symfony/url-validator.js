@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.UrlValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.UrlValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is a valid <code>URL</code> string.</p>
      * @description
@@ -14,8 +14,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>url</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.UrlValidator(data);
+     * var validator = new sogv.UrlValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -24,7 +29,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.UrlValidator#message
+     * @name sogv.UrlValidator#message
      * @type {String}
      * @description
      * This message is shown if the URL is invalid.</p>
@@ -47,7 +52,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.UrlValidator#normalize
+     * @name sogv.UrlValidator#normalize
      * @type {Boolean}
      * @description
      * Normalizer string before validate (trim, etc.).
@@ -55,7 +60,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.UrlValidator#protocols
+     * @name sogv.UrlValidator#protocols
      * @type {Array}
      * @description
      * The protocols considered to be valid for the URL.
@@ -64,7 +69,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.UrlValidator#relativeProtocol
+     * @name sogv.UrlValidator#relativeProtocol
      * @type {Boolean}
      * @description
      * If true, the protocol is considered optional when validating the syntax of the given URL.
@@ -73,7 +78,7 @@ Object.assign(abv, function () {
      */
 
     var UrlValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             normalize: optionRules.normalize || 'type:{"type":"bool"}',
             protocols: optionRules.protocols || 'type:{"type":["string","array"],"any":true}',
@@ -91,12 +96,14 @@ Object.assign(abv, function () {
 
         this.__configure();
     };
-    UrlValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    UrlValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     UrlValidator.prototype.constructor = UrlValidator;
 
     Object.defineProperty(UrlValidator.prototype, 'alias', {
         get: function () {
-            return 'url';
+            return [
+                'url'
+            ];
         }
     });
 
@@ -118,7 +125,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.AllValidator#configure
+         * @name sogv.AllValidator#configure
          * @description Configure validator
          */
         __configure: function () {
@@ -133,7 +140,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.UrlValidator#__validate
+         * @name sogv.UrlValidator#__validate
          * @description Validate data
          */
         __validate: function () {
@@ -158,7 +165,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.UrlValidator#__beforeValidate
+         * @name sogv.UrlValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
@@ -169,7 +176,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -186,7 +193,7 @@ Object.assign(abv, function () {
             }
 
             // Check if protocols is array
-            var errorMessage = abv.isValidWithErrorMessage(this.protocols, 'type:{"type":"array"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.protocols, 'type:{"type":"array"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -196,7 +203,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.UrlValidator#__messageParameters
+         * @name sogv.UrlValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -212,4 +219,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.UrlValidator);
+sogv.registry(sogv.UrlValidator);

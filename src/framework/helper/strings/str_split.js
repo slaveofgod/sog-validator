@@ -1,4 +1,4 @@
-abv.str_split = function (str, split_length) {
+sogv.str_split = function (str, split_length) {
     //Convert a string to an array
 
     if(split_length == null){

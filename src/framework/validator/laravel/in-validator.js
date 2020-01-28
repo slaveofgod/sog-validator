@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.InValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.InValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>The field under validation must be <code>included</code> in the given list of values.</p>
      * @description
@@ -14,8 +14,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>in</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.InValidator("Liam", [
+     * var validator = new sogv.InValidator("Liam", [
      *   "Liam", "Noah", "William", "James", "Logan", "Benjamin", "Mason", "Elijah",
      *   "Oliver", "Jacob", "Lucas", "Michael", "Alexander", "Ethan", "Daniel",
      *   "Matthew", "Aiden", "Henry", "Joseph", "Jackson", "Samuel", "Sebastian",
@@ -29,7 +34,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.ChoiceValidator#choices
+     * @name sogv.ChoiceValidator#choices
      * @type {Array}
      * @description
      * <p>A required option - this is the array of options that should be considered in the valid set.</p>
@@ -37,7 +42,7 @@ Object.assign(abv, function () {
      */
 
     var InValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             choices: optionRules.choices || 'required|type:{"type":"array"}',
         }, lang, internal);
@@ -48,7 +53,7 @@ Object.assign(abv, function () {
 
         this.name = 'InValidator';
     };
-    InValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    InValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     InValidator.prototype.constructor = InValidator;
 
     Object.defineProperty(InValidator.prototype, 'alias', {
@@ -74,11 +79,11 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.InValidator#__validate
+         * @name sogv.InValidator#__validate
          * @description Validate data
          */
         __validate: function () {
-            var status = abv.isValid(this.data, {'choice': {
+            var status = sogv.isValid(this.data, {'choice': {
                 "choices": this.choices,
                 "min": this.min
             }}, true);
@@ -92,7 +97,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.InValidator#__beforeValidate
+         * @name sogv.InValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
@@ -103,7 +108,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -123,7 +128,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.InValidator#__messageParameters
+         * @name sogv.InValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -139,4 +144,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.InValidator);
+sogv.registry(sogv.InValidator);

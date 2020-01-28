@@ -1,4 +1,4 @@
-abv.is_long = function (mixedVar) {
+sogv.is_long = function (mixedVar) {
     // eslint-disable-line camelcase
     //  discuss at: https://locutus.io/php/is_long/
     // original by: Paulo Freitas
@@ -7,5 +7,5 @@ abv.is_long = function (mixedVar) {
     //   example 1: is_long(186.31)
     //   returns 1: true
 
-    return abv.is_float(mixedVar);
+    return sogv.is_float(mixedVar);
 };

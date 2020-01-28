@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.ArrayValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.ArrayValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>The field under validation must be an array</p>
      * @description
@@ -14,27 +14,35 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>array</code>', '<code>arr</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.ArrayValidator(data);
+     * var validator = new sogv.ArrayValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
      */
 
     var ArrayValidator = function (data, options, optionRules, lang, internal) {
-        abv.TypeValidator.call(this, data, {
+        sogv.TypeValidator.call(this, data, {
             type: 'array',
             message: "The %%attribute%% must be an array."
         }, {}, lang, internal);
 
         this.name = 'ArrayValidator';
     };
-    ArrayValidator.prototype = Object.create(abv.TypeValidator.prototype);
+    ArrayValidator.prototype = Object.create(sogv.TypeValidator.prototype);
     ArrayValidator.prototype.constructor = ArrayValidator;
 
     Object.defineProperty(ArrayValidator.prototype, 'alias', {
         get: function () {
-            return 'array';
+            return [
+                'array',
+                'arr'
+            ];
         }
     });
 
@@ -48,7 +56,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.ArrayValidator#__messageParameters
+         * @name sogv.ArrayValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -64,4 +72,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.ArrayValidator);
+sogv.registry(sogv.ArrayValidator);

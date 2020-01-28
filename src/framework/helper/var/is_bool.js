@@ -1,4 +1,4 @@
-abv.is_bool = function (mixedVar) {
+sogv.is_bool = function (mixedVar) {
     // eslint-disable-line camelcase
     //  discuss at: https://locutus.io/php/is_bool/
     // original by: Onno Marsman (https://twitter.com/onnomarsman)

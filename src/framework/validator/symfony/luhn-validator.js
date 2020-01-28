@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.LuhnValidator
-     * @extends abv.AbstractComparisonValidator
+     * @name sogv.LuhnValidator
+     * @extends sogv.AbstractComparisonValidator
      * @classdesc
      * <p>This constraint is used to ensure that a <code>credit card</code> number passes the {@link https://en.wikipedia.org/wiki/Luhn_algorithm|Luhn algorithm}.</p>
      * <p>It is useful as a first step to validating a credit card: before communicating with a payment gateway.</p>
@@ -15,8 +15,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>luhn</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.LuhnValidator(data);
+     * var validator = new sogv.LuhnValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -25,7 +30,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.LuhnValidator#message
+     * @name sogv.LuhnValidator#message
      * @type {String}
      * @description
      * <p>The default message supplied when the value does not pass the Luhn check.</p>
@@ -48,7 +53,7 @@ Object.assign(abv, function () {
      */
 
     var LuhnValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -56,12 +61,14 @@ Object.assign(abv, function () {
 
         this.name = 'LuhnValidator';
     };
-    LuhnValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+    LuhnValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
     LuhnValidator.prototype.constructor = LuhnValidator;
 
     Object.defineProperty(LuhnValidator.prototype, 'alias', {
         get: function () {
-            return 'luhn';
+            return [
+                'luhn'
+            ];
         }
     });
 
@@ -75,11 +82,11 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LuhnValidator#__validate
+         * @name sogv.LuhnValidator#__validate
          * @description Validate data
          */
         __validate: function () {
-            if (false === abv.isType('digit', this.data)) {
+            if (false === sogv.isType('digit', this.data)) {
                 this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
@@ -103,7 +110,7 @@ Object.assign(abv, function () {
             //         ^     ^     ^     ^     ^
             //    =    1+8 + 4  +  6  +  1+6 + 2
             for (var i = length - 2; i >= 0; i -= 2) {
-                checkSum += abv.array_sum(abv.str_split(this.data[i] * 2));
+                checkSum += sogv.array_sum(sogv.str_split(this.data[i] * 2));
             }
 
             if (0 === checkSum || 0 !== checkSum % 10) {
@@ -115,7 +122,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LuhnValidator#__beforeValidate
+         * @name sogv.LuhnValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
@@ -126,7 +133,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -146,7 +153,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LuhnValidator#__messageParameters
+         * @name sogv.LuhnValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -162,4 +169,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.LuhnValidator);
+sogv.registry(sogv.LuhnValidator);

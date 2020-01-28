@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.BooleanValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.BooleanValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>The field under validation must be able to be cast as a <code>boolean</code>. Accepted input are <code>true</code>, <code>false</code>, <code>1</code>, <code>0</code>, "<code>1</code>", and "<code>0</code>".</p>
      * @description
@@ -14,21 +14,26 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>boolean</code>', '<code>bool-or-equal</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.BooleanValidator(data);
+     * var validator = new sogv.BooleanValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
      */
 
     var BooleanValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+        sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
 
         this.message = 'The %%attribute%% field must be true or false.';
 
         this.name = 'BooleanValidator';
     };
-    BooleanValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    BooleanValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     BooleanValidator.prototype.constructor = BooleanValidator;
 
     Object.defineProperty(BooleanValidator.prototype, 'alias', {
@@ -50,13 +55,13 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.BooleanValidator#__validate
+         * @name sogv.BooleanValidator#__validate
          * @description Validate data
          */
         __validate: function () {
             if (
-                false === abv.isValid(this.data, 'false')
-                && false === abv.isValid(this.data, 'true')
+                false === sogv.isValid(this.data, 'false')
+                && false === sogv.isValid(this.data, 'true')
             ) {
                 this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
@@ -66,7 +71,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.BetweenValidator#__beforeValidate
+         * @name sogv.BetweenValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
@@ -77,7 +82,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -87,7 +92,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.BooleanValidator#__messageParameters
+         * @name sogv.BooleanValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -103,4 +108,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.BooleanValidator);
+sogv.registry(sogv.BooleanValidator);

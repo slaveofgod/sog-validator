@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.StringValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.StringValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>The field under validation must be a string.</p>
      * @description
@@ -14,28 +14,34 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>string</code>', '<code>str</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.StringValidator(data);
+     * var validator = new sogv.StringValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
      */
 
     var StringValidator = function (data, options, optionRules, lang, internal) {
-        abv.TypeValidator.call(this, data, {
+        sogv.TypeValidator.call(this, data, {
             type: 'string',
             message: "The %%attribute%% must be a string."
         }, {}, lang, internal);
 
         this.name = 'StringValidator';
     };
-    StringValidator.prototype = Object.create(abv.TypeValidator.prototype);
+    StringValidator.prototype = Object.create(sogv.TypeValidator.prototype);
     StringValidator.prototype.constructor = StringValidator;
 
     Object.defineProperty(StringValidator.prototype, 'alias', {
         get: function () {
             return [
-                'string'
+                'string',
+                'str'
             ];
         }
     });
@@ -50,7 +56,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.StringValidator#__messageParameters
+         * @name sogv.StringValidator#__messageParameters
          * @description
          * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
@@ -67,4 +73,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.StringValidator);
+sogv.registry(sogv.StringValidator);

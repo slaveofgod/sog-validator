@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.IsbnValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.IsbnValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>This constraint validates that an {@link https://en.wikipedia.org/wiki/Isbn|International Standard Book Number (ISBN)} is either a valid <code>ISBN-10</code> or a valid <code>ISBN-13</code>.</p>
      * @description
@@ -14,8 +14,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>isbn</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.IsbnValidator(data);
+     * var validator = new sogv.IsbnValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -24,7 +29,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.IsbnValidator#bothIsbnMessage
+     * @name sogv.IsbnValidator#bothIsbnMessage
      * @type {String}
      * @description
      * <p>The message that will be shown if the type option is null and the given value does not pass any of the <code>ISBN</code> checks.</p>
@@ -47,7 +52,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.IsbnValidator#isbn10Message
+     * @name sogv.IsbnValidator#isbn10Message
      * @type {String}
      * @description
      * <p>The message that will be shown if the type option is isbn10 and the given value does not pass the <code>ISBN-10</code> check.</p>
@@ -70,7 +75,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.IsbnValidator#isbn13Message
+     * @name sogv.IsbnValidator#isbn13Message
      * @type {String}
      * @description
      * <p>The message that will be shown if the type option is <code>isbn13</code> and the given value does not pass the <code>ISBN-13</code> check.</p>
@@ -93,7 +98,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.IsbnValidator#message
+     * @name sogv.IsbnValidator#message
      * @type {String}
      * @description
      * <p>The message that will be shown if the value is not valid. If not <code>null</code>, this message has priority over all the other messages.</p>
@@ -116,7 +121,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.IsbnValidator#type
+     * @name sogv.IsbnValidator#type
      * @type {String}
      * @description
      * <p>The type of ISBN to validate against. Valid values are <code>isbn10</code>, <code>isbn13</code> and <code>null</code> to accept any kind of <code>ISBN</code>.</p>
@@ -124,7 +129,7 @@ Object.assign(abv, function () {
      */
 
     var IsbnValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             bothIsbnMessage: optionRules.bothIsbnMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             isbn10Message: optionRules.isbn10Message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             isbn13Message: optionRules.isbn13Message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
@@ -140,12 +145,14 @@ Object.assign(abv, function () {
 
         this.name = 'IsbnValidator';
     };
-    IsbnValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    IsbnValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     IsbnValidator.prototype.constructor = IsbnValidator;
 
     Object.defineProperty(IsbnValidator.prototype, 'alias', {
         get: function () {
-            return 'isbn';
+            return [
+                'isbn'
+            ];
         }
     });
 
@@ -164,7 +171,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IsbnValidator#__validate
+         * @name sogv.IsbnValidator#__validate
          * @description
          * <p>Validate data.</p>
          */
@@ -211,7 +218,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IsbnValidator#__validateIsbn10
+         * @name sogv.IsbnValidator#__validateIsbn10
          * @description
          * <p>Validate <code>ISBN 10</code></p>
          * @param {String} isbn ISBN
@@ -238,7 +245,7 @@ Object.assign(abv, function () {
                 var digit = null;
                 if ('X' === isbn[i]) {
                     digit = 10;
-                } else if (true === abv.isType('digit', isbn[i])) {
+                } else if (true === sogv.isType('digit', isbn[i])) {
                     digit = isbn[i];
                 } else {
                     return false;
@@ -254,7 +261,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IsbnValidator#__validateIsbn13
+         * @name sogv.IsbnValidator#__validateIsbn13
          * @description
          * <p>Validate <code>ISBN 13</code></p>
          * @param {String} isbn ISBN
@@ -265,7 +272,7 @@ Object.assign(abv, function () {
             // 1. ERROR_INVALID_CHARACTERS
             // 2. ERROR_TOO_SHORT/ERROR_TOO_LONG
             // 3. ERROR_CHECKSUM_FAILED
-            if (false === abv.isType('digit', isbn)) {
+            if (false === sogv.isType('digit', isbn)) {
                 return false;
             }
             var length = isbn.length;
@@ -288,7 +295,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IsbnValidator#__getMessage
+         * @name sogv.IsbnValidator#__getMessage
          * @description
          * <p>Get message by type.</p>
          * @param {String} type Message type
@@ -309,7 +316,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IsbnValidator#__beforeValidate
+         * @name sogv.IsbnValidator#__beforeValidate
          * @description
          * <p>Execute before validation is running.</p>
          */
@@ -321,7 +328,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -341,7 +348,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IsbnValidator#__messageParameters
+         * @name sogv.IsbnValidator#__messageParameters
          * @description
          * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
@@ -358,4 +365,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.IsbnValidator);
+sogv.registry(sogv.IsbnValidator);

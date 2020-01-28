@@ -1,3 +1,3 @@
-abv.is_boolean = function (mixedVar) {
-    return abv.is_bool(mixedVar);
+sogv.is_boolean = function (mixedVar) {
+    return sogv.is_bool(mixedVar);
 };

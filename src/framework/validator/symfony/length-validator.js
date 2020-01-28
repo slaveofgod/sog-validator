@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.LengthValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.LengthValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a given string length is between some <code>minimum</code> and <code>maximum</code> value.</p>
      * @description
@@ -14,8 +14,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>length</code>', '<code>len</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.LengthValidator(data, {min: 10});
+     * var validator = new sogv.LengthValidator(data, {min: 10});
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -24,7 +29,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.LengthValidator#allowEmptyString
+     * @name sogv.LengthValidator#allowEmptyString
      * @type {Boolean}
      * @description
      * <p>If set to true, empty strings are considered valid.</p>
@@ -33,7 +38,7 @@ Object.assign(abv, function () {
      */
 
     // /**
-    //  * @name abv.LengthValidator#charset
+    //  * @name sogv.LengthValidator#charset
     //  * @type {String}
     //  * @description
     //  * <p>The charset to be used when computing value's length.</p>
@@ -41,7 +46,7 @@ Object.assign(abv, function () {
     //  */
     //
     // /**
-    //  * @name abv.LengthValidator#charsetMessage
+    //  * @name sogv.LengthValidator#charsetMessage
     //  * @type {String}
     //  * @description
     //  * <p>The message that will be shown if the value is not using the given charset.</p>
@@ -64,7 +69,7 @@ Object.assign(abv, function () {
     //  */
 
     /**
-     * @name abv.LengthValidator#exactMessage
+     * @name sogv.LengthValidator#exactMessage
      * @type {String}
      * @description
      * <p>The message that will be shown if min and max values are equal and the underlying value's length is not exactly this value.</p>
@@ -87,14 +92,14 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.LengthValidator#max
+     * @name sogv.LengthValidator#max
      * @type {Integer}
      * @description This option is the "max" length value. Validation will fail if the given value's length is greater than this max value.
      * This option is required when the "min: option is not defined.
      */
 
     /**
-     * @name abv.LengthValidator#maxMessage
+     * @name sogv.LengthValidator#maxMessage
      * @type {String}
      * @description
      * <p>The message that will be shown if the underlying value's length is more than the max option.</p>
@@ -117,7 +122,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.LengthValidator#min
+     * @name sogv.LengthValidator#min
      * @type {Integer}
      * @description
      * This option is the "min" length value. Validation will fail if the given value's length is less than this min value.
@@ -126,7 +131,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.LengthValidator#minMessage
+     * @name sogv.LengthValidator#minMessage
      * @type {String}
      * @description
      * <p>The message that will be shown if the underlying value's length is less than the min option.</p>
@@ -149,7 +154,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.LengthValidator#normalize
+     * @name sogv.LengthValidator#normalize
      * @type {Boolean}
      * @description
      * <p>Normalizer string before validate (trim, etc.).</p>
@@ -157,7 +162,7 @@ Object.assign(abv, function () {
      */
 
     var LengthValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             allowEmptyString: optionRules.allowEmptyString || 'type:{"type":"bool"}',
             charset: optionRules.charset || 'length:{"min":2,"max":10}',
             charsetMessage: optionRules.charsetMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}',
@@ -181,12 +186,15 @@ Object.assign(abv, function () {
 
         this.name = 'LengthValidator';
     };
-    LengthValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    LengthValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     LengthValidator.prototype.constructor = LengthValidator;
 
     Object.defineProperty(LengthValidator.prototype, 'alias', {
         get: function () {
-            return 'length';
+            return [
+                'length',
+                'len'
+            ];
         }
     });
 
@@ -208,7 +216,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LengthValidator#__validate
+         * @name sogv.LengthValidator#__validate
          * @description Validate data
          */
         __validate: function () {
@@ -254,7 +262,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LengthValidator#__beforeValidate
+         * @name sogv.LengthValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
@@ -264,7 +272,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -284,7 +292,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LengthValidator#__exactMessageParameters
+         * @name sogv.LengthValidator#__exactMessageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -298,7 +306,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LengthValidator#__maxMessageParameters
+         * @name sogv.LengthValidator#__maxMessageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -312,7 +320,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.LengthValidator#__minMessageParameters
+         * @name sogv.LengthValidator#__minMessageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -329,4 +337,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.LengthValidator);
+sogv.registry(sogv.LengthValidator);

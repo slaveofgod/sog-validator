@@ -1,4 +1,4 @@
-abv.checkdate = function (m, d, y) {
+sogv.checkdate = function (m, d, y) {
     //  discuss at: https://locutus.io/php/checkdate/
     // original by: Kevin van Zonneveld (https://kvz.io)
     // improved by: Pyerre

@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.TimeValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.TimeValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is a valid <code>time</code>, meaning a string (or an object that can be cast into a string) that follows a valid <code>HH:mm:ss</code> format.</p>
      * @description
@@ -14,8 +14,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>time</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.TimeValidator(data);
+     * var validator = new sogv.TimeValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -24,7 +29,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.TimeValidator#message
+     * @name sogv.TimeValidator#message
      * @type {String}
      * @description
      * <p>This message is shown if the underlying data is not a valid time.</p>
@@ -47,7 +52,7 @@ Object.assign(abv, function () {
      */
 
     var TimeValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -56,12 +61,14 @@ Object.assign(abv, function () {
 
         this.name = 'TimeValidator';
     };
-    TimeValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    TimeValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     TimeValidator.prototype.constructor = TimeValidator;
 
     Object.defineProperty(TimeValidator.prototype, 'alias', {
         get: function () {
-            return 'time';
+            return [
+                'time'
+            ];
         }
     });
 
@@ -75,7 +82,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.TimeValidator#__validate
+         * @name sogv.TimeValidator#__validate
          * @description Validate data
          */
         __validate: function () {
@@ -88,7 +95,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.TimeValidator#__beforeValidate
+         * @name sogv.TimeValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
@@ -99,7 +106,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -119,7 +126,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.TimeValidator#__messageParameters
+         * @name sogv.TimeValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -135,4 +142,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.TimeValidator);
+sogv.registry(sogv.TimeValidator);

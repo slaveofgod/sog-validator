@@ -1,10 +1,10 @@
-Object.assign(abv, (function () {
+Object.assign(sogv, (function () {
     'use strict';
 
     /**
      * @abstract
      * @constructor
-     * @name abv.AbstractValidator
+     * @name sogv.AbstractValidator
      * @classdesc Abstract base class that implements functionality for validation.
      * @description Create a new validation extension.
      * @param {*} data The data which needs to be validated.
@@ -18,13 +18,13 @@ Object.assign(abv, (function () {
     // PROPERTIES
 
     /**
-     * @name abv.RegexValidator#data
+     * @name sogv.RegexValidator#data
      * @type {*}
      * @description Data that needs to be validated.
      */
 
     /**
-     * @name abv.RegexValidator#lang
+     * @name sogv.RegexValidator#lang
      * @type {String}
      * @description Language of error messages.
      */
@@ -37,15 +37,15 @@ Object.assign(abv, (function () {
         this.lang = lang || 'en';
 
         this.__options = options || {};
-        this.__errorService = new abv.ErrorHandler({"lang": lang, "internal": internal});
+        this.__errorService = new sogv.ErrorHandler({"lang": lang, "internal": internal});
         this.__internal = (true === internal);
-        this.__moment = abv.moment;
+        this.__moment = sogv.moment;
         this.__name = null;
         this.__skip = false; // Skip validation (do not validate this value)
 
         // ensure setup of localization variables takes place
         this.__moment.locale(this.lang);
-        abv.setlocale('LC_ALL', this.lang);
+        sogv.setlocale('LC_ALL', this.lang);
 
         if (false === this.__internal) {
             this.__validateOptions(optionRules);
@@ -58,7 +58,7 @@ Object.assign(abv, (function () {
     Object.assign(AbstractValidator.prototype, {
         /**
          * @function
-         * @name abv.AbstractValidator#isValid
+         * @name sogv.AbstractValidator#isValid
          * @description Check if data valid
          * @returns {Boolean} Validation status
          */
@@ -80,7 +80,7 @@ Object.assign(abv, (function () {
         /**
          * @private
          * @function
-         * @name abv.AbstractValidator#__validate
+         * @name sogv.AbstractValidator#__validate
          * @description Validate data
          */
         __validate: function () {
@@ -90,7 +90,7 @@ Object.assign(abv, (function () {
         /**
          * @private
          * @function
-         * @name abv.AbstractValidator#isValid
+         * @name sogv.AbstractValidator#isValid
          * @description Check if data valid
          * @returns {Boolean} Validation status
          */
@@ -100,9 +100,9 @@ Object.assign(abv, (function () {
 
         /**
          * @function
-         * @name abv.AbstractValidator#errors
+         * @name sogv.AbstractValidator#errors
          * @description Return error errors
-         * @returns {abv.Error} Error messages
+         * @returns {sogv.Error} Error messages
          */
         errors: function () {
             return this.__errorService;
@@ -111,7 +111,7 @@ Object.assign(abv, (function () {
         /**
          * @private
          * @function
-         * @name abv.AbstractValidator#__setErrorMessage
+         * @name sogv.AbstractValidator#__setErrorMessage
          * @param {String} message Error message text
          * @param {Object} parameters Error message parameters
          * @description Set error message
@@ -123,7 +123,7 @@ Object.assign(abv, (function () {
         /**
          * @private
          * @function
-         * @name abv.AbstractValidator#__beforeValidate
+         * @name sogv.AbstractValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {},
@@ -131,7 +131,7 @@ Object.assign(abv, (function () {
         /**
          * @private
          * @function
-         * @name abv.AbstractValidator#__afterValidate
+         * @name sogv.AbstractValidator#__afterValidate
          * @description Execute after validation is complete
          */
         __afterValidate: function () {},
@@ -139,7 +139,7 @@ Object.assign(abv, (function () {
         /**
          * @private
          * @function
-         * @name abv.AbstractValidator#__validateOptions
+         * @name sogv.AbstractValidator#__validateOptions
          * @description Validate options
          * @param {Object} rules Validation rules
          */
@@ -151,7 +151,7 @@ Object.assign(abv, (function () {
             for (var key in rules) {
                 if (!rules.hasOwnProperty(key)) continue;
 
-                var message = abv.isValidWithErrorMessage(this.__options[key], rules[key], true);
+                var message = sogv.isValidWithErrorMessage(this.__options[key], rules[key], true);
                 if (null !== message) {
                     throw new Error("[option:" + key + "]: " +  message);
                 }
@@ -161,7 +161,7 @@ Object.assign(abv, (function () {
         /**
          * @private
          * @function
-         * @name abv.AbstractValidator#__normalize
+         * @name sogv.AbstractValidator#__normalize
          * @description Normalize string data
          */
         __normalize: function () {
@@ -173,7 +173,7 @@ Object.assign(abv, (function () {
         /**
          * @private
          * @function
-         * @name abv.AbstractValidator#__isEmptyData
+         * @name sogv.AbstractValidator#__isEmptyData
          * @returns {Boolean} Status
          * @description Checking, if data empty
          */
@@ -184,26 +184,26 @@ Object.assign(abv, (function () {
         /**
          * @private
          * @function
-         * @name abv.AbstractValidator#__formattedData
+         * @name sogv.AbstractValidator#__formattedData
          * @description Formatted data depending of type
          * @returns {*}
          */
         __formattedData: function (data) {
-            if (true === abv.isType('numeric', data)) {
+            if (true === sogv.isType('numeric', data)) {
                 return data;
             }
 
-            if (true === abv.isType('bool', data)) {
+            if (true === sogv.isType('bool', data)) {
                 return data;
             }
 
-            if (true === abv.isType('array', data)) {
+            if (true === sogv.isType('array', data)) {
                 return JSON.stringify(data);
             }
 
             if (
-                true === abv.isType('object', data)
-                && 'Date' !== abv.getType(data)
+                true === sogv.isType('object', data)
+                && 'Date' !== sogv.getType(data)
             ) {
                 return JSON.stringify(data);
             }
@@ -218,16 +218,16 @@ Object.assign(abv, (function () {
         /**
          * @private
          * @function
-         * @name abv.AbstractValidator#__convertDataToValueType
+         * @name sogv.AbstractValidator#__convertDataToValueType
          * @description Convert data to value type
          * @returns {*}
          */
         __convertDataToValueType: function () {
-            if (abv.getType(this.data) === abv.getType(this.value)) {
+            if (sogv.getType(this.data) === sogv.getType(this.value)) {
                 return this.data;
             }
 
-            switch (abv.getType(this.value)) {
+            switch (sogv.getType(this.value)) {
                 case 'Date':
                     return new Date(this.data);
                     break;
@@ -239,12 +239,12 @@ Object.assign(abv, (function () {
         /**
          * @private
          * @function
-         * @name abv.AbstractComparisonValidator#__prepareDataForComparing
+         * @name sogv.AbstractComparisonValidator#__prepareDataForComparing
          * @description Prepare data for comparing
          * @returns {*}
          */
         __prepareDataForComparing: function (data) {
-            switch (abv.getType(data)) {
+            switch (sogv.getType(data)) {
                 case 'Date':
                     return data.getTime();
                     break;

@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.CountValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.CountValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a given collection's (i.e. an array or an object that implements Countable) element <code>count</code> is <code>between</code> some <code>minimum</code> and <code>maximum</code> value.</p>
      * @description
@@ -14,8 +14,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>count</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.CountValidator(data, {"min": 10, "max": 20});
+     * var validator = new sogv.CountValidator(data, {"min": 10, "max": 20});
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -24,7 +29,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.CountValidator#exactMessage
+     * @name sogv.CountValidator#exactMessage
      * @type {String}
      * @description
      * <p>The message that will be shown if min and max values are equal and the underlying collection elements count is not exactly this value.</p>
@@ -51,7 +56,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.CountValidator#max
+     * @name sogv.CountValidator#max
      * @type {Integer}
      * @description
      * <p>This option is the "max" count value. Validation will fail if the given collection elements count is greater than this max value.</p>
@@ -59,7 +64,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.CountValidator#maxMessage
+     * @name sogv.CountValidator#maxMessage
      * @type {String}
      * @description
      * <p>The message that will be shown if the underlying collection elements count is more than the max option.</p>
@@ -86,7 +91,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.CountValidator#min
+     * @name sogv.CountValidator#min
      * @type {Integer}
      * @description
      * <p>This option is the "min" count value. Validation will fail if the given collection elements count is less than this min value.</p>
@@ -94,7 +99,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.CountValidator#minMessage
+     * @name sogv.CountValidator#minMessage
      * @type {String}
      * @description
      * <p>The message that will be shown if the underlying collection elements count is less than the min option.</p>
@@ -121,7 +126,7 @@ Object.assign(abv, function () {
      */
 
     var CountValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             exactMessage: optionRules.exactMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             max: optionRules.max || 'type:{"type":"numeric"}',
             maxMessage: optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}',
@@ -137,12 +142,14 @@ Object.assign(abv, function () {
 
         this.name = 'CountValidator';
     };
-    CountValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    CountValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     CountValidator.prototype.constructor = CountValidator;
 
     Object.defineProperty(CountValidator.prototype, 'alias', {
         get: function () {
-            return 'count';
+            return [
+                'count'
+            ];
         }
     });
 
@@ -164,7 +171,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IsTrueValidator#__validate
+         * @name sogv.IsTrueValidator#__validate
          * @description
          * <p>Validate data.</p>
          */
@@ -189,7 +196,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IpValidator#__beforeValidate
+         * @name sogv.IpValidator#__beforeValidate
          * @description
          * <p>Execute before validation is running.</p>
          */
@@ -201,7 +208,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -215,7 +222,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IsTrueValidator#__minMessageParameters
+         * @name sogv.IsTrueValidator#__minMessageParameters
          * @description
          * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
@@ -230,7 +237,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IsTrueValidator#__maxMessageParameters
+         * @name sogv.IsTrueValidator#__maxMessageParameters
          * @description
          * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
@@ -245,7 +252,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IsTrueValidator#__exactMessageParameters
+         * @name sogv.IsTrueValidator#__exactMessageParameters
          * @description
          * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
@@ -260,7 +267,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IsTrueValidator#__messageParameters
+         * @name sogv.IsTrueValidator#__messageParameters
          * @description
          * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
@@ -277,4 +284,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.CountValidator);
+sogv.registry(sogv.CountValidator);

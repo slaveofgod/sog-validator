@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.BicValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.BicValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>This constraint is used to ensure that a value has the proper format of a {@link https://en.wikipedia.org/wiki/Business_Identifier_Code|Business Identifier Code (BIC)}.</p>
      * <p><code>BIC</code> is an internationally agreed means to uniquely identify both financial and non-financial institutions.</p>
@@ -16,8 +16,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>bic</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.BicValidator(data);
+     * var validator = new sogv.BicValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -26,7 +31,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.BicValidator#iban
+     * @name sogv.BicValidator#iban
      * @type {String}
      * @description
      * An IBAN value to validate that the BIC is associated with it.</p>
@@ -34,7 +39,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.BicValidator#ibanMessage
+     * @name sogv.BicValidator#ibanMessage
      * @type {String}
      * @description
      * The default message supplied when the value does not pass the combined BIC/IBAN check.</p>
@@ -57,7 +62,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.BicValidator#message
+     * @name sogv.BicValidator#message
      * @type {String}
      * @description
      * The default message supplied when the value does not pass the BIC check.</p>
@@ -80,7 +85,7 @@ Object.assign(abv, function () {
      */
 
     var BicValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             iban: optionRules.iban || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             ibanMessage: optionRules.ibanMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
@@ -111,12 +116,14 @@ Object.assign(abv, function () {
 
         this.name = 'BicValidator';
     };
-    BicValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    BicValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     BicValidator.prototype.constructor = BicValidator;
 
     Object.defineProperty(BicValidator.prototype, 'alias', {
         get: function () {
-            return 'bic';
+            return [
+                'bic'
+            ];
         }
     });
 
@@ -135,7 +142,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.BicValidator#__validate
+         * @name sogv.BicValidator#__validate
          * @description Validate data
          */
         __validate: function () {
@@ -148,18 +155,18 @@ Object.assign(abv, function () {
             }
 
             // must contain alphanumeric values only
-            if (false === abv.isType('alnum', canonicalize)) {
+            if (false === sogv.isType('alnum', canonicalize)) {
                 this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
 
             // first 4 letters must be alphabetic (bank code)
-            if (false === abv.isType('alpha', canonicalize.substr(0, 4))) {
+            if (false === sogv.isType('alpha', canonicalize.substr(0, 4))) {
                 this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
 
-            if (null !== abv.isValidWithErrorMessage(canonicalize.substr(4, 2), 'country', true)) {
+            if (null !== sogv.isValidWithErrorMessage(canonicalize.substr(4, 2), 'country', true)) {
                 this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
@@ -177,7 +184,7 @@ Object.assign(abv, function () {
 
             var ibanCountryCode = this.iban.substr(0, 2);
             if (
-                true === abv.isType('alpha', ibanCountryCode)
+                true === sogv.isType('alpha', ibanCountryCode)
                 && this.__bicAndIbanCountriesMatch(canonicalize.substr(4, 2), ibanCountryCode)
             ) {
                 this.__setErrorMessage(this.ibanMessage, this.__ibanMessageParameters());
@@ -187,7 +194,7 @@ Object.assign(abv, function () {
 
         /**
          * @private
-         * @name abv.BicValidator#__bicAndIbanCountriesMatch
+         * @name sogv.BicValidator#__bicAndIbanCountriesMatch
          * @description Match BIC and IBAN countries
          * @param {String} bicCountryCode BIC country code
          * @param {String} ibanCountryCode IBAN country code
@@ -200,7 +207,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.BicValidator#__beforeValidate
+         * @name sogv.BicValidator#__beforeValidate
          * @description Execute before validation is running
          */
         __beforeValidate: function () {
@@ -211,7 +218,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -231,7 +238,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.BicValidator#__messageParameters
+         * @name sogv.BicValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -244,7 +251,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.BicValidator#__ibanMessageParameters
+         * @name sogv.BicValidator#__ibanMessageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -260,4 +267,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.BicValidator);
+sogv.registry(sogv.BicValidator);

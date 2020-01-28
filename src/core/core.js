@@ -15,11 +15,11 @@ var _typeLookup = function () {
 }();
 
 /**
- * @name abv
+ * @name sogv
  * @namespace
  * @description Root namespace for the SOG Validator Library
  */
-var abv = {
+var sogv = {
     version: "__CURRENT_SDK_VERSION__",
     revision: "__REVISION__",
     config: { },
@@ -28,7 +28,7 @@ var abv = {
 
     /**
      * @function
-     * @name abv.registry
+     * @name sogv.registry
      * @description Register validator
      * @param {Function} validator Validator
      */
@@ -43,9 +43,9 @@ var abv = {
             throw new Error('The validator has to have "alias" property');
         }
 
-        // Check that the validator extend from "abv.AbstractValidator" abstract class
+        // Check that the validator extend from "sogv.AbstractValidator" abstract class
         if ('AbstractValidator' !== __validator.base) {
-            throw new Error('The validator has to extend "abv.AbstractValidator" abstract class');
+            throw new Error('The validator has to extend "sogv.AbstractValidator" abstract class');
         }
 
         // Check that "__validate" method is implemented
@@ -55,18 +55,18 @@ var abv = {
 
         // Check that alias is type of "string" or "array"
         if (
-            false === abv.isType('string', alias)
-            && false === abv.isType('array', alias)
+            false === sogv.isType('string', alias)
+            && false === sogv.isType('array', alias)
         ) {
-            throw new Error('The alias must be type of "string" or "array", "' + abv.getType(alias) + '" given');
+            throw new Error('The alias must be type of "string" or "array", "' + sogv.getType(alias) + '" given');
         }
 
         // Check that options is type of "array"
         if (
             !options
-            || false === abv.isType('array', options)
+            || false === sogv.isType('array', options)
         ) {
-            throw new Error('The options must be type of "array", "' + abv.getType(options) + '" given');
+            throw new Error('The options must be type of "array", "' + sogv.getType(options) + '" given');
         }
 
         if ('string' === typeof alias) {
@@ -74,15 +74,15 @@ var abv = {
         }
 
         alias.forEach(function (element) {
-            if ('undefined' === typeof abv.validators[element]) {
-                abv.validators[element] = validator;
+            if ('undefined' === typeof sogv.validators[element]) {
+                sogv.validators[element] = validator;
             }
         });
     },
 
     /**
      * @function
-     * @name abv.getType
+     * @name sogv.getType
      * @description Get data type
      * @param {*} data Data, which type needs to be defined
      * @returns {String}
@@ -107,7 +107,7 @@ var abv = {
 
     /**
      * @function
-     * @name abv.isType
+     * @name sogv.isType
      * @description Parse validation rules from string
      * @param {String} type Type string
      * @param {*} data Data, which type needs to be checked
@@ -130,7 +130,7 @@ var abv = {
             case 'real':
             case 'scalar':
             case 'string':
-                return abv["is_" + type](data);
+                return sogv["is_" + type](data);
                 break;
             case 'alnum':
             case 'alpha':
@@ -143,7 +143,7 @@ var abv = {
             case 'space':
             case 'upper':
             case 'xdigit':
-                return abv["ctype_" + type](data);
+                return sogv["ctype_" + type](data);
                 break;
             case 'aldash':
                 return /^[a-zA-Z0-9_-]+$/.test(data);
@@ -169,7 +169,7 @@ var abv = {
 
     /**
      * @function
-     * @name abv.makeValidator
+     * @name sogv.makeValidator
      * @description Create object of the validator
      * @param {*} data The data which needs to be validated
      * @param {String} validator Validator name
@@ -180,16 +180,16 @@ var abv = {
      * @returns {Object} The roles in array format
      */
     makeValidator: function (data, validator, options, optionRules, lang, internal) {
-        if ('undefined' === typeof abv.validators[validator]) {
+        if ('undefined' === typeof sogv.validators[validator]) {
             throw new Error('Validator with alias "' + validator + '" is not registered');
         }
 
-        return new abv.validators[validator](data, options, optionRules, lang, internal);
+        return new sogv.validators[validator](data, options, optionRules, lang, internal);
     },
 
     /**
      * @function
-     * @name abv.isValid
+     * @name sogv.isValid
      * @description Check if data valid according to validation rules
      * @param {*} data The data which needs to be validated
      * @param {String} rules Validation rules in string format
@@ -197,7 +197,7 @@ var abv = {
      * @returns {Boolean} Validation status
      */
     isValid: function (data, rules, internal) {
-        var engine = new abv.Application({
+        var engine = new sogv.Application({
             internal: internal
         });
 
@@ -211,7 +211,7 @@ var abv = {
 
     /**
      * @function
-     * @name abv.isValidWithErrorMessage
+     * @name sogv.isValidWithErrorMessage
      * @description Check if data valid according to validation rules
      * @param {*} data The data which needs to be validated
      * @param {String} rules Validation rules in string format
@@ -219,7 +219,7 @@ var abv = {
      * @returns {Null|String} If valid this function return null otherwise error message
      */
     isValidWithErrorMessage: function (data, rules, internal) {
-        var engine = new abv.Application({
+        var engine = new sogv.Application({
             internal: internal
         });
 
@@ -233,4 +233,4 @@ var abv = {
 };
 
 if (typeof exports !== 'undefined')
-    exports.abv = abv;
+    exports.sogv = sogv;

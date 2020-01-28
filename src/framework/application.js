@@ -1,32 +1,33 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.Application
-     * @classdesc A abv.Application represents and manages your Validation application.
+     * @name sogv.Application
+     * @classdesc A sogv.Application represents and manages your Validation application.
      * @description Create a new Application.
-     * @param {Object} options
+     * @param {Object} options The setting options
      * @example
-     * var validationEngine = new abv.Application({
+     * var validationEngine = new sogv.Application({
      *     lang: 'en'
      * });
      *
      * var form = validationEngine.make({
-     *   name: 'required',
-     *   name: 'required',
+     *   first_name: 'required|string|length:{"min":2,"max":255}',
+     *   last_lame: 'required|string|length:{"min":2,"max":255}',
      *   email: 'required|email',
-     *   birthday: 'required',
-     *   creditCard: 'required',
-     *   ip: 'required',
-     *   locale: 'required',
-     *   country: 'required',
-     *   language: 'required',
-     *   homepage: 'required'
+     *   birthday: 'required|date',
+     *   creditCard: 'required|string|card-scheme:{"schemes":["VISA"]}',
+     *   ip: 'required|string|ip',
+     *   locale: 'required|string|locale',
+     *   country: 'required|string|country',
+     *   language: 'required|string|language',
+     *   homepage: 'required|string|url'
      * }, {
-     *   name: 'Leo Lane',
+     *   first_name: 'Leo',
+     *   last_lame: 'Lane',
      *   email: 'leo.lane38@example.com',
-     *   birthday: '03.07.1977',
+     *   birthday: '1977-03-07',
      *   creditCard: '4111111111111111',
      *   ip: '8.8.8.8',
      *   locale: 'cy_GB',
@@ -35,15 +36,18 @@ Object.assign(abv, function () {
      *   homepage: 'https://github.com//slaveofgod/sog-validator'
      * });
      *
-     * if (false === form.get('name').isValid()) {
-     *   form.get('name').errors().first();
+     * if (false === form.isValid()) {
+     *     if (false === form.get('name').isValid()) {
+     *         form.get('name').errors().first();
+     *     }
+     *     // ...
      * }
      */
 
     // PROPERTIES
 
     /**
-     * @name abv.Application#lang
+     * @name sogv.Application#lang
      * @type {String}
      * @description
      * <p>The language used by the application.</p>
@@ -54,7 +58,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.Application#internal
+     * @name sogv.Application#internal
      * @type {Boolean}
      * @description If this parameter is true, it means, that validation called from core.
      */
@@ -69,11 +73,11 @@ Object.assign(abv, function () {
         /**
          * @private
          * @static
-         * @type {abv.Application|Undefined}
-         * @name abv.app
+         * @type {sogv.Application|Undefined}
+         * @name sogv.app
          * @description Gets the current application, if any.
          */
-        abv.app = this;
+        sogv.app = this;
 
         this.name = 'Application';
     };
@@ -88,19 +92,19 @@ Object.assign(abv, function () {
     Object.assign(Application.prototype, {
         /**
          * @function
-         * @name abv.Application#make
+         * @name sogv.Application#make
          * @description Create validators for all the fields
          * @param {Object} data The data which needs to be validated
          * @param {Object} rules The validation rules
-         * @returns {abv.ValidatorHandler}
+         * @returns {sogv.ValidatorHandler}
          */
         make: function (data, rules) {
-            var validators = new abv.ValidatorHandler();
+            var validators = new sogv.ValidatorHandler();
 
             for (var key in rules) {
                 if (!rules.hasOwnProperty(key)) continue;
 
-                validators.add(key, new abv.AllValidator(data[key], rules[key], {
+                validators.add(key, new sogv.AllValidator(data[key], rules[key], {
                     lang: this.lang,
                     internal: this.internal
                 }));
@@ -111,12 +115,12 @@ Object.assign(abv, function () {
 
         /**
          * @function
-         * @name abv.Application#makeSingle
+         * @name sogv.Application#makeSingle
          * @description Create single validator
          * @param {*} data The data which needs to be validated
          * @param {String} rules The validation rules
          * @example
-         * var validationEngine = new abv.Application({
+         * var validationEngine = new sogv.Application({
          *     lang: 'en'
          * });
          *
@@ -131,7 +135,7 @@ Object.assign(abv, function () {
          * @returns {Object} Validator object
          */
         makeSingle: function (data, rules) {
-            var validator =  new abv.AllValidator(data, rules, {
+            var validator =  new sogv.AllValidator(data, rules, {
                 lang: this.lang,
                 internal: this.internal
             });

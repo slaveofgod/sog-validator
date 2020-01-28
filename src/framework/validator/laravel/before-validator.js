@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.BeforeValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.BeforeValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>The field under validation must be a value preceding the given <code>date</code>.</p>
      * <p>The dates will be passed into the <code>Data object</code>.</p>
@@ -16,8 +16,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>before</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.BeforeValidator(data, {"value": "the value to compare to"});
+     * var validator = new sogv.BeforeValidator(data, {"value": "the value to compare to"});
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -26,7 +31,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.BeforeValidator#value
+     * @name sogv.BeforeValidator#value
      * @type {*}
      * @description
      * <p>This option is required.</p>
@@ -35,7 +40,7 @@ Object.assign(abv, function () {
      */
 
     var BeforeValidator = function (data, options, optionRules, lang, internal) {
-        abv.LessThanValidator.call(this, data, {
+        sogv.LessThanValidator.call(this, data, {
             message: "The %%attribute%% must be a date before %%date%%.",
             value: options.value
         }, {
@@ -44,12 +49,14 @@ Object.assign(abv, function () {
 
         this.name = 'BeforeValidator';
     };
-    BeforeValidator.prototype = Object.create(abv.LessThanValidator.prototype);
+    BeforeValidator.prototype = Object.create(sogv.LessThanValidator.prototype);
     BeforeValidator.prototype.constructor = BeforeValidator;
 
     Object.defineProperty(BeforeValidator.prototype, 'alias', {
         get: function () {
-            return 'before';
+            return [
+                'before'
+            ];
         }
     });
 
@@ -68,7 +75,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.BeforeValidator#__messageParameters
+         * @name sogv.BeforeValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -85,4 +92,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.BeforeValidator);
+sogv.registry(sogv.BeforeValidator);

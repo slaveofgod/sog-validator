@@ -3,7 +3,7 @@
  *  @param  {array}     arr     The input array.
  *  @return {numeric}
  */
-abv.array_sum = function (arr) {
+sogv.array_sum = function (arr) {
     var sum = 0;
 
     for (var arrKey in arr){

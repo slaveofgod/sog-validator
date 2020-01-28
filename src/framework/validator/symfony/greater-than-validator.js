@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.GreaterThanValidator
-     * @extends abv.AbstractComparisonValidator
+     * @name sogv.GreaterThanValidator
+     * @extends sogv.AbstractComparisonValidator
      * @classdesc
      * <p>Validates that a value is <code>greater</code> than another value, defined in the options.</p>
      * @description
@@ -14,8 +14,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>greater-than</code>', '<code>greater</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.GreaterThanValidator(data, {"value": "the value to compare to"});
+     * var validator = new sogv.GreaterThanValidator(data, {"value": "the value to compare to"});
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -24,7 +29,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.GreaterThanValidator#message
+     * @name sogv.GreaterThanValidator#message
      * @type {String}
      * @description
      * <p>This is the message that will be shown if the value is not greater than the comparison value.</p>
@@ -55,7 +60,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.GreaterThanValidator#value
+     * @name sogv.GreaterThanValidator#value
      * @type {*}
      * @description
      * <p>This option is required.</p>
@@ -64,7 +69,7 @@ Object.assign(abv, function () {
      */
 
     var GreaterThanValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractComparisonValidator.call(this, data, options, {
+        sogv.AbstractComparisonValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             value: optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'
         }, lang, internal);
@@ -73,12 +78,15 @@ Object.assign(abv, function () {
 
         this.name = 'GreaterThanValidator';
     };
-    GreaterThanValidator.prototype = Object.create(abv.AbstractComparisonValidator.prototype);
+    GreaterThanValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
     GreaterThanValidator.prototype.constructor = GreaterThanValidator;
 
     Object.defineProperty(GreaterThanValidator.prototype, 'alias', {
         get: function () {
-            return 'greater-than';
+            return [
+                'greater-than',
+                'greater'
+            ];
         }
     });
 
@@ -97,7 +105,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.GreaterThanValidator#__compareValues
+         * @name sogv.GreaterThanValidator#__compareValues
          * @description
          * <p>Compare two value.</p>
          * @param {*} value Value
@@ -111,7 +119,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.GreaterThanValidator#__messageParameters
+         * @name sogv.GreaterThanValidator#__messageParameters
          * @description
          * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
@@ -120,7 +128,7 @@ Object.assign(abv, function () {
             return {
                 'value': this.__formattedData(this.data),
                 'compared_value': this.__formattedData(this.value),
-                'compared_value_type': abv.getType(this.value)
+                'compared_value_type': sogv.getType(this.value)
             }
         }
     });
@@ -130,4 +138,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.GreaterThanValidator);
+sogv.registry(sogv.GreaterThanValidator);

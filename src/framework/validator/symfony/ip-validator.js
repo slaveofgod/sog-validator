@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.IpValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.IpValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is a valid IP address.</p>
      * <p>By default, this will validate the value as <code>IPv4</code>, but a number of different options exist to validate as <code>IPv6</code> and many other combinations.</p>
@@ -15,8 +15,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>ip</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.IpValidator(data);
+     * var validator = new sogv.IpValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -25,7 +30,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.IpValidator#message
+     * @name sogv.IpValidator#message
      * @type {String}
      * @description
      * <p>This message is shown if the string is not a valid IP address.</p>
@@ -48,7 +53,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.IpValidator#normalize
+     * @name sogv.IpValidator#normalize
      * @type {Boolean}
      * @description
      * <p>Normalizer string before validate (trim, etc.).</p>
@@ -56,7 +61,7 @@ Object.assign(abv, function () {
      */
 
     /**
-     * @name abv.IpValidator#version
+     * @name sogv.IpValidator#version
      * @type {String}
      * @description
      * <p>This determines exactly how the IP address is validated and can take one of a variety of different values.</p>
@@ -88,7 +93,7 @@ Object.assign(abv, function () {
      */
 
     var IpValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             normalize: optionRules.normalize || 'type:{"type":"bool"}',
             version: optionRules.version || 'type:{"type":["string","numeric"],"any":true}|length:{"min":1,"max":255}'
@@ -135,12 +140,14 @@ Object.assign(abv, function () {
 
         this.name = 'IpValidator';
     };
-    IpValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    IpValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     IpValidator.prototype.constructor = IpValidator;
 
     Object.defineProperty(IpValidator.prototype, 'alias', {
         get: function () {
-            return 'ip';
+            return [
+                'ip'
+            ];
         }
     });
 
@@ -159,7 +166,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IpValidator#__validate
+         * @name sogv.IpValidator#__validate
          * @description
          * <p>Validate data</p>
          */
@@ -215,7 +222,7 @@ Object.assign(abv, function () {
                     break;
             }
 
-            if (!abv.filter_var(this.data, this.FILTER_VALIDATE_IP, flag)) {
+            if (!sogv.filter_var(this.data, this.FILTER_VALIDATE_IP, flag)) {
                 this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
@@ -224,7 +231,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IpValidator#__beforeValidate
+         * @name sogv.IpValidator#__beforeValidate
          * @description
          * <p>Execute before validation is running.<p>
          */
@@ -236,7 +243,7 @@ Object.assign(abv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = abv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -256,7 +263,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.IpValidator#__messageParameters
+         * @name sogv.IpValidator#__messageParameters
          * @description
          * <p>Returned parameters for error message which needs to be replaced.</p>
          * @returns {Object} List of parameters
@@ -273,4 +280,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.IpValidator);
+sogv.registry(sogv.IpValidator);

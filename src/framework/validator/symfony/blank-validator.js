@@ -1,10 +1,10 @@
-Object.assign(abv, function () {
+Object.assign(sogv, function () {
     'use strict';
 
     /**
      * @constructor
-     * @name abv.BlankValidator
-     * @extends abv.AbstractValidator
+     * @name sogv.BlankValidator
+     * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is blank - meaning equal to an <code>empty string</code> or <code>null</code>.</p>
      * @description
@@ -14,8 +14,13 @@ Object.assign(abv, function () {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
+     * @property {Array} alias
+     * <p>The aliases for the current validator.</p>
+     * <p>They could be used in the short validation format.</p>
+     * <p>Defined aliases: ['<code>blank</code>', '<code>empty</code>'].</p>
+     * @property {Object} options The description of the required options.
      * @example
-     * var validator = new abv.BlankValidator(data);
+     * var validator = new sogv.BlankValidator(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -24,7 +29,7 @@ Object.assign(abv, function () {
     // PROPERTIES
 
     /**
-     * @name abv.BlankValidator#message
+     * @name sogv.BlankValidator#message
      * @type {String}
      * @description
      * <p>This is the message that will be shown if the value is not blank.</p>
@@ -47,7 +52,7 @@ Object.assign(abv, function () {
      */
 
     var BlankValidator = function (data, options, optionRules, lang, internal) {
-        abv.AbstractValidator.call(this, data, options, {
+        sogv.AbstractValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -55,12 +60,15 @@ Object.assign(abv, function () {
 
         this.name = 'BlankValidator';
     };
-    BlankValidator.prototype = Object.create(abv.AbstractValidator.prototype);
+    BlankValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
     BlankValidator.prototype.constructor = BlankValidator;
 
     Object.defineProperty(BlankValidator.prototype, 'alias', {
         get: function () {
-            return 'blank';
+            return [
+                'blank',
+                'empty'
+            ];
         }
     });
 
@@ -74,7 +82,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.BlankValidator#__validate
+         * @name sogv.BlankValidator#__validate
          * @description Validate data
          */
         __validate: function () {
@@ -90,7 +98,7 @@ Object.assign(abv, function () {
         /**
          * @private
          * @function
-         * @name abv.BlankValidator#__messageParameters
+         * @name sogv.BlankValidator#__messageParameters
          * @description Returned parameters for error message which needs to be replaced
          * @returns {Object} List of parameters
          */
@@ -106,4 +114,4 @@ Object.assign(abv, function () {
     };
 }());
 
-abv.registry(abv.BlankValidator);
+sogv.registry(sogv.BlankValidator);
