@@ -1,6 +1,6 @@
 {
   "name": "sog-validator",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "author": {
     "name": "Slave God",
     "email": "iamtheslaveofgod@gmail.com"
@@ -18,7 +18,7 @@
     "validator"
   ],
   "license": "MIT",
-  "main": "build/output/sog-validator.js",
+  "main": "build/output/sog-validator.min.js",
   "types": "index.d.ts",
   "bugs": {
     "url": "https://github.com/slaveofgod/sog-validator/issues"
