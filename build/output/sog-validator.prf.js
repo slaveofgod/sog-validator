@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v0.9.7 revision f7b1879 (PROFILER)
+ * SOG Validator Library v0.9.7 revision f685fbb (PROFILER)
  * Copyright 2011-2020 SOG Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var sogv = {version:"0.9.7", revision:"f7b1879", config:{}, common:{}, validators:{}, registry:function(validator) {
+var sogv = {version:"0.9.7", revision:"f685fbb", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -11343,7 +11343,7 @@ Object.assign(sogv, function() {
   AlphaNumValidator.prototype = Object.create(sogv.TypeValidator.prototype);
   AlphaNumValidator.prototype.constructor = AlphaNumValidator;
   Object.defineProperty(AlphaNumValidator.prototype, "alias", {get:function() {
-    return ["alpha_num", "alpha-num"];
+    return ["alpha_num", "alpha-num", "alnum"];
   }});
   Object.defineProperty(AlphaNumValidator.prototype, "options", {get:function() {
     return [];
@@ -12229,6 +12229,486 @@ Object.assign(sogv, function() {
   return {SizeValidator:SizeValidator};
 }());
 sogv.registry(sogv.SizeValidator);
+Object.assign(sogv, function() {
+  var CallableValidator = function(data, options, optionRules, lang, internal) {
+    sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+    this.message = "The %%attribute%% field must be callable.";
+    this.name = "CallableValidator";
+  };
+  CallableValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+  CallableValidator.prototype.constructor = CallableValidator;
+  Object.defineProperty(CallableValidator.prototype, "alias", {get:function() {
+    return ["callable"];
+  }});
+  Object.defineProperty(CallableValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(CallableValidator.prototype, {__validate:function() {
+    if (false === sogv.isValid(this.data, 'type:{"type":"callable"}')) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {CallableValidator:CallableValidator};
+}());
+sogv.registry(sogv.CallableValidator);
+Object.assign(sogv, function() {
+  var FloatValidator = function(data, options, optionRules, lang, internal) {
+    sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+    this.message = "The %%attribute%% field must be float.";
+    this.name = "FloatValidator";
+  };
+  FloatValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+  FloatValidator.prototype.constructor = FloatValidator;
+  Object.defineProperty(FloatValidator.prototype, "alias", {get:function() {
+    return ["float"];
+  }});
+  Object.defineProperty(FloatValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(FloatValidator.prototype, {__validate:function() {
+    if (false === sogv.isValid(this.data, 'type:{"type":"float"}')) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {FloatValidator:FloatValidator};
+}());
+sogv.registry(sogv.FloatValidator);
+Object.assign(sogv, function() {
+  var DoubleValidator = function(data, options, optionRules, lang, internal) {
+    sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+    this.message = "The %%attribute%% field must be double.";
+    this.name = "DoubleValidator";
+  };
+  DoubleValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+  DoubleValidator.prototype.constructor = DoubleValidator;
+  Object.defineProperty(DoubleValidator.prototype, "alias", {get:function() {
+    return ["double"];
+  }});
+  Object.defineProperty(DoubleValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(DoubleValidator.prototype, {__validate:function() {
+    if (false === sogv.isValid(this.data, 'type:{"type":"double"}')) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {DoubleValidator:DoubleValidator};
+}());
+sogv.registry(sogv.DoubleValidator);
+Object.assign(sogv, function() {
+  var IterableValidator = function(data, options, optionRules, lang, internal) {
+    sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+    this.message = "The %%attribute%% field must be iterable.";
+    this.name = "IterableValidator";
+  };
+  IterableValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+  IterableValidator.prototype.constructor = IterableValidator;
+  Object.defineProperty(IterableValidator.prototype, "alias", {get:function() {
+    return ["iterable"];
+  }});
+  Object.defineProperty(IterableValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(IterableValidator.prototype, {__validate:function() {
+    if (false === sogv.isValid(this.data, 'type:{"type":"iterable"}')) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {IterableValidator:IterableValidator};
+}());
+sogv.registry(sogv.IterableValidator);
+Object.assign(sogv, function() {
+  var ObjectValidator = function(data, options, optionRules, lang, internal) {
+    sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+    this.message = "The %%attribute%% field must be object.";
+    this.name = "ObjectValidator";
+  };
+  ObjectValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+  ObjectValidator.prototype.constructor = ObjectValidator;
+  Object.defineProperty(ObjectValidator.prototype, "alias", {get:function() {
+    return ["object"];
+  }});
+  Object.defineProperty(ObjectValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(ObjectValidator.prototype, {__validate:function() {
+    if (false === sogv.isValid(this.data, 'type:{"type":"object"}')) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {ObjectValidator:ObjectValidator};
+}());
+sogv.registry(sogv.ObjectValidator);
+Object.assign(sogv, function() {
+  var RealValidator = function(data, options, optionRules, lang, internal) {
+    sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+    this.message = "The %%attribute%% field must be real.";
+    this.name = "RealValidator";
+  };
+  RealValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+  RealValidator.prototype.constructor = RealValidator;
+  Object.defineProperty(RealValidator.prototype, "alias", {get:function() {
+    return ["real"];
+  }});
+  Object.defineProperty(RealValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(RealValidator.prototype, {__validate:function() {
+    if (false === sogv.isValid(this.data, 'type:{"type":"real"}')) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {RealValidator:RealValidator};
+}());
+sogv.registry(sogv.RealValidator);
+Object.assign(sogv, function() {
+  var ScalarValidator = function(data, options, optionRules, lang, internal) {
+    sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+    this.message = "The %%attribute%% field must be scalar.";
+    this.name = "ScalarValidator";
+  };
+  ScalarValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+  ScalarValidator.prototype.constructor = ScalarValidator;
+  Object.defineProperty(ScalarValidator.prototype, "alias", {get:function() {
+    return ["scalar"];
+  }});
+  Object.defineProperty(ScalarValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(ScalarValidator.prototype, {__validate:function() {
+    if (false === sogv.isValid(this.data, 'type:{"type":"scalar"}')) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {ScalarValidator:ScalarValidator};
+}());
+sogv.registry(sogv.ScalarValidator);
+Object.assign(sogv, function() {
+  var CntrlValidator = function(data, options, optionRules, lang, internal) {
+    sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+    this.message = "The %%attribute%% field must be cntrl.";
+    this.name = "CntrlValidator";
+  };
+  CntrlValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+  CntrlValidator.prototype.constructor = CntrlValidator;
+  Object.defineProperty(CntrlValidator.prototype, "alias", {get:function() {
+    return ["cntrl"];
+  }});
+  Object.defineProperty(CntrlValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(CntrlValidator.prototype, {__validate:function() {
+    if (false === sogv.isValid(this.data, 'type:{"type":"cntrl"}')) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {CntrlValidator:CntrlValidator};
+}());
+sogv.registry(sogv.CntrlValidator);
+Object.assign(sogv, function() {
+  var DigitValidator = function(data, options, optionRules, lang, internal) {
+    sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+    this.message = "The %%attribute%% field must be digit.";
+    this.name = "DigitValidator";
+  };
+  DigitValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+  DigitValidator.prototype.constructor = DigitValidator;
+  Object.defineProperty(DigitValidator.prototype, "alias", {get:function() {
+    return ["digit"];
+  }});
+  Object.defineProperty(DigitValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(DigitValidator.prototype, {__validate:function() {
+    if (false === sogv.isValid(this.data, 'type:{"type":"digit"}')) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {DigitValidator:DigitValidator};
+}());
+sogv.registry(sogv.DigitValidator);
+Object.assign(sogv, function() {
+  var GraphValidator = function(data, options, optionRules, lang, internal) {
+    sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+    this.message = "The value field must be graph.";
+    this.name = "GraphValidator";
+  };
+  GraphValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+  GraphValidator.prototype.constructor = GraphValidator;
+  Object.defineProperty(GraphValidator.prototype, "alias", {get:function() {
+    return ["graph"];
+  }});
+  Object.defineProperty(GraphValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(GraphValidator.prototype, {__validate:function() {
+    if (false === sogv.isValid(this.data, 'type:{"type":"graph"}')) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {GraphValidator:GraphValidator};
+}());
+sogv.registry(sogv.GraphValidator);
+Object.assign(sogv, function() {
+  var LowerValidator = function(data, options, optionRules, lang, internal) {
+    sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+    this.message = "The %%attribute%% field must be lower.";
+    this.name = "LowerValidator";
+  };
+  LowerValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+  LowerValidator.prototype.constructor = LowerValidator;
+  Object.defineProperty(LowerValidator.prototype, "alias", {get:function() {
+    return ["lower"];
+  }});
+  Object.defineProperty(LowerValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(LowerValidator.prototype, {__validate:function() {
+    if (false === sogv.isValid(this.data, 'type:{"type":"lower"}')) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {LowerValidator:LowerValidator};
+}());
+sogv.registry(sogv.LowerValidator);
+Object.assign(sogv, function() {
+  var PrintValidator = function(data, options, optionRules, lang, internal) {
+    sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+    this.message = "The %%attribute%% field must be print.";
+    this.name = "PrintValidator";
+  };
+  PrintValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+  PrintValidator.prototype.constructor = PrintValidator;
+  Object.defineProperty(PrintValidator.prototype, "alias", {get:function() {
+    return ["print"];
+  }});
+  Object.defineProperty(PrintValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(PrintValidator.prototype, {__validate:function() {
+    if (false === sogv.isValid(this.data, 'type:{"type":"print"}')) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {PrintValidator:PrintValidator};
+}());
+sogv.registry(sogv.PrintValidator);
+Object.assign(sogv, function() {
+  var PunctValidator = function(data, options, optionRules, lang, internal) {
+    sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+    this.message = "The %%attribute%% field must be punct.";
+    this.name = "PunctValidator";
+  };
+  PunctValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+  PunctValidator.prototype.constructor = PunctValidator;
+  Object.defineProperty(PunctValidator.prototype, "alias", {get:function() {
+    return ["punct"];
+  }});
+  Object.defineProperty(PunctValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(PunctValidator.prototype, {__validate:function() {
+    if (false === sogv.isValid(this.data, 'type:{"type":"punct"}')) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {PunctValidator:PunctValidator};
+}());
+sogv.registry(sogv.PunctValidator);
+Object.assign(sogv, function() {
+  var SpaceValidator = function(data, options, optionRules, lang, internal) {
+    sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+    this.message = "The %%attribute%% field must be space.";
+    this.name = "SpaceValidator";
+  };
+  SpaceValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+  SpaceValidator.prototype.constructor = SpaceValidator;
+  Object.defineProperty(SpaceValidator.prototype, "alias", {get:function() {
+    return ["space"];
+  }});
+  Object.defineProperty(SpaceValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(SpaceValidator.prototype, {__validate:function() {
+    if (false === sogv.isValid(this.data, 'type:{"type":"space"}')) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {SpaceValidator:SpaceValidator};
+}());
+sogv.registry(sogv.SpaceValidator);
+Object.assign(sogv, function() {
+  var UpperValidator = function(data, options, optionRules, lang, internal) {
+    sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+    this.message = "The %%attribute%% field must be upper.";
+    this.name = "UpperValidator";
+  };
+  UpperValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+  UpperValidator.prototype.constructor = UpperValidator;
+  Object.defineProperty(UpperValidator.prototype, "alias", {get:function() {
+    return ["upper"];
+  }});
+  Object.defineProperty(UpperValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(UpperValidator.prototype, {__validate:function() {
+    if (false === sogv.isValid(this.data, 'type:{"type":"upper"}')) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {UpperValidator:UpperValidator};
+}());
+sogv.registry(sogv.UpperValidator);
+Object.assign(sogv, function() {
+  var XdigitValidator = function(data, options, optionRules, lang, internal) {
+    sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+    this.message = "The %%attribute%% field must be xdigit.";
+    this.name = "XdigitValidator";
+  };
+  XdigitValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+  XdigitValidator.prototype.constructor = XdigitValidator;
+  Object.defineProperty(XdigitValidator.prototype, "alias", {get:function() {
+    return ["xdigit"];
+  }});
+  Object.defineProperty(XdigitValidator.prototype, "options", {get:function() {
+    return [];
+  }});
+  Object.assign(XdigitValidator.prototype, {__validate:function() {
+    if (false === sogv.isValid(this.data, 'type:{"type":"xdigit"}')) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"attribute":"value"};
+  }});
+  return {XdigitValidator:XdigitValidator};
+}());
+sogv.registry(sogv.XdigitValidator);
 sogv.I18nHandler.add("af", [{"@id":"1", "source":"This value should be false.", "target":"Hierdie waarde moet vals wees."}, {"@id":"2", "source":"This value should be true.", "target":"Hierdie waarde moet waar wees."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Hierdie waarde moet van die soort {{type}} wees."}, {"@id":"4", "source":"This value should be blank.", "target":"Hierdie waarde moet leeg wees."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Die waarde wat jy gekies het is nie 'n geldige keuse nie."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Jy moet ten minste %%limit%% kies.|Jy moet ten minste %%limit%% keuses kies."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Jy moet by die meeste %%limit%% keuse kies.|Jy moet by die meeste %%limit%% keuses kies."}, {"@id":"8", "source":"One or more of the given values is invalid.", 
 "target":"Een of meer van die gegewe waardes is ongeldig."}, {"@id":"9", "source":"This field was not expected.", "target":"Die veld is nie verwag nie."}, {"@id":"10", "source":"This field is missing.", "target":"Hierdie veld ontbreek."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Hierdie waarde is nie 'n geldige datum nie."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Hierdie waarde is nie 'n geldige datum en tyd nie."}, {"@id":"13", "source":"This value is not a valid email address.", 

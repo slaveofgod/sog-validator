@@ -41,7 +41,8 @@ Object.assign(sogv, function () {
         get: function () {
             return [
                 'alpha_num',
-                'alpha-num'
+                'alpha-num',
+                'alnum'
             ];
         }
     });
