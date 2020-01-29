@@ -1,6 +1,6 @@
 # sog-validator
 
-[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status][travis-image]][travis-url]
+[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status][travis-image]][travis-url] [![DeepScan grade][deepscan-image]][deepscan-url]
 
 A library of validators
 
@@ -133,5 +133,8 @@ In progress ...
 
 [coveralls-url]: https://coveralls.io/r/slaveofgod/sog-validator
 [coveralls-image]: http://img.shields.io/coveralls/slaveofgod/sog-validator/master.svg
+
+[deepscan-url]: https://deepscan.io/dashboard#view=project&tid=7185&pid=9318&bid=119438
+[deepscan-image]: https://deepscan.io/api/teams/7185/projects/9318/branches/119438/badge/grade.svg
 
 [downloads-image]: http://img.shields.io/npm/dm/sog-validator.svg
