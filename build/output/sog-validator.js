@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v0.9.7 revision e6933a3
+ * SOG Validator Library v0.9.7 revision 614df47
  * Copyright 2011-2020 SOG Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var sogv = {version:"0.9.7", revision:"e6933a3", config:{}, common:{}, validators:{}, registry:function(validator) {
+var sogv = {version:"0.9.7", revision:"614df47", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -78,7 +78,6 @@ var sogv = {version:"0.9.7", revision:"e6933a3", config:{}, common:{}, validator
       return sogv["is_" + type](data);
       break;
     case "alnum":
-    case "alpha":
     case "alpha":
     case "digit":
     case "graph":
@@ -3727,7 +3726,7 @@ sogv.moment = function() {
   addRegexToken("x", matchSigned);
   addRegexToken("X", matchTimestamp);
   addParseToken("X", function(input, array, config) {
-    config._d = new Date(parseFloat(input, 10) * 1000);
+    config._d = new Date(parseFloat(input) * 1000);
   });
   addParseToken("x", function(input, array, config) {
     config._d = new Date(toInt(input));
@@ -8250,9 +8249,9 @@ sogv.getenv = function(varname) {
 sogv.ini_get = function(varname) {
   var __global;
   if ("undefined" === typeof global) {
-    var __global = global;
+    __global = global;
   } else {
-    var __global = global;
+    __global = global;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8297,9 +8296,9 @@ sogv.setlocale = function(category, locale) {
   };
   var __global;
   if ("undefined" === typeof global) {
-    var __global = global;
+    __global = global;
   } else {
-    var __global = global;
+    __global = global;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8461,9 +8460,9 @@ sogv.ctype_alnum = function(text) {
   sogv.setlocale("LC_ALL", 0);
   var __global;
   if ("undefined" === typeof global) {
-    var __global = global;
+    __global = global;
   } else {
-    var __global = global;
+    __global = global;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8478,9 +8477,9 @@ sogv.ctype_alpha = function(text) {
   sogv.setlocale("LC_ALL", 0);
   var __global;
   if ("undefined" === typeof global) {
-    var __global = global;
+    __global = global;
   } else {
-    var __global = global;
+    __global = global;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8495,9 +8494,9 @@ sogv.ctype_cntrl = function(text) {
   sogv.setlocale("LC_ALL", 0);
   var __global;
   if ("undefined" === typeof global) {
-    var __global = global;
+    __global = global;
   } else {
-    var __global = global;
+    __global = global;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8512,9 +8511,9 @@ sogv.ctype_digit = function(text) {
   sogv.setlocale("LC_ALL", 0);
   var __global;
   if ("undefined" === typeof global) {
-    var __global = global;
+    __global = global;
   } else {
-    var __global = global;
+    __global = global;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8529,9 +8528,9 @@ sogv.ctype_graph = function(text) {
   sogv.setlocale("LC_ALL", 0);
   var __global;
   if ("undefined" === typeof global) {
-    var __global = global;
+    __global = global;
   } else {
-    var __global = global;
+    __global = global;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8546,9 +8545,9 @@ sogv.ctype_lower = function(text) {
   sogv.setlocale("LC_ALL", 0);
   var __global;
   if ("undefined" === typeof global) {
-    var __global = global;
+    __global = global;
   } else {
-    var __global = global;
+    __global = global;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8563,9 +8562,9 @@ sogv.ctype_print = function(text) {
   sogv.setlocale("LC_ALL", 0);
   var __global;
   if ("undefined" === typeof global) {
-    var __global = global;
+    __global = global;
   } else {
-    var __global = global;
+    __global = global;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8580,9 +8579,9 @@ sogv.ctype_punct = function(text) {
   sogv.setlocale("LC_ALL", 0);
   var __global;
   if ("undefined" === typeof global) {
-    var __global = global;
+    __global = global;
   } else {
-    var __global = global;
+    __global = global;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8597,9 +8596,9 @@ sogv.ctype_space = function(text) {
   sogv.setlocale("LC_ALL", 0);
   var __global;
   if ("undefined" === typeof global) {
-    var __global = global;
+    __global = global;
   } else {
-    var __global = global;
+    __global = global;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8614,9 +8613,9 @@ sogv.ctype_upper = function(text) {
   sogv.setlocale("LC_ALL", 0);
   var __global;
   if ("undefined" === typeof global) {
-    var __global = global;
+    __global = global;
   } else {
-    var __global = global;
+    __global = global;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8631,9 +8630,9 @@ sogv.ctype_xdigit = function(text) {
   sogv.setlocale("LC_ALL", 0);
   var __global;
   if ("undefined" === typeof global) {
-    var __global = global;
+    __global = global;
   } else {
-    var __global = global;
+    __global = global;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8694,9 +8693,9 @@ sogv.is_buffer = function(vr) {
 sogv.is_callable = function(mixedVar, syntaxOnly, callableName) {
   var __global;
   if ("undefined" === typeof global) {
-    var __global = global;
+    __global = global;
   } else {
-    var __global = global;
+    __global = global;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   var validJSFunctionNamePattern = /^[_$a-zA-Z\xA0-\uFFFF][_$a-zA-Z0-9\xA0-\uFFFF]*$/;
@@ -9232,7 +9231,7 @@ Object.assign(sogv, function() {
     this.message = this.__options.message || "This value is not a valid URL.";
     this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
     this.protocols = this.__options.protocols || ["http", "https", "ftp"];
-    this.relativeProtocol = !this.__options.relativeProtocol || false === this.__options.relativeProtocol ? false : true;
+    this.relativeProtocol = "undefined" === typeof this.__options.relativeProtocol || false === this.__options.relativeProtocol ? false : true;
     this.name = "UrlValidator";
     this.__pattern = "^((((%s):(?:\\/\\/)?)(?:[\\-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9\\.\\-]+|(?:www\\.|[\\-;:&=\\+\\$,\\w]+@)[A-Za-z0-9\\.\\-]+)((?:\\/[\\+~%\\/\\.\\w\\-_]*)?\\??(?:[\\-\\+=&;%@\\.\\w_]*)#?(?:[\\.\\!\\/\\\\\\w]*))?)$";
     this.__configure();
@@ -9879,17 +9878,18 @@ Object.assign(sogv, function() {
       this.__setErrorMessage(this.invalidMessage, this.__invalidMessageParameters());
       return;
     }
+    var __date;
     if (false === sogv.isType("numeric", this.data) && true === sogv.isType("date-string", this.data)) {
-      var date = new Date(this.data);
-      this.data = date.getTime();
+      __date = new Date(this.data);
+      this.data = __date.getTime();
     }
     if (false === sogv.isType("numeric", this.min) && true === sogv.isType("date-string", this.min)) {
-      var date = new Date(this.min);
-      this.min = date.getTime();
+      __date = new Date(this.min);
+      this.min = __date.getTime();
     }
     if (false === sogv.isType("numeric", this.max) && true === sogv.isType("date-string", this.max)) {
-      var date = new Date(this.max);
-      this.max = date.getTime();
+      __date = new Date(this.max);
+      this.max = __date.getTime();
     }
   }, __invalidMessageParameters:function() {
     return {"value":this.__formattedData(this.data)};
@@ -11222,15 +11222,17 @@ Object.assign(sogv, function() {
   }});
   Object.assign(CountValidator.prototype, {__validate:function() {
     var count = this.data.length;
+    var __message;
+    var __messageParameters;
     if (null !== this.max && count > this.max) {
-      var __message = this.min == this.max ? this.exactMessage : this.maxMessage;
-      var __messageParameters = this.min == this.max ? this.__exactMessageParameters() : this.__maxMessageParameters();
+      __message = this.min == this.max ? this.exactMessage : this.maxMessage;
+      __messageParameters = this.min == this.max ? this.__exactMessageParameters() : this.__maxMessageParameters();
       this.__setErrorMessage(__message, __messageParameters);
       return;
     }
     if (null !== this.min && count < this.min) {
-      var __message = this.min == this.max ? this.exactMessage : this.maxMessage;
-      var __messageParameters = this.min == this.max ? this.__exactMessageParameters() : this.__minMessageParameters();
+      __message = this.min == this.max ? this.exactMessage : this.maxMessage;
+      __messageParameters = this.min == this.max ? this.__exactMessageParameters() : this.__minMessageParameters();
       this.__setErrorMessage(__message, __messageParameters);
       return;
     }

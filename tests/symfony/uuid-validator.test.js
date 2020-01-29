@@ -44,8 +44,6 @@ describe('uuid', () => {
     });
 
     describe('Is Invalid', () => {
-        let toBe = "This is not a valid UUID.";
-
         test('String "216fff40-98d9-11e3-a5e2-0800200c9a66" ["versions": [4,5]]', () => {
             expect(abv.isValidWithErrorMessage('216fff40-98d9-11e3-a5e2-0800200c9a66', 'uuid:{"versions": [4,5]}')).toBe("This is not a valid UUID.");
         });

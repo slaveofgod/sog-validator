@@ -12,7 +12,7 @@ sogv.ctype_alnum = function (text) {
     // ensure setup of localization variables takes place
     sogv.setlocale('LC_ALL', 0);
 
-    var __global; if ('undefined' === typeof global) { var __global = global; } else { var __global = global; }
+    var __global; if ('undefined' === typeof global) { __global = global; } else { __global = global; }
     var $global = (typeof window !== 'undefined' ? window : __global);
     $global.$locutus = $global.$locutus || {};
     var $locutus = $global.$locutus;

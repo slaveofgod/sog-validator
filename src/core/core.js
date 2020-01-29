@@ -137,7 +137,6 @@ var sogv = {
                 break;
             case 'alnum':
             case 'alpha':
-            case 'alpha':
             case 'digit':
             case 'graph':
             case 'lower':

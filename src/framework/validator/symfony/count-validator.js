@@ -178,16 +178,19 @@ Object.assign(sogv, function () {
         __validate: function () {
             var count = this.data.length;
 
+            var __message;
+            var __messageParameters;
+
             if (null !== this.max && count > this.max) {
-                var __message = (this.min == this.max) ? this.exactMessage : this.maxMessage;
-                var __messageParameters = (this.min == this.max) ? this.__exactMessageParameters() : this.__maxMessageParameters();
+                __message = (this.min == this.max) ? this.exactMessage : this.maxMessage;
+                __messageParameters = (this.min == this.max) ? this.__exactMessageParameters() : this.__maxMessageParameters();
                 this.__setErrorMessage(__message, __messageParameters);
                 return ;
             }
 
             if (null !== this.min && count < this.min) {
-                var __message = (this.min == this.max) ? this.exactMessage : this.maxMessage;
-                var __messageParameters = (this.min == this.max) ? this.__exactMessageParameters() : this.__minMessageParameters();
+                __message = (this.min == this.max) ? this.exactMessage : this.maxMessage;
+                __messageParameters = (this.min == this.max) ? this.__exactMessageParameters() : this.__minMessageParameters();
                 this.__setErrorMessage(__message, __messageParameters);
                 return ;
             }

@@ -7,7 +7,7 @@ sogv.ini_get = function (varname) {
     //   example 1: ini_get('date.timezone')
     //   returns 1: 'Asia/Hong_Kong'
 
-    var __global; if ('undefined' === typeof global) { var __global = global; } else { var __global = global; }
+    var __global; if ('undefined' === typeof global) { __global = global; } else { __global = global; }
     var $global = (typeof window !== 'undefined' ? window : __global);
     $global.$locutus = $global.$locutus || {};
     var $locutus = $global.$locutus;

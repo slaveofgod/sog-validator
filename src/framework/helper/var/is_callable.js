@@ -31,7 +31,7 @@ sogv.is_callable = function (mixedVar, syntaxOnly, callableName) {
     //   example 5: is_callable(class MyClass {})
     //   returns 5: false
 
-    var __global; if ('undefined' === typeof global) { var __global = global; } else { var __global = global; }
+    var __global; if ('undefined' === typeof global) { __global = global; } else { __global = global; }
     var $global = (typeof window !== 'undefined' ? window : __global);
 
     var validJSFunctionNamePattern = /^[_$a-zA-Z\xA0-\uFFFF][_$a-zA-Z0-9\xA0-\uFFFF]*$/;

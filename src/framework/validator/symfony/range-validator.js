@@ -236,13 +236,15 @@ Object.assign(sogv, function () {
                 return ;
             }
 
+            var __date;
+
             // Convert "data" to datetime if type is "date-string"
             if (
                 false === sogv.isType('numeric', this.data)
                 && true === sogv.isType('date-string', this.data)
             ) {
-                var date = new Date(this.data);
-                this.data = date.getTime();
+                __date = new Date(this.data);
+                this.data = __date.getTime();
             }
 
             // Convert "min" to datetime if type is "date-string"
@@ -250,8 +252,8 @@ Object.assign(sogv, function () {
                 false === sogv.isType('numeric', this.min)
                 && true === sogv.isType('date-string', this.min)
             ) {
-                var date = new Date(this.min);
-                this.min = date.getTime();
+                __date = new Date(this.min);
+                this.min = __date.getTime();
             }
 
             // Convert "max" to datetime if type is "date-string"
@@ -259,8 +261,8 @@ Object.assign(sogv, function () {
                 false === sogv.isType('numeric', this.max)
                 && true === sogv.isType('date-string', this.max)
             ) {
-                var date = new Date(this.max);
-                this.max = date.getTime();
+                __date = new Date(this.max);
+                this.max = __date.getTime();
             }
         },
 
