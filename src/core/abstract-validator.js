@@ -81,7 +81,8 @@ Object.assign(sogv, (function () {
          * @private
          * @function
          * @name sogv.AbstractValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             throw new Error('The validator has to implement "__validate" method');
@@ -124,7 +125,8 @@ Object.assign(sogv, (function () {
          * @private
          * @function
          * @name sogv.AbstractValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {},
 

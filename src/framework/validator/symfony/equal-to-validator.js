@@ -97,7 +97,7 @@ Object.assign(sogv, function () {
             return [
                 {
                     'name': 'value',
-                    'type': 'any'
+                    'type': 'boolean|scalar|string|array'
                 }
             ];
         }

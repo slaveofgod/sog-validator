@@ -107,11 +107,11 @@ Object.assign(sogv, function () {
         get: function () {
             return [
                 {
-                    'name': 'match',
-                    'type': 'boolean'
-                }, {
                     'name': 'pattern',
                     'type': 'any'
+                }, {
+                    'name': 'match',
+                    'type': 'boolean'
                 }
             ];
         }
@@ -122,7 +122,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.RegexValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             // Normalize
@@ -147,7 +148,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.RegexValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             // Check if empty
@@ -178,8 +180,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.RegexValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __messageParameters: function () {
             return {

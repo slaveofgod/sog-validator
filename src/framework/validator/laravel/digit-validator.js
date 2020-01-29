@@ -55,7 +55,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.DigitValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             if (false === sogv.isValid(this.data, 'type:{"type":"digit"}')) {
@@ -68,7 +69,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.BetweenValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             // Check if empty
@@ -82,8 +84,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.DigitValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __messageParameters: function () {
             return {

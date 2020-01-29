@@ -70,6 +70,8 @@
             
                 <li class="parent  " data-name="sogv.array_sum"><a href="sogv.html#.array_sum">array_sum</a></li>
             
+                <li class="parent  " data-name="sogv.convertToType"><a href="sogv.html#.convertToType">convertToType</a></li>
+            
                 <li class="parent  " data-name="sogv.getType"><a href="sogv.html#.getType">getType</a></li>
             
                 <li class="parent  " data-name="sogv.isType"><a href="sogv.html#.isType">isType</a></li>
@@ -4654,12 +4656,12 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id=".getType">
-            <a class="share-icon" href="#.getType"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id=".convertToType">
+            <a class="share-icon" href="#.convertToType"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                sogv.getType
+                sogv.convertToType
             </span>
-            <span class="signature">(data)</span><span class="type-signature">String</span>
+            <span class="signature">(data, strTypes)</span><span class="type-signature">*</span>
             
             <span class="access-signature">static</span>
             
@@ -4675,7 +4677,7 @@
     
     
     <div class="description">
-        Get data type
+        Convert data to one of the type.
     </div>
     
 
@@ -4722,7 +4724,176 @@
             
             <td class="description last">
                 
-                Data, which type needs to be defined</td>
+                The data which needs to be converted</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>strTypes</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                Data types. (Example: 'integer|date-string')</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        *
+                        
+                    
+            </td>
+            <td class="description last">The converted data</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id=".getType">
+            <a class="share-icon" href="#.getType"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                sogv.getType
+            </span>
+            <span class="signature">(data)</span><span class="type-signature">String</span>
+            
+            <span class="access-signature">static</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Get data type.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                Data, which type needs to be defined.</td>
         </tr>
 	
 	
@@ -4785,7 +4956,7 @@
                         
                     
             </td>
-            <td class="description last"></td>
+            <td class="description last">Data type</td>
         </tr>
     
     </tbody>
@@ -4821,7 +4992,7 @@
     
     
     <div class="description">
-        Parse validation rules from string
+        <p>Parse validation rules from string.</p>
     </div>
     
 
@@ -4868,7 +5039,7 @@
             
             <td class="description last">
                 
-                Type string</td>
+                Type string.</td>
         </tr>
 	
 	
@@ -4891,7 +5062,7 @@
             
             <td class="description last">
                 
-                Data, which type needs to be checked</td>
+                Data, which type needs to be checked.</td>
         </tr>
 	
 	
@@ -4990,7 +5161,7 @@
     
     
     <div class="description">
-        Check if data valid according to validation rules
+        <p>Check if data valid according to validation rules.</p>
     </div>
     
 
@@ -5037,7 +5208,7 @@
             
             <td class="description last">
                 
-                The data which needs to be validated</td>
+                The data which needs to be validated.</td>
         </tr>
 	
 	
@@ -5060,7 +5231,7 @@
             
             <td class="description last">
                 
-                Validation rules in string format</td>
+                Validation rules in string format.</td>
         </tr>
 	
 	
@@ -5083,7 +5254,7 @@
             
             <td class="description last">
                 
-                It means, that validation called from core</td>
+                It means, that validation called from core.</td>
         </tr>
 	
 	
@@ -5146,7 +5317,7 @@
                         
                     
             </td>
-            <td class="description last">Validation status</td>
+            <td class="description last">Validation status.</td>
         </tr>
     
     </tbody>
@@ -5166,7 +5337,7 @@
             <span class="">
                 sogv.isValidWithErrorMessage
             </span>
-            <span class="signature">(data, rules, internal)</span><span class="type-signature">Null | String</span>
+            <span class="signature">(data, rules, internal, lang)</span><span class="type-signature">Null | String</span>
             
             <span class="access-signature">static</span>
             
@@ -5182,7 +5353,7 @@
     
     
     <div class="description">
-        Check if data valid according to validation rules
+        <p>Check if data valid according to validation rules.</p>
     </div>
     
 
@@ -5229,7 +5400,7 @@
             
             <td class="description last">
                 
-                The data which needs to be validated</td>
+                The data which needs to be validated.</td>
         </tr>
 	
 	
@@ -5252,7 +5423,7 @@
             
             <td class="description last">
                 
-                Validation rules in string format</td>
+                Validation rules in string format.</td>
         </tr>
 	
 	
@@ -5275,7 +5446,30 @@
             
             <td class="description last">
                 
-                It means, that validation called from core</td>
+                It means, that validation called from core.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>lang</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                The language used by the application. Default: "<code>en</code>".</td>
         </tr>
 	
 	
@@ -5341,7 +5535,7 @@
                         
                     
             </td>
-            <td class="description last">If valid this function return null otherwise error message</td>
+            <td class="description last">If valid this function return null otherwise error message.</td>
         </tr>
     
     </tbody>
@@ -5377,7 +5571,7 @@
     
     
     <div class="description">
-        Create object of the validator
+        <p>Create object of the validator.</p>
     </div>
     
 
@@ -5424,7 +5618,7 @@
             
             <td class="description last">
                 
-                The data which needs to be validated</td>
+                The data which needs to be validated.</td>
         </tr>
 	
 	
@@ -5447,7 +5641,7 @@
             
             <td class="description last">
                 
-                Validator name</td>
+                Validator name.</td>
         </tr>
 	
 	
@@ -5470,7 +5664,7 @@
             
             <td class="description last">
                 
-                The setting options</td>
+                The setting options.</td>
         </tr>
 	
 	
@@ -5602,7 +5796,7 @@
                         
                     
             </td>
-            <td class="description last">The roles in array format</td>
+            <td class="description last">The roles in array format.</td>
         </tr>
     
     </tbody>
@@ -5638,7 +5832,7 @@
     
     
     <div class="description">
-        Register validator
+        <p>Register validator.</p>
     </div>
     
 
@@ -5685,7 +5879,7 @@
             
             <td class="description last">
                 
-                Validator</td>
+                The validator.</td>
         </tr>
 	
 	
@@ -5750,7 +5944,7 @@
 
         <footer class="content-size">
             <div class="footer">
-                Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Tue Jan 28 2020 22:20:25 GMT+0200 (Eastern European Standard Time)
+                Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Jan 29 2020 17:36:23 GMT+0200 (Eastern European Standard Time)
             </div>
         </footer>
     </div>

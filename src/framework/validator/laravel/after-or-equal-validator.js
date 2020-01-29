@@ -65,7 +65,7 @@ Object.assign(sogv, function () {
             return [
                 {
                     'name': 'value',
-                    'type': 'date'
+                    'type': 'date-string'
                 }
             ];
         }

@@ -72,10 +72,10 @@ Object.assign(sogv, function () {
             return [
                 {
                     'name': 'min',
-                    'type': 'numeric'
+                    'type': 'integer'
                 }, {
                     'name': 'max',
-                    'type': 'numeric'
+                    'type': 'integer'
                 }
             ];
         }
@@ -86,7 +86,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.DigitsBetweenValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"numeric"}', true);
@@ -110,7 +111,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.LocaleValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             // Check "min" and "max" exist
@@ -146,8 +148,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.DigitsBetweenValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __messageParameters: function () {
             return {

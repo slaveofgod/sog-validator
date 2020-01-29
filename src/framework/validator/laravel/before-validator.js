@@ -65,7 +65,7 @@ Object.assign(sogv, function () {
             return [
                 {
                     'name': 'value',
-                    'type': 'date'
+                    'type': 'date-string'
                 }
             ];
         }
@@ -76,8 +76,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.BeforeValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __messageParameters: function () {
             return {

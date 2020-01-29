@@ -84,7 +84,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.CurrencyValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             for (var i = 0; i < this.__currencies.length; i ++) {
@@ -101,7 +102,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.CurrencyValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             // Check if empty
@@ -132,8 +134,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.CurrencyValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __messageParameters: function () {
             return {

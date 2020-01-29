@@ -63,7 +63,10 @@ Object.assign(sogv, function () {
     /**
      * @name sogv.IdenticalToValidator#value
      * @type {*}
-     * @description This option is required. It defines the value to compare to. It can be a string, number or object.
+     * @description
+     * <p>This option is <code>required</code>.</p>
+     * <p>It defines the value to compare to.</p>
+     * <p>It can be a <code>string</code>, <code>number</code> or <code>object</code>.</p>
      */
 
     var IdenticalToValidator = function (data, options, optionRules, lang, internal) {
@@ -93,7 +96,7 @@ Object.assign(sogv, function () {
             return [
                 {
                     'name': 'value',
-                    'type': 'any'
+                    'type': 'boolean|scalar|any'
                 }
             ];
         }
@@ -104,7 +107,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.IdenticalToValidator#__compareValues
-         * @description Compare two value
+         * @description
+         * <p>Compare two value.</p>
          * @param {*} value Value
          * @param {*} comparedValue Compared value
          * @returns {Boolean}
@@ -117,8 +121,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.IdenticalToValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __messageParameters: function () {
             return {

@@ -175,11 +175,11 @@ Object.assign(sogv, function () {
         get: function () {
             return [
                 {
-                    'name': 'max',
-                    'type': 'numeric|date-string'
-                }, {
                     'name': 'min',
-                    'type': 'numeric|date-string'
+                    'type': 'scalar|date-string'
+                }, {
+                    'name': 'max',
+                    'type': 'scalar|date-string'
                 }
             ];
         }
@@ -190,7 +190,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.RangeValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             var hasLowerLimit = null !== this.min;
@@ -216,7 +217,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.RangeValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             // Check if empty
@@ -266,8 +268,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.RangeValidator#__invalidMessageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __invalidMessageParameters: function () {
             return {
@@ -279,8 +282,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.RangeValidator#__notInRangeMessageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __notInRangeMessageParameters: function () {
             return {
@@ -294,8 +298,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.RangeValidator#__maxMessageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __maxMessageParameters: function () {
             return {
@@ -308,8 +313,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.RangeValidator#__minMessageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __minMessageParameters: function () {
             return {

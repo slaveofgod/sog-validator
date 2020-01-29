@@ -202,11 +202,11 @@ Object.assign(sogv, function () {
         get: function () {
             return [
                 {
-                    'name': 'max',
-                    'type': 'numeric'
-                }, {
                     'name': 'min',
-                    'type': 'numeric'
+                    'type': 'integer'
+                }, {
+                    'name': 'max',
+                    'type': 'integer'
                 }
             ];
         }
@@ -217,7 +217,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.LengthValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             // Normalize
@@ -263,7 +264,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.LengthValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             // Check "min" or "max" exist
@@ -293,8 +295,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.LengthValidator#__exactMessageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __exactMessageParameters: function () {
             return {
@@ -307,8 +310,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.LengthValidator#__maxMessageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __maxMessageParameters: function () {
             return {
@@ -321,8 +325,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.LengthValidator#__minMessageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __minMessageParameters: function () {
             return {

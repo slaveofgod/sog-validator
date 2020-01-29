@@ -148,7 +148,7 @@ Object.assign(sogv, function () {
         this.message = this.__options.message || 'This is not a valid UUID.';
         this.normalize = (!this.__options.normalize || false === this.__options.normalize) ? false : true;
         this.strict = (false === this.__options.strict) ? false : true;
-        this.versions = (this.__checkVersions()) ? this.__options.versions : this.__versions;
+        this.versions = (this.__checkVersions()) ? this.__prepareVersions(this.__options.versions) : this.__versions;
 
         this.name = 'UuidValidator';
     };
@@ -169,6 +169,9 @@ Object.assign(sogv, function () {
                 {
                     'name': 'versions',
                     'type': 'array'
+                }, {
+                    'name': 'strict',
+                    'type': 'boolean'
                 }
             ];
         }
@@ -372,7 +375,7 @@ Object.assign(sogv, function () {
                 for (var key in versions) {
                     if (!versions.hasOwnProperty(key)) continue;
 
-                    if (false === this.__versions.includes(versions[key])) {
+                    if (false === this.__versions.includes(parseInt(versions[key]))) {
                         throw new Error('Invalid version: "' + versions[key] + '"');
                     }
                 }
@@ -381,6 +384,22 @@ Object.assign(sogv, function () {
             }
 
             return false;
+        },
+
+        /**
+         * @private
+         * @function
+         * @name sogv.UuidValidator#__prepareVersions
+         * @description
+         * <p>Preparing versions (convert to integer).</p>
+         * @returns {Array}
+         */
+        __prepareVersions: function (versions) {
+            for (var i = 0; i < versions.length; i ++) {
+                versions[i] = parseInt(versions[i]);
+            }
+
+            return versions;
         },
 
         /**

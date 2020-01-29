@@ -55,7 +55,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.DistinctValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             sogv.UniqueValidator.prototype.__beforeValidate.call(this);
@@ -72,8 +73,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.DigitsValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __messageParameters: function () {
             return {

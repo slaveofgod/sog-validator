@@ -29,8 +29,9 @@ var sogv = {
     /**
      * @function
      * @name sogv.registry
-     * @description Register validator
-     * @param {Function} validator Validator
+     * @description
+     * <p>Register validator.</p>
+     * @param {Function} validator The validator.
      */
     registry: function (validator) {
         var __v = [validator];
@@ -83,9 +84,10 @@ var sogv = {
     /**
      * @function
      * @name sogv.getType
-     * @description Get data type
-     * @param {*} data Data, which type needs to be defined
-     * @returns {String}
+     * @description
+     * <p>Get data type.</p>
+     * @param {*} data Data, which type needs to be defined.
+     * @returns {String} Data type
      */
     getType: function (data) {
         var results = null;
@@ -108,9 +110,10 @@ var sogv = {
     /**
      * @function
      * @name sogv.isType
-     * @description Parse validation rules from string
-     * @param {String} type Type string
-     * @param {*} data Data, which type needs to be checked
+     * @description
+     * <p>Parse validation rules from string.</p>
+     * @param {String} type Type string.
+     * @param {*} data Data, which type needs to be checked.
      * @returns {Boolean} Is correct data type.
      */
     isType: function (type, data) {
@@ -170,14 +173,15 @@ var sogv = {
     /**
      * @function
      * @name sogv.makeValidator
-     * @description Create object of the validator
-     * @param {*} data The data which needs to be validated
-     * @param {String} validator Validator name
-     * @param {Object} options The setting options
+     * @description
+     * <p>Create object of the validator.</p>
+     * @param {*} data The data which needs to be validated.
+     * @param {String} validator Validator name.
+     * @param {Object} options The setting options.
      * @param {Object} optionRules The validation rules for setting options.
      * @param {Object} lang The language used by the application. Defaults to 'en'.
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
-     * @returns {Object} The roles in array format
+     * @returns {Object} The roles in array format.
      */
     makeValidator: function (data, validator, options, optionRules, lang, internal) {
         if ('undefined' === typeof sogv.validators[validator]) {
@@ -190,11 +194,12 @@ var sogv = {
     /**
      * @function
      * @name sogv.isValid
-     * @description Check if data valid according to validation rules
-     * @param {*} data The data which needs to be validated
-     * @param {String} rules Validation rules in string format
-     * @param {Boolean} internal It means, that validation called from core
-     * @returns {Boolean} Validation status
+     * @description
+     * <p>Check if data valid according to validation rules.</p>
+     * @param {*} data The data which needs to be validated.
+     * @param {String} rules Validation rules in string format.
+     * @param {Boolean} internal It means, that validation called from core.
+     * @returns {Boolean} Validation status.
      */
     isValid: function (data, rules, internal) {
         var engine = new sogv.Application({
@@ -212,13 +217,15 @@ var sogv = {
     /**
      * @function
      * @name sogv.isValidWithErrorMessage
-     * @description Check if data valid according to validation rules
-     * @param {*} data The data which needs to be validated
-     * @param {String} rules Validation rules in string format
-     * @param {Boolean} internal It means, that validation called from core
-     * @returns {Null|String} If valid this function return null otherwise error message
+     * @description
+     * <p>Check if data valid according to validation rules.</p>
+     * @param {*} data The data which needs to be validated.
+     * @param {String} rules Validation rules in string format.
+     * @param {Boolean} internal It means, that validation called from core.
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
+     * @returns {Null|String} If valid this function return null otherwise error message.
      */
-    isValidWithErrorMessage: function (data, rules, internal) {
+    isValidWithErrorMessage: function (data, rules, internal, lang) {
         var engine = new sogv.Application({
             internal: internal
         });
@@ -229,6 +236,79 @@ var sogv = {
         );
 
         return (true === validator.isValid()) ? null : validator.errors().first();
+    },
+
+    /**
+     * @function
+     * @name sogv.convertToType
+     * @description Convert data to one of the type.
+     * @param {*} data The data which needs to be converted
+     * @param {String} strTypes Data types. (Example: 'integer|date-string')
+     * @returns {*} The converted data
+     */
+    convertToType: function (data, strTypes) {
+        var types = strTypes.split('|');
+
+        if ('undefined' === typeof data) {
+            return data;
+        }
+
+        for (var i = 0; i < types.length; i++) {
+            switch (types[i]) {
+                case 'array':
+                    return data.split(';');
+                    break;
+                case 'int':
+                case 'integer':
+                    if (parseInt(data) == data) {
+                        return parseInt(data);
+                    }
+                    break;
+                case 'float':
+                    if (parseFloat(data) == data) {
+                        return parseFloat(data);
+                    }
+                    break;
+                case 'scalar':
+                    if ((data * 1) == data) {
+                        return (data * 1);
+                    }
+                    break;
+                case 'date-string':
+                    if (
+                        false === data.includes(';')
+                        && sogv.isType('date-string', data)
+                    ) {
+                        return data;
+                    }
+                    break;
+                case 'str':
+                case 'string':
+                    try {
+                        var __data = data.toString();
+                        if (
+                            __data == data
+                            && false === data.includes(';')
+                        ) {
+                            return data.toString();
+                        }
+                    } catch (e) {}
+                    break;
+                case 'boolean':
+                case 'bool':
+                    if (
+                        "true" === data
+                        || "false" === data
+                        || true === data
+                        || false === data
+                    ) {
+                        return (false === data || "false" === data) ? false : true;
+                    }
+                    break;
+            }
+        }
+
+        return data;
     }
 };
 

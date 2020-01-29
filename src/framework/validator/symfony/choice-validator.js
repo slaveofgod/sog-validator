@@ -228,18 +228,18 @@ Object.assign(sogv, function () {
         get: function () {
             return [
                 {
-                    'name': 'max',
-                    'type': 'numeric'
+                    'name': 'choices',
+                    'type': 'array'
                 }, {
                     'name': 'min',
-                    'type': 'numeric'
+                    'type': 'integer'
+                }, {
+                    'name': 'max',
+                    'type': 'integer'
                 }, {
                     'name': 'multiple',
                     'type': 'boolean'
-                }, {
-                    'name': 'choices',
-                    'type': 'array'
-                },
+                }
             ];
         }
     });
@@ -249,14 +249,15 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.ChoiceValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             if (true === this.multiple) {
-                for (var key in this.value) {
-                    if (!this.value.hasOwnProperty(key)) continue;
-                    if(false === this.choices.includes(this.value[key])) {
-                        this.__currentInvalidDataItem = this.value[key];
+                for (var key in this.data) {
+                    if (!this.data.hasOwnProperty(key)) continue;
+                    if(false === this.choices.includes(this.data[key])) {
+                        this.__currentInvalidDataItem = this.data[key];
                         this.__setErrorMessage(this.multipleMessage, this.__multipleMessageParameters());
                         return ;
                     }
@@ -283,7 +284,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.ChoiceValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             if (false === sogv.isType('array', this.choices) && 'undefined' === typeof this.callback) {
@@ -315,8 +317,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.ChoiceValidator#__multipleMessageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __multipleMessageParameters: function () {
             return {
@@ -328,8 +331,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.ChoiceValidator#__minMessageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __minMessageParameters: function () {
             return {
@@ -343,8 +347,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.ChoiceValidator#__maxMessageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __maxMessageParameters: function () {
             return {
@@ -358,8 +363,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.ChoiceValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __messageParameters: function () {
             return {

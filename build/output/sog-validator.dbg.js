@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v0.9.7 revision f685fbb (DEBUG PROFILER)
+ * SOG Validator Library v0.9.7 revision e6933a3 (DEBUG PROFILER)
  * Copyright 2011-2020 SOG Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var sogv = {version:"0.9.7", revision:"f685fbb", config:{}, common:{}, validators:{}, registry:function(validator) {
+var sogv = {version:"0.9.7", revision:"e6933a3", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -117,10 +117,60 @@ var sogv = {version:"0.9.7", revision:"f685fbb", config:{}, common:{}, validator
   var engine = new sogv.Application({internal:internal});
   var validator = engine.makeSingle(data, rules);
   return validator.isValid();
-}, isValidWithErrorMessage:function(data, rules, internal) {
+}, isValidWithErrorMessage:function(data, rules, internal, lang) {
   var engine = new sogv.Application({internal:internal});
   var validator = engine.makeSingle(data, rules);
   return true === validator.isValid() ? null : validator.errors().first();
+}, convertToType:function(data, strTypes) {
+  var types = strTypes.split("|");
+  if ("undefined" === typeof data) {
+    return data;
+  }
+  for (var i = 0; i < types.length; i++) {
+    switch(types[i]) {
+      case "array":
+        return data.split(";");
+        break;
+      case "int":
+      case "integer":
+        if (parseInt(data) == data) {
+          return parseInt(data);
+        }
+        break;
+      case "float":
+        if (parseFloat(data) == data) {
+          return parseFloat(data);
+        }
+        break;
+      case "scalar":
+        if (data * 1 == data) {
+          return data * 1;
+        }
+        break;
+      case "date-string":
+        if (false === data.includes(";") && sogv.isType("date-string", data)) {
+          return data;
+        }
+        break;
+      case "str":
+      case "string":
+        try {
+          var __data = data.toString();
+          if (__data == data && false === data.includes(";")) {
+            return data.toString();
+          }
+        } catch (e) {
+        }
+        break;
+      case "boolean":
+      case "bool":
+        if ("true" === data || "false" === data || true === data || false === data) {
+          return false === data || "false" === data ? false : true;
+        }
+        break;
+    }
+  }
+  return data;
 }};
 if (typeof exports !== "undefined") {
   exports.sogv = sogv;
@@ -366,53 +416,36 @@ Object.assign(sogv, function() {
 sogv.ValidationSettingsHandler = {parse:function(settings) {
   var validators = settings;
   if ("string" === typeof settings) {
-    validators = this.__parseJsonFormat(settings);
+    var splitted = settings.split("|");
+    validators = {};
+    for (var key in splitted) {
+      if (!splitted.hasOwnProperty(key)) {
+        continue;
+      }
+      this.__parseSingle(validators, splitted[key]);
+    }
   }
   return validators;
-}, __parseLaravelFormat:function(settings) {
-  var splitted = settings.split("|");
-  var validators = {};
-  for (var key in splitted) {
-    if (!splitted.hasOwnProperty(key)) {
-      continue;
-    }
-    var rule = splitted[key];
-    var validator = rule.substring(0, rule.indexOf(";"));
-    var options = {};
-    if ("" === validator) {
-      validator = rule;
-    } else {
-      rule.substring(rule.indexOf(";") + 1).split(",").map(function(element) {
-        var option = element.split(":");
-        options[option[0]] = option[1];
-      });
-    }
-    validators[validator] = options;
-  }
-  return validators;
-}, __parseJsonFormat:function(settings) {
-  var splitted = settings.split("|");
-  var validators = {};
-  for (var key in splitted) {
-    if (!splitted.hasOwnProperty(key)) {
-      continue;
-    }
-    var rule = splitted[key];
-    var validator = rule.substring(0, rule.indexOf(":"));
-    var options = {};
-    if ("" === validator) {
-      validator = rule;
-    } else {
-      var settingsString = rule.substring(rule.indexOf(":") + 1);
-      try {
+}, __parseSingle:function(validators, settings) {
+  var validator = settings.substring(0, settings.indexOf(":"));
+  var options = {};
+  if ("" === validator) {
+    validator = settings;
+  } else {
+    var settingsString = settings.substring(settings.indexOf(":") + 1);
+    if ("" !== settingsString) {
+      if (/^(\[|\{).+$/.test(settingsString)) {
         options = JSON.parse(settingsString);
-      } catch (e) {
-        throw new Error('Invalid JSON: "' + settingsString + '"');
+      } else {
+        var __options = settingsString.split(",");
+        var __validator = sogv.makeValidator(null, validator, {}, {}, "en", true);
+        for (var i = 0; i < __validator.options.length; i++) {
+          options[__validator.options[i].name] = sogv.convertToType(__options[i], __validator.options[i].type);
+        }
       }
     }
-    validators[validator] = options;
   }
-  return validators;
+  validators[validator] = options;
 }};
 Object.assign(sogv, function() {
   var Application = function(options) {
@@ -9011,7 +9044,7 @@ Object.assign(sogv, function() {
     return ["type"];
   }});
   Object.defineProperty(TypeValidator.prototype, "options", {get:function() {
-    return [{"name":"any", "type":"boolean"}, {"name":"type", "type":"array"}];
+    return [{"name":"type", "type":"array"}, {"name":"any", "type":"boolean"}];
   }});
   Object.assign(TypeValidator.prototype, {__validate:function() {
     if ("undefined" === typeof this.data) {
@@ -9148,7 +9181,7 @@ Object.assign(sogv, function() {
     return ["length", "len"];
   }});
   Object.defineProperty(LengthValidator.prototype, "options", {get:function() {
-    return [{"name":"max", "type":"numeric"}, {"name":"min", "type":"numeric"}];
+    return [{"name":"min", "type":"integer"}, {"name":"max", "type":"integer"}];
   }});
   Object.assign(LengthValidator.prototype, {__validate:function() {
     if (true === this.normalize) {
@@ -9275,7 +9308,7 @@ Object.assign(sogv, function() {
     return ["regex"];
   }});
   Object.defineProperty(RegexValidator.prototype, "options", {get:function() {
-    return [{"name":"match", "type":"boolean"}, {"name":"pattern", "type":"any"}];
+    return [{"name":"pattern", "type":"any"}, {"name":"match", "type":"boolean"}];
   }});
   Object.assign(RegexValidator.prototype, {__validate:function() {
     if (true === this.normalize) {
@@ -9486,7 +9519,7 @@ Object.assign(sogv, function() {
     this.message = this.__options.message || "This is not a valid UUID.";
     this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
     this.strict = false === this.__options.strict ? false : true;
-    this.versions = this.__checkVersions() ? this.__options.versions : this.__versions;
+    this.versions = this.__checkVersions() ? this.__prepareVersions(this.__options.versions) : this.__versions;
     this.name = "UuidValidator";
   };
   UuidValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
@@ -9495,7 +9528,7 @@ Object.assign(sogv, function() {
     return ["uuid"];
   }});
   Object.defineProperty(UuidValidator.prototype, "options", {get:function() {
-    return [{"name":"versions", "type":"array"}];
+    return [{"name":"versions", "type":"array"}, {"name":"strict", "type":"boolean"}];
   }});
   Object.assign(UuidValidator.prototype, {__validate:function() {
     if (true === this.normalize) {
@@ -9606,13 +9639,18 @@ Object.assign(sogv, function() {
         if (!versions.hasOwnProperty(key)) {
           continue;
         }
-        if (false === this.__versions.includes(versions[key])) {
+        if (false === this.__versions.includes(parseInt(versions[key]))) {
           throw new Error('Invalid version: "' + versions[key] + '"');
         }
       }
       return true;
     }
     return false;
+  }, __prepareVersions:function(versions) {
+    for (var i = 0; i < versions.length; i++) {
+      versions[i] = parseInt(versions[i]);
+    }
+    return versions;
   }, __messageParameters:function() {
     return {"value":this.data};
   }});
@@ -9631,7 +9669,7 @@ Object.assign(sogv, function() {
     return ["equal-to", "equal", "same"];
   }});
   Object.defineProperty(EqualToValidator.prototype, "options", {get:function() {
-    return [{"name":"value", "type":"any"}];
+    return [{"name":"value", "type":"boolean|scalar|string|array"}];
   }});
   Object.assign(EqualToValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value == comparedValue;
@@ -9653,7 +9691,7 @@ Object.assign(sogv, function() {
     return ["not-equal-to", "not-equal"];
   }});
   Object.defineProperty(NotEqualToValidator.prototype, "options", {get:function() {
-    return [{"name":"value", "type":"any"}];
+    return [{"name":"value", "type":"boolean|scalar|string|array"}];
   }});
   Object.assign(NotEqualToValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value != comparedValue;
@@ -9675,7 +9713,7 @@ Object.assign(sogv, function() {
     return ["identical-to", "identical"];
   }});
   Object.defineProperty(IdenticalToValidator.prototype, "options", {get:function() {
-    return [{"name":"value", "type":"any"}];
+    return [{"name":"value", "type":"boolean|scalar|any"}];
   }});
   Object.assign(IdenticalToValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value === comparedValue;
@@ -9697,7 +9735,7 @@ Object.assign(sogv, function() {
     return ["not-identical-to", "not-identical"];
   }});
   Object.defineProperty(NotIdenticalToValidator.prototype, "options", {get:function() {
-    return [{"name":"value", "type":"any"}];
+    return [{"name":"value", "type":"boolean|scalar|any"}];
   }});
   Object.assign(NotIdenticalToValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value !== comparedValue;
@@ -9719,7 +9757,7 @@ Object.assign(sogv, function() {
     return ["less-than", "less"];
   }});
   Object.defineProperty(LessThanValidator.prototype, "options", {get:function() {
-    return [{"name":"value", "type":"scalar|date"}];
+    return [{"name":"value", "type":"boolean|scalar|date-string"}];
   }});
   Object.assign(LessThanValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value < comparedValue;
@@ -9741,7 +9779,7 @@ Object.assign(sogv, function() {
     return ["less-than-or-equal", "max"];
   }});
   Object.defineProperty(LessThanOrEqualValidator.prototype, "options", {get:function() {
-    return [{"name":"value", "type":"scalar|date"}];
+    return [{"name":"value", "type":"boolean|scalar|date-string"}];
   }});
   Object.assign(LessThanOrEqualValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value <= comparedValue;
@@ -9763,7 +9801,7 @@ Object.assign(sogv, function() {
     return ["greater-than", "greater"];
   }});
   Object.defineProperty(GreaterThanValidator.prototype, "options", {get:function() {
-    return [{"name":"value", "type":"scalar|date"}];
+    return [{"name":"value", "type":"boolean|scalar|date-string"}];
   }});
   Object.assign(GreaterThanValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value > comparedValue;
@@ -9785,7 +9823,7 @@ Object.assign(sogv, function() {
     return ["greater-than-or-equal", "min"];
   }});
   Object.defineProperty(GreaterThanOrEqualValidator.prototype, "options", {get:function() {
-    return [{"name":"value", "type":"scalar|date"}];
+    return [{"name":"value", "type":"boolean|scalar|date-string"}];
   }});
   Object.assign(GreaterThanOrEqualValidator.prototype, {__compareValues:function(value, comparedValue) {
     return value >= comparedValue;
@@ -9815,7 +9853,7 @@ Object.assign(sogv, function() {
     return ["range"];
   }});
   Object.defineProperty(RangeValidator.prototype, "options", {get:function() {
-    return [{"name":"max", "type":"numeric|date-string"}, {"name":"min", "type":"numeric|date-string"}];
+    return [{"name":"min", "type":"scalar|date-string"}, {"name":"max", "type":"scalar|date-string"}];
   }});
   Object.assign(RangeValidator.prototype, {__validate:function() {
     var hasLowerLimit = null !== this.min;
@@ -9877,7 +9915,7 @@ Object.assign(sogv, function() {
     return ["divisible-by"];
   }});
   Object.defineProperty(DivisibleByValidator.prototype, "options", {get:function() {
-    return [{"name":"value", "type":"date"}];
+    return [{"name":"value", "type":"integer|float|date-string|string"}];
   }});
   Object.assign(DivisibleByValidator.prototype, {__compareValues:function(value, comparedValue) {
     if (sogv.isType("integer", value) && sogv.isType("integer", comparedValue)) {
@@ -10240,16 +10278,16 @@ Object.assign(sogv, function() {
     return ["choice"];
   }});
   Object.defineProperty(ChoiceValidator.prototype, "options", {get:function() {
-    return [{"name":"max", "type":"numeric"}, {"name":"min", "type":"numeric"}, {"name":"multiple", "type":"boolean"}, {"name":"choices", "type":"array"}];
+    return [{"name":"choices", "type":"array"}, {"name":"min", "type":"integer"}, {"name":"max", "type":"integer"}, {"name":"multiple", "type":"boolean"}];
   }});
   Object.assign(ChoiceValidator.prototype, {__validate:function() {
     if (true === this.multiple) {
-      for (var key in this.value) {
-        if (!this.value.hasOwnProperty(key)) {
+      for (var key in this.data) {
+        if (!this.data.hasOwnProperty(key)) {
           continue;
         }
-        if (false === this.choices.includes(this.value[key])) {
-          this.__currentInvalidDataItem = this.value[key];
+        if (false === this.choices.includes(this.data[key])) {
+          this.__currentInvalidDataItem = this.data[key];
           this.__setErrorMessage(this.multipleMessage, this.__multipleMessageParameters());
           return;
         }
@@ -11180,7 +11218,7 @@ Object.assign(sogv, function() {
     return ["count"];
   }});
   Object.defineProperty(CountValidator.prototype, "options", {get:function() {
-    return [{"name":"max", "type":"numeric"}, {"name":"min", "type":"numeric"}];
+    return [{"name":"min", "type":"numeric"}, {"name":"max", "type":"numeric"}];
   }});
   Object.assign(CountValidator.prototype, {__validate:function() {
     var count = this.data.length;
@@ -11270,7 +11308,7 @@ Object.assign(sogv, function() {
     return ["after"];
   }});
   Object.defineProperty(AfterValidator.prototype, "options", {get:function() {
-    return [{"name":"value", "type":"date"}];
+    return [{"name":"value", "type":"date-string"}];
   }});
   Object.assign(AfterValidator.prototype, {__messageParameters:function() {
     return {"attribute":"value", "date":this.data};
@@ -11289,7 +11327,7 @@ Object.assign(sogv, function() {
     return ["after_or_equal", "after-or-equal"];
   }});
   Object.defineProperty(AfterOrEqualValidator.prototype, "options", {get:function() {
-    return [{"name":"value", "type":"date"}];
+    return [{"name":"value", "type":"date-string"}];
   }});
   Object.assign(AfterOrEqualValidator.prototype, {__messageParameters:function() {
     return {"attribute":"value", "date":this.data};
@@ -11384,7 +11422,7 @@ Object.assign(sogv, function() {
     return ["before"];
   }});
   Object.defineProperty(BeforeValidator.prototype, "options", {get:function() {
-    return [{"name":"value", "type":"date"}];
+    return [{"name":"value", "type":"date-string"}];
   }});
   Object.assign(BeforeValidator.prototype, {__messageParameters:function() {
     return {"attribute":"value", "date":this.data};
@@ -11403,7 +11441,7 @@ Object.assign(sogv, function() {
     return ["before_or_equal", "before-or-equal"];
   }});
   Object.defineProperty(BeforeOrEqualValidator.prototype, "options", {get:function() {
-    return [{"name":"value", "type":"date"}];
+    return [{"name":"value", "type":"date-string"}];
   }});
   Object.assign(BeforeOrEqualValidator.prototype, {__messageParameters:function() {
     return {"attribute":"value", "date":this.data};
@@ -11428,7 +11466,7 @@ Object.assign(sogv, function() {
     return ["between"];
   }});
   Object.defineProperty(BetweenValidator.prototype, "options", {get:function() {
-    return [{"name":"max", "type":"numeric|date-string"}, {"name":"min", "type":"numeric|date-string"}];
+    return [{"name":"min", "type":"scalar|date-string"}, {"name":"max", "type":"scalar|date-string"}];
   }});
   Object.assign(BetweenValidator.prototype, {__validate:function() {
     if (true === sogv.isType("numeric", this.min)) {
@@ -11616,7 +11654,7 @@ Object.assign(sogv, function() {
     return ["digits_between", "digits-between"];
   }});
   Object.defineProperty(DigitsBetweenValidator.prototype, "options", {get:function() {
-    return [{"name":"min", "type":"numeric"}, {"name":"max", "type":"numeric"}];
+    return [{"name":"min", "type":"integer"}, {"name":"max", "type":"integer"}];
   }});
   Object.assign(DigitsBetweenValidator.prototype, {__validate:function() {
     var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"numeric"}', true);
@@ -11770,7 +11808,7 @@ Object.assign(sogv, function() {
     return ["gt"];
   }});
   Object.defineProperty(GtValidator.prototype, "options", {get:function() {
-    return [{"name":"value", "type":"boolean|string|numeric|array|datetime"}];
+    return [{"name":"value", "type":"boolean|scalar|string|array"}];
   }});
   Object.assign(GtValidator.prototype, {__validate:function() {
     if (true === sogv.isType("integer", this.value) && (true === sogv.isType("array", this.data) || true === sogv.isType("string", this.data))) {
@@ -11815,7 +11853,7 @@ Object.assign(sogv, function() {
     return ["gte"];
   }});
   Object.defineProperty(GteValidator.prototype, "options", {get:function() {
-    return [{"name":"value", "type":"boolean|string|numeric|array|datetime"}];
+    return [{"name":"value", "type":"boolean|scalar|string|array"}];
   }});
   Object.assign(GteValidator.prototype, {__validate:function() {
     if (true === sogv.isType("integer", this.value) && (true === sogv.isType("array", this.data) || true === sogv.isType("string", this.data))) {
@@ -11860,7 +11898,7 @@ Object.assign(sogv, function() {
     return ["lt"];
   }});
   Object.defineProperty(LtValidator.prototype, "options", {get:function() {
-    return [{"name":"value", "type":"boolean|string|numeric|array|datetime"}];
+    return [{"name":"value", "type":"boolean|scalar|string|array"}];
   }});
   Object.assign(LtValidator.prototype, {__validate:function() {
     if (true === sogv.isType("integer", this.value) && (true === sogv.isType("array", this.data) || true === sogv.isType("string", this.data))) {
@@ -11905,7 +11943,7 @@ Object.assign(sogv, function() {
     return ["lte"];
   }});
   Object.defineProperty(LteValidator.prototype, "options", {get:function() {
-    return [{"name":"value", "type":"boolean|string|numeric|array|datetime"}];
+    return [{"name":"value", "type":"boolean|scalar|string|array"}];
   }});
   Object.assign(LteValidator.prototype, {__validate:function() {
     if (true === sogv.isType("integer", this.value) && (true === sogv.isType("array", this.data) || true === sogv.isType("string", this.data))) {
@@ -12042,7 +12080,7 @@ Object.assign(sogv, function() {
     return ["starts_with", "starts-with", "starts"];
   }});
   Object.defineProperty(StartsWithValidator.prototype, "options", {get:function() {
-    return [{"name":"ends", "type":"array"}];
+    return [{"name":"starts", "type":"array"}];
   }});
   Object.assign(StartsWithValidator.prototype, {__validate:function() {
     for (var i = 0; i < this.starts.length; i++) {
@@ -12186,7 +12224,7 @@ Object.assign(sogv, function() {
     return ["size"];
   }});
   Object.defineProperty(SizeValidator.prototype, "options", {get:function() {
-    return [{"name":"value", "type":"integer"}];
+    return [{"name":"value", "type":"scalar"}];
   }});
   Object.assign(SizeValidator.prototype, {__validate:function() {
     if (true === sogv.isType("numeric", this.data)) {

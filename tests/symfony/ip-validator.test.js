@@ -20,7 +20,7 @@ describe('ip', () => {
 
         test('Lorem ipsum', () => {
             expect(abv.isValidWithErrorMessage('Lorem ipsum', 'ip')).toBe("This is not a valid IP address.");
-        })
+        });
 
         test('0', () => {
             expect(abv.isValidWithErrorMessage(0, 'ip')).toBe("This is not a valid IP address.");

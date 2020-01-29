@@ -34,7 +34,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.AbstractComparisonValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             // Check if empty
@@ -55,7 +56,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.AbstractComparisonValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             // Check if empty

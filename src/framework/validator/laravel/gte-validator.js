@@ -67,7 +67,7 @@ Object.assign(sogv, function () {
             return [
                 {
                     'name': 'value',
-                    'type': 'boolean|string|numeric|array|datetime'
+                    'type': 'boolean|scalar|string|array'
                 }
             ];
         }

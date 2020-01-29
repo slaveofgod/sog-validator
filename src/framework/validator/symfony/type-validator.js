@@ -67,15 +67,15 @@ Object.assign(sogv, function () {
      * @name sogv.TypeValidator#any
      * @type {Boolean}
      * @description
-     * If <code>true</code>, one of data type needs to be valid, otherwise passed data should be valid for all types.</p>
-     * Default: <code>false</code>
+     * <p>If <code>true</code>, one of data type needs to be valid, otherwise passed data should be valid for all types.</p>
+     * <p>Default: <code>false</code></p>
      */
 
     /**
      * @name sogv.TypeValidator#message
      * @type {String}
      * @description
-     * The message if the underlying data is not of the given type.</p>
+     * <p>The message if the underlying data is not of the given type.</p>
      * <p>Default: "<code>This value should be of type %%type%%.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
@@ -127,11 +127,11 @@ Object.assign(sogv, function () {
         get: function () {
             return [
                 {
-                    'name': 'any',
-                    'type': 'boolean'
-                }, {
                     'name': 'type',
                     'type': 'array'
+                }, {
+                    'name': 'any',
+                    'type': 'boolean'
                 },
             ];
         }
@@ -142,7 +142,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.TypeValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             if ('undefined' === typeof this.data) {
@@ -166,7 +167,8 @@ Object.assign(sogv, function () {
          * @function
          * @name sogv.TypeValidator#__validateAllTypes
          * @param {Array} types Types
-         * @description Check if all types is valid for the data
+         * @description
+         * <p>Check if all types is valid for the data.</p>
          */
         __validateAllTypes: function (types) {
             for (var key in types) {
@@ -208,7 +210,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.TimezoneValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             // Check if empty
@@ -222,8 +225,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.TypeValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __messageParameters: function () {
             return {

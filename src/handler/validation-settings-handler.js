@@ -18,41 +18,14 @@ sogv.ValidationSettingsHandler = {
     parse: function (settings) {
         var validators = settings;
         if ('string' === typeof settings) {
-            validators = this.__parseJsonFormat(settings);
-        }
+            var splitted = settings.split('|');
+            validators = {};
 
-        return validators;
-    },
+            for (var key in splitted) {
+                if (!splitted.hasOwnProperty(key)) continue;
 
-    /**
-     * @private
-     * @function
-     * @name sogv.ValidationSettingsHandler#__parseStringFormat
-     * @description Parse validation settings from string (Laravel format)
-     * @param {String} settings Validation settings in string format
-     * @returns {Object} The roles in array format
-     */
-    __parseLaravelFormat: function (settings) {
-        var splitted = settings.split('|');
-        var validators = {};
-
-        for (var key in splitted) {
-            if (!splitted.hasOwnProperty(key)) continue;
-
-            var rule = splitted[key];
-            var validator = rule.substring(0, rule.indexOf(';'));
-            var options = {};
-
-            if ('' === validator) {
-                validator = rule;
-            } else {
-                rule.substring(rule.indexOf(';') + 1).split(',').map(function (element) {
-                    var option = element.split(':');
-                    options[option[0]] = option[1];
-                });
+                this.__parseSingle(validators, splitted[key]);
             }
-
-            validators[validator] = options;
         }
 
         return validators;
@@ -61,36 +34,34 @@ sogv.ValidationSettingsHandler = {
     /**
      * @private
      * @function
-     * @name sogv.ValidationSettingsHandler#__parseJsonFormat
-     * @description Parse validation settings from string (JSON format)
-     * @param {String} settings Validation settings in string format
-     * @returns {Object} The roles in array format
+     * @name sogv.ValidationSettingsHandler#__parseSingle
+     * @description Prepare validation settings
+     * @param {Object} validators The list of validators
+     * @param {String} settings Validation settings
      */
-    __parseJsonFormat: function (settings) {
-        var splitted = settings.split('|');
-        var validators = {};
+    __parseSingle: function (validators, settings) {
+        var validator = settings.substring(0, settings.indexOf(':'));
+        var options = {};
 
-        for (var key in splitted) {
-            if (!splitted.hasOwnProperty(key)) continue;
+        if ('' === validator) {
+            validator = settings;
+        } else {
+            var settingsString = settings.substring(settings.indexOf(':') + 1);
 
-            var rule = splitted[key];
-            var validator = rule.substring(0, rule.indexOf(':'));
-            var options = {};
-
-            if ('' === validator) {
-                validator = rule;
-            } else {
-                var settingsString = rule.substring(rule.indexOf(':') + 1);
-                try {
+            if('' !== settingsString) {
+                // if (/^[\],:{}\s]*$/.test(settingsString.replace(/\\["\\\/bfnrtu]/g, '@').replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+                if (/^(\[|\{).+$/.test(settingsString)) {
                     options = JSON.parse(settingsString);
-                } catch (e) {
-                    throw new Error('Invalid JSON: "' + settingsString + '"');
+                } else {
+                    var __options = settingsString.split(',');
+                    var __validator = sogv.makeValidator(null, validator, {}, {}, 'en', true);
+                    for (var i = 0; i < __validator.options.length; i++) {
+                        options[__validator.options[i].name] = sogv.convertToType(__options[i], __validator.options[i].type);
+                    }
                 }
             }
-
-            validators[validator] = options;
         }
 
-        return validators;
-    },
+        validators[validator] = options;
+    }
 };

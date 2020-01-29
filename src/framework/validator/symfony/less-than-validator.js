@@ -95,7 +95,7 @@ Object.assign(sogv, function () {
             return [
                 {
                     'name': 'value',
-                    'type': 'scalar|date'
+                    'type': 'boolean|scalar|date-string'
                 }
             ];
         }

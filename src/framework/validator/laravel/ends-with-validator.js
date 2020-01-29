@@ -94,7 +94,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.EndsWithValidator#__beforeValidate
-         * @description Execute before validation is running
+         * @description
+         * <p>Execute before validation is running.</p>
          */
         __beforeValidate: function () {
             // Check if empty
@@ -129,8 +130,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.EndsWithValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __messageParameters: function () {
             return {

@@ -100,7 +100,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.AllValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             for (var key in this.__validatorCollection) {

@@ -157,12 +157,12 @@ Object.assign(sogv, function () {
         get: function () {
             return [
                 {
-                    'name': 'max',
-                    'type': 'numeric'
-                }, {
                     'name': 'min',
                     'type': 'numeric'
-                }
+                }, {
+                    'name': 'max',
+                    'type': 'numeric'
+                },
             ];
         }
     });

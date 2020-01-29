@@ -101,7 +101,8 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.NotBlankValidator#__validate
-         * @description Validate data
+         * @description
+         * <p>Validate data.</p>
          */
         __validate: function () {
             // Normalize
@@ -153,8 +154,9 @@ Object.assign(sogv, function () {
          * @private
          * @function
          * @name sogv.NotBlankValidator#__messageParameters
-         * @description Returned parameters for error message which needs to be replaced
-         * @returns {Object} List of parameters
+         * @description
+         * <p>Returned parameters for error message which needs to be replaced.</p>
+         * @returns {Object} List of parameters.
          */
         __messageParameters: function () {
             return {
