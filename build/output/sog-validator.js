@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v0.9.7 revision 4e94304
+ * SOG Validator Library v0.9.7 revision d06e22e
  * Copyright 2011-2020 SOG Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var sogv = {version:"0.9.7", revision:"4e94304", config:{}, common:{}, validators:{}, registry:function(validator) {
+var sogv = {version:"0.9.7", revision:"d06e22e", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -1824,19 +1824,6 @@ sogv.moment = function() {
   }
   function loadLocale(name) {
     var oldLocale = null;
-    if (!locales[name] && typeof module !== "undefined" && module && module.exports) {
-      try {
-        oldLocale = globalLocale._abbr;
-        if ("undefined" === typeof require) {
-          var require = function() {
-          };
-        }
-        var aliasedRequire = require;
-        aliasedRequire("./locale/" + name);
-        getSetGlobalLocale(oldLocale);
-      } catch (e) {
-      }
-    }
     return locales[name];
   }
   function getSetGlobalLocale(key, values) {
