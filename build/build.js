@@ -222,7 +222,7 @@ var run = function () {
               compilation_level: compilerLevel,
               language_in: "ECMASCRIPT5",
               js_output_file: outputPath,
-              output_wrapper_file: "./umd-wrapper.js",
+              output_wrapper_file: "./umd-wrapper.js.tmpl",
               manage_closure_dependencies: true,
               jscomp_off: [
                   "nonStandardJsDocs",  // docs warnings
@@ -242,7 +242,7 @@ var run = function () {
             if(sourceMap) {
                 var outputfilename = path.basename(outputPath);
 
-                var wrapperContent = fs.readFileSync("./umd-wrapper.js");
+                var wrapperContent = fs.readFileSync("./umd-wrapper.js.tmpl");
                 var wrapperPostamble = "\n//# sourceMappingURL=" + outputfilename + ".map";
 
                 var tempWrapperPath = path.join(tempPath, "./_umd-wrapper.js");

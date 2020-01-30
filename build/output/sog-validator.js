@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v0.9.7 revision e872cb2
+ * SOG Validator Library v0.9.7 revision 4e94304
  * Copyright 2011-2020 SOG Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var sogv = {version:"0.9.7", revision:"e872cb2", config:{}, common:{}, validators:{}, registry:function(validator) {
+var sogv = {version:"0.9.7", revision:"4e94304", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -6700,7 +6700,7 @@ sogv.moment = function() {
   hooks.defineLocale("sv", {months:"januari_februari_mars_april_maj_juni_juli_augusti_september_oktober_november_december".split("_"), monthsShort:"jan_feb_mar_apr_maj_jun_jul_aug_sep_okt_nov_dec".split("_"), weekdays:"s\u00f6ndag_m\u00e5ndag_tisdag_onsdag_torsdag_fredag_l\u00f6rdag".split("_"), weekdaysShort:"s\u00f6n_m\u00e5n_tis_ons_tor_fre_l\u00f6r".split("_"), weekdaysMin:"s\u00f6_m\u00e5_ti_on_to_fr_l\u00f6".split("_"), longDateFormat:{LT:"HH:mm", LTS:"HH:mm:ss", L:"YYYY-MM-DD", LL:"D MMMM YYYY", 
   LLL:"D MMMM YYYY [kl.] HH:mm", LLLL:"dddd D MMMM YYYY [kl.] HH:mm", lll:"D MMM YYYY HH:mm", llll:"ddd D MMM YYYY HH:mm"}, calendar:{sameDay:"[Idag] LT", nextDay:"[Imorgon] LT", lastDay:"[Ig\u00e5r] LT", nextWeek:"[P\u00e5] dddd LT", lastWeek:"[I] dddd[s] LT", sameElse:"L"}, relativeTime:{future:"om %s", past:"f\u00f6r %s sedan", s:"n\u00e5gra sekunder", ss:"%d sekunder", m:"en minut", mm:"%d minuter", h:"en timme", hh:"%d timmar", d:"en dag", dd:"%d dagar", M:"en m\u00e5nad", MM:"%d m\u00e5nader", 
   y:"ett \u00e5r", yy:"%d \u00e5r"}, dayOfMonthOrdinalParse:/\d{1,2}(e|a)/, ordinal:function(number) {
-    var b = number % 10, output = ~~(number % 100 / 10) === 1 ? "e" : b === 1 ? "a" : b === 2 ? "a" : b === 3 ? "e" : "e";
+    var b = number % 10, output = ~~(number % 100 / 10) === 1 ? "e" : b === 1 ? "a" : b === 2 ? "a" : "e";
     return number + output;
   }, week:{dow:1, doy:4}});
   hooks.defineLocale("sw", {months:"Januari_Februari_Machi_Aprili_Mei_Juni_Julai_Agosti_Septemba_Oktoba_Novemba_Desemba".split("_"), monthsShort:"Jan_Feb_Mac_Apr_Mei_Jun_Jul_Ago_Sep_Okt_Nov_Des".split("_"), weekdays:"Jumapili_Jumatatu_Jumanne_Jumatano_Alhamisi_Ijumaa_Jumamosi".split("_"), weekdaysShort:"Jpl_Jtat_Jnne_Jtan_Alh_Ijm_Jmos".split("_"), weekdaysMin:"J2_J3_J4_J5_Al_Ij_J1".split("_"), weekdaysParseExact:true, longDateFormat:{LT:"HH:mm", LTS:"HH:mm:ss", L:"DD.MM.YYYY", LL:"D MMMM YYYY", LLL:"D MMMM YYYY HH:mm", 
