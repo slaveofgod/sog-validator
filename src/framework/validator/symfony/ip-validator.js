@@ -122,7 +122,7 @@ Object.assign(sogv, function () {
         this.FILTER_FLAG_NO_RES_RANGE = 4194304;
 
         this.message = this.__options.message || 'This is not a valid IP address.';
-        this.normalize = (!this.__options.normalize || false === this.__options.normalize) ? false : true;
+        this.normalize = ('undefined' === typeof this.__options.normalize || false === this.__options.normalize) ? false : true;
         this.version = ([
             this.V4,
             this.V6,

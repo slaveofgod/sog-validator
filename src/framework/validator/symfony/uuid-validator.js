@@ -146,7 +146,7 @@ Object.assign(sogv, function () {
         this.LOOSE_FIRST_HYPHEN_POSITION = 4;
 
         this.message = this.__options.message || 'This is not a valid UUID.';
-        this.normalize = (!this.__options.normalize || false === this.__options.normalize) ? false : true;
+        this.normalize = ('undefined' === typeof this.__options.normalize || false === this.__options.normalize) ? false : true;
         this.strict = (false === this.__options.strict) ? false : true;
         this.versions = (this.__checkVersions()) ? this.__prepareVersions(this.__options.versions) : this.__versions;
 

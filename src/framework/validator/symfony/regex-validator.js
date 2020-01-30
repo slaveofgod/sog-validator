@@ -88,7 +88,7 @@ Object.assign(sogv, function () {
         this.match = (false === this.__options.match) ? false : true;
         this.message = this.__options.message || 'This value is not valid.';
         this.pattern = this.__options.pattern;
-        this.normalize = (!this.__options.normalize || false === this.__options.normalize) ? false : true;
+        this.normalize = ('undefined' === typeof this.__options.normalize || false === this.__options.normalize) ? false : true;
 
         this.name = 'RegexValidator';
     };

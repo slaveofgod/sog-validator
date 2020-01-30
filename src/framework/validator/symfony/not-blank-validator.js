@@ -72,9 +72,9 @@ Object.assign(sogv, function () {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
-        this.allowNull = (!this.__options.allowNull || false === this.__options.allowNull) ? false : true;
+        this.allowNull = ('undefined' === typeof this.__options.allowNull || false === this.__options.allowNull) ? false : true;
         this.message = this.__options.message || 'This value should not be blank.';
-        this.normalize = (!this.__options.normalize || false === this.__options.normalize) ? false : true;
+        this.normalize = ('undefined' === typeof this.__options.normalize || false === this.__options.normalize) ? false : true;
 
         this.name = 'NotBlankValidator';
     };

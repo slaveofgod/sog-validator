@@ -83,7 +83,7 @@ Object.assign(sogv, function () {
 
         this.message = this.__options.message || 'This value is not a valid email address.';
         this.mode = (['loose', 'strict', 'html5'].includes(this.__options.mode)) ? this.__options.mode : 'html5';
-        this.normalize = (!this.__options.normalize || false === this.__options.normalize) ? false : true;
+        this.normalize = ('undefined' === typeof this.__options.normalize || false === this.__options.normalize) ? false : true;
 
         this.__patternLoose = /^.+\@\S+\.\S+$/;
         this.__patternHtml5 = /^[a-zA-Z0-9.!#$%&\'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;

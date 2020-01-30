@@ -86,7 +86,7 @@ Object.assign(sogv, function () {
         }, lang, internal);
 
         this.message = this.__options.message || 'This value is not a valid URL.';
-        this.normalize = (!this.__options.normalize || false === this.__options.normalize) ? false : true;
+        this.normalize = ('undefined' === typeof this.__options.normalize || false === this.__options.normalize) ? false : true;
         this.protocols = this.__options.protocols || ['http', 'https', 'ftp'];
         this.relativeProtocol = ('undefined' === typeof this.__options.relativeProtocol || false === this.__options.relativeProtocol) ? false : true;
 

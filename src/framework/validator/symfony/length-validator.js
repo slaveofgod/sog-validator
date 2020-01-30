@@ -174,7 +174,7 @@ Object.assign(sogv, function () {
             normalize: optionRules.normalize || 'type:{"type":"bool"}'
         }, lang, internal);
 
-        this.allowEmptyString = (!this.__options.allowEmptyString || false === this.__options.allowEmptyString) ? false : true;
+        this.allowEmptyString = ('undefined' === typeof this.__options.allowEmptyString || false === this.__options.allowEmptyString) ? false : true;
         // this.charset = this.__options.charset || 'UTF-8';
         // this.charsetMessage = this.__options.charsetMessage || 'This value does not match the expected %%charset%% charset.';
         this.exactMessage = this.__options.exactMessage || 'This value should have exactly %%limit%% characters.';
@@ -182,7 +182,7 @@ Object.assign(sogv, function () {
         this.maxMessage = this.__options.maxMessage || 'This value is too long. It should have %%limit%% characters or less.';
         this.min = this.__options.min;
         this.minMessage = this.__options.minMessage || 'This value is too short. It should have %%limit%% characters or more.';
-        this.normalize = (!this.__options.normalize || false === this.__options.normalize) ? false : true;
+        this.normalize = ('undefined' === typeof this.__options.normalize || false === this.__options.normalize) ? false : true;
 
         this.name = 'LengthValidator';
     };
