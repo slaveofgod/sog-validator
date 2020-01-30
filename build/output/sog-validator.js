@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v0.9.7 revision f0e3c71
+ * SOG Validator Library v0.9.7 revision e872cb2
  * Copyright 2011-2020 SOG Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var sogv = {version:"0.9.7", revision:"f0e3c71", config:{}, common:{}, validators:{}, registry:function(validator) {
+var sogv = {version:"0.9.7", revision:"e872cb2", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -8771,9 +8771,6 @@ sogv.is_callable = function(mixedVar, syntaxOnly, callableName) {
   } else {
     __global = global;
     __variant = 2;
-  }
-  if (3 === __variant) {
-    return;
   }
   if (3 === __variant) {
     return;

@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v0.9.7 revision 3ab018a (DEBUG PROFILER)
+ * SOG Validator Library v0.9.7 revision e872cb2 (DEBUG PROFILER)
  * Copyright 2011-2020 SOG Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var sogv = {version:"0.9.7", revision:"3ab018a", config:{}, common:{}, validators:{}, registry:function(validator) {
+var sogv = {version:"0.9.7", revision:"e872cb2", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -417,11 +417,8 @@ sogv.ValidationSettingsHandler = {parse:function(settings) {
   if ("string" === typeof settings) {
     var splitted = settings.split("|");
     validators = {};
-    for (var key in splitted) {
-      if (!splitted.hasOwnProperty(key)) {
-        continue;
-      }
-      this.__parseSingle(validators, splitted[key]);
+    for (var i = 0; i < splitted.length; i++) {
+      this.__parseSingle(validators, splitted[i]);
     }
   }
   return validators;
@@ -3412,7 +3409,6 @@ sogv.moment = function() {
       index = format;
       localeSorted = false;
       if (isNumber(format)) {
-        index = format;
         format = undefined;
       }
       format = format || "";
@@ -5075,7 +5071,7 @@ sogv.moment = function() {
       case "s":
         return isFuture || withoutSuffix ? "n\u00e9h\u00e1ny m\u00e1sodperc" : "n\u00e9h\u00e1ny m\u00e1sodperce";
       case "ss":
-        return num + (isFuture || withoutSuffix) ? " m\u00e1sodperc" : " m\u00e1sodperce";
+        return num + (isFuture || withoutSuffix ? " m\u00e1sodperc" : " m\u00e1sodperce");
       case "m":
         return "egy" + (isFuture || withoutSuffix ? " perc" : " perce");
       case "mm":
@@ -8102,8 +8098,6 @@ sogv.filter_var = function(input, filter, options) {
     }
     return type === actual;
   }
-  function str2regex(str) {
-  }
   function isPrimitive(val) {
     return val !== Object(val);
   }
@@ -8241,7 +8235,7 @@ sogv.filter_var = function(input, filter, options) {
   }
 };
 sogv.getenv = function(varname) {
-  if (typeof process !== "undefined" || !process.env || !process.env[varname]) {
+  if (typeof process === "undefined" || !process.env || !process.env[varname]) {
     return false;
   }
   return process.env[varname];
@@ -8255,6 +8249,9 @@ sogv.ini_get = function(varname) {
   } else {
     __global = global;
     __variant = 2;
+  }
+  if (3 === __variant) {
+    return;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8305,6 +8302,9 @@ sogv.setlocale = function(category, locale) {
   } else {
     __global = global;
     __variant = 2;
+  }
+  if (3 === __variant) {
+    return;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8473,6 +8473,9 @@ sogv.ctype_alnum = function(text) {
     __global = global;
     __variant = 2;
   }
+  if (3 === __variant) {
+    return;
+  }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
@@ -8492,6 +8495,9 @@ sogv.ctype_alpha = function(text) {
   } else {
     __global = global;
     __variant = 2;
+  }
+  if (3 === __variant) {
+    return;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8513,6 +8519,9 @@ sogv.ctype_cntrl = function(text) {
     __global = global;
     __variant = 2;
   }
+  if (3 === __variant) {
+    return;
+  }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
@@ -8532,6 +8541,9 @@ sogv.ctype_digit = function(text) {
   } else {
     __global = global;
     __variant = 2;
+  }
+  if (3 === __variant) {
+    return;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8553,6 +8565,9 @@ sogv.ctype_graph = function(text) {
     __global = global;
     __variant = 2;
   }
+  if (3 === __variant) {
+    return;
+  }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
@@ -8572,6 +8587,9 @@ sogv.ctype_lower = function(text) {
   } else {
     __global = global;
     __variant = 2;
+  }
+  if (3 === __variant) {
+    return;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8593,6 +8611,9 @@ sogv.ctype_print = function(text) {
     __global = global;
     __variant = 2;
   }
+  if (3 === __variant) {
+    return;
+  }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
@@ -8612,6 +8633,9 @@ sogv.ctype_punct = function(text) {
   } else {
     __global = global;
     __variant = 2;
+  }
+  if (3 === __variant) {
+    return;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8633,6 +8657,9 @@ sogv.ctype_space = function(text) {
     __global = global;
     __variant = 2;
   }
+  if (3 === __variant) {
+    return;
+  }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
@@ -8653,6 +8680,9 @@ sogv.ctype_upper = function(text) {
     __global = global;
     __variant = 2;
   }
+  if (3 === __variant) {
+    return;
+  }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
@@ -8672,6 +8702,9 @@ sogv.ctype_xdigit = function(text) {
   } else {
     __global = global;
     __variant = 2;
+  }
+  if (3 === __variant) {
+    return;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8738,6 +8771,9 @@ sogv.is_callable = function(mixedVar, syntaxOnly, callableName) {
   } else {
     __global = global;
     __variant = 2;
+  }
+  if (3 === __variant) {
+    return;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   var validJSFunctionNamePattern = /^[_$a-zA-Z\xA0-\uFFFF][_$a-zA-Z0-9\xA0-\uFFFF]*$/;
@@ -8898,9 +8934,9 @@ Object.assign(sogv, function() {
 Object.assign(sogv, function() {
   var NotBlankValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
-    this.allowNull = !this.__options.allowNull || false === this.__options.allowNull ? false : true;
+    this.allowNull = "undefined" === typeof this.__options.allowNull || false === this.__options.allowNull ? false : true;
     this.message = this.__options.message || "This value should not be blank.";
-    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
+    this.normalize = "undefined" === typeof this.__options.normalize || false === this.__options.normalize ? false : true;
     this.name = "NotBlankValidator";
   };
   NotBlankValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
@@ -8919,7 +8955,7 @@ Object.assign(sogv, function() {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
-    if (("undefined" === typeof this.data || null === this.data) && false === this.allowNull) {
+    if (null === this.data && false === this.allowNull) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
@@ -9140,7 +9176,7 @@ Object.assign(sogv, function() {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', mode:optionRules.mode || 'type:{"type":"string"}|length:{"min":2,"max":20}', normalize:optionRules.normalize || 'type:{"type":"bool"}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid email address.";
     this.mode = ["loose", "strict", "html5"].includes(this.__options.mode) ? this.__options.mode : "html5";
-    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
+    this.normalize = "undefined" === typeof this.__options.normalize || false === this.__options.normalize ? false : true;
     this.__patternLoose = /^.+@\S+\.\S+$/;
     this.__patternHtml5 = /^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
     this.name = "EmailValidator";
@@ -9207,13 +9243,13 @@ Object.assign(sogv, function() {
   var LengthValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {allowEmptyString:optionRules.allowEmptyString || 'type:{"type":"bool"}', charset:optionRules.charset || 'length:{"min":2,"max":10}', charsetMessage:optionRules.charsetMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', exactMessage:optionRules.exactMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', max:optionRules.max || 'type:{"type":"integer"}', maxMessage:optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', 
     min:optionRules.min || 'type:{"type":"integer"}', minMessage:optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:optionRules.normalize || 'type:{"type":"bool"}'}, lang, internal);
-    this.allowEmptyString = !this.__options.allowEmptyString || false === this.__options.allowEmptyString ? false : true;
+    this.allowEmptyString = "undefined" === typeof this.__options.allowEmptyString || false === this.__options.allowEmptyString ? false : true;
     this.exactMessage = this.__options.exactMessage || "This value should have exactly %%limit%% characters.";
     this.max = this.__options.max;
     this.maxMessage = this.__options.maxMessage || "This value is too long. It should have %%limit%% characters or less.";
     this.min = this.__options.min;
     this.minMessage = this.__options.minMessage || "This value is too short. It should have %%limit%% characters or more.";
-    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
+    this.normalize = "undefined" === typeof this.__options.normalize || false === this.__options.normalize ? false : true;
     this.name = "LengthValidator";
   };
   LengthValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
@@ -9271,7 +9307,7 @@ Object.assign(sogv, function() {
   var UrlValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:optionRules.normalize || 'type:{"type":"bool"}', protocols:optionRules.protocols || 'type:{"type":["string","array"],"any":true}', relativeProtocol:optionRules.relativeProtocol || 'type:{"type":"bool"}'}, lang, internal);
     this.message = this.__options.message || "This value is not a valid URL.";
-    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
+    this.normalize = "undefined" === typeof this.__options.normalize || false === this.__options.normalize ? false : true;
     this.protocols = this.__options.protocols || ["http", "https", "ftp"];
     this.relativeProtocol = "undefined" === typeof this.__options.relativeProtocol || false === this.__options.relativeProtocol ? false : true;
     this.name = "UrlValidator";
@@ -9310,7 +9346,8 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage;
+    errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9323,7 +9360,7 @@ Object.assign(sogv, function() {
       this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.protocols, 'type:{"type":"array"}', true);
+    errorMessage = sogv.isValidWithErrorMessage(this.protocols, 'type:{"type":"array"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9340,7 +9377,7 @@ Object.assign(sogv, function() {
     this.match = false === this.__options.match ? false : true;
     this.message = this.__options.message || "This value is not valid.";
     this.pattern = this.__options.pattern;
-    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
+    this.normalize = "undefined" === typeof this.__options.normalize || false === this.__options.normalize ? false : true;
     this.name = "RegexValidator";
   };
   RegexValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
@@ -9409,7 +9446,7 @@ Object.assign(sogv, function() {
     this.FILTER_FLAG_NO_PRIV_RANGE = 8388608;
     this.FILTER_FLAG_NO_RES_RANGE = 4194304;
     this.message = this.__options.message || "This is not a valid IP address.";
-    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
+    this.normalize = "undefined" === typeof this.__options.normalize || false === this.__options.normalize ? false : true;
     this.version = [this.V4, this.V6, this.ALL, this.V4_NO_PRIV, this.V6_NO_PRIV, this.ALL_NO_PRIV, this.V4_NO_RES, this.V6_NO_RES, this.ALL_NO_RES, this.V4_ONLY_PUBLIC, this.V6_ONLY_PUBLIC, this.ALL_ONLY_PUBLIC].includes(this.__options.mode) ? this.__options.mode : "4";
     this.name = "IpValidator";
   };
@@ -9558,7 +9595,7 @@ Object.assign(sogv, function() {
     this.LOOSE_MAX_LENGTH = 39;
     this.LOOSE_FIRST_HYPHEN_POSITION = 4;
     this.message = this.__options.message || "This is not a valid UUID.";
-    this.normalize = !this.__options.normalize || false === this.__options.normalize ? false : true;
+    this.normalize = "undefined" === typeof this.__options.normalize || false === this.__options.normalize ? false : true;
     this.strict = false === this.__options.strict ? false : true;
     this.versions = this.__checkVersions() ? this.__prepareVersions(this.__options.versions) : this.__versions;
     this.name = "UuidValidator";
