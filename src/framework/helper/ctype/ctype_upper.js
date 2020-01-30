@@ -11,7 +11,7 @@ sogv.ctype_upper = function (text) {
     // ensure setup of localization variables takes place
     sogv.setlocale('LC_ALL', 0);
 
-    var __global; if ('undefined' === typeof global) { __global = global; } else { __global = global; }
+    var __global; var __variant; if ('undefined' === typeof global) { __global = global; __variant = 1; } else { __global = global; __variant = 2; }
     var $global = (typeof window !== 'undefined' ? window : __global);
     $global.$locutus = $global.$locutus || {};
     var $locutus = $global.$locutus;

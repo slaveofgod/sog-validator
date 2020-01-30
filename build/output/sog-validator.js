@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v0.9.7 revision 614df47
+ * SOG Validator Library v0.9.7 revision 3ab018a
  * Copyright 2011-2020 SOG Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var sogv = {version:"0.9.7", revision:"614df47", config:{}, common:{}, validators:{}, registry:function(validator) {
+var sogv = {version:"0.9.7", revision:"3ab018a", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -8248,10 +8248,13 @@ sogv.getenv = function(varname) {
 };
 sogv.ini_get = function(varname) {
   var __global;
+  var __variant;
   if ("undefined" === typeof global) {
     __global = global;
+    __variant = 1;
   } else {
     __global = global;
+    __variant = 2;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8295,10 +8298,13 @@ sogv.setlocale = function(category, locale) {
     return n > 1 ? 1 : 0;
   };
   var __global;
+  var __variant;
   if ("undefined" === typeof global) {
     __global = global;
+    __variant = 1;
   } else {
     __global = global;
+    __variant = 2;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8459,10 +8465,13 @@ sogv.ctype_alnum = function(text) {
   }
   sogv.setlocale("LC_ALL", 0);
   var __global;
+  var __variant;
   if ("undefined" === typeof global) {
     __global = global;
+    __variant = 1;
   } else {
     __global = global;
+    __variant = 2;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8476,10 +8485,13 @@ sogv.ctype_alpha = function(text) {
   }
   sogv.setlocale("LC_ALL", 0);
   var __global;
+  var __variant;
   if ("undefined" === typeof global) {
     __global = global;
+    __variant = 1;
   } else {
     __global = global;
+    __variant = 2;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8493,10 +8505,13 @@ sogv.ctype_cntrl = function(text) {
   }
   sogv.setlocale("LC_ALL", 0);
   var __global;
+  var __variant;
   if ("undefined" === typeof global) {
     __global = global;
+    __variant = 1;
   } else {
     __global = global;
+    __variant = 2;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8510,10 +8525,13 @@ sogv.ctype_digit = function(text) {
   }
   sogv.setlocale("LC_ALL", 0);
   var __global;
+  var __variant;
   if ("undefined" === typeof global) {
     __global = global;
+    __variant = 1;
   } else {
     __global = global;
+    __variant = 2;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8527,10 +8545,13 @@ sogv.ctype_graph = function(text) {
   }
   sogv.setlocale("LC_ALL", 0);
   var __global;
+  var __variant;
   if ("undefined" === typeof global) {
     __global = global;
+    __variant = 1;
   } else {
     __global = global;
+    __variant = 2;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8544,10 +8565,13 @@ sogv.ctype_lower = function(text) {
   }
   sogv.setlocale("LC_ALL", 0);
   var __global;
+  var __variant;
   if ("undefined" === typeof global) {
     __global = global;
+    __variant = 1;
   } else {
     __global = global;
+    __variant = 2;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8561,10 +8585,13 @@ sogv.ctype_print = function(text) {
   }
   sogv.setlocale("LC_ALL", 0);
   var __global;
+  var __variant;
   if ("undefined" === typeof global) {
     __global = global;
+    __variant = 1;
   } else {
     __global = global;
+    __variant = 2;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8578,10 +8605,13 @@ sogv.ctype_punct = function(text) {
   }
   sogv.setlocale("LC_ALL", 0);
   var __global;
+  var __variant;
   if ("undefined" === typeof global) {
     __global = global;
+    __variant = 1;
   } else {
     __global = global;
+    __variant = 2;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8595,10 +8625,13 @@ sogv.ctype_space = function(text) {
   }
   sogv.setlocale("LC_ALL", 0);
   var __global;
+  var __variant;
   if ("undefined" === typeof global) {
     __global = global;
+    __variant = 1;
   } else {
     __global = global;
+    __variant = 2;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8612,10 +8645,13 @@ sogv.ctype_upper = function(text) {
   }
   sogv.setlocale("LC_ALL", 0);
   var __global;
+  var __variant;
   if ("undefined" === typeof global) {
     __global = global;
+    __variant = 1;
   } else {
     __global = global;
+    __variant = 2;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8629,10 +8665,13 @@ sogv.ctype_xdigit = function(text) {
   }
   sogv.setlocale("LC_ALL", 0);
   var __global;
+  var __variant;
   if ("undefined" === typeof global) {
     __global = global;
+    __variant = 1;
   } else {
     __global = global;
+    __variant = 2;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8692,10 +8731,13 @@ sogv.is_buffer = function(vr) {
 };
 sogv.is_callable = function(mixedVar, syntaxOnly, callableName) {
   var __global;
+  var __variant;
   if ("undefined" === typeof global) {
     __global = global;
+    __variant = 1;
   } else {
     __global = global;
+    __variant = 2;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   var validJSFunctionNamePattern = /^[_$a-zA-Z\xA0-\uFFFF][_$a-zA-Z0-9\xA0-\uFFFF]*$/;
