@@ -121,7 +121,7 @@ Object.assign(sogv, function () {
 
             // Check if null and allowNull = false
             if (
-                ('undefined' === typeof this.data || null === this.data)
+                null === this.data
                 && false === this.allowNull
             ) {
                 this.__setErrorMessage(this.message, this.__messageParameters());

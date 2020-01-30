@@ -16,8 +16,6 @@ describe('ip', () => {
     });
 
     describe('Is Invalid', () => {
-        let toBe = "This is not a valid IP address.";
-
         test('Lorem ipsum', () => {
             expect(abv.isValidWithErrorMessage('Lorem ipsum', 'ip')).toBe("This is not a valid IP address.");
         });

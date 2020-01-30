@@ -4091,7 +4091,7 @@ sogv.moment = (function () {
             localeSorted = false;
 
             if (isNumber(format)) {
-                index = format;
+                // index = format;
                 format = undefined;
             }
 
@@ -8787,7 +8787,7 @@ sogv.moment = (function () {
             case 's':
                 return (isFuture || withoutSuffix) ? 'néhány másodperc' : 'néhány másodperce';
             case 'ss':
-                return num + (isFuture || withoutSuffix) ? ' másodperc' : ' másodperce';
+                return num + ((isFuture || withoutSuffix) ? ' másodperc' : ' másodperce');
             case 'm':
                 return 'egy' + (isFuture || withoutSuffix ? ' perc' : ' perce');
             case 'mm':

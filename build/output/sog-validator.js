@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v0.9.7 revision 4eaa7f5
+ * SOG Validator Library v0.9.7 revision f0e3c71
  * Copyright 2011-2020 SOG Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var sogv = {version:"0.9.7", revision:"4eaa7f5", config:{}, common:{}, validators:{}, registry:function(validator) {
+var sogv = {version:"0.9.7", revision:"f0e3c71", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -417,11 +417,8 @@ sogv.ValidationSettingsHandler = {parse:function(settings) {
   if ("string" === typeof settings) {
     var splitted = settings.split("|");
     validators = {};
-    for (var key in splitted) {
-      if (!splitted.hasOwnProperty(key)) {
-        continue;
-      }
-      this.__parseSingle(validators, splitted[key]);
+    for (var i = 0; i < splitted.length; i++) {
+      this.__parseSingle(validators, splitted[i]);
     }
   }
   return validators;
@@ -3412,7 +3409,6 @@ sogv.moment = function() {
       index = format;
       localeSorted = false;
       if (isNumber(format)) {
-        index = format;
         format = undefined;
       }
       format = format || "";
@@ -5075,7 +5071,7 @@ sogv.moment = function() {
       case "s":
         return isFuture || withoutSuffix ? "n\u00e9h\u00e1ny m\u00e1sodperc" : "n\u00e9h\u00e1ny m\u00e1sodperce";
       case "ss":
-        return num + (isFuture || withoutSuffix) ? " m\u00e1sodperc" : " m\u00e1sodperce";
+        return num + (isFuture || withoutSuffix ? " m\u00e1sodperc" : " m\u00e1sodperce");
       case "m":
         return "egy" + (isFuture || withoutSuffix ? " perc" : " perce");
       case "mm":
@@ -8102,8 +8098,6 @@ sogv.filter_var = function(input, filter, options) {
     }
     return type === actual;
   }
-  function str2regex(str) {
-  }
   function isPrimitive(val) {
     return val !== Object(val);
   }
@@ -8241,7 +8235,7 @@ sogv.filter_var = function(input, filter, options) {
   }
 };
 sogv.getenv = function(varname) {
-  if (typeof process !== "undefined" || !process.env || !process.env[varname]) {
+  if (typeof process === "undefined" || !process.env || !process.env[varname]) {
     return false;
   }
   return process.env[varname];
@@ -8255,6 +8249,9 @@ sogv.ini_get = function(varname) {
   } else {
     __global = global;
     __variant = 2;
+  }
+  if (3 === __variant) {
+    return;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8305,6 +8302,9 @@ sogv.setlocale = function(category, locale) {
   } else {
     __global = global;
     __variant = 2;
+  }
+  if (3 === __variant) {
+    return;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8473,6 +8473,9 @@ sogv.ctype_alnum = function(text) {
     __global = global;
     __variant = 2;
   }
+  if (3 === __variant) {
+    return;
+  }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
@@ -8492,6 +8495,9 @@ sogv.ctype_alpha = function(text) {
   } else {
     __global = global;
     __variant = 2;
+  }
+  if (3 === __variant) {
+    return;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8513,6 +8519,9 @@ sogv.ctype_cntrl = function(text) {
     __global = global;
     __variant = 2;
   }
+  if (3 === __variant) {
+    return;
+  }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
@@ -8532,6 +8541,9 @@ sogv.ctype_digit = function(text) {
   } else {
     __global = global;
     __variant = 2;
+  }
+  if (3 === __variant) {
+    return;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8553,6 +8565,9 @@ sogv.ctype_graph = function(text) {
     __global = global;
     __variant = 2;
   }
+  if (3 === __variant) {
+    return;
+  }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
@@ -8572,6 +8587,9 @@ sogv.ctype_lower = function(text) {
   } else {
     __global = global;
     __variant = 2;
+  }
+  if (3 === __variant) {
+    return;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8593,6 +8611,9 @@ sogv.ctype_print = function(text) {
     __global = global;
     __variant = 2;
   }
+  if (3 === __variant) {
+    return;
+  }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
@@ -8612,6 +8633,9 @@ sogv.ctype_punct = function(text) {
   } else {
     __global = global;
     __variant = 2;
+  }
+  if (3 === __variant) {
+    return;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8633,6 +8657,9 @@ sogv.ctype_space = function(text) {
     __global = global;
     __variant = 2;
   }
+  if (3 === __variant) {
+    return;
+  }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
@@ -8653,6 +8680,9 @@ sogv.ctype_upper = function(text) {
     __global = global;
     __variant = 2;
   }
+  if (3 === __variant) {
+    return;
+  }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
   var $locutus = $global.$locutus;
@@ -8672,6 +8702,9 @@ sogv.ctype_xdigit = function(text) {
   } else {
     __global = global;
     __variant = 2;
+  }
+  if (3 === __variant) {
+    return;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   $global.$locutus = $global.$locutus || {};
@@ -8738,6 +8771,12 @@ sogv.is_callable = function(mixedVar, syntaxOnly, callableName) {
   } else {
     __global = global;
     __variant = 2;
+  }
+  if (3 === __variant) {
+    return;
+  }
+  if (3 === __variant) {
+    return;
   }
   var $global = typeof window !== "undefined" ? window : __global;
   var validJSFunctionNamePattern = /^[_$a-zA-Z\xA0-\uFFFF][_$a-zA-Z0-9\xA0-\uFFFF]*$/;
@@ -8919,7 +8958,7 @@ Object.assign(sogv, function() {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
-    if (("undefined" === typeof this.data || null === this.data) && false === this.allowNull) {
+    if (null === this.data && false === this.allowNull) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
@@ -9310,7 +9349,8 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage;
+    errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9323,7 +9363,7 @@ Object.assign(sogv, function() {
       this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.protocols, 'type:{"type":"array"}', true);
+    errorMessage = sogv.isValidWithErrorMessage(this.protocols, 'type:{"type":"array"}', true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;

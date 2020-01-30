@@ -39,7 +39,7 @@ sogv.filter_var = function(input, filter, options) {
         return type === actual;
     }
 
-    function str2regex(str) {}
+    // function str2regex(str) {}
 
     function isPrimitive(val) {
         return val !== Object(val);

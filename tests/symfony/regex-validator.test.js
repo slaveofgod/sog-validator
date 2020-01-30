@@ -40,8 +40,6 @@ describe('regex', () => {
     });
 
     describe('Is Invalid', () => {
-        let toBe = "This value should be blank.";
-
         test('test.email@gmai l.com', () => {
             expect(abv.isValidWithErrorMessage('test.email@gmai l.com', {"regex": {
                 pattern: /^.+\@\S+\.\S+$/

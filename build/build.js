@@ -260,7 +260,8 @@ var run = function () {
             var closureCompiler = new ClosureCompiler(options);
 
             // compile
-            var compilerProcess = closureCompiler.run(function(exitCode, stdOut, stdErr) {
+            // var compilerProcess = closureCompiler.run(function(exitCode, stdOut, stdErr) {
+            closureCompiler.run(function(exitCode, stdOut, stdErr) {
 
                 if (exitCode) {
                     console.error(stdErr);

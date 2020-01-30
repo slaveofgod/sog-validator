@@ -4,7 +4,7 @@ sogv.getenv = function (varname) {
     //   example 1: getenv('LC_ALL')
     //   returns 1: false
 
-    if (typeof process !== 'undefined' || !process.env || !process.env[varname]) {
+    if (typeof process === 'undefined' || !process.env || !process.env[varname]) {
         return false;
     }
 

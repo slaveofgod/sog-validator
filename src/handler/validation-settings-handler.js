@@ -21,10 +21,8 @@ sogv.ValidationSettingsHandler = {
             var splitted = settings.split('|');
             validators = {};
 
-            for (var key in splitted) {
-                if (!splitted.hasOwnProperty(key)) continue;
-
-                this.__parseSingle(validators, splitted[key]);
+            for (var i = 0; i < splitted.length; i ++) {
+                this.__parseSingle(validators, splitted[i]);
             }
         }
 

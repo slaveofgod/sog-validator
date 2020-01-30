@@ -177,8 +177,10 @@ Object.assign(sogv, function () {
                 return ;
             }
 
+            var errorMessage;
+
             // Check if value is scalar
-            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -195,7 +197,7 @@ Object.assign(sogv, function () {
             }
 
             // Check if protocols is array
-            var errorMessage = sogv.isValidWithErrorMessage(this.protocols, 'type:{"type":"array"}', true);
+            errorMessage = sogv.isValidWithErrorMessage(this.protocols, 'type:{"type":"array"}', true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
