@@ -6,7 +6,7 @@ Object.assign(sogv, function () {
      * @name sogv.IsTrueValidator
      * @extends sogv.AbstractValidator
      * @classdesc
-     * <p>Validates that a value is true.</p>
+     * <p>Validates that a value is <code>true</code>.</p>
      * <p>Specifically, this checks if the value is exactly <code>true</code>, exactly the integer <code>1</code>, or exactly the string <code>"1"</code>.</p>
      * @description
      * <p>Create a new Validator.</p>

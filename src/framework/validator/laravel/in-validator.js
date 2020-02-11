@@ -34,10 +34,10 @@ Object.assign(sogv, function () {
     // PROPERTIES
 
     /**
-     * @name sogv.ChoiceValidator#choices
+     * @name sogv.InValidator#choices
      * @type {Array}
      * @description
-     * <p>A required option - this is the array of options that should be considered in the valid set.</p>
+     * <p>A required option - The field under validation must be included in the given list of values.</p>
      * <p>The input value will be matched against this array.</p>
      */
 

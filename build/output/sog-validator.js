@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v0.9.7 revision d06e22e
+ * SOG Validator Library v0.9.7 revision 4c66845
  * Copyright 2011-2020 SOG Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var sogv = {version:"0.9.7", revision:"d06e22e", config:{}, common:{}, validators:{}, registry:function(validator) {
+var sogv = {version:"0.9.7", revision:"4c66845", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -8929,7 +8929,7 @@ Object.assign(sogv, function() {
   NotBlankValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   NotBlankValidator.prototype.constructor = NotBlankValidator;
   Object.defineProperty(NotBlankValidator.prototype, "alias", {get:function() {
-    return ["not-blank", "not-empty"];
+    return ["not-blank", "not-empty", "filled"];
   }});
   Object.defineProperty(NotBlankValidator.prototype, "options", {get:function() {
     return [];
@@ -9819,7 +9819,7 @@ Object.assign(sogv, function() {
   LessThanValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   LessThanValidator.prototype.constructor = LessThanValidator;
   Object.defineProperty(LessThanValidator.prototype, "alias", {get:function() {
-    return ["less-than", "less"];
+    return ["less_than", "less-than", "less"];
   }});
   Object.defineProperty(LessThanValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"boolean|scalar|date-string"}];
@@ -9863,7 +9863,7 @@ Object.assign(sogv, function() {
   GreaterThanValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   GreaterThanValidator.prototype.constructor = GreaterThanValidator;
   Object.defineProperty(GreaterThanValidator.prototype, "alias", {get:function() {
-    return ["greater-than", "greater"];
+    return ["greater_than", "greater-than", "greater"];
   }});
   Object.defineProperty(GreaterThanValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"boolean|scalar|date-string"}];
@@ -9885,7 +9885,7 @@ Object.assign(sogv, function() {
   GreaterThanOrEqualValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   GreaterThanOrEqualValidator.prototype.constructor = GreaterThanOrEqualValidator;
   Object.defineProperty(GreaterThanOrEqualValidator.prototype, "alias", {get:function() {
-    return ["greater-than-or-equal", "min"];
+    return ["greater_than_or_equal", "greater-than-or-equal", "min"];
   }});
   Object.defineProperty(GreaterThanOrEqualValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"boolean|scalar|date-string"}];
@@ -11801,7 +11801,7 @@ Object.assign(sogv, function() {
   EndsWithValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   EndsWithValidator.prototype.constructor = EndsWithValidator;
   Object.defineProperty(EndsWithValidator.prototype, "alias", {get:function() {
-    return ["ends_with", "ends-with"];
+    return ["ends_with", "ends-with", "ends"];
   }});
   Object.defineProperty(EndsWithValidator.prototype, "options", {get:function() {
     return [{"name":"ends", "type":"array"}];
@@ -11841,25 +11841,6 @@ Object.assign(sogv, function() {
   return {EndsWithValidator:EndsWithValidator};
 }());
 sogv.registry(sogv.EndsWithValidator);
-Object.assign(sogv, function() {
-  var FilledValidator = function(data, options, optionRules, lang, internal) {
-    sogv.NotBlankValidator.call(this, data, {message:"The %%attribute%% field must have a value."}, optionRules, lang, internal);
-    this.name = "FilledValidator";
-  };
-  FilledValidator.prototype = Object.create(sogv.NotBlankValidator.prototype);
-  FilledValidator.prototype.constructor = FilledValidator;
-  Object.defineProperty(FilledValidator.prototype, "alias", {get:function() {
-    return ["filled"];
-  }});
-  Object.defineProperty(FilledValidator.prototype, "options", {get:function() {
-    return [];
-  }});
-  Object.assign(FilledValidator.prototype, {__messageParameters:function() {
-    return {"attribute":"current"};
-  }});
-  return {FilledValidator:FilledValidator};
-}());
-sogv.registry(sogv.FilledValidator);
 Object.assign(sogv, function() {
   var GtValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["numeric","datetime","date-string","boolean"],"any":true}'}, lang, internal);

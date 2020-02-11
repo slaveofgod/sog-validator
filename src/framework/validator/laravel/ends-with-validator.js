@@ -17,7 +17,7 @@ Object.assign(sogv, function () {
      * @property {Array} alias
      * <p>The aliases for the current validator.</p>
      * <p>They could be used in the short validation format.</p>
-     * <p>Defined aliases: ['<code>ends_with</code>', '<code>ends-with</code>'].</p>
+     * <p>Defined aliases: ['<code>ends_with</code>', '<code>ends-with</code>', '<code>ends</code>'].</p>
      * @property {Object} options The description of the required options.
      * @example
      * var validator = new sogv.EndsWithValidator(data, {ends: ['abc','def']});
@@ -55,7 +55,8 @@ Object.assign(sogv, function () {
         get: function () {
             return [
                 'ends_with',
-                'ends-with'
+                'ends-with',
+                'ends'
             ];
         }
     });

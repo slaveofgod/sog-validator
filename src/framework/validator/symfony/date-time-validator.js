@@ -55,8 +55,8 @@ Object.assign(sogv, function () {
      * @name sogv.DateTimeValidator#format
      * @type {String}
      * @description
-     * <p>This option allows to validate a custom date format. See DateTime::createFromFormat() for formatting options.</p>
-     * <p>Default: "YYYY-MM-DD HH:mm:ss"</p>
+     * <p>This option allows to validate a custom date format.</p>
+     * <p>Default: "<code>YYYY-MM-DD HH:mm:ss</code>"</p>
      * <p><h2>Year, month, and day tokens</h2></p>
      * <p><i>Tokens are case-sensitive.</i></p>
      * <table>

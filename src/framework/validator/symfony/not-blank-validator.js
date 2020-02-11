@@ -17,7 +17,7 @@ Object.assign(sogv, function () {
      * @property {Array} alias
      * <p>The aliases for the current validator.</p>
      * <p>They could be used in the short validation format.</p>
-     * <p>Defined aliases: ['<code>not-blank</code>', '<code>not-empty</code>'].</p>
+     * <p>Defined aliases: ['<code>not-blank</code>', '<code>not-empty</code>', '<code>filled</code>'].</p>
      * @property {Object} options The description of the required options.
      * @example
      * var validator = new sogv.NotBlankValidator(data);
@@ -85,7 +85,8 @@ Object.assign(sogv, function () {
         get: function () {
             return [
                 'not-blank',
-                'not-empty'
+                'not-empty',
+                'filled'
             ];
         }
     });

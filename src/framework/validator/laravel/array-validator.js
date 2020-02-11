@@ -6,7 +6,7 @@ Object.assign(sogv, function () {
      * @name sogv.ArrayValidator
      * @extends sogv.AbstractValidator
      * @classdesc
-     * <p>The field under validation must be an array</p>
+     * <p>The field under validation must be an array.</p>
      * @description
      * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.

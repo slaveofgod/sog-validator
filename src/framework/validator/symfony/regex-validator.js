@@ -32,9 +32,9 @@ Object.assign(sogv, function () {
      * @name sogv.RegexValidator#match
      * @type {Boolean}
      * @description
-     * If true (or not set), this validator will pass if the given string matches the given pattern regular expression.
-     * However, when this option is set to false, the opposite will occur: validation will pass only if the given string does not match the pattern regular expression.
-     * Default to true.
+     * <p>If <code>true</code> (or not set), this validator will pass if the given string matches the given pattern regular expression.</p>
+     * <p>However, when this option is set to false, the opposite will occur: validation will pass only if the given string does not match the pattern regular expression.</p>
+     * <p>Default to <code>true</code>.</p>
      */
 
     /**
@@ -64,9 +64,9 @@ Object.assign(sogv, function () {
      * @name sogv.RegexValidator#pattern
      * @type {String}
      * @description
-     * This required option is the regular expression pattern that the input will be matched against.
-     * By default, this validator will fail if the input string does not match this regular expression.
-     * However, if match is set to false, then validation will fail if the input string does match this pattern.
+     * <p>This required option is the regular expression pattern that the input will be matched against.</p>
+     * <p>By default, this validator will fail if the input string does not match this regular expression.</p>
+     * <p>However, if match is set to <code>false</code>, then validation will fail if the input string does match this pattern.</p>
      */
 
     /**

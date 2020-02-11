@@ -17,7 +17,7 @@ Object.assign(sogv, function () {
      * @property {Array} alias
      * <p>The aliases for the current validator.</p>
      * <p>They could be used in the short validation format.</p>
-     * <p>Defined aliases: ['<code>boolean</code>', '<code>bool-or-equal</code>'].</p>
+     * <p>Defined aliases: ['<code>boolean</code>', '<code>bool</code>'].</p>
      * @property {Object} options The description of the required options.
      * @example
      * var validator = new sogv.BooleanValidator(data);

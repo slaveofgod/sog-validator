@@ -36,30 +36,30 @@ Object.assign(sogv, function () {
      * This required option defines the type or collection of types allowed for the given value.</p>
      * The following types are available:
      * <ul>
-     *     <li><b>array</b> - Finds whether a variable is an array</li>
-     *     <li><b>bool</b>, <b>boolean</b> - Finds out whether a variable is a boolean</li>
-     *     <li><b>callable</b> - Verify that the contents of a variable can be called as a function</li>
-     *     <li><b>float</b> - Finds whether the type of a variable is float</li>
-     *     <li><b>double</b> - Finds whether the type of a variable is double</li>
-     *     <li><b>int</b>, <b>integer</b> - Find whether the type of a variable is integer</li>
-     *     <li><b>iterable</b> - Verify that the contents of a variable is an iterable value</li>
-     *     <li><b>null</b> - Finds whether a variable is NULL</li>
-     *     <li><b>numeric</b> - Finds whether a variable is a number or a numeric string</li>
-     *     <li><b>object</b> - Finds whether a variable is an object</li>
-     *     <li><b>real</b> - Finds whether the type of a variable is real</li>
+     *     <li><b>array</b> - Finds whether a variable is an array.</li>
+     *     <li><b>bool</b>, <b>boolean</b> - Finds out whether a variable is a boolean.</li>
+     *     <li><b>callable</b> - Verify that the contents of a variable can be called as a function.</li>
+     *     <li><b>float</b> - Finds whether the type of a variable is float.</li>
+     *     <li><b>double</b> - Finds whether the type of a variable is double.</li>
+     *     <li><b>int</b>, <b>integer</b> - Find whether the type of a variable is integer.</li>
+     *     <li><b>iterable</b> - Verify that the contents of a variable is an iterable value.</li>
+     *     <li><b>null</b> - Finds whether a variable is NULL.</li>
+     *     <li><b>numeric</b> - Finds whether a variable is a number or a numeric string.</li>
+     *     <li><b>object</b> - Finds whether a variable is an object.</li>
+     *     <li><b>real</b> - Finds whether the type of a variable is real.</li>
      *     <li><b>scalar</b> - Finds whether a variable is a scalar. <i>Scalar variables are those containing an integer, float, string or boolean.</i></li>
-     *     <li><b>string</b> - Find whether the type of a variable is string</li>
-     *     <li><b>alnum</b> - Check for alphanumeric character(s)</li>
-     *     <li><b>alpha</b> - Check for alphabetic character(s)</li>
-     *     <li><b>cntrl</b> - Check for control character(s)</li>
-     *     <li><b>digit</b> - Check for numeric character(s)</li>
-     *     <li><b>graph</b> - Check for any printable character(s) except space</li>
-     *     <li><b>lower</b> - Check for lowercase character(s)</li>
-     *     <li><b>print</b> - Check for printable character(s)</li>
-     *     <li><b>punct</b> - Check for any printable character which is not whitespace or an alphanumeric character</li>
-     *     <li><b>space</b> - Check for whitespace character(s)</li>
-     *     <li><b>upper</b> - Check for uppercase character(s)</li>
-     *     <li><b>xdigit</b> - Check for character(s) representing a hexadecimal digit</li>
+     *     <li><b>string</b> - Find whether the type of a variable is string.</li>
+     *     <li><b>alnum</b> - Check for alphanumeric character(s).</li>
+     *     <li><b>alpha</b> - Check for alphabetic character(s).</li>
+     *     <li><b>cntrl</b> - Check for control character(s).</li>
+     *     <li><b>digit</b> - Check for numeric character(s).</li>
+     *     <li><b>graph</b> - Check for any printable character(s) except space.</li>
+     *     <li><b>lower</b> - Check for lowercase character(s).</li>
+     *     <li><b>print</b> - Check for printable character(s).</li>
+     *     <li><b>punct</b> - Check for any printable character which is not whitespace or an alphanumeric character.</li>
+     *     <li><b>space</b> - Check for whitespace character(s).</li>
+     *     <li><b>upper</b> - Check for uppercase character(s).</li>
+     *     <li><b>xdigit</b> - Check for character(s) representing a hexadecimal digit.</li>
      * </ul>
      */
 

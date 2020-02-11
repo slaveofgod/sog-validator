@@ -16,7 +16,7 @@ describe('filled', () => {
     });
 
     describe('Is Invalid', () => {
-        let toBe = "The current field must have a value.";
+        let toBe = "This value should not be blank.";
 
         test('Undefined', () => {
             expect(abv.isValidWithErrorMessage(undefined, 'filled')).toBe(toBe);
