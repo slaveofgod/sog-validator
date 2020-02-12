@@ -4,7 +4,7 @@
 
 A library of validators
 
-#####This library validates any data.#####
+##### This library validates any data.
 
 [Completed documentation is here!!!](https://github.com/slaveofgod/sog-validator/tree/master/docs)
 
