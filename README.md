@@ -158,163 +158,258 @@ These are the basic constraints: use them to assert very basic things about the 
  * [Upper](#upper)
  * [Xdigit](#xdigit)
 
-##### Accepted #####
+##### Accepted
+
 _aliases_: `accepted`
+
 The field under validation must be `yes`, `on`, `1`, or `true`. This is useful for validating "Terms of Service" acceptance.
+
 ---
 
-##### Not Blank #####  
-_aliases_: `not-blank`, `not-empty`, `filled`  
+##### Not Blank
+
+_aliases_: `not-blank`, `not-empty`, `filled`
+
 Validates that a value is `not blank` - meaning not equal to a blank string, a blank array, false or null (null behavior is configurable). The field under validation must not be empty when it is present.
+
 ---
 
-##### Blank #####  
-_aliases_: `blank`, `empty`  
+##### Blank
+
+_aliases_: `blank`, `empty`
+
 Validates that a value is blank - meaning equal to an `empty string` or `null`.
+
 ---
 
-##### Not Null #####  
-_aliases_: `not-null`, `required`, `present`  
+##### Not Null
+
+_aliases_: `not-null`, `required`, `present`
+
 Validates that a value is not strictly equal to `null`.
+
 ---
 
-##### Is Null #####  
-_aliases_: `is-null`, `nullable`  
+##### Is Null
+
+_aliases_: `is-null`, `nullable`
+
 Validates that a value is exactly equal to `null`.
+
 ---
 
-##### Is True #####  
-_aliases_: `is-true`, `true`  
+##### Is True
+
+_aliases_: `is-true`, `true`
+
 Validates that a value is true. Specifically, this checks if the value is exactly `true`, exactly the integer `1`, or exactly the string "`1`".
+
 ---
 
-##### Is False #####  
-_aliases_: `is-false`, `false`  
+##### Is False
+
+_aliases_: `is-false`, `false`
+
 Validates that a value is false. Specifically, this checks to see if the value is exactly false, exactly the integer 0, or exactly the string "0".
+
 ---
 
-##### Alpha Dash #####  
-_aliases_: `alpha_dash`, `alpha-dash`  
+##### Alpha Dash
+
+_aliases_: `alpha_dash`, `alpha-dash`
+
 The field under validation may have alpha-numeric characters, as well as dashes and underscores.
+
 ---
 
-##### Array #####  
-_aliases_: `array`, `arr`  
+##### Array
+
+_aliases_: `array`, `arr`
+
 The field under validation must be an array.
 ---
 
-##### Boolean #####  
-_aliases_: `boolean`, `bool`  
+##### Boolean
+
+_aliases_: `boolean`, `bool`
+
 The field under validation must be able to be cast as a boolean. Accepted input are true, false, 1, 0, "1", and "0".
+
+
 ---
 
-##### Callable #####  
-_aliases_: `callable`  
+##### Callable
+
+_aliases_: `callable`
+
 Verify that the contents of a variable can be called as a function.
+
 ---
 
-##### Float #####  
-_aliases_: `float`  
+##### Float
+
+_aliases_: `float`
+
 The field under validation must be a float.
+
 ---
 
-##### Double #####  
-_aliases_: `double`  
+##### Double
+
+_aliases_: `double`
+
 The field under validation must be a double.
 ---
 
-##### Integer #####  
-_aliases_: `int`, `integer`  
+##### Integer
+
+_aliases_: `int`, `integer`
+
 The field under validation must be an integer.
+
 ---
 
-##### Iterable #####  
-_aliases_: `iterable`  
+##### Iterable
+
+_aliases_: `iterable`
+
 Verify that the contents of a variable is an iterable value.
+
 ---
 
-##### Null #####  
-_aliases_: `null`  
+##### Null
+
+_aliases_: `null`
+
 The field under validation must be a NULL.
+
 ---
 
-##### Numeric #####  
-_aliases_: `numeric`, `num`  
+##### Numeric
+
+_aliases_: `numeric`, `num`
+
 The field under validation must be a number or a numeric string.
+
 ---
 
-##### Object #####  
-_aliases_: `object`  
+##### Object
+
+_aliases_: `object`
+
 The field under validation must be an object.
+
 ---
 
-##### Real #####  
-_aliases_: `real`  
+##### Real
+
+_aliases_: `real`
+
 Finds whether the type of a variable is real.
+
 ---
 
-##### Scalar #####  
-_aliases_: `scalar`  
+##### Scalar
+
+_aliases_: `scalar`
+
 Finds whether a variable is a scalar. Scalar variables are those containing an integer, float, string or boolean.
+
 ---
-##### String #####  
-_aliases_: `string`, `str`  
+##### String
+
+_aliases_: `string`, `str`
+
 The field under validation must be a string.
+
 ---
 
-##### Alnum #####  
-_aliases_: `alnum`, `alpha-num`, `alpha_num`  
+##### Alnum
+
+_aliases_: `alnum`, `alpha-num`, `alpha_num`
+
 Check for alphanumeric character(s).
+
 ---
 
-##### Alpha #####  
-_aliases_: `alpha`  
+##### Alpha
+
+_aliases_: `alpha`
+
 Check for alphabetic character(s).
+
 ---
 
-##### Cntrl #####  
-_aliases_: `cntrl`  
+##### Cntrl
+
+_aliases_: `cntrl`
+
 Check for control character(s).
+
 ---
 
-##### Digit #####  
-_aliases_: `digit`  
+##### Digit
+
+_aliases_: `digit`
+
 Check for numeric character(s).
+
 ---
 
-##### Graph #####  
-_aliases_: `graph`  
+##### Graph
+
+_aliases_: `graph`
+
 Check for any printable character(s) except space.
+
 ---
 
-##### Lower #####  
-_aliases_: `lower`  
+##### Lower
+
+_aliases_: `lower`
+
 Check for lowercase character(s).
+
 ---
 
-##### Print #####  
-_aliases_: `print`  
+##### Print
+
+_aliases_: `print`
+
 Check for printable character(s).
+
 ---
 
-##### Punct #####  
-_aliases_: `punct`  
+##### Punct
+
+_aliases_: `punct`
+
 Check for any printable character which is not whitespace or an alphanumeric character.
+
 ---
 
-##### Space #####  
-_aliases_: `space`  
+##### Space
+
+_aliases_: `space`
+
 Check for whitespace character(s).
+
 ---
 
-##### Upper #####  
-_aliases_: `upper`  
+##### Upper
+
+_aliases_: `upper`
+
 Check for uppercase character(s).
+
 ---
 
-##### Xdigit #####  
-_aliases_: `xdigit`  
+##### Xdigit
+
+_aliases_: `xdigit`
+
 Check for character(s) representing a hexadecimal digit.
+
 ---
 
 
