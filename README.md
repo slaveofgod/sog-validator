@@ -227,6 +227,7 @@ The field under validation may have alpha-numeric characters, as well as dashes 
 _aliases_: `array`, `arr`
 
 The field under validation must be an array.
+
 ---
 
 ##### Boolean
@@ -259,6 +260,7 @@ The field under validation must be a float.
 _aliases_: `double`
 
 The field under validation must be a double.
+
 ---
 
 ##### Integer
