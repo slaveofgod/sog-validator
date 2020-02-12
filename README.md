@@ -2,11 +2,12 @@
 
 [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status][travis-image]][travis-url] [![DeepScan grade][deepscan-image]][deepscan-url]
 
-A library of validators
+Data validation engine.
 
-##### This library validates any data.
+##### This is the powerest library which provides the best way to validate any type of data.
 
-[Completed documentation is here!!!](https://github.com/slaveofgod/sog-validator/tree/master/docs)
+ * [Installation and Usage](#installation-and-usage)
+ * [Available Validation Rules](#available-validation-rules)
 
 ## Installation and Usage
 
@@ -157,12 +158,18 @@ These are the basic constraints: use them to assert very basic things about the 
  * [Space](#space)
  * [Upper](#upper)
  * [Xdigit](#xdigit)
+ 
+#### String Constraints
+
+---
 
 ##### Accepted
 
 _aliases_: `accepted`
 
 The field under validation must be `yes`, `on`, `1`, or `true`. This is useful for validating "Terms of Service" acceptance.
+
+[⬆ validation rules](#available-validation-rules)
 
 ---
 
@@ -172,6 +179,8 @@ _aliases_: `not-blank`, `not-empty`, `filled`
 
 Validates that a value is `not blank` - meaning not equal to a blank string, a blank array, false or null (null behavior is configurable). The field under validation must not be empty when it is present.
 
+[⬆ validation rules](#available-validation-rules)
+
 ---
 
 ##### Blank
@@ -179,6 +188,8 @@ Validates that a value is `not blank` - meaning not equal to a blank string, a b
 _aliases_: `blank`, `empty`
 
 Validates that a value is blank - meaning equal to an `empty string` or `null`.
+
+[⬆ validation rules](#available-validation-rules)
 
 ---
 
@@ -188,6 +199,8 @@ _aliases_: `not-null`, `required`, `present`
 
 Validates that a value is not strictly equal to `null`.
 
+[⬆ validation rules](#available-validation-rules)
+
 ---
 
 ##### Is Null
@@ -195,6 +208,8 @@ Validates that a value is not strictly equal to `null`.
 _aliases_: `is-null`, `nullable`
 
 Validates that a value is exactly equal to `null`.
+
+[⬆ validation rules](#available-validation-rules)
 
 ---
 
@@ -204,6 +219,8 @@ _aliases_: `is-true`, `true`
 
 Validates that a value is true. Specifically, this checks if the value is exactly `true`, exactly the integer `1`, or exactly the string "`1`".
 
+[⬆ validation rules](#available-validation-rules)
+
 ---
 
 ##### Is False
@@ -211,6 +228,8 @@ Validates that a value is true. Specifically, this checks if the value is exactl
 _aliases_: `is-false`, `false`
 
 Validates that a value is false. Specifically, this checks to see if the value is exactly false, exactly the integer 0, or exactly the string "0".
+
+[⬆ validation rules](#available-validation-rules)
 
 ---
 
@@ -220,6 +239,8 @@ _aliases_: `alpha_dash`, `alpha-dash`
 
 The field under validation may have alpha-numeric characters, as well as dashes and underscores.
 
+[⬆ validation rules](#available-validation-rules)
+
 ---
 
 ##### Array
@@ -227,6 +248,8 @@ The field under validation may have alpha-numeric characters, as well as dashes 
 _aliases_: `array`, `arr`
 
 The field under validation must be an array.
+
+[⬆ validation rules](#available-validation-rules)
 
 ---
 
@@ -236,6 +259,7 @@ _aliases_: `boolean`, `bool`
 
 The field under validation must be able to be cast as a boolean. Accepted input are true, false, 1, 0, "1", and "0".
 
+[⬆ validation rules](#available-validation-rules)
 
 ---
 
@@ -245,6 +269,8 @@ _aliases_: `callable`
 
 Verify that the contents of a variable can be called as a function.
 
+[⬆ validation rules](#available-validation-rules)
+
 ---
 
 ##### Float
@@ -252,6 +278,8 @@ Verify that the contents of a variable can be called as a function.
 _aliases_: `float`
 
 The field under validation must be a float.
+
+[⬆ validation rules](#available-validation-rules)
 
 ---
 
@@ -261,6 +289,8 @@ _aliases_: `double`
 
 The field under validation must be a double.
 
+[⬆ validation rules](#available-validation-rules)
+
 ---
 
 ##### Integer
@@ -268,6 +298,8 @@ The field under validation must be a double.
 _aliases_: `int`, `integer`
 
 The field under validation must be an integer.
+
+[⬆ validation rules](#available-validation-rules)
 
 ---
 
@@ -277,6 +309,8 @@ _aliases_: `iterable`
 
 Verify that the contents of a variable is an iterable value.
 
+[⬆ validation rules](#available-validation-rules)
+
 ---
 
 ##### Null
@@ -284,6 +318,8 @@ Verify that the contents of a variable is an iterable value.
 _aliases_: `null`
 
 The field under validation must be a NULL.
+
+[⬆ validation rules](#available-validation-rules)
 
 ---
 
@@ -293,6 +329,8 @@ _aliases_: `numeric`, `num`
 
 The field under validation must be a number or a numeric string.
 
+[⬆ validation rules](#available-validation-rules)
+
 ---
 
 ##### Object
@@ -300,6 +338,8 @@ The field under validation must be a number or a numeric string.
 _aliases_: `object`
 
 The field under validation must be an object.
+
+[⬆ validation rules](#available-validation-rules)
 
 ---
 
@@ -309,6 +349,8 @@ _aliases_: `real`
 
 Finds whether the type of a variable is real.
 
+[⬆ validation rules](#available-validation-rules)
+
 ---
 
 ##### Scalar
@@ -317,12 +359,16 @@ _aliases_: `scalar`
 
 Finds whether a variable is a scalar. Scalar variables are those containing an integer, float, string or boolean.
 
+[⬆ validation rules](#available-validation-rules)
+
 ---
 ##### String
 
 _aliases_: `string`, `str`
 
 The field under validation must be a string.
+
+[⬆ validation rules](#available-validation-rules)
 
 ---
 
@@ -332,6 +378,8 @@ _aliases_: `alnum`, `alpha-num`, `alpha_num`
 
 Check for alphanumeric character(s).
 
+[⬆ validation rules](#available-validation-rules)
+
 ---
 
 ##### Alpha
@@ -339,6 +387,8 @@ Check for alphanumeric character(s).
 _aliases_: `alpha`
 
 Check for alphabetic character(s).
+
+[⬆ validation rules](#available-validation-rules)
 
 ---
 
@@ -348,6 +398,8 @@ _aliases_: `cntrl`
 
 Check for control character(s).
 
+[⬆ validation rules](#available-validation-rules)
+
 ---
 
 ##### Digit
@@ -355,6 +407,8 @@ Check for control character(s).
 _aliases_: `digit`
 
 Check for numeric character(s).
+
+[⬆ validation rules](#available-validation-rules)
 
 ---
 
@@ -364,6 +418,8 @@ _aliases_: `graph`
 
 Check for any printable character(s) except space.
 
+[⬆ validation rules](#available-validation-rules)
+
 ---
 
 ##### Lower
@@ -371,6 +427,8 @@ Check for any printable character(s) except space.
 _aliases_: `lower`
 
 Check for lowercase character(s).
+
+[⬆ validation rules](#available-validation-rules)
 
 ---
 
@@ -380,6 +438,8 @@ _aliases_: `print`
 
 Check for printable character(s).
 
+[⬆ validation rules](#available-validation-rules)
+
 ---
 
 ##### Punct
@@ -387,6 +447,8 @@ Check for printable character(s).
 _aliases_: `punct`
 
 Check for any printable character which is not whitespace or an alphanumeric character.
+
+[⬆ validation rules](#available-validation-rules)
 
 ---
 
@@ -396,6 +458,8 @@ _aliases_: `space`
 
 Check for whitespace character(s).
 
+[⬆ validation rules](#available-validation-rules)
+
 ---
 
 ##### Upper
@@ -404,6 +468,8 @@ _aliases_: `upper`
 
 Check for uppercase character(s).
 
+[⬆ validation rules](#available-validation-rules)
+
 ---
 
 ##### Xdigit
@@ -411,6 +477,8 @@ Check for uppercase character(s).
 _aliases_: `xdigit`
 
 Check for character(s) representing a hexadecimal digit.
+
+[⬆ validation rules](#available-validation-rules)
 
 ---
 
