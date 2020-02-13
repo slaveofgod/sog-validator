@@ -207,7 +207,7 @@ These are the basic constraints: use them to assert very basic things about the 
 #### Date Constraints
 
  * [Date](#date)
- * [Date Time, Date Format](date-time-date-format)
+ * [Date Time, Date Format](#date-time-date-format)
  * [Time](#time)
  * [Timezone](#timezone)
 
