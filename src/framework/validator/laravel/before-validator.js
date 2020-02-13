@@ -6,9 +6,7 @@ Object.assign(sogv, function () {
      * @name sogv.BeforeValidator
      * @extends sogv.AbstractValidator
      * @classdesc
-     * <p>The field under validation must be a value preceding the given <code>date</code>.</p>
-     * <p>The dates will be passed into the <code>Data object</code>.</p>
-     * <p>In addition, like the after rule, the name of another field under validation may be supplied as the value of <code>date</code>.</p>
+     * <p>The field under validation must be a value before a given <code>date</code>.</p>
      * @description
      * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.

@@ -18,7 +18,7 @@ Object.assign(sogv, function () {
      * @property {Array} alias
      * <p>The aliases for the current validator.</p>
      * <p>They could be used in the short validation format.</p>
-     * <p>Defined aliases: ['<code>after_or_equal</code>', '<code>after-or-equal</code>'].</p>
+     * <p>Defined aliases: ['<code>after_or_equal</code>', '<code>after-or-equal</code>', '<code>aoe</code>'].</p>
      * @property {Object} options The description of the required options.
      * @example
      * var validator = new sogv.AfterOrEqualValidator(data, {"value": "the value to compare to"});
@@ -55,7 +55,8 @@ Object.assign(sogv, function () {
         get: function () {
             return [
                 'after_or_equal',
-                'after-or-equal'
+                'after-or-equal',
+                'aoe'
             ];
         }
     });

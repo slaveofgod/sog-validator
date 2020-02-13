@@ -191,6 +191,11 @@ These are the basic constraints: use them to assert very basic things about the 
  * [Digits](#digits)
  * [Distinct](#distinct)
  * [Size](#size)
+ * [After (Date)](#after-date)
+ * [After Or Equal (Date)](#after-or-equal-date)
+ * [Before (Date)](#before-date)
+ * [Before Or Equal (Date)](#before-or-equal-date)
+ * [Date Equals](#date-equals)
 
 ---
 
@@ -868,6 +873,81 @@ _options_:
  * `value` - This option is required. It defines the value to compare to.
 
 The field under validation must have a size matching the given value. For `string` data, value corresponds to the number of characters. For `numeric` data, value corresponds to a given integer value. For an `array`, size corresponds to the count of the array.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### After (Date)
+
+_aliases_: `after`
+
+_usage_: `after:value`
+
+_options_:
+ * `value` - This option is required. It defines the value to compare to. The data type could be `string`, `number` or `date`.
+
+The field under validation must be a value after a given date.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### After Or Equal (Date)
+
+_aliases_: `after_or_equal`, `after-or-equal`, `aoe`
+
+_usage_: `after_or_equal:value`
+
+_options_:
+ * `value` - This option is required. It defines the value to compare to. The data type could be `string`, `number` or `date`.
+
+The field under validation must be a value after or equal to the given date.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Before (Date)
+
+_aliases_: `before`
+
+_usage_: `before:value`
+
+_options_:
+ * `value` - This option is required. It defines the value to compare to. The data type could be `string`, `number` or `date`.
+
+The field under validation must be a value before a given date.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Before Or Equal (Date)
+
+_aliases_: `before_or_equal`, `before-or-equal`, `boe`
+
+_usage_: `before_or_equal:value`
+
+_options_:
+ * `value` - This option is required. It defines the value to compare to. The data type could be `string`, `number` or `date`.
+
+The field under validation must be a value before or equal to the given date.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Date Equals
+
+_aliases_: `date_equals`, `date-equals`, `aoe`
+
+_usage_: `date_equals:value`
+
+_options_:
+ * `value` - This option is required. It defines the value to compare to. The data type could be `string`, `number` or `date`.
+
+The field under validation must be `equal` to the given `date`.
 
 [⬆ validation rules](#available-validation-rules)
 

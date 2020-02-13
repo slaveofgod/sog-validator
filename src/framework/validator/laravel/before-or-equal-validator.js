@@ -6,9 +6,7 @@ Object.assign(sogv, function () {
      * @name sogv.BeforeOrEqualValidator
      * @extends sogv.AbstractValidator
      * @classdesc
-     * <p>The field under validation must be a value preceding or equal to the given <code>date</code>.</p>
-     * <p>The dates will be passed into the <code>Data object</code>.</p>
-     * <p>In addition, like the after rule, the name of another field under validation may be supplied as the value of <code>date</code>.</p>
+     * <p>The field under validation must be a value before or equal to the given <code>date</code>.</p>
      * @description
      * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
@@ -19,7 +17,7 @@ Object.assign(sogv, function () {
      * @property {Array} alias
      * <p>The aliases for the current validator.</p>
      * <p>They could be used in the short validation format.</p>
-     * <p>Defined aliases: ['<code>before_or_equal</code>', '<code>before-or-equal</code>'].</p>
+     * <p>Defined aliases: ['<code>before_or_equal</code>', '<code>before-or-equal</code>', '<code>boe</code>'].</p>
      * @property {Object} options The description of the required options.
      * @example
      * var validator = new sogv.BeforeOrEqualValidator(data, {"value": "the value to compare to"});
@@ -56,7 +54,8 @@ Object.assign(sogv, function () {
         get: function () {
             return [
                 'before_or_equal',
-                'before-or-equal'
+                'before-or-equal',
+                'boe'
             ];
         }
     });

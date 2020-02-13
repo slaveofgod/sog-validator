@@ -17,10 +17,10 @@ Object.assign(sogv, function () {
      * @property {Array} alias
      * <p>The aliases for the current validator.</p>
      * <p>They could be used in the short validation format.</p>
-     * <p>Defined aliases: ['<code>date_equals</code>', '<code>date-equals</code>'].</p>
+     * <p>Defined aliases: ['<code>date_equals</code>', '<code>date-equals</code>', '<code>de</code>'].</p>
      * @property {Object} options The description of the required options.
      * @example
-     * var validator = new sogv.DateEqualsValidator(data);
+     * var validator = new sogv.DateEqualsValidator(data, {"value": "the value to compare to"});
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -42,7 +42,8 @@ Object.assign(sogv, function () {
         get: function () {
             return [
                 'date_equals',
-                'date-equals'
+                'date-equals',
+                'de'
             ];
         }
     });
