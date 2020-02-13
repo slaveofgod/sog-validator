@@ -60,9 +60,12 @@ Object.assign(sogv, function () {
      */
 
     /**
-     * @name sogv.LessThanOrEqualValidator#value
+     * @name sogv.DivisibleByValidator#value
      * @type {*}
-     * @description This option is required. It defines the value to compare to. It can be a number or date object.
+     * @description
+     * <p>This option is required.</p>
+     * <p>It defines the value to compare to.</p>
+     * <p>It can be a <code>number</code> or <code>date object</code>.</p>
      */
 
     var DivisibleByValidator = function (data, options, optionRules, lang, internal) {

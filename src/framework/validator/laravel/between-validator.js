@@ -27,6 +27,24 @@ Object.assign(sogv, function () {
      * }
      */
 
+    // PROPERTIES
+
+    /**
+     * @name sogv.BetweenValidator#max
+     * @type {Integer}
+     * @description
+     * <p>This option is the "<code>max</code>" count value. Validation will fail if the given collection elements count is greater than this max value.</p>
+     * <p>This option is required when the min option is not defined.</p>
+     */
+
+    /**
+     * @name sogv.BetweenValidator#min
+     * @type {Integer}
+     * @description
+     * <p>This option is the "<code>min</code>" count value. Validation will fail if the given collection elements count is less than this min value.</p>
+     * <p>This option is required when the max option is not defined.</p>
+     */
+
     var BetweenValidator = function (data, options, optionRules, lang, internal) {
         sogv.AbstractValidator.call(this, data, options, {
             max: optionRules.max || 'required|type:{"type":["numeric","date-string"],"any":true}',

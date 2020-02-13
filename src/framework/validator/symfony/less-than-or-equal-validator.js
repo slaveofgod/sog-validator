@@ -17,7 +17,7 @@ Object.assign(sogv, function () {
      * @property {Array} alias
      * <p>The aliases for the current validator.</p>
      * <p>They could be used in the short validation format.</p>
-     * <p>Defined aliases: ['<code>less-than-or-equal</code>', '<code>max</code>'].</p>
+     * <p>Defined aliases: ['<code>less_than_or_equal</code>'', '<code>less-than-or-equal</code>', '<code>max</code>'].</p>
      * @property {Object} options The description of the required options.
      * @example
      * var validator = new sogv.LessThanOrEqualValidator(data, {"value": "the value to compare to"});
@@ -84,6 +84,7 @@ Object.assign(sogv, function () {
     Object.defineProperty(LessThanOrEqualValidator.prototype, 'alias', {
         get: function () {
             return [
+                'less_than_or_equal',
                 'less-than-or-equal',
                 'max'
             ];

@@ -18,7 +18,7 @@ Object.assign(sogv, function () {
      * @property {Array} alias
      * <p>The aliases for the current validator.</p>
      * <p>They could be used in the short validation format.</p>
-     * <p>Defined aliases: ['<code>identical-to</code>', '<code>identical</code>'].</p>
+     * <p>Defined aliases: ['<code>identical-to</code>', '<code>identical</code>', '<code>it</code>'].</p>
      * @property {Object} options The description of the required options.
      * @example
      * var validator = new sogv.IdenticalToValidator(data, {"value": "the value to compare to"});
@@ -86,7 +86,8 @@ Object.assign(sogv, function () {
         get: function () {
             return [
                 'identical-to',
-                'identical'
+                'identical',
+                'it'
             ];
         }
     });

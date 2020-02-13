@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v0.9.7 revision 4c66845
+ * SOG Validator Library v0.9.7 revision e194bcd
  * Copyright 2011-2020 SOG Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var sogv = {version:"0.9.7", revision:"4c66845", config:{}, common:{}, validators:{}, registry:function(validator) {
+var sogv = {version:"0.9.7", revision:"e194bcd", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -9731,7 +9731,7 @@ Object.assign(sogv, function() {
   EqualToValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   EqualToValidator.prototype.constructor = EqualToValidator;
   Object.defineProperty(EqualToValidator.prototype, "alias", {get:function() {
-    return ["equal-to", "equal", "same"];
+    return ["equal-to", "equal", "same", "et"];
   }});
   Object.defineProperty(EqualToValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"boolean|scalar|string|array"}];
@@ -9753,7 +9753,7 @@ Object.assign(sogv, function() {
   NotEqualToValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   NotEqualToValidator.prototype.constructor = NotEqualToValidator;
   Object.defineProperty(NotEqualToValidator.prototype, "alias", {get:function() {
-    return ["not-equal-to", "not-equal"];
+    return ["not-equal-to", "not-equal", "net"];
   }});
   Object.defineProperty(NotEqualToValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"boolean|scalar|string|array"}];
@@ -9775,7 +9775,7 @@ Object.assign(sogv, function() {
   IdenticalToValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   IdenticalToValidator.prototype.constructor = IdenticalToValidator;
   Object.defineProperty(IdenticalToValidator.prototype, "alias", {get:function() {
-    return ["identical-to", "identical"];
+    return ["identical-to", "identical", "it"];
   }});
   Object.defineProperty(IdenticalToValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"boolean|scalar|any"}];
@@ -9797,7 +9797,7 @@ Object.assign(sogv, function() {
   NotIdenticalToValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   NotIdenticalToValidator.prototype.constructor = NotIdenticalToValidator;
   Object.defineProperty(NotIdenticalToValidator.prototype, "alias", {get:function() {
-    return ["not-identical-to", "not-identical"];
+    return ["not-identical-to", "not-identical", "nit"];
   }});
   Object.defineProperty(NotIdenticalToValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"boolean|scalar|any"}];
@@ -9841,7 +9841,7 @@ Object.assign(sogv, function() {
   LessThanOrEqualValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   LessThanOrEqualValidator.prototype.constructor = LessThanOrEqualValidator;
   Object.defineProperty(LessThanOrEqualValidator.prototype, "alias", {get:function() {
-    return ["less-than-or-equal", "max"];
+    return ["less_than_or_equal", "less-than-or-equal", "max"];
   }});
   Object.defineProperty(LessThanOrEqualValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"boolean|scalar|date-string"}];

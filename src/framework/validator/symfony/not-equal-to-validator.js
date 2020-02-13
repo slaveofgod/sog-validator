@@ -18,7 +18,7 @@ Object.assign(sogv, function () {
      * @property {Array} alias
      * <p>The aliases for the current validator.</p>
      * <p>They could be used in the short validation format.</p>
-     * <p>Defined aliases: ['<code>not-equal-to</code>', '<code>not-equal</code>'].</p>
+     * <p>Defined aliases: ['<code>not-equal-to</code>', '<code>not-equal</code>', '<code>net</code>'].</p>
      * @property {Object} options The description of the required options.
      * @example
      * var validator = new sogv.NotEqualToValidator(data, {"value": "the value to compare to"});
@@ -63,7 +63,10 @@ Object.assign(sogv, function () {
     /**
      * @name sogv.NotEqualToValidator#value
      * @type {*}
-     * @description This option is required. It defines the value to compare to. It can be a string, number or object.
+     * @description
+     * <p>This option is required.</p>
+     * <p>It defines the value to compare to.</p>
+     * <p>It can be a <code>string</code>, <code>number</code> or <code>object</code>.</p>
      */
 
     var NotEqualToValidator = function (data, options, optionRules, lang, internal) {
@@ -83,7 +86,8 @@ Object.assign(sogv, function () {
         get: function () {
             return [
                 'not-equal-to',
-                'not-equal'
+                'not-equal',
+                'net'
             ];
         }
     });

@@ -172,6 +172,25 @@ These are the basic constraints: use them to assert very basic things about the 
  * [Uuid](#uuid)
  * [Ends With](#ends-with)
  * [Starts With](#starts-with)
+ 
+#### Comparison Constraints
+
+ * [Equal To](#equal-to)
+ * [Not Equal To](#not-equal-to)
+ * [Identical To](#identical-to)
+ * [Not Identical To](#not-identical-to)
+ * [Less Than](#less-than)
+ * [Less Than Or Equal](#less-than-or-equal)
+ * [Greater Than](#greater-than)
+ * [Greater Than Or Equal](#greater-than-or-equal)
+ * [Range](#range)
+ * [Between](#between)
+ * [Digits Between](#digits-between)
+ * [Divisible By](#divisible-by)
+ * [Unique](#unique)
+ * [Digits](#digits)
+ * [Distinct](#distinct)
+ * [Size](#size)
 
 ---
 
@@ -592,7 +611,7 @@ Validates that a value has valid `JSON` syntax.
 
 _aliases_: `uuid`
 
-_usage_: `length:versions`
+_usage_: `uuid:versions`
 
 _options_:
  * `versions` - This is optional parameter. This option can be used to only allow specific UUID versions. Valid versions are 1 - 5. Default: [1, 2, 3, 4, 5].
@@ -607,7 +626,7 @@ The field under validation must be a valid RFC 4122 (version 1, 3, 4, or 5) univ
 
 _aliases_: `ends_with`, `ends-with`, `ends`
 
-_usage_: `ends-with:foo,bar,...`
+_usage_: `ends-with:foo;bar;...`
 
 _options_:
  * `ends` - The option is required. The list of ends. One of the "`end`" needs to be the end of the passed value.
@@ -622,12 +641,233 @@ The field under validation must end with one of the given values.
 
 _aliases_: `starts_with`, `starts-with`, `starts`
 
-_usage_: `starts_with:foo,bar,...`
+_usage_: `starts_with:foo;bar;...`
 
 _options_:
  * `starts` - The option is required. The list of starts. One of the "`start`" needs to be the end of the passed value.
 
 The field under validation must start with one of the given values.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Equal To
+
+_aliases_: `equal-to`, `equal`, `same`, `et`
+
+_usage_: `equal-to:value`
+
+_options_:
+ * `value` - This option is required. It defines the value to compare to. It can be a `string`, `number` or `object`.
+
+Validates that a value is equal to another value, defined in the options. This constraint compares using `==`, so `3` and "`3`" are considered equal. 
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Not Equal To
+
+_aliases_: `not-equal-to`, `not-equal`, `net`
+
+_usage_: `not-equal-to:value`
+
+_options_:
+ * `value` - This option is required. It defines the value to compare to. It can be a `string`, `number` or `object`.
+
+Validates that a value is not equal to another value, defined in the options. This constraint compares using `!=`, so `3` and "`3`" are considered equal.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Identical To
+
+_aliases_: `identical-to`, `identical`, `it`
+
+_usage_: `identical-to:value`
+
+_options_:
+ * `value` - This option is required. It defines the value to compare to. It can be a `string`, `number` or `object`.
+
+Validates that a value is identical to another value, defined in the options. This constraint compares using `===`, so `3` and "`3`" are not considered equal.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Not Identical To
+
+_aliases_: `not-identical-to`, `not-identical`, `nit`
+
+_usage_: `not-identical-to:value`
+
+_options_:
+ * `value` - This option is required. It defines the value to compare to. It can be a `string`, `number` or `object`.
+
+Validates that a value is not identical to another value, defined in the options. This constraint compares using `!==`, so `3` and "`3`" are considered not equal.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Less Than
+
+_aliases_: `less_than`, `less-than`, `less`
+
+_usage_: `less_than:value`
+
+_options_:
+ * `value` - This option is required. It defines the value to compare to. It can be a `string`, `number` or `date object`.
+
+Validates that a value is less than another value, defined in the options.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Less Than Or Equal
+
+_aliases_: `less_than_or_equal`, `less-than-or-equal`, `max`
+
+_usage_: `less_than_or_equal:value`
+
+_options_:
+ * `value` - This option is required. It defines the value to compare to. It can be a `string`, `number` or `date object`.
+
+Validates that a value is less than or equal to another value, defined in the options.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Greater Than
+
+_aliases_: `greater_than`, `greater-than`, `greater`
+
+_usage_: `greater_than:value`
+
+_options_:
+ * `value` - This option is required. It defines the value to compare to. It can be a `string`, `number` or `date object`.
+
+Validates that a value is greater than another value, defined in the options.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Greater Than Or Equal
+
+_aliases_: `greater_than_or_equal`, `greater-than-or-equal`, `min`
+
+_usage_: `greater_than_or_equal:value`
+
+_options_:
+ * `value` - This option is required. It defines the value to compare to. It can be a `string`, `number` or `date object`.
+
+Validates that a value is greater than or equal to another value, defined in the options.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Range
+
+_aliases_: `range`
+
+_usage_: `range:min,max`
+
+Validates that a given number or Date object is between some `minimum` and `maximum`.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Between
+
+_aliases_: `between`
+
+_usage_: `between:min,max`
+
+The field under validation must have a size between the given `min` and `max`. `Strings`, `numerics`, `arrays` and `dates` are evaluated in the same fashion as the size rule.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Digits Between
+
+_aliases_: `digits_between`, `digits-between`
+
+_usage_: `digits_between:min,max`
+
+The field under validation must be `numeric` and must have a length between the given `min` and `max`.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Divisible By
+
+_aliases_: `divisible-by`
+
+_usage_: `divisible-by:value`
+
+_options_:
+ * `value` - This option is required. It defines the value to compare to. It can be a `number` or `date object`.
+
+Validates that a value is divisible by another value, defined in the options.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Unique
+
+_aliases_: `unique`
+
+Validates that all the elements of the given collection are `unique` (none of them is present more than once). Elements are compared strictly, so '`7`' and `7` are considered different elements (a string and an integer, respectively). It can be a `string` or `array`.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Digits
+
+_aliases_: `digits`
+
+_usage_: `digits:length`
+
+_options_:
+ * `length` - This option is required. It defines the exact count of digits.
+
+The field under validation must be `numeric` and must have an exact `length` of value.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Distinct
+
+_aliases_: `distinct`
+
+When working with `arrays`, the field under validation must not have any duplicate values.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Size
+
+_aliases_: `size`
+
+_usage_: `size:value`
+
+_options_:
+ * `value` - This option is required. It defines the value to compare to.
+
+The field under validation must have a size matching the given value. For `string` data, value corresponds to the number of characters. For `numeric` data, value corresponds to a given integer value. For an `array`, size corresponds to the count of the array.
 
 [⬆ validation rules](#available-validation-rules)
 

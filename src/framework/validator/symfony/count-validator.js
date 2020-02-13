@@ -59,8 +59,8 @@ Object.assign(sogv, function () {
      * @name sogv.CountValidator#max
      * @type {Integer}
      * @description
-     * <p>This option is the "max" count value. Validation will fail if the given collection elements count is greater than this max value.</p>
-     * <p>This option is required when the min option is not defined.<.p>
+     * <p>This option is the "<code>max</code>" count value. Validation will fail if the given collection elements count is greater than this max value.</p>
+     * <p>This option is required when the min option is not defined.</p>
      */
 
     /**
@@ -94,7 +94,7 @@ Object.assign(sogv, function () {
      * @name sogv.CountValidator#min
      * @type {Integer}
      * @description
-     * <p>This option is the "min" count value. Validation will fail if the given collection elements count is less than this min value.</p>
+     * <p>This option is the "<code>min</code>" count value. Validation will fail if the given collection elements count is less than this min value.</p>
      * <p>This option is required when the max option is not defined.</p>
      */
 

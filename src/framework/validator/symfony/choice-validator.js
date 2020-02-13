@@ -6,7 +6,8 @@ Object.assign(sogv, function () {
      * @name sogv.ChoiceValidator
      * @extends sogv.AbstractValidator
      * @classdesc
-     * <p>Validates that a value is <code>blank</code> - meaning equal to an empty <code>string</code> or <code>null</code>.</p>
+     * <p>This constraint is used to ensure that the given value is one of a given set of valid choices.</p>
+     * <p>It can also be used to validate that each item in an array of items is one of those valid choices.</p>
      * @description
      * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
