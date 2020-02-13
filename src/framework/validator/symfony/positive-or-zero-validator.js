@@ -18,7 +18,7 @@ Object.assign(sogv, function () {
      * @property {Array} alias
      * <p>The aliases for the current validator.</p>
      * <p>They could be used in the short validation format.</p>
-     * <p>Defined aliases: ['<code>positive-or-zero</code>'].</p>
+     * <p>Defined aliases: ['<code>positive-or-zero</code>', '<code>poz</code>'].</p>
      * @property {Object} options The description of the required options.
      * @example
      * var validator = new sogv.PositiveOrZeroValidator(data, {"value": "the value to compare to"});
@@ -76,7 +76,8 @@ Object.assign(sogv, function () {
     Object.defineProperty(PositiveOrZeroValidator.prototype, 'alias', {
         get: function () {
             return [
-                'positive-or-zero'
+                'positive-or-zero',
+                'poz'
             ];
         }
     });

@@ -196,6 +196,20 @@ These are the basic constraints: use them to assert very basic things about the 
  * [Before (Date)](#before-date)
  * [Before Or Equal (Date)](#before-or-equal-date)
  * [Date Equals](#date-equals)
+ 
+#### Number Constraints
+
+ * [Positive](#positive)
+ * [Positive Or Zero](#positive-or-zero)
+ * [Negativeaaa](#negative)
+ * [Negative Or Zero](#negative-or-zero)
+ 
+#### Date Constraints
+
+ * [Date](#date)
+ * [Date Time, Date Format](date-time-date-format)
+ * [Time](#time)
+ * [Timezone](#timezone)
 
 ---
 
@@ -948,6 +962,91 @@ _options_:
  * `value` - This option is required. It defines the value to compare to. The data type could be `string`, `number` or `date`.
 
 The field under validation must be `equal` to the given `date`.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Positive
+
+_aliases_: `positive`
+
+Validates that a value is a `positive` number. Zero is neither positive nor negative, so you must use `Positive Or Zero` if you want to allow zero as value.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Positive Or Zero
+
+_aliases_: `positive`
+
+Validates that a value is a `positive` number or equal to `zero`.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Negative
+
+_aliases_: `negative`
+
+Validates that a value is a `negative` number. Zero is neither positive nor negative, so you must use `Negative Or Zero` if you want to allow zero as value.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Negative Or Zero
+
+_aliases_: `negative-or-zero`, `noz`
+
+Validates that a value is a `negative` number or equal to `zero`.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Date
+
+_aliases_: `date`
+
+Validates that a value is a valid `date`, meaning a string (or an object that can be cast into a string) that follows a valid `YYYY-MM-DD` format.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Date Time, Date Format
+
+_aliases_: `date-time`, `date_format`, `date-format`
+
+_usage_: `date_format:format`
+
+_options_:
+ * `format` - This option allows to validate a custom date format. Default: "`YYYY-MM-DD HH:mm:ss`"
+
+Validates that a value is a valid `date`, meaning a string (or an object that can be cast into a string) that follows a valid `YYYY-MM-DD` format.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Time
+
+_aliases_: `time`
+
+Validates that a value is a valid `time`, meaning a string (or an object that can be cast into a string) that follows a valid `HH:mm:ss` format.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Timezone
+
+_aliases_: `timezone`, `tz`
+
+Validates that a value is a valid timezone identifier (e.g. `Europe/Paris`). [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
 
 [⬆ validation rules](#available-validation-rules)
 

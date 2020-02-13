@@ -6,7 +6,7 @@ Object.assign(sogv, function () {
      * @name sogv.NegativeOrZeroValidator
      * @extends sogv.AbstractComparisonValidator
      * @classdesc
-     * <p>Validates that a value is a negative <code>number<code> or <code>equal</code> to <code>zero</code>.</p>
+     * <p>Validates that a value is a negative <code>number</code> or <code>equal</code> to <code>zero</code>.</p>
      * <p>If you don't want to allow <code>zero</code> as value, use <code>sogv.Negative</code> instead.</p>
      * @description
      * <p>Create a new Validator.</p>
@@ -18,7 +18,7 @@ Object.assign(sogv, function () {
      * @property {Array} alias
      * <p>The aliases for the current validator.</p>
      * <p>They could be used in the short validation format.</p>
-     * <p>Defined aliases: ['<code>negative-or-zero</code>'].</p>
+     * <p>Defined aliases: ['<code>negative-or-zero</code>', '<code>noz</code>'].</p>
      * @property {Object} options The description of the required options.
      * @example
      * var validator = new sogv.NegativeOrZeroValidator(data, {"value": "the value to compare to"});
@@ -76,7 +76,8 @@ Object.assign(sogv, function () {
     Object.defineProperty(NegativeOrZeroValidator.prototype, 'alias', {
         get: function () {
             return [
-                'negative-or-zero'
+                'negative-or-zero',
+                'noz'
             ];
         }
     });
