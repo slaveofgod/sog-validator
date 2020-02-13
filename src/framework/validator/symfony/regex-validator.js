@@ -34,7 +34,7 @@ Object.assign(sogv, function () {
      * @description
      * <p>If <code>true</code> (or not set), this validator will pass if the given string matches the given pattern regular expression.</p>
      * <p>However, when this option is set to false, the opposite will occur: validation will pass only if the given string does not match the pattern regular expression.</p>
-     * <p>Default to <code>true</code>.</p>
+     * <p>Default: <code>true</code>.</p>
      */
 
     /**

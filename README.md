@@ -161,6 +161,18 @@ These are the basic constraints: use them to assert very basic things about the 
  
 #### String Constraints
 
+ * [Email](#email)
+ * [Length](#length)
+ * [Url](#url)
+ * [Regular Expression](#regular-expression)
+ * [Ip](#ip)
+ * [IPv4](#ipv4)
+ * [IPv6](#ipv6)
+ * [Json](#json)
+ * [Uuid](#uuid)
+ * [Ends With](#ends-with)
+ * [Starts With](#starts-with)
+
 ---
 
 ##### Accepted
@@ -482,6 +494,144 @@ Check for character(s) representing a hexadecimal digit.
 
 ---
 
+##### Email
+
+_aliases_: `email`
+
+_usage_: `email:mode`
+
+_available modes_:
+ * `loose` - A simple regular expression. Allows all values with an "`@`" symbol in, and a "`.`" in the second host part of the email address.
+ * `html5` - This matches the pattern used for the `HTML5` email input element.
+
+Validates that a value is a valid email address.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Length
+
+_aliases_: `length`, `len`
+
+_usage_: `length:min,max`
+
+Validates that a given string length is between some `minimum` and `maximum` value.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Url
+
+_aliases_: `url`
+
+Validates that a value is a valid URL string.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Regular Expression
+
+_aliases_: `regex`
+
+_usage_: `regex:pattern,match`
+
+_options_:
+ * `pattern` - This required option is the regular expression pattern that the input will be matched against.
+ * `match` - If `true` (or not set), this validator will pass if the given string matches the given pattern regular expression. However, when this option is set to `false`, the opposite will occur: validation will pass only if the given string does not match the pattern regular expression. Default: `true`.
+
+Validates that a value matches a regular expression.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Ip
+
+_aliases_: `ip`
+
+Validates that a value is a valid IP address.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### IPv4
+
+_aliases_: `ipv4`
+
+The field under validation must be an `IPv4` address.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### IPv6
+
+_aliases_: `ipv6`
+
+The field under validation must be an `IPv6` address.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Json
+
+_aliases_: `json`
+
+Validates that a value has valid `JSON` syntax.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Uuid
+
+_aliases_: `uuid`
+
+_usage_: `length:versions`
+
+_options_:
+ * `versions` - This is optional parameter. This option can be used to only allow specific UUID versions. Valid versions are 1 - 5. Default: [1, 2, 3, 4, 5].
+
+The field under validation must be a valid RFC 4122 (version 1, 3, 4, or 5) universally unique identifier (UUID).
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Ends With
+
+_aliases_: `ends_with`, `ends-with`, `ends`
+
+_usage_: `ends-with:foo,bar,...`
+
+_options_:
+ * `ends` - The option is required. The list of ends. One of the "`end`" needs to be the end of the passed value.
+
+The field under validation must end with one of the given values.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Starts With
+
+_aliases_: `starts_with`, `starts-with`, `starts`
+
+_usage_: `starts_with:foo,bar,...`
+
+_options_:
+ * `starts` - The option is required. The list of starts. One of the "`start`" needs to be the end of the passed value.
+
+The field under validation must start with one of the given values.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
 
 [npm-url]: https://npmjs.org/package/sog-validator
 [npm-image]: http://img.shields.io/npm/v/sog-validator.svg
