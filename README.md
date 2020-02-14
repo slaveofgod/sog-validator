@@ -71,6 +71,8 @@ if (false === form.isValid()) {
 import sogv from 'sog-validator';
 ```
 
+[⬆ navigation](#navigation)
+
 ### Client-side usage
 
 The library can be loaded either as a standalone script.
@@ -132,6 +134,8 @@ if (null !== message) {
 }
 </script>
 ```
+
+[⬆ navigation](#navigation)
 
 ## Available Validation Rules
 Below is a list of all available validation rules and their function:
@@ -250,7 +254,9 @@ These are the basic constraints: use them to assert very basic things about the 
 
  * [Count](#count)
 
----
+[⬆ navigation](#navigation)
+
+## Validation Rules
 
 ##### Accepted
 
