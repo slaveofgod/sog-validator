@@ -7,8 +7,8 @@ Object.assign(sogv, function () {
      * @extends sogv.AbstractValidator
      * @classdesc
      * <p>Validates that a value is a valid <code>locale</code>.</p>
-     * <p>The "<code>value</code>" for each locale is any of the @link(http://userguide.icu-project.org/locale|ICU format locale IDs).</p>
-     * <p>For example, the two letter {@link https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes|ISO 639-1}language code (e.g. <code>fr</code>), or the language code followed by an underscore (<code>_</code>) and the {@link https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes|ISO 3166-1 alpha-2} country code (e.g. fr_FR for French/France).</p>
+     * <p>The "<code>value</code>" for each locale is any of the {@link http://userguide.icu-project.org/locale|ICU format locale IDs}.</p>
+     * <p>For example, the two letter {@link https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes|ISO 639-1} language code (e.g. <code>fr</code>), or the language code followed by an underscore (<code>_</code>) and the {@link https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes|ISO 3166-1 alpha-2} country code (e.g. fr_FR for French/France).</p>
      * <p>The given locale values are canonicalized before validating them to avoid issues with wrong uppercase/lowercase values and to remove unneeded elements (e.g. <code>FR-fr.utf8</code> will be validated as <code>fr_FR</code>).</p>
      * @description
      * <p>Create a new Validator.</p>

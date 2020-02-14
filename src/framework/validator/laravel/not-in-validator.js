@@ -34,7 +34,7 @@ Object.assign(sogv, function () {
     // PROPERTIES
 
     /**
-     * @name sogv.ChoiceValidator#choices
+     * @name sogv.NotInValidator#choices
      * @type {Array}
      * @description
      * <p>A required option - this is the array of options that should be considered in the valid set.</p>

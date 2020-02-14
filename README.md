@@ -210,6 +210,15 @@ These are the basic constraints: use them to assert very basic things about the 
  * [Date Time, Date Format](#date-time-date-format)
  * [Time](#time)
  * [Timezone](#timezone)
+ 
+#### Choice Constraints
+
+ * [Choice](#choice)
+ * [Not In](#not-in)
+ * [In](#in)
+ * [Language](#language)
+ * [Locale](#locale)
+ * [Country](#country)
 
 ---
 
@@ -1113,6 +1122,84 @@ Validates that a value is a valid timezone identifier (e.g. `Europe/Paris`). [Li
 [⬆ validation rules](#available-validation-rules)
 
 ---
+
+##### Choice
+
+_aliases_: `choice`
+
+_usage_: `choice:foo;bar;...,min,max,multiple`
+
+_options_:
+ * `choices` - A required option (unless callback is specified) - this is the array of options that should be considered in the valid set. The input value will be matched against this array.
+ * `min` - If the multiple option is true, then you can use the min option to force at least XX number of values to be selected. For example, if min is 3, but the input array only contains 2 valid items, the validation will fail.
+ * `max` - If the multiple option is true, then you can use the max option to force no more than XX number of values to be selected. For example, if max is 3, but the input array contains 4 valid items, the validation will fail.
+ * `multiple` - If this option is true, the input value is expected to be an array instead of a single, scalar value. The constraint will check that each value of the input array can be found in the array of valid choices. If even one of the input values cannot be found, the validation will fail. Default: false.
+
+This constraint is used to ensure that the given value is one of a given set of valid choices. It can also be used to validate that each item in an array of items is one of those valid choices.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Not In
+
+_aliases_: `not_in`, `not-in`
+
+_usage_: `not_in:foo;bar;...`
+
+_options_:
+ * `choices` - A required option - this is the array of options that should be considered in the valid set. The input value will be matched against this array.
+
+The field under validation must not be included in the given list of values.
+
+[⬆ validation rules](#available-validation-rules)
+
+-----
+
+##### In
+
+_aliases_: `in`
+
+_usage_: `in:foo;bar;...`
+
+_options_:
+ * `choices` - A required option - The field under validation must be included in the given list of values. The input value will be matched against this array.
+
+The field under validation must be included in the given list of values.
+
+[⬆ validation rules](#available-validation-rules)
+
+-----
+
+##### Language
+
+_aliases_: `language`, `lang`
+
+Validates that a value is a valid language Unicode language identifier (e.g. `fr` or `ar-dz`).
+
+[⬆ validation rules](#available-validation-rules)
+
+-----
+
+##### Locale
+
+_aliases_: `locale`
+
+Validates that a value is a valid locale. The "`value`" for each locale is any of the [ICU format locale IDs](http://userguide.icu-project.org/locale). For example, the two letter [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) language code (e.g. `fr`), or the language code followed by an underscore (`_`) and the [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes) country code (e.g. fr_FR for French/France). The given locale values are canonicalized before validating them to avoid issues with wrong uppercase/lowercase values and to remove unneeded elements (e.g. `FR-fr.utf8` will be validated as `fr_FR`).
+
+[⬆ validation rules](#available-validation-rules)
+
+-----
+
+##### Country
+
+_aliases_: `country`
+
+Validates that a value is a valid [3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes/ISO) `country code`.
+
+[⬆ validation rules](#available-validation-rules)
+
+-----
 
 [npm-url]: https://npmjs.org/package/sog-validator
 [npm-image]: http://img.shields.io/npm/v/sog-validator.svg

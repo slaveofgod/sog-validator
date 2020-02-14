@@ -43,7 +43,8 @@ Object.assign(sogv, function () {
     /**
      * @name sogv.ChoiceValidator#callback
      * @type {String|Array|Closure}
-     * @description This is a callback method that can be used instead of the choices option to return the choices array.
+     * @description
+     * <p>This is a callback method that can be used instead of the choices option to return the choices array.</p>
      */
 
     /**
@@ -120,8 +121,8 @@ Object.assign(sogv, function () {
      * @name sogv.ChoiceValidator#min
      * @type {Integer}
      * @description
-     * If the multiple option is true, then you can use the min option to force at least XX number of values to be selected.
-     * For example, if min is 3, but the input array only contains 2 valid items, the validation will fail.
+     * <p>If the multiple option is true, then you can use the min option to force at least XX number of values to be selected.</p>
+     * <p>For example, if min is 3, but the input array only contains 2 valid items, the validation will fail.</p>
      */
 
     /**
@@ -159,10 +160,10 @@ Object.assign(sogv, function () {
      * @name sogv.ChoiceValidator#multiple
      * @type {Boolean}
      * @description
-     * If this option is true, the input value is expected to be an array instead of a single, scalar value.
-     * The constraint will check that each value of the input array can be found in the array of valid choices.
-     * If even one of the input values cannot be found, the validation will fail.
-     * Default: <code>false</code>
+     * <p>If this option is true, the input value is expected to be an array instead of a single, scalar value.</p>
+     * <p>The constraint will check that each value of the input array can be found in the array of valid choices.</p>
+     * <p>If even one of the input values cannot be found, the validation will fail.</p>
+     * <p>Default: <code>false</code></p>
      */
 
     /**
