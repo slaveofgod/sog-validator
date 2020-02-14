@@ -18,10 +18,10 @@ Object.assign(sogv, function () {
      * @property {Array} alias
      * <p>The aliases for the current validator.</p>
      * <p>They could be used in the short validation format.</p>
-     * <p>Defined aliases: ['<code>card-scheme</code>'].</p>
+     * <p>Defined aliases: ['<code>card-scheme</code>', '<code>cs</code>'].</p>
      * @property {Object} options The description of the required options.
      * @example
-     * var validator = new sogv.CardSchemeValidator(data);
+     * var validator = new sogv.CardSchemeValidator(data, schemes);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
@@ -158,7 +158,8 @@ Object.assign(sogv, function () {
     Object.defineProperty(CardSchemeValidator.prototype, 'alias', {
         get: function () {
             return [
-                'card-scheme'
+                'card-scheme',
+                'cs'
             ];
         }
     });

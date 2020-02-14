@@ -32,9 +32,18 @@ Object.assign(sogv, function () {
      * @name sogv.IssnValidator#caseSensitive
      * @type {Boolean}
      * @description
-     * <p>The validator will allow ISSN values to end with a lower case 'x' by default.</p>
-     * <p>When switching this to true, the validator requires an upper case 'X'.</p>
-     * <p>Default: <code>false</code><.p>
+     * <p>The validator will allow <code>ISSN</code> values to end with a lower case '<code>x</code>' by default.</p>
+     * <p>When switching this to <code>true</code>, the validator requires an upper case '<code>X</code>'.</p>
+     * <p>Default: <code>false</code></p>
+     */
+
+    /**
+     * @name sogv.IssnValidator#requireHyphen
+     * @type {Boolean}
+     * @description
+     * <p>The validator will allow non hyphenated <code>ISSN</code> values by default.</p>
+     * <p>When switching this to <code>true</code>, the validator requires a hyphenated <code>ISSN</code> value.</p>
+     * <p>Default: <code>false</code></p>
      */
 
     /**
@@ -58,15 +67,6 @@ Object.assign(sogv, function () {
      *         </tr>
      *     </tbody>
      * </table>
-     */
-
-    /**
-     * @name sogv.IssnValidator#requireHyphen
-     * @type {Boolean}
-     * @description
-     * <p>The validator will allow non hyphenated ISSN values by default.</p>
-     * <p>When switching this to true, the validator requires a hyphenated ISSN value.</p>
-     * <p>Default: <code>false</code></p>
      */
 
     var IssnValidator = function (data, options, optionRules, lang, internal) {

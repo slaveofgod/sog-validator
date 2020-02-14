@@ -7,7 +7,7 @@ Object.assign(sogv, function () {
      * @extends sogv.AbstractValidator
      * @classdesc
      * <p>This constraint is used to ensure that a bank account number has the proper format of an {@link https://en.wikipedia.org/wiki/International_Bank_Account_Number|International Bank Account Number (IBAN)}.</p>
-     * <p>IBAN is an internationally agreed means of identifying bank accounts across national borders with a reduced risk of propagating transcription errors.</p>
+     * <p><code>IBAN</code> is an internationally agreed means of identifying bank accounts across national borders with a reduced risk of propagating transcription errors.</p>
      * @description
      * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.

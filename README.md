@@ -219,6 +219,21 @@ These are the basic constraints: use them to assert very basic things about the 
  * [Language](#language)
  * [Locale](#locale)
  * [Country](#country)
+ 
+#### File Constraints
+
+ * [File](#file)
+ * [Image](#image)
+
+#### Financial and other Number Constraints
+
+ * [Bic](#bic)
+ * [Card Scheme](#card-scheme)
+ * [Currency](#currency)
+ * [Luhn](#luhn)
+ * [Iban](#iban)
+ * [Isbn](#isbn)
+ * [Issn](#issn)
 
 ---
 
@@ -1154,7 +1169,7 @@ The field under validation must not be included in the given list of values.
 
 [⬆ validation rules](#available-validation-rules)
 
------
+---
 
 ##### In
 
@@ -1169,7 +1184,7 @@ The field under validation must be included in the given list of values.
 
 [⬆ validation rules](#available-validation-rules)
 
------
+---
 
 ##### Language
 
@@ -1179,7 +1194,7 @@ Validates that a value is a valid language Unicode language identifier (e.g. `fr
 
 [⬆ validation rules](#available-validation-rules)
 
------
+---
 
 ##### Locale
 
@@ -1189,7 +1204,7 @@ Validates that a value is a valid locale. The "`value`" for each locale is any o
 
 [⬆ validation rules](#available-validation-rules)
 
------
+---
 
 ##### Country
 
@@ -1199,7 +1214,114 @@ Validates that a value is a valid [3166-1 alpha-2](https://en.wikipedia.org/wiki
 
 [⬆ validation rules](#available-validation-rules)
 
------
+---
+
+##### File
+
+_aliases_: `file`
+
+Under development ...
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Image
+
+_aliases_: `image`
+
+Under development ...
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Bic
+
+_aliases_: `bic`
+
+_usage_: `bic:iban`
+
+_options_:
+ * `iban` - An IBAN value to validate that the BIC is associated with it. Default: null.
+
+This constraint is used to ensure that a value has the proper format of a [Business Identifier Code (BIC)](https://en.wikipedia.org/wiki/Business_Identifier_Code). `BIC` is an internationally agreed means to uniquely identify both financial and non-financial institutions. You may also check that the `BIC` is associated with a given `IBAN`.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Card Scheme
+
+_aliases_: `card-scheme`, `cs`
+
+_usage_: `card-scheme:schemes`
+
+_options_:
+ * `schemes` - This option is required and represents the name of the number scheme used to validate the credit card number, it can either be a string or an array. Valid values are: `AMEX`, `CHINA_UNIONPAY`, `DINERS`, `DISCOVER`, `INSTAPAYMENT`, `JCB`, `LASER`, `MAESTRO`, `MASTERCARD`, `MIR`, `UATP`, `VISA`
+
+This constraint ensures that a credit card number is valid for a given credit card company. It can be used to validate the number before trying to initiate a payment through a payment gateway.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Currency
+
+_aliases_: `currency`
+
+Validates that a value is a valid [3-letter ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) `currency` name.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Luhn
+
+_aliases_: `luhn`
+
+This constraint is used to ensure that a `credit card` number passes the [Luhn algorithm](https://en.wikipedia.org/wiki/Luhn_algorithm). It is useful as a first step to validating a credit card: before communicating with a payment gateway.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Iban
+
+_aliases_: `iban`
+
+This constraint is used to ensure that a bank account number has the proper format of an [International Bank Account Number (IBAN)](https://en.wikipedia.org/wiki/International_Bank_Account_Number). `IBAN` is an internationally agreed means of identifying bank accounts across national borders with a reduced risk of propagating transcription errors.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Isbn
+
+_aliases_: `isbn`
+
+This constraint validates that an [International Standard Book Number (ISBN)](https://en.wikipedia.org/wiki/Isbn) is either a valid `ISBN-10` or a valid `ISBN-13`.
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Issn
+
+_aliases_: `issn`
+
+_usage_: `issn:caseSensitive,requireHyphen`
+
+_options_:
+ * `caseSensitive` - This is optional parameter. The validator will allow `ISSN` values to end with a lower case '`x`' by default. When switching this to `true`, the validator requires an upper case '`X`'. Default: `false`.
+
+ * `requireHyphen` - This is optional parameter. The validator will allow non hyphenated `ISSN` values by default. When switching this to `true`, the validator requires a hyphenated `ISSN` value. Default: `false`.
+
+Validates that a value is a valid [International Standard Serial Number (ISSN)](https://en.wikipedia.org/wiki/Issn).
+
+[⬆ validation rules](#available-validation-rules)
+
+---
 
 [npm-url]: https://npmjs.org/package/sog-validator
 [npm-image]: http://img.shields.io/npm/v/sog-validator.svg
