@@ -2,7 +2,7 @@
     "plugins": [],
     "recurseDepth": 10,
     "source": {
-        "include": ["src"],
+        "include": ["src", "README.md"],
         "includePattern": ".+\\.js(doc|x)?$",
         "excludePattern": "(^|\\/|\\\\)_"
     },
@@ -20,5 +20,8 @@
         "encoding": "utf8",
         "recurse": true,
         "template": "./node_modules/@pixi/jsdoc-template"
+    },
+    "markdown": {
+        "idInHeadings": true
     }
 }

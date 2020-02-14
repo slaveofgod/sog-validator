@@ -222,7 +222,8 @@ These are the basic constraints: use them to assert very basic things about the 
 #### Date Constraints
 
  * [Date](#date)
- * [Date Time, Date Format](#date-time-date-format)
+ * [Date Time](#date-time)
+ * [Date Format](#date-format)
  * [Time](#time)
  * [Timezone](#timezone)
  
@@ -1062,7 +1063,8 @@ Validates that a value is a valid `date`, meaning a string (or an object that ca
 
 ---
 
-##### Date Time, Date Format
+##### Date Time
+##### Date Format
 
 _aliases_: `date-time`, `date_format`, `date-format`
 

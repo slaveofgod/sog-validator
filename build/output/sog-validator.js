@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v0.9.7 revision e194bcd
+ * SOG Validator Library v0.9.7 revision fd3f5f6
  * Copyright 2011-2020 SOG Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var sogv = {version:"0.9.7", revision:"e194bcd", config:{}, common:{}, validators:{}, registry:function(validator) {
+var sogv = {version:"0.9.7", revision:"fd3f5f6", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -10082,7 +10082,7 @@ Object.assign(sogv, function() {
   PositiveOrZeroValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   PositiveOrZeroValidator.prototype.constructor = PositiveOrZeroValidator;
   Object.defineProperty(PositiveOrZeroValidator.prototype, "alias", {get:function() {
-    return ["positive-or-zero"];
+    return ["positive-or-zero", "poz"];
   }});
   Object.defineProperty(PositiveOrZeroValidator.prototype, "options", {get:function() {
     return [];
@@ -10128,7 +10128,7 @@ Object.assign(sogv, function() {
   NegativeOrZeroValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   NegativeOrZeroValidator.prototype.constructor = NegativeOrZeroValidator;
   Object.defineProperty(NegativeOrZeroValidator.prototype, "alias", {get:function() {
-    return ["negative-or-zero"];
+    return ["negative-or-zero", "noz"];
   }});
   Object.defineProperty(NegativeOrZeroValidator.prototype, "options", {get:function() {
     return [];
@@ -10681,7 +10681,7 @@ Object.assign(sogv, function() {
   CardSchemeValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   CardSchemeValidator.prototype.constructor = CardSchemeValidator;
   Object.defineProperty(CardSchemeValidator.prototype, "alias", {get:function() {
-    return ["card-scheme"];
+    return ["card-scheme", "cs"];
   }});
   Object.defineProperty(CardSchemeValidator.prototype, "options", {get:function() {
     return [{"name":"schemes", "type":"array"}];
@@ -11392,7 +11392,7 @@ Object.assign(sogv, function() {
   AfterOrEqualValidator.prototype = Object.create(sogv.GreaterThanOrEqualValidator.prototype);
   AfterOrEqualValidator.prototype.constructor = AfterOrEqualValidator;
   Object.defineProperty(AfterOrEqualValidator.prototype, "alias", {get:function() {
-    return ["after_or_equal", "after-or-equal"];
+    return ["after_or_equal", "after-or-equal", "aoe"];
   }});
   Object.defineProperty(AfterOrEqualValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"date-string"}];
@@ -11506,7 +11506,7 @@ Object.assign(sogv, function() {
   BeforeOrEqualValidator.prototype = Object.create(sogv.LessThanOrEqualValidator.prototype);
   BeforeOrEqualValidator.prototype.constructor = BeforeOrEqualValidator;
   Object.defineProperty(BeforeOrEqualValidator.prototype, "alias", {get:function() {
-    return ["before_or_equal", "before-or-equal"];
+    return ["before_or_equal", "before-or-equal", "boe"];
   }});
   Object.defineProperty(BeforeOrEqualValidator.prototype, "options", {get:function() {
     return [{"name":"value", "type":"date-string"}];
@@ -11636,7 +11636,7 @@ Object.assign(sogv, function() {
   DateEqualsValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
   DateEqualsValidator.prototype.constructor = DateEqualsValidator;
   Object.defineProperty(DateEqualsValidator.prototype, "alias", {get:function() {
-    return ["date_equals", "date-equals"];
+    return ["date_equals", "date-equals", "de"];
   }});
   Object.defineProperty(DateEqualsValidator.prototype, "options", {get:function() {
     return [];

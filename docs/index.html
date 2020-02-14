@@ -68,8 +68,6 @@
             
             <span class="subtitle">Methods</span>
             
-                <li class="parent  " data-name="sogv.array_sum"><a href="sogv.html#.array_sum">array_sum</a></li>
-            
                 <li class="parent  " data-name="sogv.convertToType"><a href="sogv.html#.convertToType">convertToType</a></li>
             
                 <li class="parent  " data-name="sogv.getType"><a href="sogv.html#.getType">getType</a></li>
@@ -4117,6 +4115,1075 @@
 
 
 
+    <section>
+        <article class="readme content-size"><h1 id="sog-validator">sog-validator</h1>
+<p><a target="_blank" href="https://npmjs.org/package/sog-validator"><img src="http://img.shields.io/npm/v/sog-validator.svg" alt="NPM version"></a> <a target="_blank" href="https://npmjs.org/package/sog-validator"><img src="http://img.shields.io/npm/dm/sog-validator.svg" alt="Downloads"></a> <a target="_blank" href="https://travis-ci.org/slaveofgod/sog-validator"><img src="http://img.shields.io/travis/slaveofgod/sog-validator.svg" alt="Build Status"></a> <a target="_blank" href="https://deepscan.io/dashboard#view=project&amp;tid=7185&amp;pid=9318&amp;bid=119438"><img src="https://deepscan.io/api/teams/7185/projects/9318/branches/119438/badge/grade.svg" alt="DeepScan grade"></a></p>
+<p>Data validation engine.</p>
+<h5 id="this-is-the-powerest-library-which-provides-the-best-way-to-validate-any-type-of-data.">This is the powerest library which provides the best way to validate any type of data.</h5>
+<h2 id="navigation">Navigation</h2>
+<ul>
+<li><a href="#installation-and-usage">Installation and Usage</a></li>
+<li><a href="#available-validation-rules">Available Validation Rules</a>
+<ul>
+<li><a href="#basic-constraints">Basic Constraints</a></li>
+<li><a href="#string-constraints">String Constraints</a></li>
+<li><a href="#comparison-constraints">Comparison Constraints</a></li>
+<li><a href="#number-constraints">Number Constraints</a></li>
+<li><a href="#date-constraints">Date Constraints</a></li>
+<li><a href="#choice-constraints">Choice Constraints</a></li>
+<li><a href="#file-constraints">File Constraints</a></li>
+<li><a href="#financial-and-other-number-constraints">Financial and other Number Constraints</a></li>
+<li><a href="#other-constraints">Other Constraints</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="installation-and-usage">Installation and Usage</h2>
+<h3 id="server-side-usage">Server-side usage</h3>
+<p>Install the library with <code>npm install sog-validator</code></p>
+<h4 id="no-es6">No ES6</h4>
+<pre class="prettyprint source lang-javascript"><code>var sogv = require('sog-validator');
+
+var validationEngine = new sogv.Application({
+    lang: 'en'
+});
+
+var form = validationEngine.make({
+    first_name: 'required|string|length:min,max',
+    last_lame: 'required|string|length:min,max',
+    email: 'required|email',
+    birthday: 'required|date',
+    creditCard: 'required|string|card-scheme:VISA;MASTERCARD',
+    ip: 'required|string|ip',
+    locale: 'required|string|locale',
+    country: 'required|string|country',
+    language: 'required|string|language',
+    homepage: 'required|string|url'
+}, {
+    first_name: 'Leo',
+    last_lame: 'Lane',
+    email: 'leo.lane38@example.com',
+    birthday: '1977-03-07',
+    creditCard: '4111111111111111',
+    ip: '8.8.8.8',
+    locale: 'cy_GB',
+    country: 'US',
+    language: 'en_gb',
+    homepage: 'https://github.com//slaveofgod/sog-validator'
+});
+
+if (false === form.isValid()) {
+    if (false === form.get('name').isValid()) {
+        form.get('name').errors().first();
+    }
+    // ...
+}
+</code></pre>
+<h4 id="es6">ES6</h4>
+<pre class="prettyprint source lang-javascript"><code>import sogv from 'sog-validator';
+</code></pre>
+<p><a href="#navigation">⬆ navigation</a></p>
+<h3 id="client-side-usage">Client-side usage</h3>
+<p>The library can be loaded either as a standalone script.</p>
+<pre class="prettyprint source lang-html"><code>&lt;script type=&quot;text/javascript&quot; src=&quot;build/output/sog-validator.min.js&quot;>&lt;/script>
+&lt;script type=&quot;text/javascript&quot;>
+var validationEngine = new sogv.Application({
+    lang: 'en'
+});
+
+var form = validationEngine.make({
+    first_name: 'required|string|length:min,max',
+    last_lame: 'required|string|length:min,max',
+    email: 'required|email',
+    birthday: 'required|date',
+    creditCard: 'required|string|card-scheme:VISA;MASTERCARD',
+    ip: 'required|string|ip',
+    locale: 'required|string|locale',
+    country: 'required|string|country',
+    language: 'required|string|language',
+    homepage: 'required|string|url'
+}, {
+    first_name: 'Leo',
+    last_lame: 'Lane',
+    email: 'leo.lane38@example.com',
+    birthday: '1977-03-07',
+    creditCard: '4111111111111111',
+    ip: '8.8.8.8',
+    locale: 'cy_GB',
+    country: 'US',
+    language: 'en_gb',
+    homepage: 'https://github.com//slaveofgod/sog-validator'
+});
+     *
+if (false === form.isValid()) {
+    if (false === form.get('name').isValid()) {
+        form.get('name').errors().first();
+    }
+    // ...
+}
+&lt;/script>
+</code></pre>
+<h3 id="single-usage">Single usage</h3>
+<pre class="prettyprint source lang-html"><code>&lt;script type=&quot;text/javascript&quot; src=&quot;build/output/sog-validator.min.js&quot;>&lt;/script>
+&lt;script type=&quot;text/javascript&quot;>
+
+// Validation status only
+if (false === sogv.isValid('leo.lane38@example.com', 'required|email')) {
+    // do something with invalid data
+}
+
+// Validation status and error message (returns message if data invalid or null if valid)
+var message = sogv.isValidWithErrorMessage('leo.lane38@example.com', 'required|email');
+if (null !== message) {
+    // do something with invalid data
+}
+&lt;/script>
+</code></pre>
+<p><a href="#navigation">⬆ navigation</a></p>
+<h2 id="available-validation-rules">Available Validation Rules</h2>
+<p>Below is a list of all available validation rules and their function:</p>
+<h4 id="basic-constraints">Basic Constraints</h4>
+<p>These are the basic constraints: use them to assert very basic things about the value of properties or the return value of methods on your object.</p>
+<ul>
+<li><a href="#accepted">Accepted</a></li>
+<li><a href="#not-blank">Not Blank</a></li>
+<li><a href="#blank">Blank</a></li>
+<li><a href="#not-null">Not Null</a></li>
+<li><a href="#is-null">Is Null</a></li>
+<li><a href="#is-true">Is True</a></li>
+<li><a href="#alpha-dash">Alpha Dash</a></li>
+<li><a href="#array">Array</a></li>
+<li><a href="#boolean">Boolean</a></li>
+<li><a href="#callable">Callable</a></li>
+<li><a href="#float">Float</a></li>
+<li><a href="#double">Double</a></li>
+<li><a href="#integer">Integer</a></li>
+<li><a href="#iterable">Iterable</a></li>
+<li><a href="#null">Null</a></li>
+<li><a href="#numeric">Numeric</a></li>
+<li><a href="#object">Object</a></li>
+<li><a href="#real">Real</a></li>
+<li><a href="#scalar">Scalar</a></li>
+<li><a href="#string">String</a></li>
+<li><a href="#alnum">Alnum</a></li>
+<li><a href="#alpha">Alpha</a></li>
+<li><a href="#cntrl">Cntrl</a></li>
+<li><a href="#digit">Digit</a></li>
+<li><a href="#graph">Graph</a></li>
+<li><a href="#lower">Lower</a></li>
+<li><a href="#print">Print</a></li>
+<li><a href="#punct">Punct</a></li>
+<li><a href="#space">Space</a></li>
+<li><a href="#upper">Upper</a></li>
+<li><a href="#xdigit">Xdigit</a></li>
+</ul>
+<h4 id="string-constraints">String Constraints</h4>
+<ul>
+<li><a href="#email">Email</a></li>
+<li><a href="#length">Length</a></li>
+<li><a href="#url">Url</a></li>
+<li><a href="#regular-expression">Regular Expression</a></li>
+<li><a href="#ip">Ip</a></li>
+<li><a href="#ipv4">IPv4</a></li>
+<li><a href="#ipv6">IPv6</a></li>
+<li><a href="#json">Json</a></li>
+<li><a href="#uuid">Uuid</a></li>
+<li><a href="#ends-with">Ends With</a></li>
+<li><a href="#starts-with">Starts With</a></li>
+</ul>
+<h4 id="comparison-constraints">Comparison Constraints</h4>
+<ul>
+<li><a href="#equal-to">Equal To</a></li>
+<li><a href="#not-equal-to">Not Equal To</a></li>
+<li><a href="#identical-to">Identical To</a></li>
+<li><a href="#not-identical-to">Not Identical To</a></li>
+<li><a href="#less-than">Less Than</a></li>
+<li><a href="#less-than-or-equal">Less Than Or Equal</a></li>
+<li><a href="#greater-than">Greater Than</a></li>
+<li><a href="#greater-than-or-equal">Greater Than Or Equal</a></li>
+<li><a href="#range">Range</a></li>
+<li><a href="#between">Between</a></li>
+<li><a href="#digits-between">Digits Between</a></li>
+<li><a href="#divisible-by">Divisible By</a></li>
+<li><a href="#unique">Unique</a></li>
+<li><a href="#digits">Digits</a></li>
+<li><a href="#distinct">Distinct</a></li>
+<li><a href="#size">Size</a></li>
+<li><a href="#after-date">After (Date)</a></li>
+<li><a href="#after-or-equal-date">After Or Equal (Date)</a></li>
+<li><a href="#before-date">Before (Date)</a></li>
+<li><a href="#before-or-equal-date">Before Or Equal (Date)</a></li>
+<li><a href="#date-equals">Date Equals</a></li>
+</ul>
+<h4 id="number-constraints">Number Constraints</h4>
+<ul>
+<li><a href="#positive">Positive</a></li>
+<li><a href="#positive-or-zero">Positive Or Zero</a></li>
+<li><a href="#negative">Negativeaaa</a></li>
+<li><a href="#negative-or-zero">Negative Or Zero</a></li>
+</ul>
+<h4 id="date-constraints">Date Constraints</h4>
+<ul>
+<li><a href="#date">Date</a></li>
+<li><a href="#date-time">Date Time</a></li>
+<li><a href="#date-format">Date Format</a></li>
+<li><a href="#time">Time</a></li>
+<li><a href="#timezone">Timezone</a></li>
+</ul>
+<h4 id="choice-constraints">Choice Constraints</h4>
+<ul>
+<li><a href="#choice">Choice</a></li>
+<li><a href="#not-in">Not In</a></li>
+<li><a href="#in">In</a></li>
+<li><a href="#language">Language</a></li>
+<li><a href="#locale">Locale</a></li>
+<li><a href="#country">Country</a></li>
+</ul>
+<h4 id="file-constraints">File Constraints</h4>
+<ul>
+<li><a href="#file">File</a></li>
+<li><a href="#image">Image</a></li>
+</ul>
+<h4 id="financial-and-other-number-constraints">Financial and other Number Constraints</h4>
+<ul>
+<li><a href="#bic">Bic</a></li>
+<li><a href="#card-scheme">Card Scheme</a></li>
+<li><a href="#currency">Currency</a></li>
+<li><a href="#luhn">Luhn</a></li>
+<li><a href="#iban">Iban</a></li>
+<li><a href="#isbn">Isbn</a></li>
+<li><a href="#issn">Issn</a></li>
+</ul>
+<h4 id="other-constraints">Other Constraints</h4>
+<ul>
+<li><a href="#count">Count</a></li>
+</ul>
+<p><a href="#navigation">⬆ navigation</a></p>
+<h2 id="validation-rules">Validation Rules</h2>
+<h5 id="accepted">Accepted</h5>
+<p><em>aliases</em>: <code>accepted</code></p>
+<p>The field under validation must be <code>yes</code>, <code>on</code>, <code>1</code>, or <code>true</code>. This is useful for validating &quot;Terms of Service&quot; acceptance.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="not-blank">Not Blank</h5>
+<p><em>aliases</em>: <code>not-blank</code>, <code>not-empty</code>, <code>filled</code></p>
+<p>Validates that a value is <code>not blank</code> - meaning not equal to a blank string, a blank array, false or null (null behavior is configurable). The field under validation must not be empty when it is present.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="blank">Blank</h5>
+<p><em>aliases</em>: <code>blank</code>, <code>empty</code></p>
+<p>Validates that a value is blank - meaning equal to an <code>empty string</code> or <code>null</code>.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="not-null">Not Null</h5>
+<p><em>aliases</em>: <code>not-null</code>, <code>required</code>, <code>present</code></p>
+<p>Validates that a value is not strictly equal to <code>null</code>.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="is-null">Is Null</h5>
+<p><em>aliases</em>: <code>is-null</code>, <code>nullable</code></p>
+<p>Validates that a value is exactly equal to <code>null</code>.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="is-true">Is True</h5>
+<p><em>aliases</em>: <code>is-true</code>, <code>true</code></p>
+<p>Validates that a value is true. Specifically, this checks if the value is exactly <code>true</code>, exactly the integer <code>1</code>, or exactly the string &quot;<code>1</code>&quot;.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="is-false">Is False</h5>
+<p><em>aliases</em>: <code>is-false</code>, <code>false</code></p>
+<p>Validates that a value is false. Specifically, this checks to see if the value is exactly false, exactly the integer 0, or exactly the string &quot;0&quot;.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="alpha-dash">Alpha Dash</h5>
+<p><em>aliases</em>: <code>alpha_dash</code>, <code>alpha-dash</code></p>
+<p>The field under validation may have alpha-numeric characters, as well as dashes and underscores.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="array">Array</h5>
+<p><em>aliases</em>: <code>array</code>, <code>arr</code></p>
+<p>The field under validation must be an array.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="boolean">Boolean</h5>
+<p><em>aliases</em>: <code>boolean</code>, <code>bool</code></p>
+<p>The field under validation must be able to be cast as a boolean. Accepted input are true, false, 1, 0, &quot;1&quot;, and &quot;0&quot;.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="callable">Callable</h5>
+<p><em>aliases</em>: <code>callable</code></p>
+<p>Verify that the contents of a variable can be called as a function.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="float">Float</h5>
+<p><em>aliases</em>: <code>float</code></p>
+<p>The field under validation must be a float.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="double">Double</h5>
+<p><em>aliases</em>: <code>double</code></p>
+<p>The field under validation must be a double.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="integer">Integer</h5>
+<p><em>aliases</em>: <code>int</code>, <code>integer</code></p>
+<p>The field under validation must be an integer.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="iterable">Iterable</h5>
+<p><em>aliases</em>: <code>iterable</code></p>
+<p>Verify that the contents of a variable is an iterable value.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="null">Null</h5>
+<p><em>aliases</em>: <code>null</code></p>
+<p>The field under validation must be a NULL.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="numeric">Numeric</h5>
+<p><em>aliases</em>: <code>numeric</code>, <code>num</code></p>
+<p>The field under validation must be a number or a numeric string.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="object">Object</h5>
+<p><em>aliases</em>: <code>object</code></p>
+<p>The field under validation must be an object.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="real">Real</h5>
+<p><em>aliases</em>: <code>real</code></p>
+<p>Finds whether the type of a variable is real.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="scalar">Scalar</h5>
+<p><em>aliases</em>: <code>scalar</code></p>
+<p>Finds whether a variable is a scalar. Scalar variables are those containing an integer, float, string or boolean.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="string">String</h5>
+<p><em>aliases</em>: <code>string</code>, <code>str</code></p>
+<p>The field under validation must be a string.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="alnum">Alnum</h5>
+<p><em>aliases</em>: <code>alnum</code>, <code>alpha-num</code>, <code>alpha_num</code></p>
+<p>Check for alphanumeric character(s).</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="alpha">Alpha</h5>
+<p><em>aliases</em>: <code>alpha</code></p>
+<p>Check for alphabetic character(s).</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="cntrl">Cntrl</h5>
+<p><em>aliases</em>: <code>cntrl</code></p>
+<p>Check for control character(s).</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="digit">Digit</h5>
+<p><em>aliases</em>: <code>digit</code></p>
+<p>Check for numeric character(s).</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="graph">Graph</h5>
+<p><em>aliases</em>: <code>graph</code></p>
+<p>Check for any printable character(s) except space.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="lower">Lower</h5>
+<p><em>aliases</em>: <code>lower</code></p>
+<p>Check for lowercase character(s).</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="print">Print</h5>
+<p><em>aliases</em>: <code>print</code></p>
+<p>Check for printable character(s).</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="punct">Punct</h5>
+<p><em>aliases</em>: <code>punct</code></p>
+<p>Check for any printable character which is not whitespace or an alphanumeric character.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="space">Space</h5>
+<p><em>aliases</em>: <code>space</code></p>
+<p>Check for whitespace character(s).</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="upper">Upper</h5>
+<p><em>aliases</em>: <code>upper</code></p>
+<p>Check for uppercase character(s).</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="xdigit">Xdigit</h5>
+<p><em>aliases</em>: <code>xdigit</code></p>
+<p>Check for character(s) representing a hexadecimal digit.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="email">Email</h5>
+<p><em>aliases</em>: <code>email</code></p>
+<p><em>usage</em>: <code>email:mode</code></p>
+<p><em>available modes</em>:</p>
+<ul>
+<li><code>loose</code> - A simple regular expression. Allows all values with an &quot;<code>@</code>&quot; symbol in, and a &quot;<code>.</code>&quot; in the second host part of the email address.</li>
+<li><code>html5</code> - This matches the pattern used for the <code>HTML5</code> email input element.</li>
+</ul>
+<p>Validates that a value is a valid email address.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="length">Length</h5>
+<p><em>aliases</em>: <code>length</code>, <code>len</code></p>
+<p><em>usage</em>: <code>length:min,max</code></p>
+<p>Validates that a given string length is between some <code>minimum</code> and <code>maximum</code> value.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="url">Url</h5>
+<p><em>aliases</em>: <code>url</code></p>
+<p>Validates that a value is a valid URL string.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="regular-expression">Regular Expression</h5>
+<p><em>aliases</em>: <code>regex</code></p>
+<p><em>usage</em>: <code>regex:pattern,match</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>pattern</code> - This required option is the regular expression pattern that the input will be matched against.</li>
+<li><code>match</code> - If <code>true</code> (or not set), this validator will pass if the given string matches the given pattern regular expression. However, when this option is set to <code>false</code>, the opposite will occur: validation will pass only if the given string does not match the pattern regular expression. Default: <code>true</code>.</li>
+</ul>
+<p>Validates that a value matches a regular expression.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="ip">Ip</h5>
+<p><em>aliases</em>: <code>ip</code></p>
+<p>Validates that a value is a valid IP address.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="ipv4">IPv4</h5>
+<p><em>aliases</em>: <code>ipv4</code></p>
+<p>The field under validation must be an <code>IPv4</code> address.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="ipv6">IPv6</h5>
+<p><em>aliases</em>: <code>ipv6</code></p>
+<p>The field under validation must be an <code>IPv6</code> address.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="json">Json</h5>
+<p><em>aliases</em>: <code>json</code></p>
+<p>Validates that a value has valid <code>JSON</code> syntax.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="uuid">Uuid</h5>
+<p><em>aliases</em>: <code>uuid</code></p>
+<p><em>usage</em>: <code>uuid:versions</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>versions</code> - This is optional parameter. This option can be used to only allow specific UUID versions. Valid versions are 1 - 5. Default: [1, 2, 3, 4, 5].</li>
+</ul>
+<p>The field under validation must be a valid RFC 4122 (version 1, 3, 4, or 5) universally unique identifier (UUID).</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="ends-with">Ends With</h5>
+<p><em>aliases</em>: <code>ends_with</code>, <code>ends-with</code>, <code>ends</code></p>
+<p><em>usage</em>: <code>ends-with:foo;bar;...</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>ends</code> - The option is required. The list of ends. One of the &quot;<code>end</code>&quot; needs to be the end of the passed value.</li>
+</ul>
+<p>The field under validation must end with one of the given values.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="starts-with">Starts With</h5>
+<p><em>aliases</em>: <code>starts_with</code>, <code>starts-with</code>, <code>starts</code></p>
+<p><em>usage</em>: <code>starts_with:foo;bar;...</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>starts</code> - The option is required. The list of starts. One of the &quot;<code>start</code>&quot; needs to be the end of the passed value.</li>
+</ul>
+<p>The field under validation must start with one of the given values.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="equal-to">Equal To</h5>
+<p><em>aliases</em>: <code>equal-to</code>, <code>equal</code>, <code>same</code>, <code>et</code></p>
+<p><em>usage</em>: <code>equal-to:value</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>value</code> - This option is required. It defines the value to compare to. It can be a <code>string</code>, <code>number</code> or <code>object</code>.</li>
+</ul>
+<p>Validates that a value is equal to another value, defined in the options. This constraint compares using <code>==</code>, so <code>3</code> and &quot;<code>3</code>&quot; are considered equal.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="not-equal-to">Not Equal To</h5>
+<p><em>aliases</em>: <code>not-equal-to</code>, <code>not-equal</code>, <code>net</code></p>
+<p><em>usage</em>: <code>not-equal-to:value</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>value</code> - This option is required. It defines the value to compare to. It can be a <code>string</code>, <code>number</code> or <code>object</code>.</li>
+</ul>
+<p>Validates that a value is not equal to another value, defined in the options. This constraint compares using <code>!=</code>, so <code>3</code> and &quot;<code>3</code>&quot; are considered equal.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="identical-to">Identical To</h5>
+<p><em>aliases</em>: <code>identical-to</code>, <code>identical</code>, <code>it</code></p>
+<p><em>usage</em>: <code>identical-to:value</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>value</code> - This option is required. It defines the value to compare to. It can be a <code>string</code>, <code>number</code> or <code>object</code>.</li>
+</ul>
+<p>Validates that a value is identical to another value, defined in the options. This constraint compares using <code>===</code>, so <code>3</code> and &quot;<code>3</code>&quot; are not considered equal.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="not-identical-to">Not Identical To</h5>
+<p><em>aliases</em>: <code>not-identical-to</code>, <code>not-identical</code>, <code>nit</code></p>
+<p><em>usage</em>: <code>not-identical-to:value</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>value</code> - This option is required. It defines the value to compare to. It can be a <code>string</code>, <code>number</code> or <code>object</code>.</li>
+</ul>
+<p>Validates that a value is not identical to another value, defined in the options. This constraint compares using <code>!==</code>, so <code>3</code> and &quot;<code>3</code>&quot; are considered not equal.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="less-than">Less Than</h5>
+<p><em>aliases</em>: <code>less_than</code>, <code>less-than</code>, <code>less</code></p>
+<p><em>usage</em>: <code>less_than:value</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>value</code> - This option is required. It defines the value to compare to. It can be a <code>string</code>, <code>number</code> or <code>date object</code>.</li>
+</ul>
+<p>Validates that a value is less than another value, defined in the options.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="less-than-or-equal">Less Than Or Equal</h5>
+<p><em>aliases</em>: <code>less_than_or_equal</code>, <code>less-than-or-equal</code>, <code>max</code></p>
+<p><em>usage</em>: <code>less_than_or_equal:value</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>value</code> - This option is required. It defines the value to compare to. It can be a <code>string</code>, <code>number</code> or <code>date object</code>.</li>
+</ul>
+<p>Validates that a value is less than or equal to another value, defined in the options.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="greater-than">Greater Than</h5>
+<p><em>aliases</em>: <code>greater_than</code>, <code>greater-than</code>, <code>greater</code></p>
+<p><em>usage</em>: <code>greater_than:value</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>value</code> - This option is required. It defines the value to compare to. It can be a <code>string</code>, <code>number</code> or <code>date object</code>.</li>
+</ul>
+<p>Validates that a value is greater than another value, defined in the options.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="greater-than-or-equal">Greater Than Or Equal</h5>
+<p><em>aliases</em>: <code>greater_than_or_equal</code>, <code>greater-than-or-equal</code>, <code>min</code></p>
+<p><em>usage</em>: <code>greater_than_or_equal:value</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>value</code> - This option is required. It defines the value to compare to. It can be a <code>string</code>, <code>number</code> or <code>date object</code>.</li>
+</ul>
+<p>Validates that a value is greater than or equal to another value, defined in the options.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="range">Range</h5>
+<p><em>aliases</em>: <code>range</code></p>
+<p><em>usage</em>: <code>range:min,max</code></p>
+<p>Validates that a given number or Date object is between some <code>minimum</code> and <code>maximum</code>.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="between">Between</h5>
+<p><em>aliases</em>: <code>between</code></p>
+<p><em>usage</em>: <code>between:min,max</code></p>
+<p>The field under validation must have a size between the given <code>min</code> and <code>max</code>. <code>Strings</code>, <code>numerics</code>, <code>arrays</code> and <code>dates</code> are evaluated in the same fashion as the size rule.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="digits-between">Digits Between</h5>
+<p><em>aliases</em>: <code>digits_between</code>, <code>digits-between</code></p>
+<p><em>usage</em>: <code>digits_between:min,max</code></p>
+<p>The field under validation must be <code>numeric</code> and must have a length between the given <code>min</code> and <code>max</code>.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="divisible-by">Divisible By</h5>
+<p><em>aliases</em>: <code>divisible-by</code></p>
+<p><em>usage</em>: <code>divisible-by:value</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>value</code> - This option is required. It defines the value to compare to. It can be a <code>number</code> or <code>date object</code>.</li>
+</ul>
+<p>Validates that a value is divisible by another value, defined in the options.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="unique">Unique</h5>
+<p><em>aliases</em>: <code>unique</code></p>
+<p>Validates that all the elements of the given collection are <code>unique</code> (none of them is present more than once). Elements are compared strictly, so '<code>7</code>' and <code>7</code> are considered different elements (a string and an integer, respectively). It can be a <code>string</code> or <code>array</code>.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="digits">Digits</h5>
+<p><em>aliases</em>: <code>digits</code></p>
+<p><em>usage</em>: <code>digits:length</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>length</code> - This option is required. It defines the exact count of digits.</li>
+</ul>
+<p>The field under validation must be <code>numeric</code> and must have an exact <code>length</code> of value.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="distinct">Distinct</h5>
+<p><em>aliases</em>: <code>distinct</code></p>
+<p>When working with <code>arrays</code>, the field under validation must not have any duplicate values.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="size">Size</h5>
+<p><em>aliases</em>: <code>size</code></p>
+<p><em>usage</em>: <code>size:value</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>value</code> - This option is required. It defines the value to compare to.</li>
+</ul>
+<p>The field under validation must have a size matching the given value. For <code>string</code> data, value corresponds to the number of characters. For <code>numeric</code> data, value corresponds to a given integer value. For an <code>array</code>, size corresponds to the count of the array.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="after-(date)">After (Date)</h5>
+<p><em>aliases</em>: <code>after</code></p>
+<p><em>usage</em>: <code>after:value</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>value</code> - This option is required. It defines the value to compare to. The data type could be <code>string</code>, <code>number</code> or <code>date</code>.</li>
+</ul>
+<p>The field under validation must be a value after a given date.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="after-or-equal-(date)">After Or Equal (Date)</h5>
+<p><em>aliases</em>: <code>after_or_equal</code>, <code>after-or-equal</code>, <code>aoe</code></p>
+<p><em>usage</em>: <code>after_or_equal:value</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>value</code> - This option is required. It defines the value to compare to. The data type could be <code>string</code>, <code>number</code> or <code>date</code>.</li>
+</ul>
+<p>The field under validation must be a value after or equal to the given date.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="before-(date)">Before (Date)</h5>
+<p><em>aliases</em>: <code>before</code></p>
+<p><em>usage</em>: <code>before:value</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>value</code> - This option is required. It defines the value to compare to. The data type could be <code>string</code>, <code>number</code> or <code>date</code>.</li>
+</ul>
+<p>The field under validation must be a value before a given date.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="before-or-equal-(date)">Before Or Equal (Date)</h5>
+<p><em>aliases</em>: <code>before_or_equal</code>, <code>before-or-equal</code>, <code>boe</code></p>
+<p><em>usage</em>: <code>before_or_equal:value</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>value</code> - This option is required. It defines the value to compare to. The data type could be <code>string</code>, <code>number</code> or <code>date</code>.</li>
+</ul>
+<p>The field under validation must be a value before or equal to the given date.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="date-equals">Date Equals</h5>
+<p><em>aliases</em>: <code>date_equals</code>, <code>date-equals</code>, <code>aoe</code></p>
+<p><em>usage</em>: <code>date_equals:value</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>value</code> - This option is required. It defines the value to compare to. The data type could be <code>string</code>, <code>number</code> or <code>date</code>.</li>
+</ul>
+<p>The field under validation must be <code>equal</code> to the given <code>date</code>.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="positive">Positive</h5>
+<p><em>aliases</em>: <code>positive</code></p>
+<p>Validates that a value is a <code>positive</code> number. Zero is neither positive nor negative, so you must use <code>Positive Or Zero</code> if you want to allow zero as value.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="positive-or-zero">Positive Or Zero</h5>
+<p><em>aliases</em>: <code>positive</code></p>
+<p>Validates that a value is a <code>positive</code> number or equal to <code>zero</code>.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="negative">Negative</h5>
+<p><em>aliases</em>: <code>negative</code></p>
+<p>Validates that a value is a <code>negative</code> number. Zero is neither positive nor negative, so you must use <code>Negative Or Zero</code> if you want to allow zero as value.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="negative-or-zero">Negative Or Zero</h5>
+<p><em>aliases</em>: <code>negative-or-zero</code>, <code>noz</code></p>
+<p>Validates that a value is a <code>negative</code> number or equal to <code>zero</code>.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="date">Date</h5>
+<p><em>aliases</em>: <code>date</code></p>
+<p>Validates that a value is a valid <code>date</code>, meaning a string (or an object that can be cast into a string) that follows a valid <code>YYYY-MM-DD</code> format.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="date-time">Date Time</h5>
+<h5 id="date-format">Date Format</h5>
+<p><em>aliases</em>: <code>date-time</code>, <code>date_format</code>, <code>date-format</code></p>
+<p><em>usage</em>: <code>date_format:format</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>format</code> - This option allows to validate a custom date format. Default: &quot;<code>YYYY-MM-DD HH:mm:ss</code>&quot;</li>
+</ul>
+<p>Validates that a value is a valid <code>date</code>, meaning a string (or an object that can be cast into a string) that follows a valid <code>YYYY-MM-DD</code> format.</p>
+<h4 id="year%2C-month%2C-and-day-tokens">Year, month, and day tokens</h4>
+<p><em>Tokens are case-sensitive.</em></p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>YYYY</code></td>
+<td><code>2014</code></td>
+<td>4 or 2 digit year</td>
+</tr>
+<tr>
+<td><code>YY</code></td>
+<td><code>14</code></td>
+<td>2 digit year</td>
+</tr>
+<tr>
+<td><code>Y</code></td>
+<td><code>-25</code></td>
+<td>Year with any number of digits and sign</td>
+</tr>
+<tr>
+<td><code>Q</code></td>
+<td><code>1..4</code></td>
+<td>Quarter of year. Sets month to first month in quarter.</td>
+</tr>
+<tr>
+<td><code>M MM</code></td>
+<td><code>1..12</code></td>
+<td>Month number</td>
+</tr>
+<tr>
+<td><code>MMM MMMM</code></td>
+<td><code>Jan..December</code></td>
+<td>Month name in locale that is specified</td>
+</tr>
+<tr>
+<td><code>D DD</code></td>
+<td><code>1..31</code></td>
+<td>Day of month</td>
+</tr>
+<tr>
+<td><code>Do</code></td>
+<td><code>1st..31st</code></td>
+<td>Day of month with ordinal</td>
+</tr>
+<tr>
+<td><code>DDD DDDD</code></td>
+<td><code>1..365</code></td>
+<td>Day of year</td>
+</tr>
+<tr>
+<td><code>X</code></td>
+<td><code>1410715640.579</code></td>
+<td>Unix timestamp</td>
+</tr>
+<tr>
+<td><code>x</code></td>
+<td><code>1410715640579</code></td>
+<td>Unix ms timestamp</td>
+</tr>
+</tbody>
+</table>
+<h4 id="week-year%2C-week%2C-and-weekday-tokens">Week year, week, and weekday tokens</h4>
+<p><em>Tokens are case-sensitive.</em></p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gggg</code></td>
+<td><code>2014</code></td>
+<td>Locale 4 digit week year</td>
+</tr>
+<tr>
+<td><code>gg</code></td>
+<td><code>14</code></td>
+<td>Locale 2 digit week year</td>
+</tr>
+<tr>
+<td><code>w ww</code></td>
+<td><code>1..53</code></td>
+<td>Locale week of year</td>
+</tr>
+<tr>
+<td><code>e</code></td>
+<td><code>0..6</code></td>
+<td>Locale day of week</td>
+</tr>
+<tr>
+<td><code>ddd dddd</code></td>
+<td><code>Mon...Sunday</code></td>
+<td>Day name in locale that is specified</td>
+</tr>
+<tr>
+<td><code>GGGG</code></td>
+<td><code>2014</code></td>
+<td>ISO 4 digit week year</td>
+</tr>
+<tr>
+<td><code>GG</code></td>
+<td><code>14</code></td>
+<td>ISO 2 digit week year</td>
+</tr>
+<tr>
+<td><code>W WW</code></td>
+<td><code>1..53</code></td>
+<td>ISO week of year</td>
+</tr>
+<tr>
+<td><code>E</code></td>
+<td><code>1..7</code></td>
+<td>ISO day of week</td>
+</tr>
+</tbody>
+</table>
+<h4 id="locale-aware-formats">Locale aware formats</h4>
+<p><em>Tokens are case-sensitive.</em></p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>L</code></td>
+<td><code>04/09/1986</code></td>
+<td>Date (in local format)</td>
+</tr>
+<tr>
+<td><code>LL</code></td>
+<td><code>September 4 1986</code></td>
+<td>Month name, day of month, year</td>
+</tr>
+<tr>
+<td><code>LLL</code></td>
+<td><code>September 4 1986 8:30 PM</code></td>
+<td>Month name, day of month, year, time</td>
+</tr>
+<tr>
+<td><code>LLLL</code></td>
+<td><code>Thursday, September 4 1986 8:30 PM</code></td>
+<td>Day of week, month name, day of month, year, time</td>
+</tr>
+<tr>
+<td><code>LT</code></td>
+<td><code>08:30 PM</code></td>
+<td>Time (without seconds)</td>
+</tr>
+<tr>
+<td><code>LTS</code></td>
+<td><code>08:30:00 PM</code></td>
+<td>Time (with seconds)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="hour%2C-minute%2C-second%2C-millisecond%2C-and-offset-tokens">Hour, minute, second, millisecond, and offset tokens</h4>
+<p><em>Tokens are case-sensitive.</em></p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>H HH</code></td>
+<td><code>0..23</code></td>
+<td>Hours (24 hour time)</td>
+</tr>
+<tr>
+<td><code>h hh</code></td>
+<td><code>1..12</code></td>
+<td>Hours (12 hour time used with <code>a A</code>.)</td>
+</tr>
+<tr>
+<td><code>k kk</code></td>
+<td><code>1..24</code></td>
+<td>Hours (24 hour time from 1 to 24)</td>
+</tr>
+<tr>
+<td><code>a A</code></td>
+<td><code>am pm</code></td>
+<td>Post or ante meridiem (Note the one character <code>a p</code> are also considered valid)</td>
+</tr>
+<tr>
+<td><code>m mm</code></td>
+<td><code>0..59</code></td>
+<td>Minutes</td>
+</tr>
+<tr>
+<td><code>s ss</code></td>
+<td><code>0..59</code></td>
+<td>Seconds</td>
+</tr>
+<tr>
+<td><code>S SS SSS</code></td>
+<td><code>0..999</code></td>
+<td>Fractional seconds</td>
+</tr>
+<tr>
+<td><code>Z ZZ</code></td>
+<td><code>+12:00</code></td>
+<td>Offset from UTC as <code>+-HH:mm</code>, <code>+-HHmm</code>, or <code>Z</code></td>
+</tr>
+</tbody>
+</table>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="time">Time</h5>
+<p><em>aliases</em>: <code>time</code></p>
+<p>Validates that a value is a valid <code>time</code>, meaning a string (or an object that can be cast into a string) that follows a valid <code>HH:mm:ss</code> format.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="timezone">Timezone</h5>
+<p><em>aliases</em>: <code>timezone</code>, <code>tz</code></p>
+<p>Validates that a value is a valid timezone identifier (e.g. <code>Europe/Paris</code>). <a target="_blank" href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">List of tz database time zones</a>.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="choice">Choice</h5>
+<p><em>aliases</em>: <code>choice</code></p>
+<p><em>usage</em>: <code>choice:foo;bar;...,min,max,multiple</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>choices</code> - A required option (unless callback is specified) - this is the array of options that should be considered in the valid set. The input value will be matched against this array.</li>
+<li><code>min</code> - If the multiple option is true, then you can use the min option to force at least XX number of values to be selected. For example, if min is 3, but the input array only contains 2 valid items, the validation will fail.</li>
+<li><code>max</code> - If the multiple option is true, then you can use the max option to force no more than XX number of values to be selected. For example, if max is 3, but the input array contains 4 valid items, the validation will fail.</li>
+<li><code>multiple</code> - If this option is true, the input value is expected to be an array instead of a single, scalar value. The constraint will check that each value of the input array can be found in the array of valid choices. If even one of the input values cannot be found, the validation will fail. Default: false.</li>
+</ul>
+<p>This constraint is used to ensure that the given value is one of a given set of valid choices. It can also be used to validate that each item in an array of items is one of those valid choices.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="not-in">Not In</h5>
+<p><em>aliases</em>: <code>not_in</code>, <code>not-in</code></p>
+<p><em>usage</em>: <code>not_in:foo;bar;...</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>choices</code> - A required option - this is the array of options that should be considered in the valid set. The input value will be matched against this array.</li>
+</ul>
+<p>The field under validation must not be included in the given list of values.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="in">In</h5>
+<p><em>aliases</em>: <code>in</code></p>
+<p><em>usage</em>: <code>in:foo;bar;...</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>choices</code> - A required option - The field under validation must be included in the given list of values. The input value will be matched against this array.</li>
+</ul>
+<p>The field under validation must be included in the given list of values.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="language">Language</h5>
+<p><em>aliases</em>: <code>language</code>, <code>lang</code></p>
+<p>Validates that a value is a valid language Unicode language identifier (e.g. <code>fr</code> or <code>ar-dz</code>).</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="locale">Locale</h5>
+<p><em>aliases</em>: <code>locale</code></p>
+<p>Validates that a value is a valid locale. The &quot;<code>value</code>&quot; for each locale is any of the <a target="_blank" href="http://userguide.icu-project.org/locale">ICU format locale IDs</a>. For example, the two letter <a target="_blank" href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes">ISO 639-1</a> language code (e.g. <code>fr</code>), or the language code followed by an underscore (<code>_</code>) and the <a target="_blank" href="https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes">ISO 3166-1 alpha-2</a> country code (e.g. fr_FR for French/France). The given locale values are canonicalized before validating them to avoid issues with wrong uppercase/lowercase values and to remove unneeded elements (e.g. <code>FR-fr.utf8</code> will be validated as <code>fr_FR</code>).</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="country">Country</h5>
+<p><em>aliases</em>: <code>country</code></p>
+<p>Validates that a value is a valid <a target="_blank" href="https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes/ISO">3166-1 alpha-2</a> <code>country code</code>.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="file">File</h5>
+<p><em>aliases</em>: <code>file</code></p>
+<p>Under development ...</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="image">Image</h5>
+<p><em>aliases</em>: <code>image</code></p>
+<p>Under development ...</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="bic">Bic</h5>
+<p><em>aliases</em>: <code>bic</code></p>
+<p><em>usage</em>: <code>bic:iban</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>iban</code> - An IBAN value to validate that the BIC is associated with it. Default: null.</li>
+</ul>
+<p>This constraint is used to ensure that a value has the proper format of a <a target="_blank" href="https://en.wikipedia.org/wiki/Business_Identifier_Code">Business Identifier Code (BIC)</a>. <code>BIC</code> is an internationally agreed means to uniquely identify both financial and non-financial institutions. You may also check that the <code>BIC</code> is associated with a given <code>IBAN</code>.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="card-scheme">Card Scheme</h5>
+<p><em>aliases</em>: <code>card-scheme</code>, <code>cs</code></p>
+<p><em>usage</em>: <code>card-scheme:schemes</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>schemes</code> - This option is required and represents the name of the number scheme used to validate the credit card number, it can either be a string or an array. Valid values are: <code>AMEX</code>, <code>CHINA_UNIONPAY</code>, <code>DINERS</code>, <code>DISCOVER</code>, <code>INSTAPAYMENT</code>, <code>JCB</code>, <code>LASER</code>, <code>MAESTRO</code>, <code>MASTERCARD</code>, <code>MIR</code>, <code>UATP</code>, <code>VISA</code></li>
+</ul>
+<p>This constraint ensures that a credit card number is valid for a given credit card company. It can be used to validate the number before trying to initiate a payment through a payment gateway.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="currency">Currency</h5>
+<p><em>aliases</em>: <code>currency</code></p>
+<p>Validates that a value is a valid <a target="_blank" href="https://en.wikipedia.org/wiki/ISO_4217">3-letter ISO 4217</a> <code>currency</code> name.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="luhn">Luhn</h5>
+<p><em>aliases</em>: <code>luhn</code></p>
+<p>This constraint is used to ensure that a <code>credit card</code> number passes the <a target="_blank" href="https://en.wikipedia.org/wiki/Luhn_algorithm">Luhn algorithm</a>. It is useful as a first step to validating a credit card: before communicating with a payment gateway.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="iban">Iban</h5>
+<p><em>aliases</em>: <code>iban</code></p>
+<p>This constraint is used to ensure that a bank account number has the proper format of an <a target="_blank" href="https://en.wikipedia.org/wiki/International_Bank_Account_Number">International Bank Account Number (IBAN)</a>. <code>IBAN</code> is an internationally agreed means of identifying bank accounts across national borders with a reduced risk of propagating transcription errors.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="isbn">Isbn</h5>
+<p><em>aliases</em>: <code>isbn</code></p>
+<p>This constraint validates that an <a target="_blank" href="https://en.wikipedia.org/wiki/Isbn">International Standard Book Number (ISBN)</a> is either a valid <code>ISBN-10</code> or a valid <code>ISBN-13</code>.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="issn">Issn</h5>
+<p><em>aliases</em>: <code>issn</code></p>
+<p><em>usage</em>: <code>issn:caseSensitive,requireHyphen</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li>
+<p><code>caseSensitive</code> - This is optional parameter. The validator will allow <code>ISSN</code> values to end with a lower case '<code>x</code>' by default. When switching this to <code>true</code>, the validator requires an upper case '<code>X</code>'. Default: <code>false</code>.</p>
+</li>
+<li>
+<p><code>requireHyphen</code> - This is optional parameter. The validator will allow non hyphenated <code>ISSN</code> values by default. When switching this to <code>true</code>, the validator requires a hyphenated <code>ISSN</code> value. Default: <code>false</code>.</p>
+</li>
+</ul>
+<p>Validates that a value is a valid <a target="_blank" href="https://en.wikipedia.org/wiki/Issn">International Standard Serial Number (ISSN)</a>.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr>
+<h5 id="count">Count</h5>
+<p><em>aliases</em>: <code>count</code></p>
+<p><em>usage</em>: <code>count:min,max</code></p>
+<p><em>options</em>:</p>
+<ul>
+<li><code>min</code> - This option is the &quot;<code>min</code>&quot; count value. Validation will fail if the given collection elements count is less than this min value. This option is required when the max option is not defined.</li>
+<li><code>max</code> - This option is the &quot;<code>max</code>&quot; count value. Validation will fail if the given collection elements count is greater than this max value. This option is required when the min option is not defined.</li>
+</ul>
+<p>Validates that a given collection's (i.e. an array or an object that implements Countable) element <code>count</code> is <code>between</code> some <code>minimum</code> and <code>maximum</code> value.</p>
+<p><a href="#navigation">⬆ navigation</a></p>
+<hr></article>
+    </section>
+
 
 
 
@@ -4126,7 +5193,7 @@
 
         <footer class="content-size">
             <div class="footer">
-                Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Fri Feb 14 2020 15:18:37 GMT+0200 (Eastern European Standard Time)
+                Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Fri Feb 14 2020 16:14:26 GMT+0200 (Eastern European Standard Time)
             </div>
         </footer>
     </div>
