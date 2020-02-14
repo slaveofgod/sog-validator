@@ -1,33 +1,33 @@
 'use strict';
 
-const abv = require('../../build/output/sog-validator');
+const sogv = require('../../build/output/sog-validator');
 
 describe('boolean', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
         test('True', () => {
-            expect(abv.isValidWithErrorMessage(true, 'boolean')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage(true, 'boolean')).toBe(toBe);
         });
 
         test('1', () => {
-            expect(abv.isValidWithErrorMessage(1, 'boolean')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage(1, 'boolean')).toBe(toBe);
         });
 
         test('"1"', () => {
-            expect(abv.isValidWithErrorMessage('1', 'boolean')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage('1', 'boolean')).toBe(toBe);
         });
 
         test('False', () => {
-            expect(abv.isValidWithErrorMessage(false, 'bool')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage(false, 'bool')).toBe(toBe);
         });
 
         test('0', () => {
-            expect(abv.isValidWithErrorMessage(0, 'bool')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage(0, 'bool')).toBe(toBe);
         });
 
         test('"0"', () => {
-            expect(abv.isValidWithErrorMessage('0', 'bool')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage('0', 'bool')).toBe(toBe);
         });
     });
 
@@ -35,7 +35,7 @@ describe('boolean', () => {
         let toBe = "The value field must be true or false.";
 
         test('String', () => {
-            expect(abv.isValidWithErrorMessage('Lorem ipsum', 'boolean')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage('Lorem ipsum', 'boolean')).toBe(toBe);
         });
     });
 });

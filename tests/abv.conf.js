@@ -18,7 +18,7 @@ function findInDir(dir, filter, fileList = []) {
     return fileList;
 }
 
-var header = "const abv = require('../../build/output/sog-validator');\nconst engine = new abv.Application({language: 'en'});\nconst chalk = require('chalk');";
+var header = "const sogv = require('../../build/output/sog-validator');\nconst engine = new sogv.Application({language: 'en'});\nconst chalk = require('chalk');";
 
 fs.writeFile('./build/all.js', header, (err) => {
     // throws an error, you could also catch it here

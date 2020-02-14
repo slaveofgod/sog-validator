@@ -1,6 +1,6 @@
 # sog-validator
 
-[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status][travis-image]][travis-url] [![DeepScan grade][deepscan-image]][deepscan-url]
+[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status][travis-image]][travis-url] [![DeepScan grade][deepscan-image]][deepscan-url] [![jsDelivr][jsdelivr-image]][jsdelivr-url]
 
 Data validation engine.
 
@@ -1398,5 +1398,8 @@ THE SOFTWARE.
 
 [deepscan-url]: https://deepscan.io/dashboard#view=project&tid=7185&pid=9318&bid=119438
 [deepscan-image]: https://deepscan.io/api/teams/7185/projects/9318/branches/119438/badge/grade.svg
+
+[jsdelivr-url]: https://www.jsdelivr.com/package/npm/sog-validator
+[jsdelivr-image]: https://data.jsdelivr.com/v1/package/npm/sog-validator/badge
 
 [downloads-image]: http://img.shields.io/npm/dm/sog-validator.svg

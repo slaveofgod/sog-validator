@@ -1,21 +1,21 @@
 'use strict';
 
-const abv = require('../../build/output/sog-validator');
+const sogv = require('../../build/output/sog-validator');
 
 describe('greater-than-or-equal', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
         test('Empty string will not validate', () => {
-            expect(abv.isValidWithErrorMessage('', 'greater-than-or-equal:{"value":"0.00000001"}')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage('', 'greater-than-or-equal:{"value":"0.00000001"}')).toBe(toBe);
         });
 
         test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'greater-than-or-equal:{"value":"0.00000001"}')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage(null, 'greater-than-or-equal:{"value":"0.00000001"}')).toBe(toBe);
         });
 
         test('1995-12-17T03:24:00 >= new Date("1995-12-17T03:24:00")', () => {
-            expect(abv.isValidWithErrorMessage('1995-12-17T03:24:00', {
+            expect(sogv.isValidWithErrorMessage('1995-12-17T03:24:00', {
                 "min": {
                     "value": new Date('1995-12-17T03:24:00')
                 }
@@ -23,31 +23,31 @@ describe('greater-than-or-equal', () => {
         });
 
         test('0 >= false', () => {
-            expect(abv.isValidWithErrorMessage(0, 'greater-than-or-equal:{"value":false}')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage(0, 'greater-than-or-equal:{"value":false}')).toBe(toBe);
         });
 
         test('1 >= true', () => {
-            expect(abv.isValidWithErrorMessage(1, 'greater-than-or-equal:{"value":true}')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage(1, 'greater-than-or-equal:{"value":true}')).toBe(toBe);
         });
 
         test('12345 >= "12345"', () => {
-            expect(abv.isValidWithErrorMessage(12345, 'greater-than-or-equal:{"value":"12345"}')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage(12345, 'greater-than-or-equal:{"value":"12345"}')).toBe(toBe);
         });
 
         test('"a@a.com" >= "a@a.com"', () => {
-            expect(abv.isValidWithErrorMessage('a@a.com', 'greater-than-or-equal:{"value":"a@a.com"}')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage('a@a.com', 'greater-than-or-equal:{"value":"a@a.com"}')).toBe(toBe);
         });
 
         test('false >= false', () => {
-            expect(abv.isValidWithErrorMessage(false, 'greater-than-or-equal:{"value":false}')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage(false, 'greater-than-or-equal:{"value":false}')).toBe(toBe);
         });
 
         test('0.00000002 >= 0.00000001', () => {
-            expect(abv.isValidWithErrorMessage(0.00000002, 'greater-than-or-equal:{"value":"0.00000001"}')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage(0.00000002, 'greater-than-or-equal:{"value":"0.00000001"}')).toBe(toBe);
         });
 
         test('1996-12-17T03:24:00 >= new Date("1995-12-17T03:24:00")', () => {
-            expect(abv.isValidWithErrorMessage('1996-12-17T03:24:00', {
+            expect(sogv.isValidWithErrorMessage('1996-12-17T03:24:00', {
                 "greater-than-or-equal": {
                     "value": new Date('1995-12-17T03:24:00')
                 }
@@ -55,7 +55,7 @@ describe('greater-than-or-equal', () => {
         });
 
         test('1995-12-17T03:24:00 >= new Date("1995-12-17T03:21:00")', () => {
-            expect(abv.isValidWithErrorMessage('1995-12-17T03:24:00', {
+            expect(sogv.isValidWithErrorMessage('1995-12-17T03:24:00', {
                 "min": {
                     "value": new Date('1995-12-17T03:21:00')
                 }
@@ -63,21 +63,21 @@ describe('greater-than-or-equal', () => {
         });
 
         test('true >= false', () => {
-            expect(abv.isValidWithErrorMessage(true, 'greater-than-or-equal:{"value":false}')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage(true, 'greater-than-or-equal:{"value":false}')).toBe(toBe);
         });
     });
 
     describe('Is Invalid', () => {
         test('false >= true', () => {
-            expect(abv.isValidWithErrorMessage(false, 'greater-than-or-equal:{"value":true}')).toBe("This value should be greater than or equal to true.");
+            expect(sogv.isValidWithErrorMessage(false, 'greater-than-or-equal:{"value":true}')).toBe("This value should be greater than or equal to true.");
         });
 
         test('12345 >= "12346"', () => {
-            expect(abv.isValidWithErrorMessage(12345, 'greater-than-or-equal:{"value":"12346"}')).toBe("This value should be greater than or equal to 12346.");
+            expect(sogv.isValidWithErrorMessage(12345, 'greater-than-or-equal:{"value":"12346"}')).toBe("This value should be greater than or equal to 12346.");
         });
 
         test('1995-12-17T03:24:00 >= new Date("1996-12-17T03:24:00")', () => {
-            expect(abv.isValidWithErrorMessage('1995-12-17T03:24:00', {
+            expect(sogv.isValidWithErrorMessage('1995-12-17T03:24:00', {
                 "greater-than-or-equal": {
                     "value": new Date('1996-12-17T03:24:00')
                 }
@@ -85,7 +85,7 @@ describe('greater-than-or-equal', () => {
         });
 
         test('Lorem ipsum >= new Date("1995-12-17T03:24:00")', () => {
-            expect(abv.isValidWithErrorMessage('Lorem ipsum', {
+            expect(sogv.isValidWithErrorMessage('Lorem ipsum', {
                 "min": {
                     "value": new Date('1995-12-17T03:24:00')
                 }
@@ -93,7 +93,7 @@ describe('greater-than-or-equal', () => {
         });
 
         test('"true" >= true', () => {
-            expect(abv.isValidWithErrorMessage("true", 'greater-than-or-equal:{"value":true}')).toBe("This value should be greater than or equal to true.");
+            expect(sogv.isValidWithErrorMessage("true", 'greater-than-or-equal:{"value":true}')).toBe("This value should be greater than or equal to true.");
         });
     });
 });

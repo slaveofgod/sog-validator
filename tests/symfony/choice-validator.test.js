@@ -1,21 +1,21 @@
 'use strict';
 
-const abv = require('../../build/output/sog-validator');
+const sogv = require('../../build/output/sog-validator');
 
 describe('choice', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
         test('Empty string will not validate', () => {
-            expect(abv.isValidWithErrorMessage('', 'choice:{"choices":[]}')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage('', 'choice:{"choices":[]}')).toBe(toBe);
         });
 
         test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'choice:{"choices":[]}')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage(null, 'choice:{"choices":[]}')).toBe(toBe);
         });
 
         test('Liam,Noah,William,James [multiple:true,min:3,choices]', () => {
-            expect(abv.isValidWithErrorMessage(["Liam", "Noah", "William", "James"], {
+            expect(sogv.isValidWithErrorMessage(["Liam", "Noah", "William", "James"], {
                 'choice': {
                     "choices": [
                         "Liam", "Noah", "William", "James", "Logan", "Benjamin", "Mason", "Elijah",
@@ -30,7 +30,7 @@ describe('choice', () => {
         });
 
         test('Liam,Noah,William,James [multiple:true,max:4,choices]', () => {
-            expect(abv.isValidWithErrorMessage(["Liam", "Noah", "William", "James"], {
+            expect(sogv.isValidWithErrorMessage(["Liam", "Noah", "William", "James"], {
                 'choice': {
                     "choices": [
                         "Liam", "Noah", "William", "James", "Logan", "Benjamin", "Mason", "Elijah",
@@ -45,7 +45,7 @@ describe('choice', () => {
         });
 
         test('Liam [choices]', () => {
-            expect(abv.isValidWithErrorMessage("Liam", {
+            expect(sogv.isValidWithErrorMessage("Liam", {
                 'choice': {
                     "choices": [
                         "Liam", "Noah", "William", "James", "Logan", "Benjamin", "Mason", "Elijah",
@@ -58,7 +58,7 @@ describe('choice', () => {
         });
 
         test('Liam,Noah,William,James [multiple:true,min:3,callback]', () => {
-            expect(abv.isValidWithErrorMessage(["Liam", "Noah", "William", "James"], {
+            expect(sogv.isValidWithErrorMessage(["Liam", "Noah", "William", "James"], {
                 'choice': {
                     "callback": function () {
                         return [
@@ -75,7 +75,7 @@ describe('choice', () => {
         });
 
         test('Liam,Noah,William,James [multiple:true,max:4,callback]', () => {
-            expect(abv.isValidWithErrorMessage(["Liam", "Noah", "William", "James"], {
+            expect(sogv.isValidWithErrorMessage(["Liam", "Noah", "William", "James"], {
                 'choice': {
                     "callback": function () {
                         return [
@@ -92,7 +92,7 @@ describe('choice', () => {
         });
 
         test('Liam [callback]', () => {
-            expect(abv.isValidWithErrorMessage("Liam", {
+            expect(sogv.isValidWithErrorMessage("Liam", {
                 'choice': {
                     "callback": function () {
                         return [
@@ -110,7 +110,7 @@ describe('choice', () => {
     describe('Is Invalid', () => {
 
         test('Bob [choices]', () => {
-            expect(abv.isValidWithErrorMessage("Bob", {
+            expect(sogv.isValidWithErrorMessage("Bob", {
                 'choice': {
                     "choices": [
                         "Liam", "Noah", "William", "James", "Logan", "Benjamin", "Mason", "Elijah",
@@ -123,7 +123,7 @@ describe('choice', () => {
         });
 
         test('Liam,Noah,William,James [multiple:true,max:3,choices]', () => {
-            expect(abv.isValidWithErrorMessage(["Liam", "Noah", "William", "James"], {
+            expect(sogv.isValidWithErrorMessage(["Liam", "Noah", "William", "James"], {
                 'choice': {
                     "choices": [
                         "Liam", "Noah", "William", "James", "Logan", "Benjamin", "Mason", "Elijah",
@@ -138,7 +138,7 @@ describe('choice', () => {
         });
 
         test('Liam,Noah,William,James [multiple:true,min:5,choices]', () => {
-            expect(abv.isValidWithErrorMessage(["Liam", "Noah", "William", "James"], {
+            expect(sogv.isValidWithErrorMessage(["Liam", "Noah", "William", "James"], {
                 'choice': {
                     "choices": [
                         "Liam", "Noah", "William", "James", "Logan", "Benjamin", "Mason", "Elijah",
@@ -153,7 +153,7 @@ describe('choice', () => {
         });
 
         test('Liam [choices]', () => {
-            expect(abv.isValidWithErrorMessage('Liam', {
+            expect(sogv.isValidWithErrorMessage('Liam', {
                 'choice': {
                     "choices": [
                         "Liam", "Noah", "William", "James", "Logan", "Benjamin", "Mason", "Elijah",
@@ -167,7 +167,7 @@ describe('choice', () => {
         });
 
         test('Bob [callback]', () => {
-            expect(abv.isValidWithErrorMessage("Bob", {
+            expect(sogv.isValidWithErrorMessage("Bob", {
                 'choice': {
                     "callback": function () {
                         return [
@@ -182,7 +182,7 @@ describe('choice', () => {
         });
 
         test('Liam,Noah,William,James [multiple:true,max:3,callback]', () => {
-            expect(abv.isValidWithErrorMessage(["Liam", "Noah", "William", "James"], {
+            expect(sogv.isValidWithErrorMessage(["Liam", "Noah", "William", "James"], {
                 'choice': {
                     "callback": function () {
                         return [
@@ -199,7 +199,7 @@ describe('choice', () => {
         });
 
         test('Liam,Noah,William,James [multiple:true,min:5,callback]', () => {
-            expect(abv.isValidWithErrorMessage(["Liam", "Noah", "William", "James"], {
+            expect(sogv.isValidWithErrorMessage(["Liam", "Noah", "William", "James"], {
                 'choice': {
                     "callback": function () {
                         return [
@@ -216,7 +216,7 @@ describe('choice', () => {
         });
 
         test('Liam [callback]', () => {
-            expect(abv.isValidWithErrorMessage('Liam', {
+            expect(sogv.isValidWithErrorMessage('Liam', {
                 'choice': {
                     "callback": function () {
                         return [
@@ -232,7 +232,7 @@ describe('choice', () => {
         });
 
         test('Liam [callback]', () => {
-            expect(abv.isValidWithErrorMessage('Liam', {
+            expect(sogv.isValidWithErrorMessage('Liam', {
                 'choice': {
                     "callback": function () {
                         return [
@@ -248,15 +248,15 @@ describe('choice', () => {
         });
 
         test('0', () => {
-            expect(abv.isValidWithErrorMessage(0, 'choice:{"choices":[]}')).toBe("The value you selected is not a valid choice.");
+            expect(sogv.isValidWithErrorMessage(0, 'choice:{"choices":[]}')).toBe("The value you selected is not a valid choice.");
         });
 
         test('Empty Object', () => {
-            expect(abv.isValidWithErrorMessage({}, 'choice:{"choices":[]}')).toBe("The value you selected is not a valid choice.");
+            expect(sogv.isValidWithErrorMessage({}, 'choice:{"choices":[]}')).toBe("The value you selected is not a valid choice.");
         });
 
         test('Empty Array', () => {
-            expect(abv.isValidWithErrorMessage([], 'choice:{"choices":[]}')).toBe("The value you selected is not a valid choice.");
+            expect(sogv.isValidWithErrorMessage([], 'choice:{"choices":[]}')).toBe("The value you selected is not a valid choice.");
         });
     });
 });

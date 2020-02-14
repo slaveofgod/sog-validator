@@ -1,21 +1,21 @@
 'use strict';
 
-const abv = require('../../build/output/sog-validator');
+const sogv = require('../../build/output/sog-validator');
 
 describe('date-equals', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
         test('Empty string will not validate', () => {
-            expect(abv.isValidWithErrorMessage('', 'date-equals:{"value":"0.00000001"}')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage('', 'date-equals:{"value":"0.00000001"}')).toBe(toBe);
         });
 
         test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'date-equals:{"value":"0.00000001"}')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage(null, 'date-equals:{"value":"0.00000001"}')).toBe(toBe);
         });
 
         test('1995-12-17T03:24:00 == new Date("1995-12-17T03:24:00")', () => {
-            expect(abv.isValidWithErrorMessage('1995-12-17T03:24:00', {
+            expect(sogv.isValidWithErrorMessage('1995-12-17T03:24:00', {
                 "date-equals": {
                     "value": new Date('1995-12-17T03:24:00')
                 }
@@ -25,7 +25,7 @@ describe('date-equals', () => {
 
     describe('Is Invalid', () => {
         test('1996-12-17T03:24:00 == new Date("1995-12-17T03:24:00")', () => {
-            expect(abv.isValidWithErrorMessage('1996-12-17T03:24:00', {
+            expect(sogv.isValidWithErrorMessage('1996-12-17T03:24:00', {
                 "date-equals": {
                     "value": new Date('1995-12-17T03:24:00')
                 }
@@ -33,7 +33,7 @@ describe('date-equals', () => {
         });
 
         test('1995-12-17T03:24:00 == new Date("1995-12-17T03:21:00")', () => {
-            expect(abv.isValidWithErrorMessage('1995-12-17T03:24:00', {
+            expect(sogv.isValidWithErrorMessage('1995-12-17T03:24:00', {
                 "date-equals": {
                     "value": new Date('1995-12-17T03:21:00')
                 }
@@ -41,7 +41,7 @@ describe('date-equals', () => {
         });
 
         test('1995-12-17T03:24:00 == new Date("1996-12-17T03:24:00")', () => {
-            expect(abv.isValidWithErrorMessage('1995-12-17T03:24:00', {
+            expect(sogv.isValidWithErrorMessage('1995-12-17T03:24:00', {
                 "date-equals": {
                     "value": new Date('1996-12-17T03:24:00')
                 }
@@ -49,7 +49,7 @@ describe('date-equals', () => {
         });
 
         test('Lorem ipsum == new Date("1995-12-17T03:24:00")', () => {
-            expect(abv.isValidWithErrorMessage('Lorem ipsum', {
+            expect(sogv.isValidWithErrorMessage('Lorem ipsum', {
                 "date-equals": {
                     "value": new Date('1995-12-17T03:24:00')
                 }

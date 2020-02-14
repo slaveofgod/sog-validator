@@ -1,29 +1,29 @@
 'use strict';
 
-const abv = require('../../build/output/sog-validator');
+const sogv = require('../../build/output/sog-validator');
 
 describe('not-null', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
         test('Empty string', () => {
-            expect(abv.isValidWithErrorMessage('', 'not-null')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage('', 'not-null')).toBe(toBe);
         });
 
         test('Empty array', () => {
-            expect(abv.isValidWithErrorMessage([], 'not-null')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage([], 'not-null')).toBe(toBe);
         });
 
         test('Empty object', () => {
-            expect(abv.isValidWithErrorMessage({}, 'not-null')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage({}, 'not-null')).toBe(toBe);
         });
 
         test('0', () => {
-            expect(abv.isValidWithErrorMessage(0, 'not-null')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage(0, 'not-null')).toBe(toBe);
         });
 
         test('False', () => {
-            expect(abv.isValidWithErrorMessage(false, 'not-null')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage(false, 'not-null')).toBe(toBe);
         });
     });
 
@@ -31,11 +31,11 @@ describe('not-null', () => {
         let toBe = "This value should not be null.";
 
         test('Undefined', () => {
-            expect(abv.isValidWithErrorMessage(undefined, 'not-null')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage(undefined, 'not-null')).toBe(toBe);
         });
 
         test('Null', () => {
-            expect(abv.isValidWithErrorMessage(null, 'not-null')).toBe(toBe);
+            expect(sogv.isValidWithErrorMessage(null, 'not-null')).toBe(toBe);
         });
     });
 });
