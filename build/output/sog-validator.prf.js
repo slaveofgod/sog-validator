@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v0.9.7 revision fd3f5f6 (PROFILER)
+ * SOG Validator Library v1.0.1 revision 996767f (PROFILER)
  * Copyright 2011-2020 SOG Validator Ltd. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var sogv = {version:"0.9.7", revision:"fd3f5f6", config:{}, common:{}, validators:{}, registry:function(validator) {
+var sogv = {version:"1.0.1", revision:"996767f", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
