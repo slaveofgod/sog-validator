@@ -1,6 +1,6 @@
 /*
- * SOG Validator Library v1.0.1 revision 996767f (DEBUG PROFILER)
- * Copyright 2011-2020 SOG Validator Ltd. All rights reserved.
+ * SOG Validator Library v1.0.2 revision 6ac35b6 (DEBUG PROFILER)
+ * Copyright 2019-2020 Slave of God <iamtheslaveofgod@gmail.com>. All rights reserved.
  */
 ;(function (root, factory) {
     if (typeof define === 'function' && define.amd) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var sogv = {version:"1.0.1", revision:"996767f", config:{}, common:{}, validators:{}, registry:function(validator) {
+var sogv = {version:"1.0.2", revision:"6ac35b6", config:{}, common:{}, validators:{}, registry:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;

@@ -171,7 +171,7 @@ var getCopyrightNotice = function (ver, rev) {
     return [
         "/*",
         " * SOG Validator Library v" + ver + " revision " + rev + buildOptions,
-        " * Copyright 2011-" + new Date().getFullYear() + " SOG Validator Ltd. All rights reserved.",
+        " * Copyright 2019-" + new Date().getFullYear() + " Slave of God <iamtheslaveofgod@gmail.com>. All rights reserved.",
         " */",
         ""
     ].join("\n");
