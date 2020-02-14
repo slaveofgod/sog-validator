@@ -8,6 +8,15 @@ Data validation engine.
 
  * [Installation and Usage](#installation-and-usage)
  * [Available Validation Rules](#available-validation-rules)
+   * [Basic Constraints](#basic-constraints)
+   * [String Constraints](#string-constraints)
+   * [Comparison Constraints](#comparison-constraints)
+   * [Number Constraints](#number-constraints)
+   * [Date Constraints](#date-constraints)
+   * [Choice Constraints](#choice-constraints)
+   * [File Constraints](#file-constraints)
+   * [Financial and other Number Constraints](#financial-and-other-number-constraints)
+   * [Other Constraints](#other-constraints)
 
 ## Installation and Usage
 
