@@ -235,6 +235,10 @@ These are the basic constraints: use them to assert very basic things about the 
  * [Isbn](#isbn)
  * [Issn](#issn)
 
+#### Other Constraints
+
+ * [Count](#count)
+
 ---
 
 ##### Accepted
@@ -1318,6 +1322,22 @@ _options_:
  * `requireHyphen` - This is optional parameter. The validator will allow non hyphenated `ISSN` values by default. When switching this to `true`, the validator requires a hyphenated `ISSN` value. Default: `false`.
 
 Validates that a value is a valid [International Standard Serial Number (ISSN)](https://en.wikipedia.org/wiki/Issn).
+
+[⬆ validation rules](#available-validation-rules)
+
+---
+
+##### Count
+
+_aliases_: `count`
+
+_usage_: `count:min,max`
+
+_options_:
+ * `min` - This option is the "`min`" count value. Validation will fail if the given collection elements count is less than this min value. This option is required when the max option is not defined.
+ * `max` - This option is the "`max`" count value. Validation will fail if the given collection elements count is greater than this max value. This option is required when the min option is not defined.
+
+Validates that a given collection's (i.e. an array or an object that implements Countable) element `count` is `between` some `minimum` and `maximum` value.
 
 [⬆ validation rules](#available-validation-rules)
 
