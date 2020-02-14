@@ -6,6 +6,8 @@ Data validation engine.
 
 ##### This is the powerest library which provides the best way to validate any type of data.
 
+## Navigation
+
  * [Installation and Usage](#installation-and-usage)
  * [Available Validation Rules](#available-validation-rules)
    * [Basic Constraints](#basic-constraints)
@@ -256,7 +258,7 @@ _aliases_: `accepted`
 
 The field under validation must be `yes`, `on`, `1`, or `true`. This is useful for validating "Terms of Service" acceptance.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -266,7 +268,7 @@ _aliases_: `not-blank`, `not-empty`, `filled`
 
 Validates that a value is `not blank` - meaning not equal to a blank string, a blank array, false or null (null behavior is configurable). The field under validation must not be empty when it is present.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -276,7 +278,7 @@ _aliases_: `blank`, `empty`
 
 Validates that a value is blank - meaning equal to an `empty string` or `null`.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -286,7 +288,7 @@ _aliases_: `not-null`, `required`, `present`
 
 Validates that a value is not strictly equal to `null`.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -296,7 +298,7 @@ _aliases_: `is-null`, `nullable`
 
 Validates that a value is exactly equal to `null`.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -306,7 +308,7 @@ _aliases_: `is-true`, `true`
 
 Validates that a value is true. Specifically, this checks if the value is exactly `true`, exactly the integer `1`, or exactly the string "`1`".
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -316,7 +318,7 @@ _aliases_: `is-false`, `false`
 
 Validates that a value is false. Specifically, this checks to see if the value is exactly false, exactly the integer 0, or exactly the string "0".
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -326,7 +328,7 @@ _aliases_: `alpha_dash`, `alpha-dash`
 
 The field under validation may have alpha-numeric characters, as well as dashes and underscores.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -336,7 +338,7 @@ _aliases_: `array`, `arr`
 
 The field under validation must be an array.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -346,7 +348,7 @@ _aliases_: `boolean`, `bool`
 
 The field under validation must be able to be cast as a boolean. Accepted input are true, false, 1, 0, "1", and "0".
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -356,7 +358,7 @@ _aliases_: `callable`
 
 Verify that the contents of a variable can be called as a function.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -366,7 +368,7 @@ _aliases_: `float`
 
 The field under validation must be a float.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -376,7 +378,7 @@ _aliases_: `double`
 
 The field under validation must be a double.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -386,7 +388,7 @@ _aliases_: `int`, `integer`
 
 The field under validation must be an integer.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -396,7 +398,7 @@ _aliases_: `iterable`
 
 Verify that the contents of a variable is an iterable value.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -406,7 +408,7 @@ _aliases_: `null`
 
 The field under validation must be a NULL.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -416,7 +418,7 @@ _aliases_: `numeric`, `num`
 
 The field under validation must be a number or a numeric string.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -426,7 +428,7 @@ _aliases_: `object`
 
 The field under validation must be an object.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -436,7 +438,7 @@ _aliases_: `real`
 
 Finds whether the type of a variable is real.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -446,7 +448,7 @@ _aliases_: `scalar`
 
 Finds whether a variable is a scalar. Scalar variables are those containing an integer, float, string or boolean.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 ##### String
@@ -455,7 +457,7 @@ _aliases_: `string`, `str`
 
 The field under validation must be a string.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -465,7 +467,7 @@ _aliases_: `alnum`, `alpha-num`, `alpha_num`
 
 Check for alphanumeric character(s).
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -475,7 +477,7 @@ _aliases_: `alpha`
 
 Check for alphabetic character(s).
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -485,7 +487,7 @@ _aliases_: `cntrl`
 
 Check for control character(s).
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -495,7 +497,7 @@ _aliases_: `digit`
 
 Check for numeric character(s).
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -505,7 +507,7 @@ _aliases_: `graph`
 
 Check for any printable character(s) except space.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -515,7 +517,7 @@ _aliases_: `lower`
 
 Check for lowercase character(s).
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -525,7 +527,7 @@ _aliases_: `print`
 
 Check for printable character(s).
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -535,7 +537,7 @@ _aliases_: `punct`
 
 Check for any printable character which is not whitespace or an alphanumeric character.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -545,7 +547,7 @@ _aliases_: `space`
 
 Check for whitespace character(s).
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -555,7 +557,7 @@ _aliases_: `upper`
 
 Check for uppercase character(s).
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -565,7 +567,7 @@ _aliases_: `xdigit`
 
 Check for character(s) representing a hexadecimal digit.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -581,7 +583,7 @@ _available modes_:
 
 Validates that a value is a valid email address.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -593,7 +595,7 @@ _usage_: `length:min,max`
 
 Validates that a given string length is between some `minimum` and `maximum` value.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -603,7 +605,7 @@ _aliases_: `url`
 
 Validates that a value is a valid URL string.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -619,7 +621,7 @@ _options_:
 
 Validates that a value matches a regular expression.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -629,7 +631,7 @@ _aliases_: `ip`
 
 Validates that a value is a valid IP address.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -639,7 +641,7 @@ _aliases_: `ipv4`
 
 The field under validation must be an `IPv4` address.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -649,7 +651,7 @@ _aliases_: `ipv6`
 
 The field under validation must be an `IPv6` address.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -659,7 +661,7 @@ _aliases_: `json`
 
 Validates that a value has valid `JSON` syntax.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -674,7 +676,7 @@ _options_:
 
 The field under validation must be a valid RFC 4122 (version 1, 3, 4, or 5) universally unique identifier (UUID).
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -689,7 +691,7 @@ _options_:
 
 The field under validation must end with one of the given values.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -704,7 +706,7 @@ _options_:
 
 The field under validation must start with one of the given values.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -719,7 +721,7 @@ _options_:
 
 Validates that a value is equal to another value, defined in the options. This constraint compares using `==`, so `3` and "`3`" are considered equal. 
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -734,7 +736,7 @@ _options_:
 
 Validates that a value is not equal to another value, defined in the options. This constraint compares using `!=`, so `3` and "`3`" are considered equal.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -749,7 +751,7 @@ _options_:
 
 Validates that a value is identical to another value, defined in the options. This constraint compares using `===`, so `3` and "`3`" are not considered equal.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -764,7 +766,7 @@ _options_:
 
 Validates that a value is not identical to another value, defined in the options. This constraint compares using `!==`, so `3` and "`3`" are considered not equal.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -779,7 +781,7 @@ _options_:
 
 Validates that a value is less than another value, defined in the options.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -794,7 +796,7 @@ _options_:
 
 Validates that a value is less than or equal to another value, defined in the options.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -809,7 +811,7 @@ _options_:
 
 Validates that a value is greater than another value, defined in the options.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -824,7 +826,7 @@ _options_:
 
 Validates that a value is greater than or equal to another value, defined in the options.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -836,7 +838,7 @@ _usage_: `range:min,max`
 
 Validates that a given number or Date object is between some `minimum` and `maximum`.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -848,7 +850,7 @@ _usage_: `between:min,max`
 
 The field under validation must have a size between the given `min` and `max`. `Strings`, `numerics`, `arrays` and `dates` are evaluated in the same fashion as the size rule.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -860,7 +862,7 @@ _usage_: `digits_between:min,max`
 
 The field under validation must be `numeric` and must have a length between the given `min` and `max`.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -875,7 +877,7 @@ _options_:
 
 Validates that a value is divisible by another value, defined in the options.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -885,7 +887,7 @@ _aliases_: `unique`
 
 Validates that all the elements of the given collection are `unique` (none of them is present more than once). Elements are compared strictly, so '`7`' and `7` are considered different elements (a string and an integer, respectively). It can be a `string` or `array`.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -900,7 +902,7 @@ _options_:
 
 The field under validation must be `numeric` and must have an exact `length` of value.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -910,7 +912,7 @@ _aliases_: `distinct`
 
 When working with `arrays`, the field under validation must not have any duplicate values.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -925,7 +927,7 @@ _options_:
 
 The field under validation must have a size matching the given value. For `string` data, value corresponds to the number of characters. For `numeric` data, value corresponds to a given integer value. For an `array`, size corresponds to the count of the array.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -940,7 +942,7 @@ _options_:
 
 The field under validation must be a value after a given date.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -955,7 +957,7 @@ _options_:
 
 The field under validation must be a value after or equal to the given date.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -970,7 +972,7 @@ _options_:
 
 The field under validation must be a value before a given date.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -985,7 +987,7 @@ _options_:
 
 The field under validation must be a value before or equal to the given date.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1000,7 +1002,7 @@ _options_:
 
 The field under validation must be `equal` to the given `date`.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1010,7 +1012,7 @@ _aliases_: `positive`
 
 Validates that a value is a `positive` number. Zero is neither positive nor negative, so you must use `Positive Or Zero` if you want to allow zero as value.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1020,7 +1022,7 @@ _aliases_: `positive`
 
 Validates that a value is a `positive` number or equal to `zero`.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1030,7 +1032,7 @@ _aliases_: `negative`
 
 Validates that a value is a `negative` number. Zero is neither positive nor negative, so you must use `Negative Or Zero` if you want to allow zero as value.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1040,7 +1042,7 @@ _aliases_: `negative-or-zero`, `noz`
 
 Validates that a value is a `negative` number or equal to `zero`.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1050,7 +1052,7 @@ _aliases_: `date`
 
 Validates that a value is a valid `date`, meaning a string (or an object that can be cast into a string) that follows a valid `YYYY-MM-DD` format.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1127,7 +1129,7 @@ Input | Example | Description
 `S SS SSS` | `0..999` | Fractional seconds
 `Z ZZ` | `+12:00` | Offset from UTC as `+-HH:mm`, `+-HHmm`, or `Z`
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1137,7 +1139,7 @@ _aliases_: `time`
 
 Validates that a value is a valid `time`, meaning a string (or an object that can be cast into a string) that follows a valid `HH:mm:ss` format.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1147,7 +1149,7 @@ _aliases_: `timezone`, `tz`
 
 Validates that a value is a valid timezone identifier (e.g. `Europe/Paris`). [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1165,7 +1167,7 @@ _options_:
 
 This constraint is used to ensure that the given value is one of a given set of valid choices. It can also be used to validate that each item in an array of items is one of those valid choices.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1180,7 +1182,7 @@ _options_:
 
 The field under validation must not be included in the given list of values.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1195,7 +1197,7 @@ _options_:
 
 The field under validation must be included in the given list of values.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1205,7 +1207,7 @@ _aliases_: `language`, `lang`
 
 Validates that a value is a valid language Unicode language identifier (e.g. `fr` or `ar-dz`).
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1215,7 +1217,7 @@ _aliases_: `locale`
 
 Validates that a value is a valid locale. The "`value`" for each locale is any of the [ICU format locale IDs](http://userguide.icu-project.org/locale). For example, the two letter [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) language code (e.g. `fr`), or the language code followed by an underscore (`_`) and the [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes) country code (e.g. fr_FR for French/France). The given locale values are canonicalized before validating them to avoid issues with wrong uppercase/lowercase values and to remove unneeded elements (e.g. `FR-fr.utf8` will be validated as `fr_FR`).
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1225,7 +1227,7 @@ _aliases_: `country`
 
 Validates that a value is a valid [3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes/ISO) `country code`.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1235,7 +1237,7 @@ _aliases_: `file`
 
 Under development ...
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1245,7 +1247,7 @@ _aliases_: `image`
 
 Under development ...
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1260,7 +1262,7 @@ _options_:
 
 This constraint is used to ensure that a value has the proper format of a [Business Identifier Code (BIC)](https://en.wikipedia.org/wiki/Business_Identifier_Code). `BIC` is an internationally agreed means to uniquely identify both financial and non-financial institutions. You may also check that the `BIC` is associated with a given `IBAN`.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1275,7 +1277,7 @@ _options_:
 
 This constraint ensures that a credit card number is valid for a given credit card company. It can be used to validate the number before trying to initiate a payment through a payment gateway.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1285,7 +1287,7 @@ _aliases_: `currency`
 
 Validates that a value is a valid [3-letter ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) `currency` name.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1295,7 +1297,7 @@ _aliases_: `luhn`
 
 This constraint is used to ensure that a `credit card` number passes the [Luhn algorithm](https://en.wikipedia.org/wiki/Luhn_algorithm). It is useful as a first step to validating a credit card: before communicating with a payment gateway.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1305,7 +1307,7 @@ _aliases_: `iban`
 
 This constraint is used to ensure that a bank account number has the proper format of an [International Bank Account Number (IBAN)](https://en.wikipedia.org/wiki/International_Bank_Account_Number). `IBAN` is an internationally agreed means of identifying bank accounts across national borders with a reduced risk of propagating transcription errors.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1315,7 +1317,7 @@ _aliases_: `isbn`
 
 This constraint validates that an [International Standard Book Number (ISBN)](https://en.wikipedia.org/wiki/Isbn) is either a valid `ISBN-10` or a valid `ISBN-13`.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1332,7 +1334,7 @@ _options_:
 
 Validates that a value is a valid [International Standard Serial Number (ISSN)](https://en.wikipedia.org/wiki/Issn).
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
@@ -1348,7 +1350,7 @@ _options_:
 
 Validates that a given collection's (i.e. an array or an object that implements Countable) element `count` is `between` some `minimum` and `maximum` value.
 
-[⬆ validation rules](#available-validation-rules)
+[⬆ navigation](#navigation)
 
 ---
 
