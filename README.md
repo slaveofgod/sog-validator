@@ -4,7 +4,7 @@
 
 Data validation engine.
 
-##### This is the powerest library which provides the best way to validate any type of data.
+##### The power library which provides the best way to validate any type of data.
 
 ## Navigation
 
@@ -80,40 +80,40 @@ The library can be loaded either as a standalone script.
 ```html
 <script type="text/javascript" src="build/output/sog-validator.min.js"></script>
 <script type="text/javascript">
-var validationEngine = new sogv.Application({
-    lang: 'en'
-});
-
-var form = validationEngine.make({
-    first_name: 'required|string|length:min,max',
-    last_lame: 'required|string|length:min,max',
-    email: 'required|email',
-    birthday: 'required|date',
-    creditCard: 'required|string|card-scheme:VISA;MASTERCARD',
-    ip: 'required|string|ip',
-    locale: 'required|string|locale',
-    country: 'required|string|country',
-    language: 'required|string|language',
-    homepage: 'required|string|url'
-}, {
-    first_name: 'Leo',
-    last_lame: 'Lane',
-    email: 'leo.lane38@example.com',
-    birthday: '1977-03-07',
-    creditCard: '4111111111111111',
-    ip: '8.8.8.8',
-    locale: 'cy_GB',
-    country: 'US',
-    language: 'en_gb',
-    homepage: 'https://github.com//slaveofgod/sog-validator'
-});
-     *
-if (false === form.isValid()) {
-    if (false === form.get('name').isValid()) {
-        form.get('name').errors().first();
+    var validationEngine = new sogv.Application({
+        lang: 'en'
+    });
+    
+    var form = validationEngine.make({
+        first_name: 'required|string|length:min,max',
+        last_lame: 'required|string|length:min,max',
+        email: 'required|email',
+        birthday: 'required|date',
+        creditCard: 'required|string|card-scheme:VISA;MASTERCARD',
+        ip: 'required|string|ip',
+        locale: 'required|string|locale',
+        country: 'required|string|country',
+        language: 'required|string|language',
+        homepage: 'required|string|url'
+    }, {
+        first_name: 'Leo',
+        last_lame: 'Lane',
+        email: 'leo.lane38@example.com',
+        birthday: '1977-03-07',
+        creditCard: '4111111111111111',
+        ip: '8.8.8.8',
+        locale: 'cy_GB',
+        country: 'US',
+        language: 'en_gb',
+        homepage: 'https://github.com//slaveofgod/sog-validator'
+    });
+         *
+    if (false === form.isValid()) {
+        if (false === form.get('name').isValid()) {
+            form.get('name').errors().first();
+        }
+        // ...
     }
-    // ...
-}
 </script>
 ```
 
@@ -122,16 +122,16 @@ if (false === form.isValid()) {
 <script type="text/javascript" src="build/output/sog-validator.min.js"></script>
 <script type="text/javascript">
 
-// Validation status only
-if (false === sogv.isValid('leo.lane38@example.com', 'required|email')) {
-    // do something with invalid data
-}
-
-// Validation status and error message (returns message if data invalid or null if valid)
-var message = sogv.isValidWithErrorMessage('leo.lane38@example.com', 'required|email');
-if (null !== message) {
-    // do something with invalid data
-}
+    // Validation status only
+    if (false === sogv.isValid('leo.lane38@example.com', 'required|email')) {
+        // do something with invalid data
+    }
+    
+    // Validation status and error message (returns message if data invalid or null if valid)
+    var message = sogv.isValidWithErrorMessage('leo.lane38@example.com', 'required|email');
+    if (null !== message) {
+        // do something with invalid data
+    }
 </script>
 ```
 

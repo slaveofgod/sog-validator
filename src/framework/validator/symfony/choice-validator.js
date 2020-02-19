@@ -294,7 +294,7 @@ Object.assign(sogv, function () {
                 throw new Error('Either "choices" or "callback" must be specified on constraint Choice');
             }
 
-            // Check if empty
+            // Cancel validation if data is empty
             if (true === this.__isEmptyData()) {
                 this.__skip = true;
                 return ;

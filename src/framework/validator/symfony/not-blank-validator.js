@@ -135,13 +135,13 @@ Object.assign(sogv, function () {
                 return ;
             }
 
-            // Check if empty string
+            // Cancel validation if data is empty string
             if ('' === this.data) {
                 this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
 
-            // Check if empty string
+            // Cancel validation if data is empty string
             if (
                 true === Array.isArray(this.data)
                 && 0 === this.data.length

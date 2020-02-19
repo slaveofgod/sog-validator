@@ -120,7 +120,7 @@ Object.assign(sogv, function () {
                 throw new Error('Either option "min" and "max" must be given for constraint');
             }
 
-            // Check if empty
+            // Cancel validation if data is empty
             if (true === this.__isEmptyData()) {
                 this.__skip = true;
                 return ;

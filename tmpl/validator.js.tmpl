@@ -3,10 +3,10 @@ Object.assign(sogv, function () {
 
     /**
      * @constructor
-     * @name sogv.DoubleValidator
+     * @name sogv.%ClassName%
      * @extends sogv.AbstractValidator
      * @classdesc
-     * <p>Finds whether the type of a variable is <code>double</code>.</p>
+     * <p>%ClassDescription%</p>
      * @description
      * <p>Create a new Validator.</p>
      * @param {*} data The data which needs to be validated.
@@ -17,49 +17,75 @@ Object.assign(sogv, function () {
      * @property {Array} alias
      * <p>The aliases for the current validator.</p>
      * <p>They could be used in the short validation format.</p>
-     * <p>Defined aliases: ['<code>double</code>'].</p>
+     * <p>Defined aliases: ['<code>%Alias%</code>'].</p>
      * @property {Object} options The description of the required options.
      * @example
-     * var validator = new sogv.DoubleValidator(data);
+     * var validator = new sogv.%ClassName%(data);
      * if (false === validator.isValid()) {
      *      validator.errors().first();
      * }
      */
 
-    var DoubleValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+    // PROPERTIES
 
-        this.message = 'The %%attribute%% field must be double.';
+    /**
+     * @name sogv.%ClassName%#property
+     * @type {Type}
+     * @description
+     * <p>Property description.</p>
+     */
 
-        this.name = 'DoubleValidator';
+    var %ClassName% = function (data, options, optionRules, lang, internal) {
+        sogv.AbstractValidator.call(this, data, options, {
+            property: optionRules.property || 'required|string',
+        }, lang, internal);
+
+        this.property = this.__options.property;
+        this.message = '%ErrorMessage%';
+
+        this.name = '%ClassName%';
     };
-    DoubleValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
-    DoubleValidator.prototype.constructor = DoubleValidator;
+    %ClassName%.prototype = Object.create(sogv.AbstractValidator.prototype);
+    %ClassName%.prototype.constructor = %ClassName%;
 
-    Object.defineProperty(DoubleValidator.prototype, 'alias', {
+    Object.defineProperty(%ClassName%.prototype, 'alias', {
         get: function () {
             return [
-                'double'
+                '%Alias%'
             ];
         }
     });
 
-    Object.defineProperty(DoubleValidator.prototype, 'options', {
+    Object.defineProperty(%ClassName%.prototype, 'options', {
         get: function () {
-            return [];
+            return [
+                {
+                    'name': 'property',
+                    'type': 'string'
+                }
+            ];
         }
     });
 
-    Object.assign(DoubleValidator.prototype, {
+    Object.assign(%ClassName%.prototype, {
         /**
          * @private
          * @function
-         * @name sogv.DoubleValidator#__validate
+         * @name sogv.%ClassName%#__validate
          * @description
          * <p>Validate data.</p>
          */
         __validate: function () {
-            if (false === sogv.isValid(this.data, 'type:{"type":"double"}')) {
+
+            // Write your validation rules here ...
+            // This is just an example.
+            // Validated data is contained in "this.data" variable
+            var status = true;
+            if (null === this.data) {
+                var status = false;
+            }
+
+            if (false === status) {
                 this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
@@ -68,7 +94,7 @@ Object.assign(sogv, function () {
         /**
          * @private
          * @function
-         * @name sogv.BetweenValidator#__beforeValidate
+         * @name sogv.%ClassName%#__beforeValidate
          * @description
          * <p>Execute before validation is running.</p>
          */
@@ -83,21 +109,21 @@ Object.assign(sogv, function () {
         /**
          * @private
          * @function
-         * @name sogv.DoubleValidator#__messageParameters
+         * @name sogv.%ClassName%#__messageParameters
          * @description
          * <p>Returned parameters for error message which needs to be replaced.</p>
-         * @returns {Object} List of parameters.</p>
+         * @returns {Object} List of parameters.
          */
         __messageParameters: function () {
             return {
-                'attribute': 'value'
+                'property': this.property
             }
         }
     });
 
     return {
-        DoubleValidator: DoubleValidator
+        %ClassName%: %ClassName%
     };
 }());
 
-sogv.registry(sogv.DoubleValidator);
+sogv.registry(sogv.%ClassName%);

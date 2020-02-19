@@ -176,7 +176,7 @@ Object.assign(sogv, function () {
                 this.__normalize();
             }
 
-            // Check if empty
+            // Cancel validation if data is empty
             if (true === this.__isEmptyData()) {
                 this.__skip = true;
                 return ;
@@ -236,7 +236,7 @@ Object.assign(sogv, function () {
          * <p>Execute before validation is running.<p>
          */
         __beforeValidate: function () {
-            // Check if empty
+            // Cancel validation if data is empty
             if (true === this.__isEmptyData()) {
                 this.__skip = true;
                 return ;
