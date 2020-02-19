@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<!--[if IE 9]><html class="ie9"><![endif]-->
+    <head>
+        <title>Example - 1</title>
+        <meta charset="utf-8">
+        <script src="../build/output/sog-validator.min.js"></script>
+    </head>
+    <body>
+        <script>
+            var message = sogv.isValidWithErrorMessage('iamtheslaveofgod@gmail.com', 'required|email');
+            if (null === message) {
+                console.log('Valid');
+            } else {
+                console.error(message);
+            }
+        </script>
+    </body>
+</html>
