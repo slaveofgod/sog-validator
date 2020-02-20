@@ -124,4 +124,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.PositiveValidator);
+sogv.registerValidator(sogv.PositiveValidator);

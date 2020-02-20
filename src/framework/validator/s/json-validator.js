@@ -131,4 +131,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.JsonValidator);
+sogv.registerValidator(sogv.JsonValidator);

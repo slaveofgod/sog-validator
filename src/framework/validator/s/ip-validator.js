@@ -280,4 +280,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.IpValidator);
+sogv.registerValidator(sogv.IpValidator);

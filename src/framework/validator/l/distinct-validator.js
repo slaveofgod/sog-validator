@@ -89,4 +89,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.DistinctValidator);
+sogv.registerValidator(sogv.DistinctValidator);

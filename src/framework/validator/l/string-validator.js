@@ -73,4 +73,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.StringValidator);
+sogv.registerValidator(sogv.StringValidator);

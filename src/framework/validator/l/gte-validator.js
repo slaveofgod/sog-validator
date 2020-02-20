@@ -149,4 +149,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.GteValidator);
+sogv.registerValidator(sogv.GteValidator);

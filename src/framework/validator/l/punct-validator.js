@@ -100,4 +100,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.PunctValidator);
+sogv.registerValidator(sogv.PunctValidator);

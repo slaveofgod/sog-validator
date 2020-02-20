@@ -148,4 +148,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.EndsWithValidator);
+sogv.registerValidator(sogv.EndsWithValidator);

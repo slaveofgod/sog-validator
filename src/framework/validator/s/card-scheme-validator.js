@@ -33,7 +33,7 @@ Object.assign(sogv, function () {
      * @name sogv.CardSchemeValidator#message
      * @type {String}
      * @description
-     * The message shown when the value does not pass the CardScheme check.
+     * <p>The message shown when the value does not pass the CardScheme check.</p>
      * <p>Default: "Unsupported card type or invalid card number."
      * <p>You can use the following parameters in this message:</p>
      * <table>
@@ -56,9 +56,8 @@ Object.assign(sogv, function () {
      * @name sogv.CardSchemeValidator#schemes
      * @type {String|Array}
      * @description
-     * This option is required and represents the name of the number scheme used to validate the credit card number, it can either be a string or an array.
-     * </p>
-     * Valid values are:
+     * <p>This option is required and represents the name of the number scheme used to validate the credit card number, it can either be a string or an array.</p>
+     * <p>Valid values are:</p>
      * <ul>
      *     <li><b>AMEX</b></li>
      *     <li><b>CHINA_UNIONPAY</b></li>
@@ -73,7 +72,7 @@ Object.assign(sogv, function () {
      *     <li><b>UATP</b></li>
      *     <li><b>VISA</b></li>
      * </ul>
-     * For more information about the used schemes, see {@link https://en.wikipedia.org/wiki/Bank_card_number#Issuer_identification_number_.28IIN.29|Wikipedia: Issuer identification number (IIN)}.
+     * <p>For more information about the used schemes, see {@link https://en.wikipedia.org/wiki/Bank_card_number#Issuer_identification_number_.28IIN.29|Wikipedia: Issuer identification number (IIN)}.</p>
      */
 
     var CardSchemeValidator = function (data, options, optionRules, lang, internal) {
@@ -255,4 +254,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.CardSchemeValidator);
+sogv.registerValidator(sogv.CardSchemeValidator);

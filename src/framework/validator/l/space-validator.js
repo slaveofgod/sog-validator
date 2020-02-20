@@ -100,4 +100,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.SpaceValidator);
+sogv.registerValidator(sogv.SpaceValidator);

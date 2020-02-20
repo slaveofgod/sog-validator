@@ -72,4 +72,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.Ipv4Validator);
+sogv.registerValidator(sogv.Ipv4Validator);

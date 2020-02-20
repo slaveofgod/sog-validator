@@ -166,4 +166,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.DigitsBetweenValidator);
+sogv.registerValidator(sogv.DigitsBetweenValidator);

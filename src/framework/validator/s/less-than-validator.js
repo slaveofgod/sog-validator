@@ -139,4 +139,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.LessThanValidator);
+sogv.registerValidator(sogv.LessThanValidator);

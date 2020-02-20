@@ -112,4 +112,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.DateEqualsValidator);
+sogv.registerValidator(sogv.DateEqualsValidator);

@@ -73,4 +73,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.AlphaDashValidator);
+sogv.registerValidator(sogv.AlphaDashValidator);

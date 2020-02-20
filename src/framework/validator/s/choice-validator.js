@@ -381,4 +381,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.ChoiceValidator);
+sogv.registerValidator(sogv.ChoiceValidator);

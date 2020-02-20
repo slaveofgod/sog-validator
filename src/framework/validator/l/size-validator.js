@@ -174,4 +174,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.SizeValidator);
+sogv.registerValidator(sogv.SizeValidator);

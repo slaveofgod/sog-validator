@@ -207,4 +207,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.EmailValidator);
+sogv.registerValidator(sogv.EmailValidator);

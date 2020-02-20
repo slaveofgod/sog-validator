@@ -145,4 +145,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.DivisibleByValidator);
+sogv.registerValidator(sogv.DivisibleByValidator);

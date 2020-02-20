@@ -242,4 +242,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.TypeValidator);
+sogv.registerValidator(sogv.TypeValidator);

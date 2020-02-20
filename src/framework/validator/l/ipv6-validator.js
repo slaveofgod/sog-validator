@@ -72,4 +72,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.Ipv6Validator);
+sogv.registerValidator(sogv.Ipv6Validator);

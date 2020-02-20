@@ -100,4 +100,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.DoubleValidator);
+sogv.registerValidator(sogv.DoubleValidator);

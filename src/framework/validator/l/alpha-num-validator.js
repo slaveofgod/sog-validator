@@ -74,4 +74,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.AlphaNumValidator);
+sogv.registerValidator(sogv.AlphaNumValidator);

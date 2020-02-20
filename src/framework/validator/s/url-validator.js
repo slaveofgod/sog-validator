@@ -224,4 +224,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.UrlValidator);
+sogv.registerValidator(sogv.UrlValidator);

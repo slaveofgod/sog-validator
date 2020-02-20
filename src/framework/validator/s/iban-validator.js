@@ -333,4 +333,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.IbanValidator);
+sogv.registerValidator(sogv.IbanValidator);

@@ -91,4 +91,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.BeforeValidator);
+sogv.registerValidator(sogv.BeforeValidator);

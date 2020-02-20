@@ -116,4 +116,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.BlankValidator);
+sogv.registerValidator(sogv.BlankValidator);

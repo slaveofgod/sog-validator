@@ -111,4 +111,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.BooleanValidator);
+sogv.registerValidator(sogv.BooleanValidator);

@@ -226,4 +226,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.IssnValidator);
+sogv.registerValidator(sogv.IssnValidator);

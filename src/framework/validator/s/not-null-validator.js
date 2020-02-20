@@ -121,4 +121,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.NotNullValidator);
+sogv.registerValidator(sogv.NotNullValidator);

@@ -28,12 +28,12 @@ var sogv = {
 
     /**
      * @function
-     * @name sogv.registry
+     * @name sogv.registerValidator
      * @description
      * <p>Register validator.</p>
      * @param {Function} validator The validator.
      */
-    registry: function (validator) {
+    registerValidator: function (validator) {
         var __v = [validator];
         var __validator = new __v[0](null, {}, {}, 'en', true);
         var alias = __validator.alias;
@@ -180,11 +180,11 @@ var sogv = {
      * @param {Object} optionRules The validation rules for setting options.
      * @param {Object} lang The language used by the application. Defaults to 'en'.
      * @param {Boolean} internal If this parameter is true, it means, that validation called from core.
-     * @returns {Object} The roles in array format.
+     * @returns {Object} The object of validator.
      */
     makeValidator: function (data, validator, options, optionRules, lang, internal) {
         if ('undefined' === typeof sogv.validators[validator]) {
-            throw new Error('Validator with alias "' + validator + '" is not registered');
+            throw new Error('Validator with alias "' + validator + '" is not registered.');
         }
 
         return new sogv.validators[validator](data, options, optionRules, lang, internal);

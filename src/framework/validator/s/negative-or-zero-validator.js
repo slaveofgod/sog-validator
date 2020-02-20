@@ -125,4 +125,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.NegativeOrZeroValidator);
+sogv.registerValidator(sogv.NegativeOrZeroValidator);

@@ -94,4 +94,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.AfterOrEqualValidator);
+sogv.registerValidator(sogv.AfterOrEqualValidator);

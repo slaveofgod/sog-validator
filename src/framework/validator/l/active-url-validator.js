@@ -72,4 +72,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.ActiveUrlValidator);
+sogv.registerValidator(sogv.ActiveUrlValidator);

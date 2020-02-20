@@ -173,4 +173,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.UniqueValidator);
+sogv.registerValidator(sogv.UniqueValidator);

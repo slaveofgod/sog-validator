@@ -34,15 +34,15 @@ Object.assign(sogv, function () {
      * @name sogv.BicValidator#iban
      * @type {String}
      * @description
-     * An IBAN value to validate that the BIC is associated with it.</p>
-     * Default: <code>null</code>
+     * <p>An IBAN value to validate that the BIC is associated with it.</p>
+     * <p>Default: <code>null</code>.</p>
      */
 
     /**
      * @name sogv.BicValidator#ibanMessage
      * @type {String}
      * @description
-     * The default message supplied when the value does not pass the combined BIC/IBAN check.</p>
+     * <p>The default message supplied when the value does not pass the combined BIC/IBAN check.</p>
      * <p>Default: "<code>This Business Identifier Code (BIC) is not associated with IBAN %%iban%%.</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
@@ -65,7 +65,7 @@ Object.assign(sogv, function () {
      * @name sogv.BicValidator#message
      * @type {String}
      * @description
-     * The default message supplied when the value does not pass the BIC check.</p>
+     * <p>The default message supplied when the value does not pass the BIC check.</p>
      * <p>Default: "<code>This is not a valid Business Identifier Code (BIC).</code>"</p>
      * <p>You can use the following parameters in this message:</p>
      * <table>
@@ -271,4 +271,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.BicValidator);
+sogv.registerValidator(sogv.BicValidator);

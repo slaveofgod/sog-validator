@@ -18,13 +18,13 @@ Object.assign(sogv, (function () {
     // PROPERTIES
 
     /**
-     * @name sogv.RegexValidator#data
+     * @name sogv.AbstractValidator#data
      * @type {*}
      * @description Data that needs to be validated.
      */
 
     /**
-     * @name sogv.RegexValidator#lang
+     * @name sogv.AbstractValidator#lang
      * @type {String}
      * @description Language of error messages.
      */
@@ -59,7 +59,8 @@ Object.assign(sogv, (function () {
         /**
          * @function
          * @name sogv.AbstractValidator#isValid
-         * @description Check if data valid
+         * @description
+         * <p>Check if data valid.</p>
          * @returns {Boolean} Validation status
          */
         isValid: function () {
@@ -92,7 +93,8 @@ Object.assign(sogv, (function () {
          * @private
          * @function
          * @name sogv.AbstractValidator#isValid
-         * @description Check if data valid
+         * @description
+         * <p>Check if data valid.</p>
          * @returns {Boolean} Validation status
          */
         __hasErrors: function () {
@@ -102,7 +104,8 @@ Object.assign(sogv, (function () {
         /**
          * @function
          * @name sogv.AbstractValidator#errors
-         * @description Return error errors
+         * @description
+         * <p>Return error errors</p>
          * @returns {sogv.Error} Error messages
          */
         errors: function () {
@@ -115,7 +118,8 @@ Object.assign(sogv, (function () {
          * @name sogv.AbstractValidator#__setErrorMessage
          * @param {String} message Error message text
          * @param {Object} parameters Error message parameters
-         * @description Set error message
+         * @description
+         * <p>Set error message.</p>
          */
         __setErrorMessage: function (message, parameters) {
             this.__errorService.add(message, parameters);
@@ -142,7 +146,8 @@ Object.assign(sogv, (function () {
          * @private
          * @function
          * @name sogv.AbstractValidator#__validateOptions
-         * @description Validate options
+         * @description
+         * <p>Validate options.</p>
          * @param {Object} rules Validation rules
          */
         __validateOptions: function (rules) {
@@ -164,7 +169,8 @@ Object.assign(sogv, (function () {
          * @private
          * @function
          * @name sogv.AbstractValidator#__normalize
-         * @description Normalize string data
+         * @description
+         * <p>Normalize string data.</p>
          */
         __normalize: function () {
             if ('string' === typeof this.data) {
@@ -177,7 +183,8 @@ Object.assign(sogv, (function () {
          * @function
          * @name sogv.AbstractValidator#__isEmptyData
          * @returns {Boolean} Status
-         * @description Checking, if data empty
+         * @description
+         * <p>Checking, if data empty.</p>
          */
         __isEmptyData: function () {
             return ('undefined' === typeof this.data || null === this.data || '' === this.data);
@@ -187,7 +194,8 @@ Object.assign(sogv, (function () {
          * @private
          * @function
          * @name sogv.AbstractValidator#__formattedData
-         * @description Formatted data depending of type
+         * @description
+         * <p>Formatted data depending of type.</p>
          * @returns {*}
          */
         __formattedData: function (data) {
@@ -221,7 +229,8 @@ Object.assign(sogv, (function () {
          * @private
          * @function
          * @name sogv.AbstractValidator#__convertDataToValueType
-         * @description Convert data to value type
+         * @description
+         * <p>Convert data to value type.</p>
          * @returns {*}
          */
         __convertDataToValueType: function () {
@@ -242,7 +251,8 @@ Object.assign(sogv, (function () {
          * @private
          * @function
          * @name sogv.AbstractComparisonValidator#__prepareDataForComparing
-         * @description Prepare data for comparing
+         * @description
+         * <p>Prepare data for comparing.</p>
          * @returns {*}
          */
         __prepareDataForComparing: function (data) {

@@ -196,4 +196,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.RegexValidator);
+sogv.registerValidator(sogv.RegexValidator);

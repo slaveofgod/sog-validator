@@ -150,4 +150,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.CurrencyValidator);
+sogv.registerValidator(sogv.CurrencyValidator);

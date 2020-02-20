@@ -72,4 +72,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.AlphaValidator);
+sogv.registerValidator(sogv.AlphaValidator);

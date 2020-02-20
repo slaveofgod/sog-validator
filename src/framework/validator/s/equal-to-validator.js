@@ -141,4 +141,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.EqualToValidator);
+sogv.registerValidator(sogv.EqualToValidator);

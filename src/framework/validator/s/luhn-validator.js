@@ -172,4 +172,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.LuhnValidator);
+sogv.registerValidator(sogv.LuhnValidator);

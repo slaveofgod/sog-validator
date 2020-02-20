@@ -145,4 +145,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.DateValidator);
+sogv.registerValidator(sogv.DateValidator);

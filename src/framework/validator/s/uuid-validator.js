@@ -422,4 +422,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.UuidValidator);
+sogv.registerValidator(sogv.UuidValidator);

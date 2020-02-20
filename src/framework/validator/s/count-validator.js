@@ -287,4 +287,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.CountValidator);
+sogv.registerValidator(sogv.CountValidator);

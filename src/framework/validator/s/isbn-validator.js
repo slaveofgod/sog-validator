@@ -365,4 +365,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.IsbnValidator);
+sogv.registerValidator(sogv.IsbnValidator);

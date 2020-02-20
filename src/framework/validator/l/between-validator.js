@@ -230,4 +230,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.BetweenValidator);
+sogv.registerValidator(sogv.BetweenValidator);

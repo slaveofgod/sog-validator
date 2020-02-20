@@ -332,4 +332,4 @@ Object.assign(sogv, function () {
     };
 }());
 
-sogv.registry(sogv.RangeValidator);
+sogv.registerValidator(sogv.RangeValidator);

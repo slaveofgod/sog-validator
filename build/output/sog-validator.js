@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v1.1.2 revision 41d2443
+ * SOG Validator Library v1.1.3 revision d97dd6e
  * Copyright 2019-2020 Slave of God <iamtheslaveofgod@gmail.com>. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var sogv = {version:"1.1.2", revision:"41d2443", config:{}, common:{}, validators:{}, registry:function(validator) {
+var sogv = {version:"1.1.3", revision:"d97dd6e", config:{}, common:{}, validators:{}, registerValidator:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, "en", true);
   var alias = __validator.alias;
@@ -109,7 +109,7 @@ var sogv = {version:"1.1.2", revision:"41d2443", config:{}, common:{}, validator
   return false;
 }, makeValidator:function(data, validator, options, optionRules, lang, internal) {
   if ("undefined" === typeof sogv.validators[validator]) {
-    throw new Error('Validator with alias "' + validator + '" is not registered');
+    throw new Error('Validator with alias "' + validator + '" is not registered.');
   }
   return new sogv.validators[validator](data, options, optionRules, lang, internal);
 }, isValid:function(data, rules, internal) {
@@ -8879,7 +8879,7 @@ Object.assign(sogv, function() {
   }});
   return {NotBlankValidator:NotBlankValidator};
 }());
-sogv.registry(sogv.NotBlankValidator);
+sogv.registerValidator(sogv.NotBlankValidator);
 Object.assign(sogv, function() {
   var BlankValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -8904,7 +8904,7 @@ Object.assign(sogv, function() {
   }});
   return {BlankValidator:BlankValidator};
 }());
-sogv.registry(sogv.BlankValidator);
+sogv.registerValidator(sogv.BlankValidator);
 Object.assign(sogv, function() {
   var IsNullValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -8929,7 +8929,7 @@ Object.assign(sogv, function() {
   }});
   return {IsNullValidator:IsNullValidator};
 }());
-sogv.registry(sogv.IsNullValidator);
+sogv.registerValidator(sogv.IsNullValidator);
 Object.assign(sogv, function() {
   var NotNullValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -8958,7 +8958,7 @@ Object.assign(sogv, function() {
   }});
   return {NotNullValidator:NotNullValidator};
 }());
-sogv.registry(sogv.NotNullValidator);
+sogv.registerValidator(sogv.NotNullValidator);
 Object.assign(sogv, function() {
   var IsTrueValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -8983,7 +8983,7 @@ Object.assign(sogv, function() {
   }});
   return {IsTrueValidator:IsTrueValidator};
 }());
-sogv.registry(sogv.IsTrueValidator);
+sogv.registerValidator(sogv.IsTrueValidator);
 Object.assign(sogv, function() {
   var IsFalseValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -9008,7 +9008,7 @@ Object.assign(sogv, function() {
   }});
   return {IsFalseValidator:IsFalseValidator};
 }());
-sogv.registry(sogv.IsFalseValidator);
+sogv.registerValidator(sogv.IsFalseValidator);
 Object.assign(sogv, function() {
   var TypeValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {type:optionRules.type || 'type:{"type":["string","array"],"any":true}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', any:optionRules.any || 'type:{"type":"boolean"}'}, lang, internal);
@@ -9073,7 +9073,7 @@ Object.assign(sogv, function() {
   }});
   return {TypeValidator:TypeValidator};
 }());
-sogv.registry(sogv.TypeValidator);
+sogv.registerValidator(sogv.TypeValidator);
 Object.assign(sogv, function() {
   var EmailValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', mode:optionRules.mode || 'type:{"type":"string"}|length:{"min":2,"max":20}', normalize:optionRules.normalize || 'type:{"type":"bool"}'}, lang, internal);
@@ -9141,7 +9141,7 @@ Object.assign(sogv, function() {
   }});
   return {EmailValidator:EmailValidator};
 }());
-sogv.registry(sogv.EmailValidator);
+sogv.registerValidator(sogv.EmailValidator);
 Object.assign(sogv, function() {
   var LengthValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {allowEmptyString:optionRules.allowEmptyString || 'type:{"type":"bool"}', charset:optionRules.charset || 'length:{"min":2,"max":10}', charsetMessage:optionRules.charsetMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', exactMessage:optionRules.exactMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', max:optionRules.max || 'type:{"type":"integer"}', maxMessage:optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', 
@@ -9205,7 +9205,7 @@ Object.assign(sogv, function() {
   }});
   return {LengthValidator:LengthValidator};
 }());
-sogv.registry(sogv.LengthValidator);
+sogv.registerValidator(sogv.LengthValidator);
 Object.assign(sogv, function() {
   var UrlValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:optionRules.normalize || 'type:{"type":"bool"}', protocols:optionRules.protocols || 'type:{"type":["string","array"],"any":true}', relativeProtocol:optionRules.relativeProtocol || 'type:{"type":"bool"}'}, lang, internal);
@@ -9273,7 +9273,7 @@ Object.assign(sogv, function() {
   }});
   return {UrlValidator:UrlValidator};
 }());
-sogv.registry(sogv.UrlValidator);
+sogv.registerValidator(sogv.UrlValidator);
 Object.assign(sogv, function() {
   var RegexValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {match:optionRules.match || 'type:{"type": "bool"}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', pattern:optionRules.pattern || "required", normalize:optionRules.normalize || 'type:{"type": "bool"}'}, lang, internal);
@@ -9327,7 +9327,7 @@ Object.assign(sogv, function() {
   }});
   return {RegexValidator:RegexValidator};
 }());
-sogv.registry(sogv.RegexValidator);
+sogv.registerValidator(sogv.RegexValidator);
 Object.assign(sogv, function() {
   var IpValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:optionRules.normalize || 'type:{"type":"bool"}', version:optionRules.version || 'type:{"type":["string","numeric"],"any":true}|length:{"min":1,"max":255}'}, lang, internal);
@@ -9435,7 +9435,7 @@ Object.assign(sogv, function() {
   }});
   return {IpValidator:IpValidator};
 }());
-sogv.registry(sogv.IpValidator);
+sogv.registerValidator(sogv.IpValidator);
 Object.assign(sogv, function() {
   var JsonValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -9480,7 +9480,7 @@ Object.assign(sogv, function() {
   }});
   return {JsonValidator:JsonValidator};
 }());
-sogv.registry(sogv.JsonValidator);
+sogv.registerValidator(sogv.JsonValidator);
 Object.assign(sogv, function() {
   var UuidValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', normalize:optionRules.normalize || 'type:{"type":"bool"}', versions:optionRules.versions || 'type:{"type":"array"}'}, lang, internal);
@@ -9637,7 +9637,7 @@ Object.assign(sogv, function() {
   }});
   return {UuidValidator:UuidValidator};
 }());
-sogv.registry(sogv.UuidValidator);
+sogv.registerValidator(sogv.UuidValidator);
 Object.assign(sogv, function() {
   var EqualToValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || "required"}, lang, internal);
@@ -9659,7 +9659,7 @@ Object.assign(sogv, function() {
   }});
   return {EqualToValidator:EqualToValidator};
 }());
-sogv.registry(sogv.EqualToValidator);
+sogv.registerValidator(sogv.EqualToValidator);
 Object.assign(sogv, function() {
   var NotEqualToValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || "required"}, lang, internal);
@@ -9681,7 +9681,7 @@ Object.assign(sogv, function() {
   }});
   return {NotEqualToValidator:NotEqualToValidator};
 }());
-sogv.registry(sogv.NotEqualToValidator);
+sogv.registerValidator(sogv.NotEqualToValidator);
 Object.assign(sogv, function() {
   var IdenticalToValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || "required"}, lang, internal);
@@ -9703,7 +9703,7 @@ Object.assign(sogv, function() {
   }});
   return {IdenticalToValidator:IdenticalToValidator};
 }());
-sogv.registry(sogv.IdenticalToValidator);
+sogv.registerValidator(sogv.IdenticalToValidator);
 Object.assign(sogv, function() {
   var NotIdenticalToValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || "required"}, lang, internal);
@@ -9725,7 +9725,7 @@ Object.assign(sogv, function() {
   }});
   return {NotIdenticalToValidator:NotIdenticalToValidator};
 }());
-sogv.registry(sogv.NotIdenticalToValidator);
+sogv.registerValidator(sogv.NotIdenticalToValidator);
 Object.assign(sogv, function() {
   var LessThanValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
@@ -9747,7 +9747,7 @@ Object.assign(sogv, function() {
   }});
   return {LessThanValidator:LessThanValidator};
 }());
-sogv.registry(sogv.LessThanValidator);
+sogv.registerValidator(sogv.LessThanValidator);
 Object.assign(sogv, function() {
   var LessThanOrEqualValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
@@ -9769,7 +9769,7 @@ Object.assign(sogv, function() {
   }});
   return {LessThanOrEqualValidator:LessThanOrEqualValidator};
 }());
-sogv.registry(sogv.LessThanOrEqualValidator);
+sogv.registerValidator(sogv.LessThanOrEqualValidator);
 Object.assign(sogv, function() {
   var GreaterThanValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
@@ -9791,7 +9791,7 @@ Object.assign(sogv, function() {
   }});
   return {GreaterThanValidator:GreaterThanValidator};
 }());
-sogv.registry(sogv.GreaterThanValidator);
+sogv.registerValidator(sogv.GreaterThanValidator);
 Object.assign(sogv, function() {
   var GreaterThanOrEqualValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
@@ -9813,7 +9813,7 @@ Object.assign(sogv, function() {
   }});
   return {GreaterThanOrEqualValidator:GreaterThanOrEqualValidator};
 }());
-sogv.registry(sogv.GreaterThanOrEqualValidator);
+sogv.registerValidator(sogv.GreaterThanOrEqualValidator);
 Object.assign(sogv, function() {
   var RangeValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {invalidMessage:optionRules.invalidMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', max:optionRules.max || 'required|type:{"type":["numeric","date-string"],"any":true}', maxMessage:optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', min:optionRules.min || 'required|type:{"type":["numeric","date-string"],"any":true}', minMessage:optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', 
@@ -9884,7 +9884,7 @@ Object.assign(sogv, function() {
   }});
   return {RangeValidator:RangeValidator};
 }());
-sogv.registry(sogv.RangeValidator);
+sogv.registerValidator(sogv.RangeValidator);
 Object.assign(sogv, function() {
   var DivisibleByValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', value:optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'}, lang, internal);
@@ -9913,7 +9913,7 @@ Object.assign(sogv, function() {
   }});
   return {DivisibleByValidator:DivisibleByValidator};
 }());
-sogv.registry(sogv.DivisibleByValidator);
+sogv.registerValidator(sogv.DivisibleByValidator);
 Object.assign(sogv, function() {
   var UniqueValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -9964,7 +9964,7 @@ Object.assign(sogv, function() {
   }});
   return {UniqueValidator:UniqueValidator};
 }());
-sogv.registry(sogv.UniqueValidator);
+sogv.registerValidator(sogv.UniqueValidator);
 Object.assign(sogv, function() {
   var PositiveValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -9987,7 +9987,7 @@ Object.assign(sogv, function() {
   }});
   return {PositiveValidator:PositiveValidator};
 }());
-sogv.registry(sogv.PositiveValidator);
+sogv.registerValidator(sogv.PositiveValidator);
 Object.assign(sogv, function() {
   var PositiveOrZeroValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -10010,7 +10010,7 @@ Object.assign(sogv, function() {
   }});
   return {PositiveOrZeroValidator:PositiveOrZeroValidator};
 }());
-sogv.registry(sogv.PositiveOrZeroValidator);
+sogv.registerValidator(sogv.PositiveOrZeroValidator);
 Object.assign(sogv, function() {
   var NegativeValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -10033,7 +10033,7 @@ Object.assign(sogv, function() {
   }});
   return {NegativeValidator:NegativeValidator};
 }());
-sogv.registry(sogv.NegativeValidator);
+sogv.registerValidator(sogv.NegativeValidator);
 Object.assign(sogv, function() {
   var NegativeOrZeroValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractComparisonValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -10056,7 +10056,7 @@ Object.assign(sogv, function() {
   }});
   return {NegativeOrZeroValidator:NegativeOrZeroValidator};
 }());
-sogv.registry(sogv.NegativeOrZeroValidator);
+sogv.registerValidator(sogv.NegativeOrZeroValidator);
 Object.assign(sogv, function() {
   var DateValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -10100,7 +10100,7 @@ Object.assign(sogv, function() {
   }});
   return {DateValidator:DateValidator};
 }());
-sogv.registry(sogv.DateValidator);
+sogv.registerValidator(sogv.DateValidator);
 Object.assign(sogv, function() {
   var DateTimeValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', format:optionRules.format || 'type:{"type":"string"}'}, lang, internal);
@@ -10149,7 +10149,7 @@ Object.assign(sogv, function() {
   }});
   return {DateTimeValidator:DateTimeValidator};
 }());
-sogv.registry(sogv.DateTimeValidator);
+sogv.registerValidator(sogv.DateTimeValidator);
 Object.assign(sogv, function() {
   var TimeValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -10193,7 +10193,7 @@ Object.assign(sogv, function() {
   }});
   return {TimeValidator:TimeValidator};
 }());
-sogv.registry(sogv.TimeValidator);
+sogv.registerValidator(sogv.TimeValidator);
 Object.assign(sogv, function() {
   var TimezoneValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -10237,7 +10237,7 @@ Object.assign(sogv, function() {
   }});
   return {TimezoneValidator:TimezoneValidator};
 }());
-sogv.registry(sogv.TimezoneValidator);
+sogv.registerValidator(sogv.TimezoneValidator);
 Object.assign(sogv, function() {
   var ChoiceValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {callback:optionRules.callback || 'type:{"type":["string","array","callable"],"any":true}', choices:optionRules.choices || 'type:{"type":"array"}', max:optionRules.max || 'type:{"type":"numeric"}', maxMessage:optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', min:optionRules.min || 'type:{"type":"numeric"}', minMessage:optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', multiple:optionRules.multiple || 
@@ -10320,7 +10320,7 @@ Object.assign(sogv, function() {
   }});
   return {ChoiceValidator:ChoiceValidator};
 }());
-sogv.registry(sogv.ChoiceValidator);
+sogv.registerValidator(sogv.ChoiceValidator);
 Object.assign(sogv, function() {
   var LanguageValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -10372,7 +10372,7 @@ Object.assign(sogv, function() {
   }});
   return {LanguageValidator:LanguageValidator};
 }());
-sogv.registry(sogv.LanguageValidator);
+sogv.registerValidator(sogv.LanguageValidator);
 Object.assign(sogv, function() {
   var LocaleValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -10456,7 +10456,7 @@ Object.assign(sogv, function() {
   }});
   return {LocaleValidator:LocaleValidator};
 }());
-sogv.registry(sogv.LocaleValidator);
+sogv.registerValidator(sogv.LocaleValidator);
 Object.assign(sogv, function() {
   var CountryValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -10509,7 +10509,7 @@ Object.assign(sogv, function() {
   }});
   return {CountryValidator:CountryValidator};
 }());
-sogv.registry(sogv.CountryValidator);
+sogv.registerValidator(sogv.CountryValidator);
 Object.assign(sogv, function() {
   var BicValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {iban:optionRules.iban || 'type:{"type":"string"}|length:{"min":3,"max":255}', ibanMessage:optionRules.ibanMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -10584,7 +10584,7 @@ Object.assign(sogv, function() {
   }});
   return {BicValidator:BicValidator};
 }());
-sogv.registry(sogv.BicValidator);
+sogv.registerValidator(sogv.BicValidator);
 Object.assign(sogv, function() {
   var CardSchemeValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', schemes:optionRules.schemes || 'required|type:{"type":["string","array"],"any":true}'}, lang, internal);
@@ -10642,7 +10642,7 @@ Object.assign(sogv, function() {
   }});
   return {CardSchemeValidator:CardSchemeValidator};
 }());
-sogv.registry(sogv.CardSchemeValidator);
+sogv.registerValidator(sogv.CardSchemeValidator);
 Object.assign(sogv, function() {
   var CurrencyValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -10837,7 +10837,7 @@ Object.assign(sogv, function() {
   }});
   return {CurrencyValidator:CurrencyValidator};
 }());
-sogv.registry(sogv.CurrencyValidator);
+sogv.registerValidator(sogv.CurrencyValidator);
 Object.assign(sogv, function() {
   var LuhnValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -10892,7 +10892,7 @@ Object.assign(sogv, function() {
   }});
   return {LuhnValidator:LuhnValidator};
 }());
-sogv.registry(sogv.LuhnValidator);
+sogv.registerValidator(sogv.LuhnValidator);
 Object.assign(sogv, function() {
   var IbanValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -10980,7 +10980,7 @@ Object.assign(sogv, function() {
   }});
   return {IbanValidator:IbanValidator};
 }());
-sogv.registry(sogv.IbanValidator);
+sogv.registerValidator(sogv.IbanValidator);
 Object.assign(sogv, function() {
   var IsbnValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {bothIsbnMessage:optionRules.bothIsbnMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', isbn10Message:optionRules.isbn10Message || 'type:{"type":"string"}|length:{"min":3,"max":255}', isbn13Message:optionRules.isbn13Message || 'type:{"type":"string"}|length:{"min":3,"max":255}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', type:optionRules.type || 'type:{"type":"string"}|length:{"min":1,"max":255}'}, 
@@ -11103,7 +11103,7 @@ Object.assign(sogv, function() {
   }});
   return {IsbnValidator:IsbnValidator};
 }());
-sogv.registry(sogv.IsbnValidator);
+sogv.registerValidator(sogv.IsbnValidator);
 Object.assign(sogv, function() {
   var IssnValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {caseSensitive:optionRules.caseSensitive || 'type:{"type":"bool"}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', requireHyphen:optionRules.requireHyphen || 'type:{"type":"bool"}'}, lang, internal);
@@ -11183,7 +11183,7 @@ Object.assign(sogv, function() {
   }});
   return {IssnValidator:IssnValidator};
 }());
-sogv.registry(sogv.IssnValidator);
+sogv.registerValidator(sogv.IssnValidator);
 Object.assign(sogv, function() {
   var CountValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {exactMessage:optionRules.exactMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', max:optionRules.max || 'type:{"type":"numeric"}', maxMessage:optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}', min:optionRules.min || 'type:{"type":"numeric"}', minMessage:optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -11242,7 +11242,7 @@ Object.assign(sogv, function() {
   }});
   return {CountValidator:CountValidator};
 }());
-sogv.registry(sogv.CountValidator);
+sogv.registerValidator(sogv.CountValidator);
 Object.assign(sogv, function() {
   var AcceptedValidator = function(data, options, optionRules, lang, internal) {
     sogv.ChoiceValidator.call(this, data, {choices:["yes", "on", 1, true, "1", "true"], message:"The %%attribute%% must be accepted."}, {}, lang, internal);
@@ -11261,7 +11261,7 @@ Object.assign(sogv, function() {
   }});
   return {AcceptedValidator:AcceptedValidator};
 }());
-sogv.registry(sogv.AcceptedValidator);
+sogv.registerValidator(sogv.AcceptedValidator);
 Object.assign(sogv, function() {
   var ActiveUrlValidator = function(data, options, optionRules, lang, internal) {
     sogv.UrlValidator.call(this, data, {message:"The %%attribute%% is not a valid URL."}, {}, lang, internal);
@@ -11280,7 +11280,7 @@ Object.assign(sogv, function() {
   }});
   return {ActiveUrlValidator:ActiveUrlValidator};
 }());
-sogv.registry(sogv.ActiveUrlValidator);
+sogv.registerValidator(sogv.ActiveUrlValidator);
 Object.assign(sogv, function() {
   var AfterValidator = function(data, options, optionRules, lang, internal) {
     sogv.GreaterThanValidator.call(this, data, {message:"The %%attribute%% must be a date after %%date%%.", value:options.value}, {value:'required|type:{"type":["date","date-string"],"any":true}'}, lang, internal);
@@ -11299,7 +11299,7 @@ Object.assign(sogv, function() {
   }});
   return {AfterValidator:AfterValidator};
 }());
-sogv.registry(sogv.AfterValidator);
+sogv.registerValidator(sogv.AfterValidator);
 Object.assign(sogv, function() {
   var AfterOrEqualValidator = function(data, options, optionRules, lang, internal) {
     sogv.GreaterThanOrEqualValidator.call(this, data, {message:"The %%attribute%% must be a date after or equal to %%date%%.", value:options.value}, {value:'required|type:{"type":["date","date-string"],"any":true}'}, lang, internal);
@@ -11318,7 +11318,7 @@ Object.assign(sogv, function() {
   }});
   return {AfterOrEqualValidator:AfterOrEqualValidator};
 }());
-sogv.registry(sogv.AfterOrEqualValidator);
+sogv.registerValidator(sogv.AfterOrEqualValidator);
 Object.assign(sogv, function() {
   var AlphaValidator = function(data, options, optionRules, lang, internal) {
     sogv.TypeValidator.call(this, data, {type:"alpha", message:"The %%attribute%% may only contain letters."}, {}, lang, internal);
@@ -11337,7 +11337,7 @@ Object.assign(sogv, function() {
   }});
   return {AlphaValidator:AlphaValidator};
 }());
-sogv.registry(sogv.AlphaValidator);
+sogv.registerValidator(sogv.AlphaValidator);
 Object.assign(sogv, function() {
   var AlphaDashValidator = function(data, options, optionRules, lang, internal) {
     sogv.TypeValidator.call(this, data, {type:"aldash", message:"The %%attribute%% may only contain letters, numbers, dashes and underscores."}, {}, lang, internal);
@@ -11356,7 +11356,7 @@ Object.assign(sogv, function() {
   }});
   return {AlphaDashValidator:AlphaDashValidator};
 }());
-sogv.registry(sogv.AlphaDashValidator);
+sogv.registerValidator(sogv.AlphaDashValidator);
 Object.assign(sogv, function() {
   var AlphaNumValidator = function(data, options, optionRules, lang, internal) {
     sogv.TypeValidator.call(this, data, {type:"alnum", message:"The %%attribute%% may only contain letters and numbers."}, {}, lang, internal);
@@ -11375,7 +11375,7 @@ Object.assign(sogv, function() {
   }});
   return {AlphaNumValidator:AlphaNumValidator};
 }());
-sogv.registry(sogv.AlphaNumValidator);
+sogv.registerValidator(sogv.AlphaNumValidator);
 Object.assign(sogv, function() {
   var ArrayValidator = function(data, options, optionRules, lang, internal) {
     sogv.TypeValidator.call(this, data, {type:"array", message:"The %%attribute%% must be an array."}, {}, lang, internal);
@@ -11394,7 +11394,7 @@ Object.assign(sogv, function() {
   }});
   return {ArrayValidator:ArrayValidator};
 }());
-sogv.registry(sogv.ArrayValidator);
+sogv.registerValidator(sogv.ArrayValidator);
 Object.assign(sogv, function() {
   var BeforeValidator = function(data, options, optionRules, lang, internal) {
     sogv.LessThanValidator.call(this, data, {message:"The %%attribute%% must be a date before %%date%%.", value:options.value}, {value:'required|type:{"type":["date","date-string"],"any":true}'}, lang, internal);
@@ -11413,7 +11413,7 @@ Object.assign(sogv, function() {
   }});
   return {BeforeValidator:BeforeValidator};
 }());
-sogv.registry(sogv.BeforeValidator);
+sogv.registerValidator(sogv.BeforeValidator);
 Object.assign(sogv, function() {
   var BeforeOrEqualValidator = function(data, options, optionRules, lang, internal) {
     sogv.LessThanOrEqualValidator.call(this, data, {message:"The %%attribute%% must be a date before or equal to %%date%%.", value:options.value}, {value:'required|type:{"type":["date","date-string"],"any":true}'}, lang, internal);
@@ -11432,7 +11432,7 @@ Object.assign(sogv, function() {
   }});
   return {BeforeOrEqualValidator:BeforeOrEqualValidator};
 }());
-sogv.registry(sogv.BeforeOrEqualValidator);
+sogv.registerValidator(sogv.BeforeOrEqualValidator);
 Object.assign(sogv, function() {
   var BetweenValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {max:optionRules.max || 'required|type:{"type":["numeric","date-string"],"any":true}', min:optionRules.min || 'required|type:{"type":["numeric","date-string"],"any":true}'}, lang, internal);
@@ -11507,7 +11507,7 @@ Object.assign(sogv, function() {
   }});
   return {BetweenValidator:BetweenValidator};
 }());
-sogv.registry(sogv.BetweenValidator);
+sogv.registerValidator(sogv.BetweenValidator);
 Object.assign(sogv, function() {
   var BooleanValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
@@ -11542,7 +11542,7 @@ Object.assign(sogv, function() {
   }});
   return {BooleanValidator:BooleanValidator};
 }());
-sogv.registry(sogv.BooleanValidator);
+sogv.registerValidator(sogv.BooleanValidator);
 Object.assign(sogv, function() {
   var DateEqualsValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractComparisonValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["date-string","datetime"],"any":true}'}, lang, internal);
@@ -11574,7 +11574,7 @@ Object.assign(sogv, function() {
   }});
   return {DateEqualsValidator:DateEqualsValidator};
 }());
-sogv.registry(sogv.DateEqualsValidator);
+sogv.registerValidator(sogv.DateEqualsValidator);
 Object.assign(sogv, function() {
   var DigitsValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', length:optionRules.length || 'required|type:{"type":"integer"}'}, lang, internal);
@@ -11623,7 +11623,7 @@ Object.assign(sogv, function() {
   }});
   return {DigitsValidator:DigitsValidator};
 }());
-sogv.registry(sogv.DigitsValidator);
+sogv.registerValidator(sogv.DigitsValidator);
 Object.assign(sogv, function() {
   var DigitsBetweenValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', max:optionRules.max || 'type:{"type":"integer"}', min:optionRules.min || 'type:{"type":"integer"}'}, lang, internal);
@@ -11680,7 +11680,7 @@ Object.assign(sogv, function() {
   }});
   return {DigitsBetweenValidator:DigitsBetweenValidator};
 }());
-sogv.registry(sogv.DigitsBetweenValidator);
+sogv.registerValidator(sogv.DigitsBetweenValidator);
 Object.assign(sogv, function() {
   var DistinctValidator = function(data, options, optionRules, lang, internal) {
     sogv.UniqueValidator.call(this, data, {message:"The %%attribute%% field has a duplicate value."}, {}, lang, internal);
@@ -11706,7 +11706,7 @@ Object.assign(sogv, function() {
   }});
   return {DistinctValidator:DistinctValidator};
 }());
-sogv.registry(sogv.DistinctValidator);
+sogv.registerValidator(sogv.DistinctValidator);
 Object.assign(sogv, function() {
   var EndsWithValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {pattern:optionRules.pattern || 'length:{"min":3,"max":255}', ends:optionRules.ends || 'type:{"type":["iterable","string"],"any":true}'}, lang, internal);
@@ -11756,7 +11756,7 @@ Object.assign(sogv, function() {
   }});
   return {EndsWithValidator:EndsWithValidator};
 }());
-sogv.registry(sogv.EndsWithValidator);
+sogv.registerValidator(sogv.EndsWithValidator);
 Object.assign(sogv, function() {
   var GtValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["numeric","datetime","date-string","boolean"],"any":true}'}, lang, internal);
@@ -11801,7 +11801,7 @@ Object.assign(sogv, function() {
   }});
   return {GtValidator:GtValidator};
 }());
-sogv.registry(sogv.GtValidator);
+sogv.registerValidator(sogv.GtValidator);
 Object.assign(sogv, function() {
   var GteValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["numeric","datetime","date-string","boolean"],"any":true}'}, lang, internal);
@@ -11846,7 +11846,7 @@ Object.assign(sogv, function() {
   }});
   return {GteValidator:GteValidator};
 }());
-sogv.registry(sogv.GteValidator);
+sogv.registerValidator(sogv.GteValidator);
 Object.assign(sogv, function() {
   var LtValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["numeric","datetime","date-string","boolean"],"any":true}'}, lang, internal);
@@ -11891,7 +11891,7 @@ Object.assign(sogv, function() {
   }});
   return {LtValidator:LtValidator};
 }());
-sogv.registry(sogv.LtValidator);
+sogv.registerValidator(sogv.LtValidator);
 Object.assign(sogv, function() {
   var LteValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {value:optionRules.value || 'required|type:{"type":["numeric","datetime","date-string","boolean"],"any":true}'}, lang, internal);
@@ -11936,7 +11936,7 @@ Object.assign(sogv, function() {
   }});
   return {LteValidator:LteValidator};
 }());
-sogv.registry(sogv.LteValidator);
+sogv.registerValidator(sogv.LteValidator);
 Object.assign(sogv, function() {
   var NumericValidator = function(data, options, optionRules, lang, internal) {
     sogv.TypeValidator.call(this, data, {type:"numeric", message:"The %%attribute%% must be a number."}, {}, lang, internal);
@@ -11955,7 +11955,7 @@ Object.assign(sogv, function() {
   }});
   return {NumericValidator:NumericValidator};
 }());
-sogv.registry(sogv.NumericValidator);
+sogv.registerValidator(sogv.NumericValidator);
 Object.assign(sogv, function() {
   var StringValidator = function(data, options, optionRules, lang, internal) {
     sogv.TypeValidator.call(this, data, {type:"string", message:"The %%attribute%% must be a string."}, {}, lang, internal);
@@ -11974,7 +11974,7 @@ Object.assign(sogv, function() {
   }});
   return {StringValidator:StringValidator};
 }());
-sogv.registry(sogv.StringValidator);
+sogv.registerValidator(sogv.StringValidator);
 Object.assign(sogv, function() {
   var IntegerValidator = function(data, options, optionRules, lang, internal) {
     sogv.TypeValidator.call(this, data, {type:"integer", message:"The %%attribute%% must be an integer."}, {}, lang, internal);
@@ -11993,7 +11993,7 @@ Object.assign(sogv, function() {
   }});
   return {IntegerValidator:IntegerValidator};
 }());
-sogv.registry(sogv.IntegerValidator);
+sogv.registerValidator(sogv.IntegerValidator);
 Object.assign(sogv, function() {
   var Ipv4Validator = function(data, options, optionRules, lang, internal) {
     sogv.IpValidator.call(this, data, {version:4, message:"The %%attribute%% must be a valid IPv4 address."}, optionRules, lang, internal);
@@ -12012,7 +12012,7 @@ Object.assign(sogv, function() {
   }});
   return {Ipv4Validator:Ipv4Validator};
 }());
-sogv.registry(sogv.Ipv4Validator);
+sogv.registerValidator(sogv.Ipv4Validator);
 Object.assign(sogv, function() {
   var Ipv6Validator = function(data, options, optionRules, lang, internal) {
     sogv.IpValidator.call(this, data, {version:6, message:"The %%attribute%% must be a valid IPv6 address."}, optionRules, lang, internal);
@@ -12031,7 +12031,7 @@ Object.assign(sogv, function() {
   }});
   return {Ipv6Validator:Ipv6Validator};
 }());
-sogv.registry(sogv.Ipv6Validator);
+sogv.registerValidator(sogv.Ipv6Validator);
 Object.assign(sogv, function() {
   var StartsWithValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {pattern:optionRules.pattern || 'length:{"min":3,"max":255}', starts:optionRules.starts || 'type:{"type":["iterable","string"],"any":true}'}, lang, internal);
@@ -12081,7 +12081,7 @@ Object.assign(sogv, function() {
   }});
   return {StartsWithValidator:StartsWithValidator};
 }());
-sogv.registry(sogv.StartsWithValidator);
+sogv.registerValidator(sogv.StartsWithValidator);
 Object.assign(sogv, function() {
   var InValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', choices:optionRules.choices || 'required|type:{"type":"array"}'}, lang, internal);
@@ -12127,7 +12127,7 @@ Object.assign(sogv, function() {
   }});
   return {InValidator:InValidator};
 }());
-sogv.registry(sogv.InValidator);
+sogv.registerValidator(sogv.InValidator);
 Object.assign(sogv, function() {
   var NotInValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}', choices:optionRules.choices || 'required|type:{"type":"array"}'}, lang, internal);
@@ -12173,7 +12173,7 @@ Object.assign(sogv, function() {
   }});
   return {NotInValidator:NotInValidator};
 }());
-sogv.registry(sogv.NotInValidator);
+sogv.registerValidator(sogv.NotInValidator);
 Object.assign(sogv, function() {
   var SizeValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, options, {value:optionRules.max || 'required|type:{"type":"numeric"}', message:optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
@@ -12231,7 +12231,7 @@ Object.assign(sogv, function() {
   }});
   return {SizeValidator:SizeValidator};
 }());
-sogv.registry(sogv.SizeValidator);
+sogv.registerValidator(sogv.SizeValidator);
 Object.assign(sogv, function() {
   var CallableValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
@@ -12261,7 +12261,7 @@ Object.assign(sogv, function() {
   }});
   return {CallableValidator:CallableValidator};
 }());
-sogv.registry(sogv.CallableValidator);
+sogv.registerValidator(sogv.CallableValidator);
 Object.assign(sogv, function() {
   var FloatValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
@@ -12291,7 +12291,7 @@ Object.assign(sogv, function() {
   }});
   return {FloatValidator:FloatValidator};
 }());
-sogv.registry(sogv.FloatValidator);
+sogv.registerValidator(sogv.FloatValidator);
 Object.assign(sogv, function() {
   var DoubleValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
@@ -12321,7 +12321,7 @@ Object.assign(sogv, function() {
   }});
   return {DoubleValidator:DoubleValidator};
 }());
-sogv.registry(sogv.DoubleValidator);
+sogv.registerValidator(sogv.DoubleValidator);
 Object.assign(sogv, function() {
   var IterableValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
@@ -12351,7 +12351,7 @@ Object.assign(sogv, function() {
   }});
   return {IterableValidator:IterableValidator};
 }());
-sogv.registry(sogv.IterableValidator);
+sogv.registerValidator(sogv.IterableValidator);
 Object.assign(sogv, function() {
   var ObjectValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
@@ -12381,7 +12381,7 @@ Object.assign(sogv, function() {
   }});
   return {ObjectValidator:ObjectValidator};
 }());
-sogv.registry(sogv.ObjectValidator);
+sogv.registerValidator(sogv.ObjectValidator);
 Object.assign(sogv, function() {
   var RealValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
@@ -12411,7 +12411,7 @@ Object.assign(sogv, function() {
   }});
   return {RealValidator:RealValidator};
 }());
-sogv.registry(sogv.RealValidator);
+sogv.registerValidator(sogv.RealValidator);
 Object.assign(sogv, function() {
   var ScalarValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
@@ -12441,7 +12441,7 @@ Object.assign(sogv, function() {
   }});
   return {ScalarValidator:ScalarValidator};
 }());
-sogv.registry(sogv.ScalarValidator);
+sogv.registerValidator(sogv.ScalarValidator);
 Object.assign(sogv, function() {
   var CntrlValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
@@ -12471,7 +12471,7 @@ Object.assign(sogv, function() {
   }});
   return {CntrlValidator:CntrlValidator};
 }());
-sogv.registry(sogv.CntrlValidator);
+sogv.registerValidator(sogv.CntrlValidator);
 Object.assign(sogv, function() {
   var DigitValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
@@ -12501,7 +12501,7 @@ Object.assign(sogv, function() {
   }});
   return {DigitValidator:DigitValidator};
 }());
-sogv.registry(sogv.DigitValidator);
+sogv.registerValidator(sogv.DigitValidator);
 Object.assign(sogv, function() {
   var GraphValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
@@ -12531,7 +12531,7 @@ Object.assign(sogv, function() {
   }});
   return {GraphValidator:GraphValidator};
 }());
-sogv.registry(sogv.GraphValidator);
+sogv.registerValidator(sogv.GraphValidator);
 Object.assign(sogv, function() {
   var LowerValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
@@ -12561,7 +12561,7 @@ Object.assign(sogv, function() {
   }});
   return {LowerValidator:LowerValidator};
 }());
-sogv.registry(sogv.LowerValidator);
+sogv.registerValidator(sogv.LowerValidator);
 Object.assign(sogv, function() {
   var PrintValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
@@ -12591,7 +12591,7 @@ Object.assign(sogv, function() {
   }});
   return {PrintValidator:PrintValidator};
 }());
-sogv.registry(sogv.PrintValidator);
+sogv.registerValidator(sogv.PrintValidator);
 Object.assign(sogv, function() {
   var PunctValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
@@ -12621,7 +12621,7 @@ Object.assign(sogv, function() {
   }});
   return {PunctValidator:PunctValidator};
 }());
-sogv.registry(sogv.PunctValidator);
+sogv.registerValidator(sogv.PunctValidator);
 Object.assign(sogv, function() {
   var SpaceValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
@@ -12651,7 +12651,7 @@ Object.assign(sogv, function() {
   }});
   return {SpaceValidator:SpaceValidator};
 }());
-sogv.registry(sogv.SpaceValidator);
+sogv.registerValidator(sogv.SpaceValidator);
 Object.assign(sogv, function() {
   var UpperValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
@@ -12681,7 +12681,7 @@ Object.assign(sogv, function() {
   }});
   return {UpperValidator:UpperValidator};
 }());
-sogv.registry(sogv.UpperValidator);
+sogv.registerValidator(sogv.UpperValidator);
 Object.assign(sogv, function() {
   var XdigitValidator = function(data, options, optionRules, lang, internal) {
     sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
@@ -12711,7 +12711,7 @@ Object.assign(sogv, function() {
   }});
   return {XdigitValidator:XdigitValidator};
 }());
-sogv.registry(sogv.XdigitValidator);
+sogv.registerValidator(sogv.XdigitValidator);
 sogv.I18nHandler.add("af", [{"@id":"1", "source":"This value should be false.", "target":"Hierdie waarde moet vals wees."}, {"@id":"2", "source":"This value should be true.", "target":"Hierdie waarde moet waar wees."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Hierdie waarde moet van die soort {{type}} wees."}, {"@id":"4", "source":"This value should be blank.", "target":"Hierdie waarde moet leeg wees."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Die waarde wat jy gekies het is nie 'n geldige keuse nie."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Jy moet ten minste %%limit%% kies.|Jy moet ten minste %%limit%% keuses kies."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Jy moet by die meeste %%limit%% keuse kies.|Jy moet by die meeste %%limit%% keuses kies."}, {"@id":"8", "source":"One or more of the given values is invalid.", 
 "target":"Een of meer van die gegewe waardes is ongeldig."}, {"@id":"9", "source":"This field was not expected.", "target":"Die veld is nie verwag nie."}, {"@id":"10", "source":"This field is missing.", "target":"Hierdie veld ontbreek."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Hierdie waarde is nie 'n geldige datum nie."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Hierdie waarde is nie 'n geldige datum en tyd nie."}, {"@id":"13", "source":"This value is not a valid email address.", 
