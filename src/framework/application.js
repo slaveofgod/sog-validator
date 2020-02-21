@@ -13,17 +13,6 @@ Object.assign(sogv, function () {
      * });
      *
      * var form = validationEngine.make({
-     *   first_name: 'required|string|length:{"min":2,"max":255}',
-     *   last_lame: 'required|string|length:{"min":2,"max":255}',
-     *   email: 'required|email',
-     *   birthday: 'required|date',
-     *   creditCard: 'required|string|card-scheme:{"schemes":["VISA"]}',
-     *   ip: 'required|string|ip',
-     *   locale: 'required|string|locale',
-     *   country: 'required|string|country',
-     *   language: 'required|string|language',
-     *   homepage: 'required|string|url'
-     * }, {
      *   first_name: 'Leo',
      *   last_lame: 'Lane',
      *   email: 'leo.lane38@example.com',
@@ -34,6 +23,17 @@ Object.assign(sogv, function () {
      *   country: 'US',
      *   language: 'en_gb',
      *   homepage: 'https://github.com//slaveofgod/sog-validator'
+     * }, {
+     *   first_name: 'required|string|length:{"min":2,"max":255}',
+     *   last_lame: 'required|string|length:{"min":2,"max":255}',
+     *   email: 'required|email',
+     *   birthday: 'required|date',
+     *   creditCard: 'required|string|card-scheme:{"schemes":["VISA"]}',
+     *   ip: 'required|string|ip',
+     *   locale: 'required|string|locale',
+     *   country: 'required|string|country',
+     *   language: 'required|string|language',
+     *   homepage: 'required|string|url'
      * });
      *
      * if (false === form.isValid()) {
