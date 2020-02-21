@@ -119,7 +119,7 @@ try {
         throw Error('Invalid path: ' + options.path);
     }
 
-    __ClassName = sogh.camelCaseString(options.name + '_' + options.type);
+    __ClassName = sogh.camelCase(options.name + '_' + options.type);
 
     __FileName = sogh.sluggable(options.name + '_' + options.type);
 
