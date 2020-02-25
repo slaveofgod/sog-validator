@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: GtValidator</title>
+    <title>Class: ContainsValidator</title>
     
     
     
@@ -4574,7 +4574,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="sogv.GtValidator.html">Class: GtValidator</h1>
+        <h1 class="page-title" data-filename="sogv.ContainsValidator.html">Class: ContainsValidator</h1>
         
 
 
@@ -4583,11 +4583,10 @@
     
 <header>
     <div class="header content-size">
-        <h2><span class="ancestors"><a href="sogv.html">sogv</a>.</span>GtValidator
+        <h2><span class="ancestors"><a href="sogv.html">sogv</a>.</span>ContainsValidator
         </h2>
         
-            <div class="class-description"><p>The data must be <code>greater</code> than the given value.</p>
-<p><code>Strings</code>, <code>numerics</code>, <code>arrays</code>, and <code>dates</code> are evaluated using the same conventions as the size rule.</p></div>
+            <div class="class-description"><p>Validates that a value contains given substring.</p></div>
         
     </div>
 </header>  
@@ -4601,10 +4600,10 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="GtValidator">
-            <a class="share-icon" href="#GtValidator"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="ContainsValidator">
+            <a class="share-icon" href="#ContainsValidator"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                new sogv.GtValidator
+                new sogv.ContainsValidator
             </span>
             <span class="signature">(data, options, optionRules, lang, internal)</span>
             
@@ -4817,7 +4816,7 @@
             
             <td class="description last"><p>The aliases for the current validator.</p>
 <p>They could be used in the short validation format.</p>
-<p>Defined aliases: ['<code>gt</code>'].</p></td>
+<p>Defined aliases: ['<code>contains</code>'].</p></td>
         </tr>
 	
 	
@@ -4884,7 +4883,7 @@
         
 
     
-    <pre class="prettyprint"><code>var validator = new sogv.GtValidator(data, {"value": 10});
+    <pre class="prettyprint"><code>var validator = new sogv.ContainsValidator(data, contains);
 if (false === validator.isValid()) {
      validator.errors().first();
 }</code></pre>
@@ -5028,10 +5027,77 @@ if (false === validator.isValid()) {
             
 <dt>
     <div class="nameContainer">
+        <h4 class="name" id="message">
+            <a class="share-icon" href="#message"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">message</span>
+            <span class="type-signature type">String</span>
+            
+            
+            
+            
+        </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>This is the message that will be shown if the value is not contains given substring.</p>
+<p>Default: "<code>This value should contains the given substring.</code>"</p>
+<p>You can use the following parameters in this message:</p>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>%%value%%</code></td>
+            <td>The current (invalid) value</td>
+        </tr>
+    </tbody>
+</table>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
         <h4 class="name" id="value">
             <a class="share-icon" href="#value"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">value</span>
-            <span class="type-signature type">*</span>
+            <span class="type-signature type">String</span>
             
             
             
@@ -5045,8 +5111,7 @@ if (false === validator.isValid()) {
     
     <div class="description">
         <p>This option is required.</p>
-<p>It defines the value to compare to.</p>
-<p>The data type could be <code>string</code>, <code>number</code>, <code>array</code> or <code>date</code>.<p>
+<p>It defines the value to check the containing.</p>
     </div>
     
     

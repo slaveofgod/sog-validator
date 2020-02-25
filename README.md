@@ -188,6 +188,7 @@ These are the basic constraints: use them to assert very basic things about the 
  * [Uuid](#uuid) - The field under validation must be a valid RFC 4122 (version 1, 3, 4, or 5) universally unique identifier (UUID).
  * [Ends With](#ends-with) - The field under validation must end with one of the given values.
  * [Starts With](#starts-with) - The field under validation must start with one of the given values.
+ * [Contains](#contains) - The field under validation must contains the given substring.
  
 #### Comparison Constraints
 
@@ -713,6 +714,21 @@ _options_:
  * `starts` - The option is required. The list of starts. One of the "`start`" needs to be the end of the passed value.
 
 The field under validation must start with one of the given values.
+
+[⬆ navigation](#navigation)
+
+---
+
+##### Contains
+
+_aliases_: `contains`
+
+_usage_: `contains:value`
+
+_options_:
+ * `value` - The option is required. The substring.
+
+The field under validation must contains the given substring.
 
 [⬆ navigation](#navigation)
 

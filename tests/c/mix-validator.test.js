@@ -305,6 +305,10 @@ describe('mix', () => {
         test('Liam,Noah,William,James [multiple:true,min:3,choices]', () => {
             expect(sogv.isValidWithErrorMessage(["Liam", "Noah", "William", "James"], 'choice:Liam;Noah;William;James;Logan;Benjamin;Mason;Elijah;Oliver;Jacob;Lucas;Michael;Alexander;Ethan;Daniel;Matthew;Aiden;Henry;Joseph;Jackson;Samuel;Sebastian;David;Carter;Wyatt;Jayden;John;Owen;Dylan;Luke,3,10,true')).toBe(toBe);
         });
+
+        test('iamtheslaveofgod@gmail.com [value: "eslaveo"]', () => {
+            expect(sogv.isValidWithErrorMessage('iamtheslaveofgod@gmail.com', 'contains:eslaveo')).toBe(toBe);
+        });
     });
 
     describe('Is Invalid', () => {
@@ -546,6 +550,10 @@ describe('mix', () => {
 
         test('Liam,Noah [multiple:true,min:3,choices]', () => {
             expect(sogv.isValidWithErrorMessage(["Liam", "Noah"], 'choice:Liam;Noah;William;James;Logan;Benjamin;Mason;Elijah;Oliver;Jacob;Lucas;Michael;Alexander;Ethan;Daniel;Matthew;Aiden;Henry;Joseph;Jackson;Samuel;Sebastian;David;Carter;Wyatt;Jayden;John;Owen;Dylan;Luke,3,10,true')).toBe("You must select at least 3 choices.");
+        });
+
+        test('iamtheslaveofgod@gmail.com [value: "alex"]', () => {
+            expect(sogv.isValidWithErrorMessage('iamtheslaveofgod@gmail.com', 'contains:alex')).toBe("This value should contains the given substring.");
         });
     });
 });

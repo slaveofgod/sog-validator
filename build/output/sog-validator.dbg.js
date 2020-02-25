@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v1.3.1 revision a1e62fe (DEBUG PROFILER)
+ * SOG Validator Library v1.4.0 revision c3152bf (DEBUG PROFILER)
  * Copyright 2019-2020 Slave of God <iamtheslaveofgod@gmail.com>. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var sogv = {version:"1.3.1", revision:"a1e62fe", config:{}, common:{}, validators:{}, registerValidator:function(validator) {
+var sogv = {version:"1.4.0", revision:"c3152bf", config:{}, common:{}, validators:{}, registerValidator:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, this.lang, true);
   var alias = __validator.alias;
@@ -12712,6 +12712,50 @@ Object.assign(sogv, function() {
   return {XdigitValidator:XdigitValidator};
 }());
 sogv.registerValidator(sogv.XdigitValidator);
+Object.assign(sogv, function() {
+  var ContainsValidator = function(data, options, optionRules, lang, internal) {
+    sogv.AbstractValidator.call(this, data, options, {value:optionRules.max || 'required|type:{"type":"string"}', message:optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'}, lang, internal);
+    this.value = this.__options.value;
+    this.message = this.__options.message || "This value should contains the given substring.";
+    this.name = "ContainsValidator";
+  };
+  ContainsValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+  ContainsValidator.prototype.constructor = ContainsValidator;
+  Object.defineProperty(ContainsValidator.prototype, "alias", {get:function() {
+    return ["contains"];
+  }});
+  Object.defineProperty(ContainsValidator.prototype, "options", {get:function() {
+    return [{"name":"value", "type":"string"}];
+  }});
+  Object.assign(ContainsValidator.prototype, {__validate:function() {
+    if (false === this.data.includes(this.value)) {
+      this.__setErrorMessage(this.message, this.__messageParameters());
+      return;
+    }
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
+    if (null !== errorMessage) {
+      this.__setErrorMessage(errorMessage, {});
+      return;
+    }
+    try {
+      if ("undefined" !== typeof this.data) {
+        this.data = this.data.toString();
+      }
+    } catch (e) {
+      this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {ContainsValidator:ContainsValidator};
+}());
+sogv.registerValidator(sogv.ContainsValidator);
 sogv.I18nHandler.add("af", [{"@id":"1", "source":"This value should be false.", "target":"Hierdie waarde moet vals wees."}, {"@id":"2", "source":"This value should be true.", "target":"Hierdie waarde moet waar wees."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Hierdie waarde moet van die soort {{type}} wees."}, {"@id":"4", "source":"This value should be blank.", "target":"Hierdie waarde moet leeg wees."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Die waarde wat jy gekies het is nie 'n geldige keuse nie."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Jy moet ten minste %%limit%% kies.|Jy moet ten minste %%limit%% keuses kies."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Jy moet by die meeste %%limit%% keuse kies.|Jy moet by die meeste %%limit%% keuses kies."}, {"@id":"8", "source":"One or more of the given values is invalid.", 
 "target":"Een of meer van die gegewe waardes is ongeldig."}, {"@id":"9", "source":"This field was not expected.", "target":"Die veld is nie verwag nie."}, {"@id":"10", "source":"This field is missing.", "target":"Hierdie veld ontbreek."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Hierdie waarde is nie 'n geldige datum nie."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Hierdie waarde is nie 'n geldige datum en tyd nie."}, {"@id":"13", "source":"This value is not a valid email address.", 

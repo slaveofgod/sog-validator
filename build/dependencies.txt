@@ -142,6 +142,7 @@
 ../src/framework/validator/l/space-validator.js
 ../src/framework/validator/l/upper-validator.js
 ../src/framework/validator/l/xdigit-validator.js
+../src/framework/validator/c/contains-validator.js
 ../src/i18n/resource/s/af.js
 ../src/i18n/resource/s/ar.js
 ../src/i18n/resource/s/az.js
