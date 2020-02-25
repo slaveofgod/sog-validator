@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v1.2.1 revision 05d5251
+ * SOG Validator Library v1.3.0 revision 312a024
  * Copyright 2019-2020 Slave of God <iamtheslaveofgod@gmail.com>. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,9 +20,9 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var sogv = {version:"1.2.1", revision:"05d5251", config:{}, common:{}, validators:{}, registerValidator:function(validator) {
+var sogv = {version:"1.3.0", revision:"312a024", config:{}, common:{}, validators:{}, registerValidator:function(validator) {
   var __v = [validator];
-  var __validator = new __v[0](null, {}, {}, "en", true);
+  var __validator = new __v[0](null, {}, {}, this.lang, true);
   var alias = __validator.alias;
   var options = __validator.options;
   if ("undefined" === typeof alias) {
@@ -112,12 +112,12 @@ var sogv = {version:"1.2.1", revision:"05d5251", config:{}, common:{}, validator
     throw new Error('Validator with alias "' + validator + '" is not registered.');
   }
   return new sogv.validators[validator](data, options, optionRules, lang, internal);
-}, isValid:function(data, rules, internal) {
-  var engine = new sogv.Application({internal:internal});
+}, isValid:function(data, rules, lang, internal) {
+  var engine = new sogv.Application({internal:internal, lang:lang});
   var validator = engine.makeSingle(data, rules);
   return validator.isValid();
-}, isValidWithErrorMessage:function(data, rules, internal, lang) {
-  var engine = new sogv.Application({internal:internal});
+}, isValidWithErrorMessage:function(data, rules, lang, internal) {
+  var engine = new sogv.Application({internal:internal, lang:lang});
   var validator = engine.makeSingle(data, rules);
   return true === validator.isValid() ? null : validator.errors().first();
 }, convertToType:function(data, strTypes) {
@@ -218,7 +218,7 @@ if (typeof exports !== "undefined") {
       if (!rules.hasOwnProperty(key)) {
         continue;
       }
-      var message = sogv.isValidWithErrorMessage(this.__options[key], rules[key], true);
+      var message = sogv.isValidWithErrorMessage(this.__options[key], rules[key], this.lang, true);
       if (null !== message) {
         throw new Error("[option:" + key + "]: " + message);
       }
@@ -434,7 +434,7 @@ sogv.ValidationSettingsHandler = {parse:function(settings) {
         options = JSON.parse(settingsString);
       } else {
         var __options = settingsString.split(",");
-        var __validator = sogv.makeValidator(null, validator, {}, {}, "en", true);
+        var __validator = sogv.makeValidator(null, validator, {}, {}, this.lang, true);
         for (var i = 0; i < __validator.options.length; i++) {
           options[__validator.options[i].name] = sogv.convertToType(__options[i], __validator.options[i].type);
         }
@@ -9123,7 +9123,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9183,7 +9183,7 @@ Object.assign(sogv, function() {
     if (!this.min && !this.max) {
       throw new Error('Either option "min" or "max" must be given for constraint');
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9250,7 +9250,7 @@ Object.assign(sogv, function() {
       return;
     }
     var errorMessage;
-    errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9263,7 +9263,7 @@ Object.assign(sogv, function() {
       this.__setErrorMessage("This value " + this.data + " could not be converted to string.");
       return;
     }
-    errorMessage = sogv.isValidWithErrorMessage(this.protocols, 'type:{"type":"array"}', true);
+    errorMessage = sogv.isValidWithErrorMessage(this.protocols, 'type:{"type":"array"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9309,7 +9309,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9417,7 +9417,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9462,7 +9462,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9597,7 +9597,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -9954,7 +9954,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10082,7 +10082,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10117,7 +10117,7 @@ Object.assign(sogv, function() {
     return [{"name":"format", "type":"string"}];
   }});
   Object.assign(DateTimeValidator.prototype, {__validate:function() {
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"date-string"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"date-string"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10131,7 +10131,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10175,7 +10175,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10219,7 +10219,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10354,7 +10354,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10438,7 +10438,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10491,7 +10491,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10541,7 +10541,7 @@ Object.assign(sogv, function() {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
-    if (null !== sogv.isValidWithErrorMessage(canonicalize.substr(4, 2), "country", true)) {
+    if (null !== sogv.isValidWithErrorMessage(canonicalize.substr(4, 2), "country", "en", true)) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
     }
@@ -10564,7 +10564,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10624,7 +10624,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10819,7 +10819,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10874,7 +10874,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -10962,7 +10962,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -11085,7 +11085,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -11165,7 +11165,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -11223,7 +11223,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -11532,7 +11532,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -11564,7 +11564,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":["datetime","date-string"],"any":true}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":["datetime","date-string"],"any":true}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -11591,7 +11591,7 @@ Object.assign(sogv, function() {
     return [{"name":"length", "type":"integer"}];
   }});
   Object.assign(DigitsValidator.prototype, {__validate:function() {
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"numeric"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"numeric"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage);
       return;
@@ -11605,7 +11605,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -11641,7 +11641,7 @@ Object.assign(sogv, function() {
     return [{"name":"min", "type":"integer"}, {"name":"max", "type":"integer"}];
   }});
   Object.assign(DigitsBetweenValidator.prototype, {__validate:function() {
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"numeric"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"numeric"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage);
       return;
@@ -11662,7 +11662,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -11696,7 +11696,7 @@ Object.assign(sogv, function() {
   }});
   Object.assign(DistinctValidator.prototype, {__beforeValidate:function() {
     sogv.UniqueValidator.prototype.__beforeValidate.call(this);
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":["array","iterable"]}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":["array","iterable"]}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -11735,7 +11735,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -11782,7 +11782,7 @@ Object.assign(sogv, function() {
         return;
       }
     } else {
-      if (false === sogv.isValid(this.data, {"greater-than":{"value":this.value}}, true)) {
+      if (false === sogv.isValid(this.data, {"greater-than":{"value":this.value}}, this.lang, true)) {
         var __message = this.dateMessage;
         if (true === sogv.isType("numeric", this.value) || true === sogv.isType("boolean", this.value)) {
           __message = this.numericMessage;
@@ -11827,7 +11827,7 @@ Object.assign(sogv, function() {
         return;
       }
     } else {
-      if (false === sogv.isValid(this.data, {"greater-than-or-equal":{"value":this.value}}, true)) {
+      if (false === sogv.isValid(this.data, {"greater-than-or-equal":{"value":this.value}}, this.lang, true)) {
         var __message = this.dateMessage;
         if (true === sogv.isType("numeric", this.value) || true === sogv.isType("boolean", this.value)) {
           __message = this.numericMessage;
@@ -11872,7 +11872,7 @@ Object.assign(sogv, function() {
         return;
       }
     } else {
-      if (false === sogv.isValid(this.data, {"less-than":{"value":this.value}}, true)) {
+      if (false === sogv.isValid(this.data, {"less-than":{"value":this.value}}, this.lang, true)) {
         var __message = this.dateMessage;
         if (true === sogv.isType("numeric", this.value) || true === sogv.isType("boolean", this.value)) {
           __message = this.numericMessage;
@@ -11917,7 +11917,7 @@ Object.assign(sogv, function() {
         return;
       }
     } else {
-      if (false === sogv.isValid(this.data, {"less-than-or-equal":{"value":this.value}}, true)) {
+      if (false === sogv.isValid(this.data, {"less-than-or-equal":{"value":this.value}}, this.lang, true)) {
         var __message = this.dateMessage;
         if (true === sogv.isType("numeric", this.value) || true === sogv.isType("boolean", this.value)) {
           __message = this.numericMessage;
@@ -12060,7 +12060,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -12099,7 +12099,7 @@ Object.assign(sogv, function() {
     return [{"name":"choices", "type":"array"}];
   }});
   Object.assign(InValidator.prototype, {__validate:function() {
-    var status = sogv.isValid(this.data, {"choice":{"choices":this.choices, "min":this.min}}, true);
+    var status = sogv.isValid(this.data, {"choice":{"choices":this.choices, "min":this.min}}, this.lang, true);
     if (false === status) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
@@ -12109,7 +12109,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -12145,7 +12145,7 @@ Object.assign(sogv, function() {
     return [{"name":"choices", "type":"array"}];
   }});
   Object.assign(NotInValidator.prototype, {__validate:function() {
-    var status = sogv.isValid(this.data, {"choice":{"choices":this.choices, "min":this.min}}, true);
+    var status = sogv.isValid(this.data, {"choice":{"choices":this.choices, "min":this.min}}, this.lang, true);
     if (true === status) {
       this.__setErrorMessage(this.message, this.__messageParameters());
       return;
@@ -12155,7 +12155,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;
@@ -12217,7 +12217,7 @@ Object.assign(sogv, function() {
       this.__skip = true;
       return;
     }
-    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":["string","numeric","array"],"any":true}', true);
+    var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":["string","numeric","array"],"any":true}', this.lang, true);
     if (null !== errorMessage) {
       this.__setErrorMessage(errorMessage, {});
       return;

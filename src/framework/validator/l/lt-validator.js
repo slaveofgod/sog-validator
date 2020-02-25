@@ -98,7 +98,7 @@ Object.assign(sogv, function () {
                     'less-than': {
                         "value": this.value
                     }
-                }, true)) {
+                }, this.lang, true)) {
                     var __message = this.dateMessage;
                     if (
                         true === sogv.isType('numeric', this.value)

@@ -35,7 +35,7 @@ var sogv = {
      */
     registerValidator: function (validator) {
         var __v = [validator];
-        var __validator = new __v[0](null, {}, {}, 'en', true);
+        var __validator = new __v[0](null, {}, {}, this.lang, true);
         var alias = __validator.alias;
         var options = __validator.options;
 
@@ -197,12 +197,14 @@ var sogv = {
      * <p>Check if data valid according to validation rules.</p>
      * @param {*} data The data which needs to be validated.
      * @param {String} rules Validation rules in string format.
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
      * @param {Boolean} internal It means, that validation called from core.
      * @returns {Boolean} Validation status.
      */
-    isValid: function (data, rules, internal) {
+    isValid: function (data, rules, lang, internal) {
         var engine = new sogv.Application({
-            internal: internal
+            internal: internal,
+            lang: lang
         });
 
         var validator = engine.makeSingle(
@@ -220,13 +222,14 @@ var sogv = {
      * <p>Check if data valid according to validation rules.</p>
      * @param {*} data The data which needs to be validated.
      * @param {String} rules Validation rules in string format.
-     * @param {Boolean} internal It means, that validation called from core.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
+     * @param {Boolean} internal It means, that validation called from core.
      * @returns {Null|String} If valid this function return null otherwise error message.
      */
-    isValidWithErrorMessage: function (data, rules, internal, lang) {
+    isValidWithErrorMessage: function (data, rules, lang, internal) {
         var engine = new sogv.Application({
-            internal: internal
+            internal: internal,
+            lang: lang
         });
 
         var validator = engine.makeSingle(

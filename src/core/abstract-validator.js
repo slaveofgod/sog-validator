@@ -158,7 +158,7 @@ Object.assign(sogv, (function () {
             for (var key in rules) {
                 if (!rules.hasOwnProperty(key)) continue;
 
-                var message = sogv.isValidWithErrorMessage(this.__options[key], rules[key], true);
+                var message = sogv.isValidWithErrorMessage(this.__options[key], rules[key], this.lang, true);
                 if (null !== message) {
                     throw new Error("[option:" + key + "]: " +  message);
                 }

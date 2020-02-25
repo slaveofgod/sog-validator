@@ -87,7 +87,7 @@ Object.assign(sogv, function () {
             var status = sogv.isValid(this.data, {'choice': {
                 "choices": this.choices,
                 "min": this.min
-            }}, true);
+            }}, this.lang, true);
 
             if(false === status) {
                 this.__setErrorMessage(this.message, this.__messageParameters());
@@ -110,7 +110,7 @@ Object.assign(sogv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;

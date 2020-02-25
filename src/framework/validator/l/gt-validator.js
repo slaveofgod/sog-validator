@@ -98,7 +98,7 @@ Object.assign(sogv, function () {
                     'greater-than': {
                         "value": this.value
                     }
-                }, true)) {
+                }, this.lang, true)) {
                     var __message = this.dateMessage;
                     if (
                         true === sogv.isType('numeric', this.value)

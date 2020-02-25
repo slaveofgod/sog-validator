@@ -146,7 +146,7 @@ Object.assign(sogv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"iterable"}', this.lang, true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;

@@ -167,7 +167,7 @@ Object.assign(sogv, function () {
                 return ;
             }
 
-            if (null !== sogv.isValidWithErrorMessage(canonicalize.substr(4, 2), 'country', true)) {
+            if (null !== sogv.isValidWithErrorMessage(canonicalize.substr(4, 2), 'country', 'en', true)) {
                 this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }
@@ -220,7 +220,7 @@ Object.assign(sogv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;

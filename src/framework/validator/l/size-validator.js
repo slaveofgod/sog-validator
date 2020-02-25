@@ -116,7 +116,7 @@ Object.assign(sogv, function () {
             }
 
             // Check if value is valid type
-            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":["string","numeric","array"],"any":true}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":["string","numeric","array"],"any":true}', this.lang, true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return;

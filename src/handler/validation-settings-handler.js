@@ -52,7 +52,7 @@ sogv.ValidationSettingsHandler = {
                     options = JSON.parse(settingsString);
                 } else {
                     var __options = settingsString.split(',');
-                    var __validator = sogv.makeValidator(null, validator, {}, {}, 'en', true);
+                    var __validator = sogv.makeValidator(null, validator, {}, {}, this.lang, true);
                     for (var i = 0; i < __validator.options.length; i++) {
                         options[__validator.options[i].name] = sogv.convertToType(__options[i], __validator.options[i].type);
                     }

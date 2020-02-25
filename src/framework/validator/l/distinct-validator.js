@@ -62,7 +62,7 @@ Object.assign(sogv, function () {
             sogv.UniqueValidator.prototype.__beforeValidate.call(this);
 
             // Check if value is array
-            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":["array","iterable"]}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":["array","iterable"]}', this.lang, true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;

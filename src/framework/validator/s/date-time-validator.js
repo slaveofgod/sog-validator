@@ -326,7 +326,7 @@ Object.assign(sogv, function () {
          */
         __validate: function () {
             // Check if value is date
-            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"date-string"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"date-string"}', this.lang, true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
@@ -353,7 +353,7 @@ Object.assign(sogv, function () {
             }
 
             // Check if value is scalar
-            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":"scalar"}', this.lang, true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;

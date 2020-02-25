@@ -84,7 +84,7 @@ Object.assign(sogv, function () {
             }
 
             // Check if value is datetime
-            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":["datetime","date-string"],"any":true}', true);
+            var errorMessage = sogv.isValidWithErrorMessage(this.data, 'type:{"type":["datetime","date-string"],"any":true}', this.lang, true);
             if(null !== errorMessage) {
                 this.__setErrorMessage(errorMessage, {});
                 return ;
