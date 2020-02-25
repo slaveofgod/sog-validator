@@ -189,7 +189,7 @@ Object.assign(sogv, function () {
             }
 
             if (null !== this.min && count < this.min) {
-                __message = (this.min == this.max) ? this.exactMessage : this.maxMessage;
+                __message = (this.min == this.max) ? this.exactMessage : this.minMessage;
                 __messageParameters = (this.min == this.max) ? this.__exactMessageParameters() : this.__minMessageParameters();
                 this.__setErrorMessage(__message, __messageParameters);
                 return ;

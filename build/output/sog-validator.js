@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v1.3.0 revision 312a024
+ * SOG Validator Library v1.3.1 revision a1e62fe
  * Copyright 2019-2020 Slave of God <iamtheslaveofgod@gmail.com>. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var sogv = {version:"1.3.0", revision:"312a024", config:{}, common:{}, validators:{}, registerValidator:function(validator) {
+var sogv = {version:"1.3.1", revision:"a1e62fe", config:{}, common:{}, validators:{}, registerValidator:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, this.lang, true);
   var alias = __validator.alias;
@@ -11213,7 +11213,7 @@ Object.assign(sogv, function() {
       return;
     }
     if (null !== this.min && count < this.min) {
-      __message = this.min == this.max ? this.exactMessage : this.maxMessage;
+      __message = this.min == this.max ? this.exactMessage : this.minMessage;
       __messageParameters = this.min == this.max ? this.__exactMessageParameters() : this.__minMessageParameters();
       this.__setErrorMessage(__message, __messageParameters);
       return;

@@ -361,11 +361,11 @@ describe('mix', () => {
         });
 
         test('abcdef ["min":7,"max":10]', () => {
-            expect(sogv.isValidWithErrorMessage('abcdef', 'count:7,10')).toBe("This collection should contain 7 elements or less.");
+            expect(sogv.isValidWithErrorMessage('abcdef', 'count:7,10')).toBe("This collection should contain 7 elements or more.");
         });
 
         test('[1,2,3,4] ["min":5,"max":10]', () => {
-            expect(sogv.isValidWithErrorMessage([1,2,3,4], 'count:5,10')).toBe("This collection should contain 5 elements or less.");
+            expect(sogv.isValidWithErrorMessage([1,2,3,4], 'count:5,10')).toBe("This collection should contain 5 elements or more.");
         });
 
         test('2434561X ["requireHyphen":true]', () => {

@@ -45,7 +45,7 @@ describe('count', () => {
         });
 
         test('abcdef ["min":7,"max":10]', () => {
-            expect(sogv.isValidWithErrorMessage('abcdef', 'count:{"min":7,"max":10}')).toBe("This collection should contain 7 elements or less.");
+            expect(sogv.isValidWithErrorMessage('abcdef', 'count:{"min":7,"max":10}')).toBe("This collection should contain 7 elements or more.");
         });
 
         test('1234567890 ["min":5,"max":10]', () => {
@@ -53,7 +53,7 @@ describe('count', () => {
         });
 
         test('[1,2,3,4] ["min":5,"max":10]', () => {
-            expect(sogv.isValidWithErrorMessage([1,2,3,4], 'count:{"min":5,"max":10}')).toBe("This collection should contain 5 elements or less.");
+            expect(sogv.isValidWithErrorMessage([1,2,3,4], 'count:{"min":5,"max":10}')).toBe("This collection should contain 5 elements or more.");
         });
 
         test('[1,2,3,4,5,6,7,8,9,10,11] ["min":5,"max":10]', () => {
@@ -65,7 +65,7 @@ describe('count', () => {
         });
 
         test('Array', () => {
-            expect(sogv.isValidWithErrorMessage([], 'count:{"min":1}')).toBe("This collection should contain 1 element or less.");
+            expect(sogv.isValidWithErrorMessage([], 'count:{"min":1}')).toBe("This collection should contain 1 element or more.");
         });
 
         test('Object', () => {
