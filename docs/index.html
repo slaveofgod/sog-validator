@@ -4678,118 +4678,119 @@ if (false === form.isValid()) {
 <h4 id="basic-constraints">Basic Constraints</h4>
 <p>These are the basic constraints: use them to assert very basic things about the value of properties or the return value of methods on your object.</p>
 <ul>
-<li><a href="#accepted">Accepted</a></li>
-<li><a href="#not-blank">Not Blank</a></li>
-<li><a href="#blank">Blank</a></li>
-<li><a href="#not-null">Not Null</a></li>
-<li><a href="#is-null">Is Null</a></li>
-<li><a href="#is-true">Is True</a></li>
-<li><a href="#alpha-dash">Alpha Dash</a></li>
-<li><a href="#array">Array</a></li>
-<li><a href="#boolean">Boolean</a></li>
-<li><a href="#callable">Callable</a></li>
-<li><a href="#float">Float</a></li>
-<li><a href="#double">Double</a></li>
-<li><a href="#integer">Integer</a></li>
-<li><a href="#iterable">Iterable</a></li>
-<li><a href="#null">Null</a></li>
-<li><a href="#numeric">Numeric</a></li>
-<li><a href="#object">Object</a></li>
-<li><a href="#real">Real</a></li>
-<li><a href="#scalar">Scalar</a></li>
-<li><a href="#string">String</a></li>
-<li><a href="#alnum">Alnum</a></li>
-<li><a href="#alpha">Alpha</a></li>
-<li><a href="#cntrl">Cntrl</a></li>
-<li><a href="#digit">Digit</a></li>
-<li><a href="#graph">Graph</a></li>
-<li><a href="#lower">Lower</a></li>
-<li><a href="#print">Print</a></li>
-<li><a href="#punct">Punct</a></li>
-<li><a href="#space">Space</a></li>
-<li><a href="#upper">Upper</a></li>
-<li><a href="#xdigit">Xdigit</a></li>
+<li><a href="#accepted">Accepted</a> - The field under validation must be <code>yes</code>, <code>on</code>, <code>1</code>, or <code>true</code>.</li>
+<li><a href="#not-blank">Not Blank</a> - Validates that a value is <code>not blank</code>.</li>
+<li><a href="#blank">Blank</a> - Validates that a value is blank.</li>
+<li><a href="#not-null">Not Null</a> - Validates that a value is not strictly equal to <code>null</code>.</li>
+<li><a href="#is-null">Is Null</a> - Validates that a value is exactly equal to <code>null</code>.</li>
+<li><a href="#is-true">Is True</a> - Validates that a value is true.</li>
+<li><a href="#is-false">Is False</a> - Validates that a value is false.</li>
+<li><a href="#alpha-dash">Alpha Dash</a> - The field under validation may have alpha-numeric characters, as well as dashes and underscores.</li>
+<li><a href="#array">Array</a> - The field under validation must be an array.</li>
+<li><a href="#boolean">Boolean</a> - The field under validation must be able to be cast as a boolean.</li>
+<li><a href="#callable">Callable</a> - Verify that the contents of a variable can be called as a function.</li>
+<li><a href="#float">Float</a> - The field under validation must be a float.</li>
+<li><a href="#double">Double</a> - The field under validation must be a double.</li>
+<li><a href="#integer">Integer</a> - The field under validation must be an integer.</li>
+<li><a href="#iterable">Iterable</a> - Verify that the contents of a variable is an iterable value.</li>
+<li><a href="#null">Null</a> - The field under validation must be a NULL.</li>
+<li><a href="#numeric">Numeric</a> - The field under validation must be a number or a numeric string.</li>
+<li><a href="#object">Object</a> - The field under validation must be an object.</li>
+<li><a href="#real">Real</a> - Finds whether the type of a variable is real.</li>
+<li><a href="#scalar">Scalar</a> - Finds whether a variable is a scalar.</li>
+<li><a href="#string">String</a> - The field under validation must be a string.</li>
+<li><a href="#alnum">Alnum</a> - Check for alphanumeric character(s).</li>
+<li><a href="#alpha">Alpha</a> - Check for alphabetic character(s).</li>
+<li><a href="#cntrl">Cntrl</a> - Check for control character(s).</li>
+<li><a href="#digit">Digit</a> - Check for numeric character(s).</li>
+<li><a href="#graph">Graph</a> - Check for any printable character(s) except space.</li>
+<li><a href="#lower">Lower</a> - Check for lowercase character(s).</li>
+<li><a href="#print">Print</a> - Check for printable character(s).</li>
+<li><a href="#punct">Punct</a> - Check for any printable character which is not whitespace or an alphanumeric character.</li>
+<li><a href="#space">Space</a> - Check for whitespace character(s).</li>
+<li><a href="#upper">Upper</a> - Check for uppercase character(s).</li>
+<li><a href="#xdigit">Xdigit</a> - Check for character(s) representing a hexadecimal digit.</li>
 </ul>
 <h4 id="string-constraints">String Constraints</h4>
 <ul>
-<li><a href="#email">Email</a></li>
-<li><a href="#length">Length</a></li>
-<li><a href="#url">Url</a></li>
-<li><a href="#regular-expression">Regular Expression</a></li>
-<li><a href="#ip">Ip</a></li>
-<li><a href="#ipv4">IPv4</a></li>
-<li><a href="#ipv6">IPv6</a></li>
-<li><a href="#json">Json</a></li>
-<li><a href="#uuid">Uuid</a></li>
-<li><a href="#ends-with">Ends With</a></li>
-<li><a href="#starts-with">Starts With</a></li>
+<li><a href="#email">Email</a> - Validates that a value is a valid email address.</li>
+<li><a href="#length">Length</a> - Validates that a given string length is between some <code>minimum</code> and <code>maximum</code> value.</li>
+<li><a href="#url">Url</a> - Validates that a value is a valid URL string.</li>
+<li><a href="#regular-expression">Regular Expression</a> - Validates that a value matches a regular expression.</li>
+<li><a href="#ip">Ip</a> - Validates that a value is a valid IP address.</li>
+<li><a href="#ipv4">IPv4</a> - The field under validation must be an <code>IPv4</code> address.</li>
+<li><a href="#ipv6">IPv6</a> - The field under validation must be an <code>IPv6</code> address.</li>
+<li><a href="#json">Json</a> - Validates that a value has valid <code>JSON</code> syntax.</li>
+<li><a href="#uuid">Uuid</a> - The field under validation must be a valid RFC 4122 (version 1, 3, 4, or 5) universally unique identifier (UUID).</li>
+<li><a href="#ends-with">Ends With</a> - The field under validation must end with one of the given values.</li>
+<li><a href="#starts-with">Starts With</a> - The field under validation must start with one of the given values.</li>
 </ul>
 <h4 id="comparison-constraints">Comparison Constraints</h4>
 <ul>
-<li><a href="#equal-to">Equal To</a></li>
-<li><a href="#not-equal-to">Not Equal To</a></li>
-<li><a href="#identical-to">Identical To</a></li>
-<li><a href="#not-identical-to">Not Identical To</a></li>
-<li><a href="#less-than">Less Than</a></li>
-<li><a href="#less-than-or-equal">Less Than Or Equal</a></li>
-<li><a href="#greater-than">Greater Than</a></li>
-<li><a href="#greater-than-or-equal">Greater Than Or Equal</a></li>
-<li><a href="#range">Range</a></li>
-<li><a href="#between">Between</a></li>
-<li><a href="#digits-between">Digits Between</a></li>
-<li><a href="#divisible-by">Divisible By</a></li>
-<li><a href="#unique">Unique</a></li>
-<li><a href="#digits">Digits</a></li>
-<li><a href="#distinct">Distinct</a></li>
-<li><a href="#size">Size</a></li>
-<li><a href="#after-date">After (Date)</a></li>
-<li><a href="#after-or-equal-date">After Or Equal (Date)</a></li>
-<li><a href="#before-date">Before (Date)</a></li>
-<li><a href="#before-or-equal-date">Before Or Equal (Date)</a></li>
-<li><a href="#date-equals">Date Equals</a></li>
+<li><a href="#equal-to">Equal To</a> - Validates that a value is equal to another value, defined in the options.</li>
+<li><a href="#not-equal-to">Not Equal To</a> - Validates that a value is not equal to another value, defined in the options.</li>
+<li><a href="#identical-to">Identical To</a> - Validates that a value is identical to another value, defined in the options.</li>
+<li><a href="#not-identical-to">Not Identical To</a> - Validates that a value is not identical to another value, defined in the options.</li>
+<li><a href="#less-than">Less Than</a> - Validates that a value is less than another value, defined in the options.</li>
+<li><a href="#less-than-or-equal">Less Than Or Equal</a> - Validates that a value is less than or equal to another value, defined in the options.</li>
+<li><a href="#greater-than">Greater Than</a> - Validates that a value is greater than another value, defined in the options.</li>
+<li><a href="#greater-than-or-equal">Greater Than Or Equal</a> - Validates that a value is greater than or equal to another value, defined in the options.</li>
+<li><a href="#range">Range</a> - Validates that a given number or Date object is between some <code>minimum</code> and <code>maximum</code>.</li>
+<li><a href="#between">Between</a> - The field under validation must have a size between the given <code>min</code> and <code>max</code>.</li>
+<li><a href="#digits-between">Digits Between</a> - The field under validation must be <code>numeric</code> and must have a length between the given <code>min</code> and <code>max</code>.</li>
+<li><a href="#divisible-by">Divisible By</a> - Validates that a value is divisible by another value, defined in the options.</li>
+<li><a href="#unique">Unique</a> - Validates that all the elements of the given collection are <code>unique</code> (none of them is present more than once).</li>
+<li><a href="#digits">Digits</a> - The field under validation must be <code>numeric</code> and must have an exact <code>length</code> of value.</li>
+<li><a href="#distinct">Distinct</a> - When working with <code>arrays</code>, the field under validation must not have any duplicate values.</li>
+<li><a href="#size">Size</a> - The field under validation must have a size matching the given value.</li>
+<li><a href="#after-date">After (Date)</a> - The field under validation must be a value after a given date.</li>
+<li><a href="#after-or-equal-date">After Or Equal (Date)</a> - The field under validation must be a value after or equal to the given date.</li>
+<li><a href="#before-date">Before (Date)</a> - The field under validation must be a value before a given date.</li>
+<li><a href="#before-or-equal-date">Before Or Equal (Date)</a> - The field under validation must be a value before or equal to the given date.</li>
+<li><a href="#date-equals">Date Equals</a> - The field under validation must be <code>equal</code> to the given <code>date</code>.</li>
 </ul>
 <h4 id="number-constraints">Number Constraints</h4>
 <ul>
-<li><a href="#positive">Positive</a></li>
-<li><a href="#positive-or-zero">Positive Or Zero</a></li>
-<li><a href="#negative">Negativeaaa</a></li>
-<li><a href="#negative-or-zero">Negative Or Zero</a></li>
+<li><a href="#positive">Positive</a> - Validates that a value is a <code>positive</code> number.</li>
+<li><a href="#positive-or-zero">Positive Or Zero</a> - Validates that a value is a <code>positive</code> number or equal to <code>zero</code>.</li>
+<li><a href="#negative">Negativeaaa</a> - Validates that a value is a <code>negative</code> number.</li>
+<li><a href="#negative-or-zero">Negative Or Zero</a> - Validates that a value is a <code>negative</code> number or equal to <code>zero</code>.</li>
 </ul>
 <h4 id="date-constraints">Date Constraints</h4>
 <ul>
-<li><a href="#date">Date</a></li>
-<li><a href="#date-time">Date Time</a></li>
-<li><a href="#date-format">Date Format</a></li>
-<li><a href="#time">Time</a></li>
-<li><a href="#timezone">Timezone</a></li>
+<li><a href="#date">Date</a> - Validates that a value is a valid <code>date</code>, meaning a string (or an object that can be cast into a string) that follows a valid <code>YYYY-MM-DD</code> format.</li>
+<li><a href="#date-time">Date Time</a> - Validates that a value is a valid &quot;datetime&quot;, meaning a string (or an object that can be cast into a string) that follows a specific format.</li>
+<li><a href="#date-format">Date Format</a> - Validates that a value is a valid &quot;datetime&quot;, meaning a string (or an object that can be cast into a string) that follows a specific format.</li>
+<li><a href="#time">Time</a> - Validates that a value is a valid <code>time</code>, meaning a string (or an object that can be cast into a string) that follows a valid <code>HH:mm:ss</code> format.</li>
+<li><a href="#timezone">Timezone</a> - Validates that a value is a valid timezone identifier (e.g. <code>Europe/Paris</code>).</li>
 </ul>
 <h4 id="choice-constraints">Choice Constraints</h4>
 <ul>
-<li><a href="#choice">Choice</a></li>
-<li><a href="#not-in">Not In</a></li>
-<li><a href="#in">In</a></li>
-<li><a href="#language">Language</a></li>
-<li><a href="#locale">Locale</a></li>
-<li><a href="#country">Country</a></li>
+<li><a href="#choice">Choice</a> - This constraint is used to ensure that the given value is one of a given set of valid choices.</li>
+<li><a href="#not-in">Not In</a> - The field under validation must not be included in the given list of values.</li>
+<li><a href="#in">In</a> - The field under validation must be included in the given list of values.</li>
+<li><a href="#language">Language</a> - Validates that a value is a valid language Unicode language identifier (e.g. <code>fr</code> or <code>ar-dz</code>).</li>
+<li><a href="#locale">Locale</a> - Validates that a value is a valid locale.</li>
+<li><a href="#country">Country</a> - Validates that a value is a valid <a target="_blank" href="https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes/ISO">3166-1 alpha-2</a> <code>country code</code>.</li>
 </ul>
 <h4 id="file-constraints">File Constraints</h4>
 <ul>
-<li><a href="#file">File</a></li>
-<li><a href="#image">Image</a></li>
+<li><a href="#file">File</a> - Under development ...</li>
+<li><a href="#image">Image</a> - Under development ...</li>
 </ul>
 <h4 id="financial-and-other-number-constraints">Financial and other Number Constraints</h4>
 <ul>
-<li><a href="#bic">Bic</a></li>
-<li><a href="#card-scheme">Card Scheme</a></li>
-<li><a href="#currency">Currency</a></li>
-<li><a href="#luhn">Luhn</a></li>
-<li><a href="#iban">Iban</a></li>
-<li><a href="#isbn">Isbn</a></li>
-<li><a href="#issn">Issn</a></li>
+<li><a href="#bic">Bic</a> - This constraint is used to ensure that a value has the proper format of a <a target="_blank" href="https://en.wikipedia.org/wiki/Business_Identifier_Code">Business Identifier Code (BIC)</a>.</li>
+<li><a href="#card-scheme">Card Scheme</a> - This constraint ensures that a credit card number is valid for a given credit card company.</li>
+<li><a href="#currency">Currency</a> - Validates that a value is a valid <a target="_blank" href="https://en.wikipedia.org/wiki/ISO_4217">3-letter ISO 4217</a> <code>currency</code> name.</li>
+<li><a href="#luhn">Luhn</a> - This constraint is used to ensure that a <code>credit card</code> number passes the <a target="_blank" href="https://en.wikipedia.org/wiki/Luhn_algorithm">Luhn algorithm</a>.</li>
+<li><a href="#iban">Iban</a> - This constraint is used to ensure that a bank account number has the proper format of an <a target="_blank" href="https://en.wikipedia.org/wiki/International_Bank_Account_Number">International Bank Account Number (IBAN)</a>.</li>
+<li><a href="#isbn">Isbn</a> - This constraint validates that an <a target="_blank" href="https://en.wikipedia.org/wiki/Isbn">International Standard Book Number (ISBN)</a> is either a valid <code>ISBN-10</code> or a valid <code>ISBN-13</code>.</li>
+<li><a href="#issn">Issn</a> - Validates that a value is a valid <a target="_blank" href="https://en.wikipedia.org/wiki/Issn">International Standard Serial Number (ISSN)</a>.</li>
 </ul>
 <h4 id="other-constraints">Other Constraints</h4>
 <ul>
-<li><a href="#count">Count</a></li>
+<li><a href="#count">Count</a> - Validates that a given collection's (i.e. an array or an object that implements Countable) element <code>count</code> is <code>between</code> some <code>minimum</code> and <code>maximum</code> value.</li>
 </ul>
 <p><a href="#navigation">⬆ navigation</a></p>
 <h2 id="validation-rules">Validation Rules</h2>
@@ -5257,7 +5258,7 @@ if (false === form.isValid()) {
 <ul>
 <li><code>format</code> - This option allows to validate a custom date format. Default: &quot;<code>YYYY-MM-DD HH:mm:ss</code>&quot;</li>
 </ul>
-<p>Validates that a value is a valid <code>date</code>, meaning a string (or an object that can be cast into a string) that follows a valid <code>YYYY-MM-DD</code> format.</p>
+<p>Validates that a value is a valid &quot;datetime&quot;, meaning a string (or an object that can be cast into a string) that follows a specific format.</p>
 <h4 id="year%2C-month%2C-and-day-tokens">Year, month, and day tokens</h4>
 <p><em>Tokens are case-sensitive.</em></p>
 <table>
@@ -5648,7 +5649,7 @@ THE SOFTWARE.
 
         <footer class="content-size">
             <div class="footer">
-                Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Fri Feb 21 2020 23:25:21 GMT+0200 (Eastern European Standard Time)
+                Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Tue Feb 25 2020 15:35:25 GMT+0200 (Eastern European Standard Time)
             </div>
         </footer>
     </div>

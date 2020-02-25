@@ -142,118 +142,119 @@ Below is a list of all available validation rules and their function:
 
 #### Basic Constraints
 These are the basic constraints: use them to assert very basic things about the value of properties or the return value of methods on your object.
- * [Accepted](#accepted)
- * [Not Blank](#not-blank)
- * [Blank](#blank)
- * [Not Null](#not-null)
- * [Is Null](#is-null)
- * [Is True](#is-true)
- * [Alpha Dash](#alpha-dash)
- * [Array](#array)
- * [Boolean](#boolean)
- * [Callable](#callable)
- * [Float](#float)
- * [Double](#double)
- * [Integer](#integer)
- * [Iterable](#iterable)
- * [Null](#null)
- * [Numeric](#numeric)
- * [Object](#object)
- * [Real](#real)
- * [Scalar](#scalar)
- * [String](#string)
- * [Alnum](#alnum)
- * [Alpha](#alpha)
- * [Cntrl](#cntrl)
- * [Digit](#digit)
- * [Graph](#graph)
- * [Lower](#lower)
- * [Print](#print)
- * [Punct](#punct)
- * [Space](#space)
- * [Upper](#upper)
- * [Xdigit](#xdigit)
+ * [Accepted](#accepted) - The field under validation must be `yes`, `on`, `1`, or `true`.
+ * [Not Blank](#not-blank) - Validates that a value is `not blank`.
+ * [Blank](#blank) - Validates that a value is blank.
+ * [Not Null](#not-null) - Validates that a value is not strictly equal to `null`.
+ * [Is Null](#is-null) - Validates that a value is exactly equal to `null`.
+ * [Is True](#is-true) - Validates that a value is true.
+ * [Is False](#is-false) - Validates that a value is false.
+ * [Alpha Dash](#alpha-dash) - The field under validation may have alpha-numeric characters, as well as dashes and underscores.
+ * [Array](#array) - The field under validation must be an array.
+ * [Boolean](#boolean) - The field under validation must be able to be cast as a boolean.
+ * [Callable](#callable) - Verify that the contents of a variable can be called as a function.
+ * [Float](#float) - The field under validation must be a float.
+ * [Double](#double) - The field under validation must be a double.
+ * [Integer](#integer) - The field under validation must be an integer.
+ * [Iterable](#iterable) - Verify that the contents of a variable is an iterable value.
+ * [Null](#null) - The field under validation must be a NULL.
+ * [Numeric](#numeric) - The field under validation must be a number or a numeric string.
+ * [Object](#object) - The field under validation must be an object.
+ * [Real](#real) - Finds whether the type of a variable is real.
+ * [Scalar](#scalar) - Finds whether a variable is a scalar.
+ * [String](#string) - The field under validation must be a string.
+ * [Alnum](#alnum) - Check for alphanumeric character(s).
+ * [Alpha](#alpha) - Check for alphabetic character(s).
+ * [Cntrl](#cntrl) - Check for control character(s).
+ * [Digit](#digit) - Check for numeric character(s).
+ * [Graph](#graph) - Check for any printable character(s) except space.
+ * [Lower](#lower) - Check for lowercase character(s).
+ * [Print](#print) - Check for printable character(s).
+ * [Punct](#punct) - Check for any printable character which is not whitespace or an alphanumeric character.
+ * [Space](#space) - Check for whitespace character(s).
+ * [Upper](#upper) - Check for uppercase character(s).
+ * [Xdigit](#xdigit) - Check for character(s) representing a hexadecimal digit.
  
 #### String Constraints
 
- * [Email](#email)
- * [Length](#length)
- * [Url](#url)
- * [Regular Expression](#regular-expression)
- * [Ip](#ip)
- * [IPv4](#ipv4)
- * [IPv6](#ipv6)
- * [Json](#json)
- * [Uuid](#uuid)
- * [Ends With](#ends-with)
- * [Starts With](#starts-with)
+ * [Email](#email) - Validates that a value is a valid email address.
+ * [Length](#length) - Validates that a given string length is between some `minimum` and `maximum` value.
+ * [Url](#url) - Validates that a value is a valid URL string.
+ * [Regular Expression](#regular-expression) - Validates that a value matches a regular expression.
+ * [Ip](#ip) - Validates that a value is a valid IP address.
+ * [IPv4](#ipv4) - The field under validation must be an `IPv4` address.
+ * [IPv6](#ipv6) - The field under validation must be an `IPv6` address.
+ * [Json](#json) - Validates that a value has valid `JSON` syntax.
+ * [Uuid](#uuid) - The field under validation must be a valid RFC 4122 (version 1, 3, 4, or 5) universally unique identifier (UUID).
+ * [Ends With](#ends-with) - The field under validation must end with one of the given values.
+ * [Starts With](#starts-with) - The field under validation must start with one of the given values.
  
 #### Comparison Constraints
 
- * [Equal To](#equal-to)
- * [Not Equal To](#not-equal-to)
- * [Identical To](#identical-to)
- * [Not Identical To](#not-identical-to)
- * [Less Than](#less-than)
- * [Less Than Or Equal](#less-than-or-equal)
- * [Greater Than](#greater-than)
- * [Greater Than Or Equal](#greater-than-or-equal)
- * [Range](#range)
- * [Between](#between)
- * [Digits Between](#digits-between)
- * [Divisible By](#divisible-by)
- * [Unique](#unique)
- * [Digits](#digits)
- * [Distinct](#distinct)
- * [Size](#size)
- * [After (Date)](#after-date)
- * [After Or Equal (Date)](#after-or-equal-date)
- * [Before (Date)](#before-date)
- * [Before Or Equal (Date)](#before-or-equal-date)
- * [Date Equals](#date-equals)
+ * [Equal To](#equal-to) - Validates that a value is equal to another value, defined in the options.
+ * [Not Equal To](#not-equal-to) - Validates that a value is not equal to another value, defined in the options.
+ * [Identical To](#identical-to) - Validates that a value is identical to another value, defined in the options.
+ * [Not Identical To](#not-identical-to) - Validates that a value is not identical to another value, defined in the options.
+ * [Less Than](#less-than) - Validates that a value is less than another value, defined in the options.
+ * [Less Than Or Equal](#less-than-or-equal) - Validates that a value is less than or equal to another value, defined in the options.
+ * [Greater Than](#greater-than) - Validates that a value is greater than another value, defined in the options.
+ * [Greater Than Or Equal](#greater-than-or-equal) - Validates that a value is greater than or equal to another value, defined in the options.
+ * [Range](#range) - Validates that a given number or Date object is between some `minimum` and `maximum`.
+ * [Between](#between) - The field under validation must have a size between the given `min` and `max`.
+ * [Digits Between](#digits-between) - The field under validation must be `numeric` and must have a length between the given `min` and `max`.
+ * [Divisible By](#divisible-by) - Validates that a value is divisible by another value, defined in the options.
+ * [Unique](#unique) - Validates that all the elements of the given collection are `unique` (none of them is present more than once).
+ * [Digits](#digits) - The field under validation must be `numeric` and must have an exact `length` of value.
+ * [Distinct](#distinct) - When working with `arrays`, the field under validation must not have any duplicate values.
+ * [Size](#size) - The field under validation must have a size matching the given value.
+ * [After (Date)](#after-date) - The field under validation must be a value after a given date.
+ * [After Or Equal (Date)](#after-or-equal-date) - The field under validation must be a value after or equal to the given date.
+ * [Before (Date)](#before-date) - The field under validation must be a value before a given date.
+ * [Before Or Equal (Date)](#before-or-equal-date) - The field under validation must be a value before or equal to the given date.
+ * [Date Equals](#date-equals) - The field under validation must be `equal` to the given `date`.
  
 #### Number Constraints
 
- * [Positive](#positive)
- * [Positive Or Zero](#positive-or-zero)
- * [Negativeaaa](#negative)
- * [Negative Or Zero](#negative-or-zero)
+ * [Positive](#positive) - Validates that a value is a `positive` number.
+ * [Positive Or Zero](#positive-or-zero) - Validates that a value is a `positive` number or equal to `zero`.
+ * [Negativeaaa](#negative) - Validates that a value is a `negative` number.
+ * [Negative Or Zero](#negative-or-zero) - Validates that a value is a `negative` number or equal to `zero`.
  
 #### Date Constraints
 
- * [Date](#date)
- * [Date Time](#date-time)
- * [Date Format](#date-format)
- * [Time](#time)
- * [Timezone](#timezone)
+ * [Date](#date) - Validates that a value is a valid `date`, meaning a string (or an object that can be cast into a string) that follows a valid `YYYY-MM-DD` format.
+ * [Date Time](#date-time) - Validates that a value is a valid "datetime", meaning a string (or an object that can be cast into a string) that follows a specific format.
+ * [Date Format](#date-format) - Validates that a value is a valid "datetime", meaning a string (or an object that can be cast into a string) that follows a specific format.
+ * [Time](#time) - Validates that a value is a valid `time`, meaning a string (or an object that can be cast into a string) that follows a valid `HH:mm:ss` format.
+ * [Timezone](#timezone) - Validates that a value is a valid timezone identifier (e.g. `Europe/Paris`).
  
 #### Choice Constraints
 
- * [Choice](#choice)
- * [Not In](#not-in)
- * [In](#in)
- * [Language](#language)
- * [Locale](#locale)
- * [Country](#country)
+ * [Choice](#choice) - This constraint is used to ensure that the given value is one of a given set of valid choices.
+ * [Not In](#not-in) - The field under validation must not be included in the given list of values.
+ * [In](#in) - The field under validation must be included in the given list of values.
+ * [Language](#language) - Validates that a value is a valid language Unicode language identifier (e.g. `fr` or `ar-dz`).
+ * [Locale](#locale) - Validates that a value is a valid locale.
+ * [Country](#country) - Validates that a value is a valid [3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes/ISO) `country code`.
  
 #### File Constraints
 
- * [File](#file)
- * [Image](#image)
+ * [File](#file) - Under development ...
+ * [Image](#image) - Under development ...
 
 #### Financial and other Number Constraints
 
- * [Bic](#bic)
- * [Card Scheme](#card-scheme)
- * [Currency](#currency)
- * [Luhn](#luhn)
- * [Iban](#iban)
- * [Isbn](#isbn)
- * [Issn](#issn)
+ * [Bic](#bic) - This constraint is used to ensure that a value has the proper format of a [Business Identifier Code (BIC)](https://en.wikipedia.org/wiki/Business_Identifier_Code).
+ * [Card Scheme](#card-scheme) - This constraint ensures that a credit card number is valid for a given credit card company.
+ * [Currency](#currency) - Validates that a value is a valid [3-letter ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) `currency` name.
+ * [Luhn](#luhn) - This constraint is used to ensure that a `credit card` number passes the [Luhn algorithm](https://en.wikipedia.org/wiki/Luhn_algorithm).
+ * [Iban](#iban) - This constraint is used to ensure that a bank account number has the proper format of an [International Bank Account Number (IBAN)](https://en.wikipedia.org/wiki/International_Bank_Account_Number).
+ * [Isbn](#isbn) - This constraint validates that an [International Standard Book Number (ISBN)](https://en.wikipedia.org/wiki/Isbn) is either a valid `ISBN-10` or a valid `ISBN-13`.
+ * [Issn](#issn) - Validates that a value is a valid [International Standard Serial Number (ISSN)](https://en.wikipedia.org/wiki/Issn).
 
 #### Other Constraints
 
- * [Count](#count)
+ * [Count](#count) - Validates that a given collection's (i.e. an array or an object that implements Countable) element `count` is `between` some `minimum` and `maximum` value.
 
 [⬆ navigation](#navigation)
 
@@ -1073,7 +1074,7 @@ _usage_: `date_format:format`
 _options_:
  * `format` - This option allows to validate a custom date format. Default: "`YYYY-MM-DD HH:mm:ss`"
 
-Validates that a value is a valid `date`, meaning a string (or an object that can be cast into a string) that follows a valid `YYYY-MM-DD` format.
+Validates that a value is a valid "datetime", meaning a string (or an object that can be cast into a string) that follows a specific format.
 
 #### Year, month, and day tokens
 
