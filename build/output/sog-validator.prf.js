@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v1.4.0 revision c3152bf (PROFILER)
+ * SOG Validator Library v1.4.1 revision b836708 (PROFILER)
  * Copyright 2019-2020 Slave of God <iamtheslaveofgod@gmail.com>. All rights reserved.
  */
 ;(function (root, factory) {
@@ -20,7 +20,7 @@ var _typeLookup = function() {
   }
   return result;
 }();
-var sogv = {version:"1.4.0", revision:"c3152bf", config:{}, common:{}, validators:{}, registerValidator:function(validator) {
+var sogv = {version:"1.4.1", revision:"b836708", config:{}, common:{}, validators:{}, registerValidator:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, this.lang, true);
   var alias = __validator.alias;
@@ -428,20 +428,28 @@ sogv.ValidationSettingsHandler = {parse:function(settings) {
   if ("" === validator) {
     validator = settings;
   } else {
-    var settingsString = settings.substring(settings.indexOf(":") + 1);
-    if ("" !== settingsString) {
-      if (/^(\[|\{).+$/.test(settingsString)) {
-        options = JSON.parse(settingsString);
-      } else {
-        var __options = settingsString.split(",");
-        var __validator = sogv.makeValidator(null, validator, {}, {}, this.lang, true);
-        for (var i = 0; i < __validator.options.length; i++) {
-          options[__validator.options[i].name] = sogv.convertToType(__options[i], __validator.options[i].type);
+    var optionsString = settings.substring(settings.indexOf(":") + 1);
+    if ("" !== optionsString) {
+      if (/^(\[|\{).+$/.test(optionsString)) {
+        try {
+          options = JSON.parse(optionsString);
+        } catch (e) {
+          options = this.__parceOptions(optionsString);
         }
+      } else {
+        options = this.__parceOptions(validator, optionsString);
       }
     }
   }
   validators[validator] = options;
+}, __parceOptions:function(validator, optionsString) {
+  var options = {};
+  var __options = optionsString.split(",");
+  var __validator = sogv.makeValidator(null, validator, {}, {}, this.lang, true);
+  for (var i = 0; i < __validator.options.length; i++) {
+    options[__validator.options[i].name] = sogv.convertToType(__options[i], __validator.options[i].type);
+  }
+  return options;
 }};
 Object.assign(sogv, function() {
   var Application = function(options) {
@@ -9286,7 +9294,7 @@ Object.assign(sogv, function() {
   RegexValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
   RegexValidator.prototype.constructor = RegexValidator;
   Object.defineProperty(RegexValidator.prototype, "alias", {get:function() {
-    return ["regex"];
+    return ["regex", "regexp"];
   }});
   Object.defineProperty(RegexValidator.prototype, "options", {get:function() {
     return [{"name":"pattern", "type":"any"}, {"name":"match", "type":"boolean"}];

@@ -17,7 +17,7 @@ Object.assign(sogv, function () {
      * @property {Array} alias
      * <p>The aliases for the current validator.</p>
      * <p>They could be used in the short validation format.</p>
-     * <p>Defined aliases: ['<code>regex</code>'].</p>
+     * <p>Defined aliases: ['<code>regex</code>', '<code>regexp</code>'].</p>
      * @property {Object} options The description of the required options.
      * @example
      * var validator = new sogv.RegexValidator(data, {pattern: 'regular expression'});
@@ -98,7 +98,8 @@ Object.assign(sogv, function () {
     Object.defineProperty(RegexValidator.prototype, 'alias', {
         get: function () {
             return [
-                'regex'
+                'regex',
+                'regexp'
             ];
         }
     });

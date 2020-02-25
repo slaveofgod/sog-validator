@@ -6,6 +6,10 @@ describe('mix', () => {
     describe('Is Valid', () => {
         let toBe = null;
 
+        test('user.first_name ["regex": "/^[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+$/', () => {
+            expect(sogv.isValidWithErrorMessage('user.first_name', 'regex:^[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+$')).toBe(toBe);
+        });
+
         test('Visa "4012888888881881" ["schemes": "VISA"]', () => {
             expect(sogv.isValidWithErrorMessage('4012888888881881', 'card-scheme:VISA')).toBe(toBe);
         });
@@ -554,6 +558,10 @@ describe('mix', () => {
 
         test('iamtheslaveofgod@gmail.com [value: "alex"]', () => {
             expect(sogv.isValidWithErrorMessage('iamtheslaveofgod@gmail.com', 'contains:alex')).toBe("This value should contains the given substring.");
+        });
+
+        test('user.first_name ["regex": "/^[a-zA-Z0-9_-]+\;[a-zA-Z0-9_-]+$/', () => {
+            expect(sogv.isValidWithErrorMessage('user.first_name', 'regex:^[a-zA-Z0-9_-]+\;[a-zA-Z0-9_-]+$')).toBe('This value is not valid.');
         });
     });
 });

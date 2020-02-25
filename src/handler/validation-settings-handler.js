@@ -33,7 +33,8 @@ sogv.ValidationSettingsHandler = {
      * @private
      * @function
      * @name sogv.ValidationSettingsHandler#__parseSingle
-     * @description Prepare validation settings
+     * @description
+     * <p>Prepare validation settings.</p>
      * @param {Object} validators The list of validators
      * @param {String} settings Validation settings
      */
@@ -44,22 +45,44 @@ sogv.ValidationSettingsHandler = {
         if ('' === validator) {
             validator = settings;
         } else {
-            var settingsString = settings.substring(settings.indexOf(':') + 1);
+            var optionsString = settings.substring(settings.indexOf(':') + 1);
 
-            if('' !== settingsString) {
-                // if (/^[\],:{}\s]*$/.test(settingsString.replace(/\\["\\\/bfnrtu]/g, '@').replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
-                if (/^(\[|\{).+$/.test(settingsString)) {
-                    options = JSON.parse(settingsString);
-                } else {
-                    var __options = settingsString.split(',');
-                    var __validator = sogv.makeValidator(null, validator, {}, {}, this.lang, true);
-                    for (var i = 0; i < __validator.options.length; i++) {
-                        options[__validator.options[i].name] = sogv.convertToType(__options[i], __validator.options[i].type);
+            if('' !== optionsString) {
+                // if (/^[\],:{}\s]*$/.test(optionsString.replace(/\\["\\\/bfnrtu]/g, '@').replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+                if (/^(\[|\{).+$/.test(optionsString)) {
+                    try {
+                        options = JSON.parse(optionsString);
+                    } catch (e) {
+                        options = this.__parceOptions(optionsString);
                     }
+                } else {
+                    options = this.__parceOptions(validator, optionsString);
                 }
             }
         }
 
         validators[validator] = options;
+    },
+
+    /**
+     * @private
+     * @function
+     * @name sogv.ValidationSettingsHandler#__parceOptions
+     * @description
+     * <p>Prepare validation options.</p>
+     * @param {String} validator The validator.
+     * @param {String} optionsString The validation options.
+     * @returns {Object}
+     */
+    __parceOptions: function(validator, optionsString) {
+        var options = {};
+
+        var __options = optionsString.split(',');
+        var __validator = sogv.makeValidator(null, validator, {}, {}, this.lang, true);
+        for (var i = 0; i < __validator.options.length; i++) {
+            options[__validator.options[i].name] = sogv.convertToType(__options[i], __validator.options[i].type);
+        }
+
+        return options;
     }
 };

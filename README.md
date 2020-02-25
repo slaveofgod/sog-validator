@@ -620,7 +620,7 @@ Validates that a value is a valid URL string.
 
 ##### Regular Expression
 
-_aliases_: `regex`
+_aliases_: `regex`, `regexp`
 
 _usage_: `regex:pattern,match`
 
