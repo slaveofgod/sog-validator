@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v1.4.1 revision b836708 (DEBUG PROFILER)
+ * SOG Validator Library v1.4.2 revision 00d8bed (DEBUG PROFILER)
  * Copyright 2019-2020 Slave of God <iamtheslaveofgod@gmail.com>. All rights reserved.
  */
 ;(function (root, factory) {
@@ -12,15 +12,7 @@
     }
 }(this, function () {
 
-var _typeLookup = function() {
-  var result = {};
-  var names = ["Array", "Object", "Function", "Date", "RegExp", "Float32Array"];
-  for (var i = 0; i < names.length; i++) {
-    result["[object " + names[i] + "]"] = names[i].toLowerCase();
-  }
-  return result;
-}();
-var sogv = {version:"1.4.1", revision:"b836708", config:{}, common:{}, validators:{}, registerValidator:function(validator) {
+var sogv = {version:"1.4.2", revision:"00d8bed", config:{}, common:{}, validators:{}, registerValidator:function(validator) {
   var __v = [validator];
   var __validator = new __v[0](null, {}, {}, this.lang, true);
   var alias = __validator.alias;
@@ -434,7 +426,7 @@ sogv.ValidationSettingsHandler = {parse:function(settings) {
         try {
           options = JSON.parse(optionsString);
         } catch (e) {
-          options = this.__parceOptions(optionsString);
+          options = this.__parceOptions(validator, optionsString);
         }
       } else {
         options = this.__parceOptions(validator, optionsString);

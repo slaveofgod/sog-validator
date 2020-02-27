@@ -53,7 +53,7 @@ sogv.ValidationSettingsHandler = {
                     try {
                         options = JSON.parse(optionsString);
                     } catch (e) {
-                        options = this.__parceOptions(optionsString);
+                        options = this.__parceOptions(validator, optionsString);
                     }
                 } else {
                     options = this.__parceOptions(validator, optionsString);

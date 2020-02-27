@@ -1,20 +1,4 @@
 /**
- * @private
- * @function
- * @name _typeLookup
- * @description Create look up table for types
- */
-var _typeLookup = function () {
-    var result = { };
-    var names = ["Array", "Object", "Function", "Date", "RegExp", "Float32Array"];
-
-    for (var i = 0; i < names.length; i++)
-        result["[object " + names[i] + "]"] = names[i].toLowerCase();
-
-    return result;
-}();
-
-/**
  * @name sogv
  * @namespace
  * @description Root namespace for the SOG Validator Library
