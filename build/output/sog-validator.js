@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v1.5.2 revision 0aaf91b
+ * SOG Validator Library v1.6.0 revision 6336a2b
  * Copyright 2019-2020 Slave of God <iamtheslaveofgod@gmail.com>. All rights reserved.
  */
 ;(function (root, factory) {
@@ -12,7 +12,7 @@
     }
 }(this, function () {
 
-var sogv = {version:"1.5.2", revision:"0aaf91b", config:{}, common:{}, validators:{}, globalScope:function(name) {
+var sogv = {version:"1.6.0", revision:"6336a2b", config:{}, common:{}, validators:{}, globalScope:function(name) {
   var __global;
   if ("undefined" === typeof global) {
     __global = window;
@@ -5367,6 +5367,40 @@ Object.assign(sogv, function() {
   return {ContainsValidator:ContainsValidator};
 }());
 sogv.registerValidator(sogv.ContainsValidator);
+Object.assign(sogv, function() {
+  var AnyValidator = function(data, options, optionRules, lang, internal) {
+    sogv.BaseValidator.call(this, data, options, {rules:optionRules.max || "required|array|count:1,100"}, lang, internal);
+    this.message = "This value should be valid at least for one rule.";
+    this.rules = this.__options.rules;
+    this.name = "AnyValidator";
+  };
+  AnyValidator.prototype = Object.create(sogv.BaseValidator.prototype);
+  AnyValidator.prototype.constructor = AnyValidator;
+  Object.defineProperty(AnyValidator.prototype, "alias", {get:function() {
+    return ["any", "one-of"];
+  }});
+  Object.defineProperty(AnyValidator.prototype, "options", {get:function() {
+    return [{"name":"rules", "type":"array"}];
+  }});
+  Object.assign(AnyValidator.prototype, {__validate:function() {
+    for (var i = 0; i < this.rules.length; i++) {
+      if (true === sogv.isValid(this.data, this.rules[i])) {
+        return;
+      }
+    }
+    this.__setErrorMessage(this.message, this.__messageParameters());
+    return;
+  }, __beforeValidate:function() {
+    if (true === this.__isEmptyData()) {
+      this.__skip = true;
+      return;
+    }
+  }, __messageParameters:function() {
+    return {"value":this.data};
+  }});
+  return {AnyValidator:AnyValidator};
+}());
+sogv.registerValidator(sogv.AnyValidator);
 sogv.I18nHandler.add("af", [{"@id":"1", "source":"This value should be false.", "target":"Hierdie waarde moet vals wees."}, {"@id":"2", "source":"This value should be true.", "target":"Hierdie waarde moet waar wees."}, {"@id":"3", "source":"This value should be of type %%type%%.", "target":"Hierdie waarde moet van die soort {{type}} wees."}, {"@id":"4", "source":"This value should be blank.", "target":"Hierdie waarde moet leeg wees."}, {"@id":"5", "source":"The value you selected is not a valid choice.", 
 "target":"Die waarde wat jy gekies het is nie 'n geldige keuse nie."}, {"@id":"6", "source":"You must select at least %%limit%% choice.|You must select at least %%limit%% choices.", "target":"Jy moet ten minste %%limit%% kies.|Jy moet ten minste %%limit%% keuses kies."}, {"@id":"7", "source":"You must select at most %%limit%% choice.|You must select at most %%limit%% choices.", "target":"Jy moet by die meeste %%limit%% keuse kies.|Jy moet by die meeste %%limit%% keuses kies."}, {"@id":"8", "source":"One or more of the given values is invalid.", 
 "target":"Een of meer van die gegewe waardes is ongeldig."}, {"@id":"9", "source":"This field was not expected.", "target":"Die veld is nie verwag nie."}, {"@id":"10", "source":"This field is missing.", "target":"Hierdie veld ontbreek."}, {"@id":"11", "source":"This value is not a valid date.", "target":"Hierdie waarde is nie 'n geldige datum nie."}, {"@id":"12", "source":"This value is not a valid datetime.", "target":"Hierdie waarde is nie 'n geldige datum en tyd nie."}, {"@id":"13", "source":"This value is not a valid email address.", 

@@ -259,6 +259,7 @@ These are the basic constraints: use them to assert very basic things about the 
 #### Other Constraints
 
  * [Count](#count) - Validates that a given collection's (i.e. an array or an object that implements Countable) element `count` is `between` some `minimum` and `maximum` value.
+ * [Any](#any) - Validates that a value is valid at least for one of the rule.
 
 [⬆ navigation](#navigation)
 
@@ -1377,6 +1378,21 @@ _options_:
  * `max` - This option is the "`max`" count value. Validation will fail if the given collection elements count is greater than this max value. This option is required when the min option is not defined.
 
 Validates that a given collection's (i.e. an array or an object that implements Countable) element `count` is `between` some `minimum` and `maximum` value.
+
+[⬆ navigation](#navigation)
+
+---
+
+##### Any
+
+_aliases_: `any`, `one-of`
+
+_usage_: `any:string;alnum;...`
+
+_options_:
+ * `rules` - This option is required. This is the list of validation rules.
+
+Validates that a value is valid at least for one of the rule.
 
 [⬆ navigation](#navigation)
 

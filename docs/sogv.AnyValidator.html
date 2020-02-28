@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: CardSchemeValidator</title>
+    <title>Class: AnyValidator</title>
     
     
     
@@ -4622,7 +4622,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="sogv.CardSchemeValidator.html">Class: CardSchemeValidator</h1>
+        <h1 class="page-title" data-filename="sogv.AnyValidator.html">Class: AnyValidator</h1>
         
 
 
@@ -4631,11 +4631,10 @@
     
 <header>
     <div class="header content-size">
-        <h2><span class="ancestors"><a href="sogv.html">sogv</a>.</span>CardSchemeValidator
+        <h2><span class="ancestors"><a href="sogv.html">sogv</a>.</span>AnyValidator
         </h2>
         
-            <div class="class-description"><p>This constraint ensures that a credit card number is valid for a given credit card company.</p>
-<p>It can be used to validate the number before trying to initiate a payment through a payment gateway.</p></div>
+            <div class="class-description"><p>Validates that a value is valid at least for one of the rule.</p></div>
         
     </div>
 </header>  
@@ -4649,10 +4648,10 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="CardSchemeValidator">
-            <a class="share-icon" href="#CardSchemeValidator"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="AnyValidator">
+            <a class="share-icon" href="#AnyValidator"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                new sogv.CardSchemeValidator
+                new sogv.AnyValidator
             </span>
             <span class="signature">(data, options, optionRules, lang, internal)</span>
             
@@ -4865,7 +4864,7 @@
             
             <td class="description last"><p>The aliases for the current validator.</p>
 <p>They could be used in the short validation format.</p>
-<p>Defined aliases: ['<code>card-scheme</code>', '<code>cs</code>'].</p></td>
+<p>Defined aliases: ['<code>any</code>', '<code>one-of</code>'].</p></td>
         </tr>
 	
 	
@@ -4932,7 +4931,7 @@
         
 
     
-    <pre class="prettyprint"><code>var validator = new sogv.CardSchemeValidator(data, schemes);
+    <pre class="prettyprint"><code>var validator = new sogv.AnyValidator(data, contains);
 if (false === validator.isValid()) {
      validator.errors().first();
 }</code></pre>
@@ -5092,8 +5091,8 @@ if (false === validator.isValid()) {
 <dd>
     
     <div class="description">
-        <p>The message shown when the value does not pass the CardScheme check.</p>
-<p>Default: "Unsupported card type or invalid card number."
+        <p>This is the message that will be shown if the value is not valid.</p>
+<p>Default: "<code>This value should be valid at least for one rule.</code>"</p>
 <p>You can use the following parameters in this message:</p>
 <table>
     <thead>
@@ -5143,10 +5142,10 @@ if (false === validator.isValid()) {
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="schemes">
-            <a class="share-icon" href="#schemes"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">schemes</span>
-            <span class="type-signature type">String | Array</span>
+        <h4 class="name" id="rules">
+            <a class="share-icon" href="#rules"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">rules</span>
+            <span class="type-signature type">String</span>
             
             
             
@@ -5159,23 +5158,8 @@ if (false === validator.isValid()) {
 <dd>
     
     <div class="description">
-        <p>This option is required and represents the name of the number scheme used to validate the credit card number, it can either be a string or an array.</p>
-<p>Valid values are:</p>
-<ul>
-    <li><b>AMEX</b></li>
-    <li><b>CHINA_UNIONPAY</b></li>
-    <li><b>DINERS</b></li>
-    <li><b>DISCOVER</b></li>
-    <li><b>INSTAPAYMENT</b></li>
-    <li><b>JCB</b></li>
-    <li><b>LASER</b></li>
-    <li><b>MAESTRO</b></li>
-    <li><b>MASTERCARD</b></li>
-    <li><b>MIR</b></li>
-    <li><b>UATP</b></li>
-    <li><b>VISA</b></li>
-</ul>
-<p>For more information about the used schemes, see <a target="_blank" href="https://en.wikipedia.org/wiki/Bank_card_number#Issuer_identification_number_.28IIN.29">Wikipedia: Issuer identification number (IIN)</a>.</p>
+        <p>This option is required.</p>
+<p>It defines the value to check the containing.</p>
     </div>
     
     
