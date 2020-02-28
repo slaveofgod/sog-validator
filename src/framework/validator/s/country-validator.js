@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.CountryValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a value is a valid {@link https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes/ISO 3166-1 alpha-2} <code>country</code> code.</p>
      * @description
@@ -52,7 +52,7 @@ Object.assign(sogv, function () {
      */
 
     var CountryValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -62,7 +62,7 @@ Object.assign(sogv, function () {
 
         this.name = 'CountryValidator';
     };
-    CountryValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    CountryValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     CountryValidator.prototype.constructor = CountryValidator;
 
     Object.defineProperty(CountryValidator.prototype, 'alias', {

@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.ActiveUrlValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>The field under validation must have a valid <code>A</code> or <code>AAAA</code> record</p>
      * @description

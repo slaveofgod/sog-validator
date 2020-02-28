@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.ChoiceValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>This constraint is used to ensure that the given value is one of a given set of valid choices.</p>
      * <p>It can also be used to validate that each item in an array of items is one of those valid choices.</p>
@@ -190,7 +190,7 @@ Object.assign(sogv, function () {
      */
 
     var ChoiceValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             callback: optionRules.callback || 'type:{"type":["string","array","callable"],"any":true}',
             choices: optionRules.choices || 'type:{"type":"array"}',
             max: optionRules.max || 'type:{"type":"numeric"}',
@@ -215,7 +215,7 @@ Object.assign(sogv, function () {
 
         this.name = 'ChoiceValidator';
     };
-    ChoiceValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    ChoiceValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     ChoiceValidator.prototype.constructor = ChoiceValidator;
 
     Object.defineProperty(ChoiceValidator.prototype, 'alias', {

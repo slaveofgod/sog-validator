@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.IpValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a value is a valid IP address.</p>
      * <p>By default, this will validate the value as <code>IPv4</code>, but a number of different options exist to validate as <code>IPv6</code> and many other combinations.</p>
@@ -93,7 +93,7 @@ Object.assign(sogv, function () {
      */
 
     var IpValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             normalize: optionRules.normalize || 'type:{"type":"bool"}',
             version: optionRules.version || 'type:{"type":["string","numeric"],"any":true}|length:{"min":1,"max":255}'
@@ -140,7 +140,7 @@ Object.assign(sogv, function () {
 
         this.name = 'IpValidator';
     };
-    IpValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    IpValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     IpValidator.prototype.constructor = IpValidator;
 
     Object.defineProperty(IpValidator.prototype, 'alias', {

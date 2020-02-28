@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.NotBlankValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a value is not blank - meaning not equal to a blank string, a blank array, <code>false</code> or <code>null</code> (null behavior is configurable).</p>
      * @description
@@ -68,7 +68,7 @@ Object.assign(sogv, function () {
      */
 
     var NotBlankValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -78,7 +78,7 @@ Object.assign(sogv, function () {
 
         this.name = 'NotBlankValidator';
     };
-    NotBlankValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    NotBlankValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     NotBlankValidator.prototype.constructor = NotBlankValidator;
 
     Object.defineProperty(NotBlankValidator.prototype, 'alias', {

@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.AlphaDashValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>The field under validation may have <code>alpha-numeric</code> characters, as well as <code>dashes</code> and <code>underscores</code>.</p>
      * @description

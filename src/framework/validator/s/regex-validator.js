@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.RegexValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a value matches a regular expression.</p>
      * @description
@@ -78,7 +78,7 @@ Object.assign(sogv, function () {
      */
 
     var RegexValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             match: optionRules.match || 'type:{"type": "bool"}',
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             pattern: optionRules.pattern || 'required',
@@ -92,7 +92,7 @@ Object.assign(sogv, function () {
 
         this.name = 'RegexValidator';
     };
-    RegexValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    RegexValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     RegexValidator.prototype.constructor = RegexValidator;
 
     Object.defineProperty(RegexValidator.prototype, 'alias', {

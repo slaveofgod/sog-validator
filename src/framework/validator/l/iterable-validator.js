@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.IterableValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Verify that the contents of a variable is an <code>iterable</code> value.</p>
      * @description
@@ -27,13 +27,13 @@ Object.assign(sogv, function () {
      */
 
     var IterableValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+        sogv.BaseValidator.call(this, data, {}, {}, lang, internal);
 
         this.message = 'The %%attribute%% field must be iterable.';
 
         this.name = 'IterableValidator';
     };
-    IterableValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    IterableValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     IterableValidator.prototype.constructor = IterableValidator;
 
     Object.defineProperty(IterableValidator.prototype, 'alias', {

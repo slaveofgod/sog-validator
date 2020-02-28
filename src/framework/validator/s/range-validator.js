@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.RangeValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a given <code>number</code> or <code>Date object</code> is between some <code>minimum</code> and <code>maximum</code>.</p>
      * @description
@@ -139,7 +139,7 @@ Object.assign(sogv, function () {
      */
 
     var RangeValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             invalidMessage: optionRules.invalidMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             max: optionRules.max || 'required|type:{"type":["numeric","date-string"],"any":true}',
             maxMessage: optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}',
@@ -160,7 +160,7 @@ Object.assign(sogv, function () {
 
         this.name = 'RangeValidator';
     };
-    RangeValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    RangeValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     RangeValidator.prototype.constructor = RangeValidator;
 
     Object.defineProperty(RangeValidator.prototype, 'alias', {

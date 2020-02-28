@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.LuhnValidator
-     * @extends sogv.AbstractComparisonValidator
+     * @extends sogv.BaseComparisonValidator
      * @classdesc
      * <p>This constraint is used to ensure that a <code>credit card</code> number passes the {@link https://en.wikipedia.org/wiki/Luhn_algorithm|Luhn algorithm}.</p>
      * <p>It is useful as a first step to validating a credit card: before communicating with a payment gateway.</p>
@@ -53,7 +53,7 @@ Object.assign(sogv, function () {
      */
 
     var LuhnValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -61,7 +61,7 @@ Object.assign(sogv, function () {
 
         this.name = 'LuhnValidator';
     };
-    LuhnValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
+    LuhnValidator.prototype = Object.create(sogv.BaseComparisonValidator.prototype);
     LuhnValidator.prototype.constructor = LuhnValidator;
 
     Object.defineProperty(LuhnValidator.prototype, 'alias', {

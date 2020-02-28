@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.CntrlValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Check for <code>control</code> character(s).</p>
      * @description
@@ -27,13 +27,13 @@ Object.assign(sogv, function () {
      */
 
     var CntrlValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+        sogv.BaseValidator.call(this, data, {}, {}, lang, internal);
 
         this.message = 'The %%attribute%% field must be cntrl.';
 
         this.name = 'CntrlValidator';
     };
-    CntrlValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    CntrlValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     CntrlValidator.prototype.constructor = CntrlValidator;
 
     Object.defineProperty(CntrlValidator.prototype, 'alias', {

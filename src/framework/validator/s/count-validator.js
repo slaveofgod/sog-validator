@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.CountValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a given collection's (i.e. an array or an object that implements Countable) element <code>count</code> is <code>between</code> some <code>minimum</code> and <code>maximum</code> value.</p>
      * @description
@@ -126,7 +126,7 @@ Object.assign(sogv, function () {
      */
 
     var CountValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             exactMessage: optionRules.exactMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             max: optionRules.max || 'type:{"type":"numeric"}',
             maxMessage: optionRules.maxMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}',
@@ -142,7 +142,7 @@ Object.assign(sogv, function () {
 
         this.name = 'CountValidator';
     };
-    CountValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    CountValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     CountValidator.prototype.constructor = CountValidator;
 
     Object.defineProperty(CountValidator.prototype, 'alias', {

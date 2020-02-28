@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.AllValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a value is valid according to list of validation rules.</p>
      * @description
@@ -37,7 +37,7 @@ Object.assign(sogv, function () {
      */
 
     var AllValidator = function (data, rules, options) {
-        sogv.AbstractValidator.call(this, data, options, null,
+        sogv.BaseValidator.call(this, data, options, null,
             ((options && options['lang']) ? options['lang'] : null),
             (options && true === options['internal'])
         );
@@ -50,7 +50,7 @@ Object.assign(sogv, function () {
 
         this.__configure();
     };
-    AllValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    AllValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     AllValidator.prototype.constructor = AllValidator;
 
     Object.defineProperty(AllValidator.prototype, 'alias', {

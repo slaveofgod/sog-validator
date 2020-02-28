@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.SizeValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>The field under validation must have a size matching the given value.</p>
      * <p>For <code>string</code> data, value corresponds to the number of characters.</p>
@@ -40,7 +40,7 @@ Object.assign(sogv, function () {
      */
 
     var SizeValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             value: optionRules.max || 'required|type:{"type":"numeric"}',
             message: optionRules.minMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
@@ -52,7 +52,7 @@ Object.assign(sogv, function () {
 
         this.name = 'SizeValidator';
     };
-    SizeValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    SizeValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     SizeValidator.prototype.constructor = SizeValidator;
 
     Object.defineProperty(SizeValidator.prototype, 'alias', {

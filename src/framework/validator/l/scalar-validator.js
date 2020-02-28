@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.ScalarValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Finds whether a variable is a scalar. Scalar variables are those containing an <code>integer</code>, <code>float</code>, <code>string</code> or <code>boolean</code>.</p>
      * @description
@@ -27,13 +27,13 @@ Object.assign(sogv, function () {
      */
 
     var ScalarValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+        sogv.BaseValidator.call(this, data, {}, {}, lang, internal);
 
         this.message = 'The %%attribute%% field must be scalar.';
 
         this.name = 'ScalarValidator';
     };
-    ScalarValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    ScalarValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     ScalarValidator.prototype.constructor = ScalarValidator;
 
     Object.defineProperty(ScalarValidator.prototype, 'alias', {

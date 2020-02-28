@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.XdigitValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Check for character(s) representing a <code>hexadecimal digit</code>.</p>
      * @description
@@ -27,13 +27,13 @@ Object.assign(sogv, function () {
      */
 
     var XdigitValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+        sogv.BaseValidator.call(this, data, {}, {}, lang, internal);
 
         this.message = 'The %%attribute%% field must be xdigit.';
 
         this.name = 'XdigitValidator';
     };
-    XdigitValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    XdigitValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     XdigitValidator.prototype.constructor = XdigitValidator;
 
     Object.defineProperty(XdigitValidator.prototype, 'alias', {

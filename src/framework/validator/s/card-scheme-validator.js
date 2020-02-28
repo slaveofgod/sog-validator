@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.CardSchemeValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>This constraint ensures that a credit card number is valid for a given credit card company.</p>
      * <p>It can be used to validate the number before trying to initiate a payment through a payment gateway.</p>
@@ -76,7 +76,7 @@ Object.assign(sogv, function () {
      */
 
     var CardSchemeValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             schemes: optionRules.schemes || 'required|type:{"type":["string","array"],"any":true}'
         }, lang, internal);
@@ -151,7 +151,7 @@ Object.assign(sogv, function () {
 
         this.name = 'CardSchemeValidator';
     };
-    CardSchemeValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    CardSchemeValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     CardSchemeValidator.prototype.constructor = CardSchemeValidator;
 
     Object.defineProperty(CardSchemeValidator.prototype, 'alias', {

@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.SpaceValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Check for <code>whitespace</code> character(s).</p>
      * @description
@@ -27,13 +27,13 @@ Object.assign(sogv, function () {
      */
 
     var SpaceValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+        sogv.BaseValidator.call(this, data, {}, {}, lang, internal);
 
         this.message = 'The %%attribute%% field must be space.';
 
         this.name = 'SpaceValidator';
     };
-    SpaceValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    SpaceValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     SpaceValidator.prototype.constructor = SpaceValidator;
 
     Object.defineProperty(SpaceValidator.prototype, 'alias', {

@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.ContainsValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a value contains given substring.</p>
      * @description
@@ -60,7 +60,7 @@ Object.assign(sogv, function () {
      */
 
     var ContainsValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             value: optionRules.max || 'required|type:{"type":"string"}',
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
@@ -70,7 +70,7 @@ Object.assign(sogv, function () {
 
         this.name = 'ContainsValidator';
     };
-    ContainsValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    ContainsValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     ContainsValidator.prototype.constructor = ContainsValidator;
 
     Object.defineProperty(ContainsValidator.prototype, 'alias', {

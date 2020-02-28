@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.UuidValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a value is a valid {@link https://en.wikipedia.org/wiki/Universally_unique_identifier|Universally unique identifier (UUID)} per {@link https://tools.ietf.org/html/rfc4122|RFC 4122}.</p>
      * <p>By default, this will validate the format according to the RFC's guidelines, but this can be relaxed to accept non-standard <code>UUIDs</code> that other systems (like PostgreSQL) accept.</p>
@@ -94,7 +94,7 @@ Object.assign(sogv, function () {
      */
 
     var UuidValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             normalize: optionRules.normalize || 'type:{"type":"bool"}',
             versions: optionRules.versions || 'type:{"type":"array"}',
@@ -152,7 +152,7 @@ Object.assign(sogv, function () {
 
         this.name = 'UuidValidator';
     };
-    UuidValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    UuidValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     UuidValidator.prototype.constructor = UuidValidator;
 
     Object.defineProperty(UuidValidator.prototype, 'alias', {

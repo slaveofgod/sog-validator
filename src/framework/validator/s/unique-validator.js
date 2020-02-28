@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.UniqueValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that all the elements of the given collection are <code>unique</code> (none of them is present more than once).</p>
      * <p>Elements are compared strictly, so '<code>7</code>' and <code>7</code> are considered different elements (a string and an integer, respectively).</p>
@@ -54,7 +54,7 @@ Object.assign(sogv, function () {
      */
 
     var UniqueValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -65,7 +65,7 @@ Object.assign(sogv, function () {
 
         this.name = 'UniqueValidator';
     };
-    UniqueValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    UniqueValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     UniqueValidator.prototype.constructor = UniqueValidator;
 
     Object.defineProperty(UniqueValidator.prototype, 'alias', {

@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.AcceptedValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>The field under validation must be <code>yes</code>, <code>on</code>, <code>1</code>, or <code>true</code>.</p>
      * <p>This is useful for validating "Terms of Service" acceptance.</p>

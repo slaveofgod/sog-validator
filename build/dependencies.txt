@@ -1,14 +1,12 @@
 ../src/core/core.js
-../src/core/abstract-validator.js
-../src/core/abstract-comparison-validator.js
+../src/core/base-validator.js
+../src/core/base-comparison-validator.js
 ../src/i18n/i18n.js
 ../src/handler/error-handler.js
 ../src/handler/i18n-handler.js
 ../src/handler/validator-handler.js
 ../src/handler/validation-settings-handler.js
 ../src/framework/application.js
-../src/framework/helper/moment/moment.js
-../src/framework/helper/moment/moment-timezone.js
 ../src/framework/helper/hexdec.js
 ../src/framework/helper/fmod.js
 ../src/framework/helper/sprintf.js

@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.PunctValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Check for any <code>printable</code> character which is <code>not whitespace</code> or an <code>alphanumeric</code> character.</p>
      * @description
@@ -27,13 +27,13 @@ Object.assign(sogv, function () {
      */
 
     var PunctValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+        sogv.BaseValidator.call(this, data, {}, {}, lang, internal);
 
         this.message = 'The %%attribute%% field must be punct.';
 
         this.name = 'PunctValidator';
     };
-    PunctValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    PunctValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     PunctValidator.prototype.constructor = PunctValidator;
 
     Object.defineProperty(PunctValidator.prototype, 'alias', {

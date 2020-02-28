@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.BicValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>This constraint is used to ensure that a value has the proper format of a {@link https://en.wikipedia.org/wiki/Business_Identifier_Code|Business Identifier Code (BIC)}.</p>
      * <p><code>BIC</code> is an internationally agreed means to uniquely identify both financial and non-financial institutions.</p>
@@ -85,7 +85,7 @@ Object.assign(sogv, function () {
      */
 
     var BicValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             iban: optionRules.iban || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             ibanMessage: optionRules.ibanMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
@@ -116,7 +116,7 @@ Object.assign(sogv, function () {
 
         this.name = 'BicValidator';
     };
-    BicValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    BicValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     BicValidator.prototype.constructor = BicValidator;
 
     Object.defineProperty(BicValidator.prototype, 'alias', {

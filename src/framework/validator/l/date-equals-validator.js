@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.DateEqualsValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>The field under validation must be <code>equal</code> to the given <code>date</code>.</p>
      * @description
@@ -27,7 +27,7 @@ Object.assign(sogv, function () {
      */
 
     var DateEqualsValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractComparisonValidator.call(this, data, options, {
+        sogv.BaseComparisonValidator.call(this, data, options, {
             value: optionRules.value || 'required|type:{"type":["date-string","datetime"],"any":true}'
         }, lang, internal);
 
@@ -35,7 +35,7 @@ Object.assign(sogv, function () {
 
         this.name = 'DateEqualsValidator';
     };
-    DateEqualsValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
+    DateEqualsValidator.prototype = Object.create(sogv.BaseComparisonValidator.prototype);
     DateEqualsValidator.prototype.constructor = DateEqualsValidator;
 
     Object.defineProperty(DateEqualsValidator.prototype, 'alias', {

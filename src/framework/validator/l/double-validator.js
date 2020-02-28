@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.DoubleValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Finds whether the type of a variable is <code>double</code>.</p>
      * @description
@@ -27,13 +27,13 @@ Object.assign(sogv, function () {
      */
 
     var DoubleValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+        sogv.BaseValidator.call(this, data, {}, {}, lang, internal);
 
         this.message = 'The %%attribute%% field must be double.';
 
         this.name = 'DoubleValidator';
     };
-    DoubleValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    DoubleValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     DoubleValidator.prototype.constructor = DoubleValidator;
 
     Object.defineProperty(DoubleValidator.prototype, 'alias', {

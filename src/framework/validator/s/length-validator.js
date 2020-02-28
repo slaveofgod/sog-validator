@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.LengthValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a given string length is between some <code>minimum</code> and <code>maximum</code> value.</p>
      * @description
@@ -162,7 +162,7 @@ Object.assign(sogv, function () {
      */
 
     var LengthValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             allowEmptyString: optionRules.allowEmptyString || 'type:{"type":"bool"}',
             charset: optionRules.charset || 'length:{"min":2,"max":10}',
             charsetMessage: optionRules.charsetMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}',
@@ -186,7 +186,7 @@ Object.assign(sogv, function () {
 
         this.name = 'LengthValidator';
     };
-    LengthValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    LengthValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     LengthValidator.prototype.constructor = LengthValidator;
 
     Object.defineProperty(LengthValidator.prototype, 'alias', {

@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.IsbnValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>This constraint validates that an {@link https://en.wikipedia.org/wiki/Isbn|International Standard Book Number (ISBN)} is either a valid <code>ISBN-10</code> or a valid <code>ISBN-13</code>.</p>
      * @description
@@ -129,7 +129,7 @@ Object.assign(sogv, function () {
      */
 
     var IsbnValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             bothIsbnMessage: optionRules.bothIsbnMessage || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             isbn10Message: optionRules.isbn10Message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             isbn13Message: optionRules.isbn13Message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
@@ -145,7 +145,7 @@ Object.assign(sogv, function () {
 
         this.name = 'IsbnValidator';
     };
-    IsbnValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    IsbnValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     IsbnValidator.prototype.constructor = IsbnValidator;
 
     Object.defineProperty(IsbnValidator.prototype, 'alias', {

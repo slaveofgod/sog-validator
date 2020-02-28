@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.NotInValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>The field under validation must <code>not be included</code> in the given list of values.</p>
      * @description
@@ -42,7 +42,7 @@ Object.assign(sogv, function () {
      */
 
     var NotInValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             choices: optionRules.choices || 'required|type:{"type":"array"}',
         }, lang, internal);
@@ -53,7 +53,7 @@ Object.assign(sogv, function () {
 
         this.name = 'NotInValidator';
     };
-    NotInValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    NotInValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     NotInValidator.prototype.constructor = NotInValidator;
 
     Object.defineProperty(NotInValidator.prototype, 'alias', {

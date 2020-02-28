@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.LessThanValidator
-     * @extends sogv.AbstractComparisonValidator
+     * @extends sogv.BaseComparisonValidator
      * @classdesc
      * <p>Validates that a value is less than another value, defined in the options.</p>
      * @description
@@ -69,7 +69,7 @@ Object.assign(sogv, function () {
      */
 
     var LessThanValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractComparisonValidator.call(this, data, options, {
+        sogv.BaseComparisonValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             value: optionRules.value || 'required|type:{"type":["scalar","date"],"any":true}'
         }, lang, internal);
@@ -78,7 +78,7 @@ Object.assign(sogv, function () {
 
         this.name = 'LessThanValidator';
     };
-    LessThanValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
+    LessThanValidator.prototype = Object.create(sogv.BaseComparisonValidator.prototype);
     LessThanValidator.prototype.constructor = LessThanValidator;
 
     Object.defineProperty(LessThanValidator.prototype, 'alias', {

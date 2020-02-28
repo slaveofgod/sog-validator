@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.EqualToValidator
-     * @extends sogv.AbstractComparisonValidator
+     * @extends sogv.BaseComparisonValidator
      * @classdesc
      * <p>Validates that a value is equal to another value, defined in the options.</p>
      * <p>This constraint compares using <code>==</code>, so <code>3</code> and "<code>3</code>" are considered equal. Use <code>sogv.IdenticalTo</code> to compare with <code>===</code>.</p>
@@ -70,7 +70,7 @@ Object.assign(sogv, function () {
      */
 
     var EqualToValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractComparisonValidator.call(this, data, options, {
+        sogv.BaseComparisonValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             value: optionRules.value || 'required'
         }, lang, internal);
@@ -79,7 +79,7 @@ Object.assign(sogv, function () {
 
         this.name = 'EqualToValidator';
     };
-    EqualToValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
+    EqualToValidator.prototype = Object.create(sogv.BaseComparisonValidator.prototype);
     EqualToValidator.prototype.constructor = EqualToValidator;
 
     Object.defineProperty(EqualToValidator.prototype, 'alias', {

@@ -78,6 +78,8 @@ import sogv from 'sog-validator';
 The library can be loaded either as a standalone script.
 
 ```html
+<script type="text/javascript" src="node_modules/moment/min/moment-with-locales.js"></script>
+<script type="text/javascript" src="node_modules/moment-timezone/builds/moment-timezone-with-data.js"></script>
 <script type="text/javascript" src="build/output/sog-validator.min.js"></script>
 <script type="text/javascript">
     var validationEngine = new sogv.Application({
@@ -119,6 +121,8 @@ The library can be loaded either as a standalone script.
 
 ### Single usage
 ```html
+<script type="text/javascript" src="node_modules/moment/min/moment-with-locales.js"></script>
+<script type="text/javascript" src="node_modules/moment-timezone/builds/moment-timezone-with-data.js"></script>
 <script type="text/javascript" src="build/output/sog-validator.min.js"></script>
 <script type="text/javascript">
 

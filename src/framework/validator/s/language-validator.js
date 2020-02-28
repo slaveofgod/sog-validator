@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.LanguageValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a value is a valid <code>language</code> Unicode language identifier (e.g. <code>fr</code> or <code>ar-dz</code>).</p>
      * <p>Available languages:</p>
@@ -54,7 +54,7 @@ Object.assign(sogv, function () {
      */
 
     var LanguageValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -64,7 +64,7 @@ Object.assign(sogv, function () {
 
         this.name = 'LanguageValidator';
     };
-    LanguageValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    LanguageValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     LanguageValidator.prototype.constructor = LanguageValidator;
 
     Object.defineProperty(LanguageValidator.prototype, 'alias', {

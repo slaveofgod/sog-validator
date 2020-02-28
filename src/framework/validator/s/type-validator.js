@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.TypeValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a value is of a specific <code>data</code> type.</p>
      * <p>For example, if a variable should be an array, you can use this constraint with the <code>array</code> type option to validate this.</p>
@@ -99,7 +99,7 @@ Object.assign(sogv, function () {
      */
 
     var TypeValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             type: optionRules.type || 'type:{"type":["string","array"],"any":true}',
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             any: optionRules.any || 'type:{"type":"boolean"}'
@@ -112,7 +112,7 @@ Object.assign(sogv, function () {
         this.name = 'TypeValidator';
         this.__invalidType = null;
     };
-    TypeValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    TypeValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     TypeValidator.prototype.constructor = TypeValidator;
 
     Object.defineProperty(TypeValidator.prototype, 'alias', {

@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.JsonValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a value has valid <code>JSON</code> syntax.</p>
      * @description
@@ -37,7 +37,7 @@ Object.assign(sogv, function () {
      */
 
     var JsonValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -45,7 +45,7 @@ Object.assign(sogv, function () {
 
         this.name = 'JsonValidator';
     };
-    JsonValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    JsonValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     JsonValidator.prototype.constructor = JsonValidator;
 
     Object.defineProperty(JsonValidator.prototype, 'alias', {

@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.BetweenValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>The field under validation must have a <code>size</code> between the given <code>min</code> and <code>max</code>.</p>
      * <p><code>Strings</code>, <code>numerics</code>, <code>arrays</code> and <code>dates</code> are evaluated in the same fashion as the size rule.</p>
@@ -46,7 +46,7 @@ Object.assign(sogv, function () {
      */
 
     var BetweenValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             max: optionRules.max || 'required|type:{"type":["numeric","date-string"],"any":true}',
             min: optionRules.min || 'required|type:{"type":["numeric","date-string"],"any":true}',
         }, lang, internal);
@@ -60,7 +60,7 @@ Object.assign(sogv, function () {
 
         this.name = 'BetweenValidator';
     };
-    BetweenValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    BetweenValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     BetweenValidator.prototype.constructor = BetweenValidator;
 
     Object.defineProperty(BetweenValidator.prototype, 'alias', {

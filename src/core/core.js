@@ -12,6 +12,36 @@ var sogv = {
 
     /**
      * @function
+     * @name sogv.globalScope
+     * @description
+     * <p>Return variable by name from the global scope.</p>
+     * @param {String} name Variable name.
+     * @returns {Window | *}
+     */
+    globalScope: function (name) {
+        var __global; if ('undefined' === typeof global) { __global = window; } else { __global = global; }
+        var $global = (typeof window !== 'undefined' ? window : __global);
+
+        if ('undefined' === typeof $global[name]) {
+            try {
+                switch (name) {
+                    case 'moment':
+                        $global[name] = require('moment-timezone');
+                        break;
+                    default:
+                        $global[name] = require(name);
+                        break;
+                }
+            } catch (e) {
+                throw new Error('Global Scope: variable "' + name + '" does not exist.');
+            }
+        }
+
+        return $global[name];
+    },
+
+    /**
+     * @function
      * @name sogv.registerValidator
      * @description
      * <p>Register validator.</p>
@@ -28,9 +58,9 @@ var sogv = {
             throw new Error('The validator has to have "alias" property');
         }
 
-        // Check that the validator extend from "sogv.AbstractValidator" abstract class
-        if ('AbstractValidator' !== __validator.base) {
-            throw new Error('The validator has to extend "sogv.AbstractValidator" abstract class');
+        // Check that the validator extend from "sogv.BaseValidator" abstract class
+        if ('BaseValidator' !== __validator.base) {
+            throw new Error('The validator has to extend "sogv.BaseValidator" abstract class');
         }
 
         // Check that "__validate" method is implemented

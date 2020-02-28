@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.IbanValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>This constraint is used to ensure that a bank account number has the proper format of an {@link https://en.wikipedia.org/wiki/International_Bank_Account_Number|International Bank Account Number (IBAN)}.</p>
      * <p><code>IBAN</code> is an internationally agreed means of identifying bank accounts across national borders with a reduced risk of propagating transcription errors.</p>
@@ -53,7 +53,7 @@ Object.assign(sogv, function () {
      */
 
     var IbanValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -162,7 +162,7 @@ Object.assign(sogv, function () {
 
         this.name = 'IbanValidator';
     };
-    IbanValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    IbanValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     IbanValidator.prototype.constructor = IbanValidator;
 
     Object.defineProperty(IbanValidator.prototype, 'alias', {

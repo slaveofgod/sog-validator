@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.AfterOrEqualValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>The field under validation must be a value <code>after</code> or <code>equal</code> to the given <code>date</code>.</p>
      * <p>For more information, see the after rule.</p>

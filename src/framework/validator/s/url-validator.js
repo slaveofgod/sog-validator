@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.UrlValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a value is a valid <code>URL</code> string.</p>
      * @description
@@ -78,7 +78,7 @@ Object.assign(sogv, function () {
      */
 
     var UrlValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             normalize: optionRules.normalize || 'type:{"type":"bool"}',
             protocols: optionRules.protocols || 'type:{"type":["string","array"],"any":true}',
@@ -96,7 +96,7 @@ Object.assign(sogv, function () {
 
         this.__configure();
     };
-    UrlValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    UrlValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     UrlValidator.prototype.constructor = UrlValidator;
 
     Object.defineProperty(UrlValidator.prototype, 'alias', {

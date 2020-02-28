@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.EndsWithValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>The field under validation must end with one of the given values.</p>
      * @description
@@ -38,7 +38,7 @@ Object.assign(sogv, function () {
      */
 
     var EndsWithValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             pattern: optionRules.pattern || 'length:{"min":3,"max":255}',
             ends: optionRules.ends || 'type:{"type":["iterable","string"],"any":true}'
         }, lang, internal);
@@ -48,7 +48,7 @@ Object.assign(sogv, function () {
 
         this.name = 'EndsWithValidator';
     };
-    EndsWithValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    EndsWithValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     EndsWithValidator.prototype.constructor = EndsWithValidator;
 
     Object.defineProperty(EndsWithValidator.prototype, 'alias', {

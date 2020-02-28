@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.LocaleValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a value is a valid <code>locale</code>.</p>
      * <p>The "<code>value</code>" for each locale is any of the {@link http://userguide.icu-project.org/locale|ICU format locale IDs}.</p>
@@ -55,7 +55,7 @@ Object.assign(sogv, function () {
      */
 
     var LocaleValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -65,7 +65,7 @@ Object.assign(sogv, function () {
 
         this.name = 'LocaleValidator';
     };
-    LocaleValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    LocaleValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     LocaleValidator.prototype.constructor = LocaleValidator;
 
     Object.defineProperty(LocaleValidator.prototype, 'alias', {

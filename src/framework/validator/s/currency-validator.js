@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.CurrencyValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a value is a valid {@link https://en.wikipedia.org/wiki/ISO_4217|3-letter ISO 4217} <code>currency</code> name.</p>
      * @description
@@ -52,7 +52,7 @@ Object.assign(sogv, function () {
      */
 
     var CurrencyValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -62,7 +62,7 @@ Object.assign(sogv, function () {
 
         this.name = 'CurrencyValidator';
     };
-    CurrencyValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    CurrencyValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     CurrencyValidator.prototype.constructor = CurrencyValidator;
 
     Object.defineProperty(CurrencyValidator.prototype, 'alias', {

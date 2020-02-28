@@ -4,8 +4,8 @@ Object.assign(sogv, function () {
     /**
      * @abstract
      * @constructor
-     * @name sogv.AbstractComparisonValidator
-     * @extends sogv.AbstractValidator
+     * @name sogv.BaseComparisonValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Abstract base class that implements functionality for validation.</p>
      * <p>Provides a base class for the validation of property comparisons.</p>
@@ -19,21 +19,21 @@ Object.assign(sogv, function () {
 
     // PROPERTIES
 
-    var AbstractComparisonValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, optionRules, lang, internal);
+    var BaseComparisonValidator = function (data, options, optionRules, lang, internal) {
+        sogv.BaseValidator.call(this, data, options, optionRules, lang, internal);
 
         this.value = this.__options.value;
 
-        this.name = 'AbstractComparisonValidator';
+        this.name = 'BaseComparisonValidator';
     };
-    AbstractComparisonValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
-    AbstractComparisonValidator.prototype.constructor = AbstractComparisonValidator;
+    BaseComparisonValidator.prototype = Object.create(sogv.BaseValidator.prototype);
+    BaseComparisonValidator.prototype.constructor = BaseComparisonValidator;
 
-    Object.assign(AbstractComparisonValidator.prototype, {
+    Object.assign(BaseComparisonValidator.prototype, {
         /**
          * @private
          * @function
-         * @name sogv.AbstractComparisonValidator#__validate
+         * @name sogv.BaseComparisonValidator#__validate
          * @description
          * <p>Validate data.</p>
          */
@@ -55,7 +55,7 @@ Object.assign(sogv, function () {
         /**
          * @private
          * @function
-         * @name sogv.AbstractComparisonValidator#__beforeValidate
+         * @name sogv.BaseComparisonValidator#__beforeValidate
          * @description
          * <p>Execute before validation is running.</p>
          */
@@ -69,6 +69,6 @@ Object.assign(sogv, function () {
     });
 
     return {
-        AbstractComparisonValidator: AbstractComparisonValidator
+        BaseComparisonValidator: BaseComparisonValidator
     };
 }());

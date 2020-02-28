@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.NegativeValidator
-     * @extends sogv.AbstractComparisonValidator
+     * @extends sogv.BaseComparisonValidator
      * @classdesc
      * <p>Validates that a value is a <code>negative</code> number.</p>
      * <p>Zero is neither positive nor negative, so you must use <code>sogv.NegativeOrZero</code> if you want to allow zero as value.</p>
@@ -61,7 +61,7 @@ Object.assign(sogv, function () {
      */
 
     var NegativeValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractComparisonValidator.call(this, data, options, {
+        sogv.BaseComparisonValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -70,7 +70,7 @@ Object.assign(sogv, function () {
 
         this.name = 'NegativeValidator';
     };
-    NegativeValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
+    NegativeValidator.prototype = Object.create(sogv.BaseComparisonValidator.prototype);
     NegativeValidator.prototype.constructor = NegativeValidator;
 
     Object.defineProperty(NegativeValidator.prototype, 'alias', {

@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.FloatValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>The field under validation must be able to be cast as a <code>float</code>.</p>
      * @description
@@ -27,13 +27,13 @@ Object.assign(sogv, function () {
      */
 
     var FloatValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+        sogv.BaseValidator.call(this, data, {}, {}, lang, internal);
 
         this.message = 'The %%attribute%% field must be float.';
 
         this.name = 'FloatValidator';
     };
-    FloatValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    FloatValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     FloatValidator.prototype.constructor = FloatValidator;
 
     Object.defineProperty(FloatValidator.prototype, 'alias', {

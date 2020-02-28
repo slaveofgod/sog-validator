@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.TimezoneValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a value is a valid timezone identifier (e.g. <code>Europe/Paris</code>).</p>
      * <p>{@link https://en.wikipedia.org/wiki/List_of_tz_database_time_zones|List of tz database time zones}.</p>
@@ -53,7 +53,7 @@ Object.assign(sogv, function () {
      */
 
     var TimezoneValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -61,7 +61,7 @@ Object.assign(sogv, function () {
 
         this.name = 'TimezoneValidator';
     };
-    TimezoneValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    TimezoneValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     TimezoneValidator.prototype.constructor = TimezoneValidator;
 
     Object.defineProperty(TimezoneValidator.prototype, 'alias', {

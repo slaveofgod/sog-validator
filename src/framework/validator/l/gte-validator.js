@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.GteValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>The field under validation must be <code>greater</code> than or <code>equal</code> to the given field.</p>
      * <p><code>Strings</code>, <code>numerics</code>, <code>arrays</code>, and <code>dates</code> are evaluated using the same conventions as the size rule.</p>
@@ -39,7 +39,7 @@ Object.assign(sogv, function () {
      */
 
     var GteValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             value: optionRules.value || 'required|type:{"type":["numeric","datetime","date-string","boolean"],"any":true}',
         }, lang, internal);
 
@@ -51,7 +51,7 @@ Object.assign(sogv, function () {
 
         this.name = 'GteValidator';
     };
-    GteValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    GteValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     GteValidator.prototype.constructor = GteValidator;
 
     Object.defineProperty(GteValidator.prototype, 'alias', {

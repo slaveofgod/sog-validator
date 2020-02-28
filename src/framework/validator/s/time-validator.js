@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.TimeValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a value is a valid <code>time</code>, meaning a string (or an object that can be cast into a string) that follows a valid <code>HH:mm:ss</code> format.</p>
      * @description
@@ -52,7 +52,7 @@ Object.assign(sogv, function () {
      */
 
     var TimeValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -61,7 +61,7 @@ Object.assign(sogv, function () {
 
         this.name = 'TimeValidator';
     };
-    TimeValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    TimeValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     TimeValidator.prototype.constructor = TimeValidator;
 
     Object.defineProperty(TimeValidator.prototype, 'alias', {
@@ -87,7 +87,7 @@ Object.assign(sogv, function () {
          * <p>Validate data.</p>
          */
         __validate: function () {
-            if (this.data !== this.__moment(this.data, this.format).format(this.format)) {
+            if (this.data !== this.__moment(new Date('2020-01-01T' + this.data), this.format).format(this.format)) {
                 this.__setErrorMessage(this.message, this.__messageParameters());
                 return ;
             }

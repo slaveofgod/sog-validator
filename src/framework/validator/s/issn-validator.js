@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.IssnValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a value is a valid {@link https://en.wikipedia.org/wiki/Issn|International Standard Serial Number (ISSN)}.</p>
      * @description
@@ -70,7 +70,7 @@ Object.assign(sogv, function () {
      */
 
     var IssnValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             caseSensitive: optionRules.caseSensitive || 'type:{"type":"bool"}',
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             requireHyphen: optionRules.requireHyphen || 'type:{"type":"bool"}'
@@ -82,7 +82,7 @@ Object.assign(sogv, function () {
 
         this.name = 'IssnValidator';
     };
-    IssnValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    IssnValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     IssnValidator.prototype.constructor = IssnValidator;
 
     Object.defineProperty(IssnValidator.prototype, 'alias', {

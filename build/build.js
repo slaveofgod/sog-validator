@@ -36,7 +36,8 @@ try {
     process.exit(1);
 }
 
-var DEFAULT_OUTPUT = "output/sog-validator.js";
+var LIBRARY_NAME = "sog-validator";
+var DEFAULT_OUTPUT = "output/" + LIBRARY_NAME + ".js";
 var DEFAULT_TEMP = "_tmp";
 var DEFAULT_SOURCE = "../src";
 var SRC_DIR = "../";
@@ -290,6 +291,9 @@ var run = function () {
 
         });
     });
+
+    // Build CLI file
+    fs.writeFileSync(path.join(path.dirname(outputPath), "./" + LIBRARY_NAME + ".cli.js"), fs.readFileSync("./umd-wrapper-cli.js.tmpl"));
 };
 
 // parse arguments
@@ -306,7 +310,7 @@ var arguments = function () {
             console.log("\t0: WHITESPACE_ONLY [default]");
             console.log("\t1: SIMPLE");
             console.log("\t2: ADVANCED OPTIMIZATIONS");
-            console.log("-o PATH: output file path [output/sog-validator.js]");
+            console.log("-o PATH: output file path [output/" + LIBRARY_NAME + ".js]");
             console.log("-d: build debug engine configuration");
             console.log("-p: build profiler engine configuration");
             console.log("-m SOURCE_PATH: build engine and generate source map next to output file. [../src]");

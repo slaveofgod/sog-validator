@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.IsTrueValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a value is <code>true</code>.</p>
      * <p>Specifically, this checks if the value is exactly <code>true</code>, exactly the integer <code>1</code>, or exactly the string <code>"1"</code>.</p>
@@ -53,7 +53,7 @@ Object.assign(sogv, function () {
      */
 
     var IsTrueValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -61,7 +61,7 @@ Object.assign(sogv, function () {
 
         this.name = 'IsTrueValidator';
     };
-    IsTrueValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    IsTrueValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     IsTrueValidator.prototype.constructor = IsTrueValidator;
 
     Object.defineProperty(IsTrueValidator.prototype, 'alias', {

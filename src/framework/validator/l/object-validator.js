@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.ObjectValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Finds whether a variable is an <code>object</code>.</p>
      * @description
@@ -27,13 +27,13 @@ Object.assign(sogv, function () {
      */
 
     var ObjectValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+        sogv.BaseValidator.call(this, data, {}, {}, lang, internal);
 
         this.message = 'The %%attribute%% field must be object.';
 
         this.name = 'ObjectValidator';
     };
-    ObjectValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    ObjectValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     ObjectValidator.prototype.constructor = ObjectValidator;
 
     Object.defineProperty(ObjectValidator.prototype, 'alias', {

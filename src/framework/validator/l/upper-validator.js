@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.UpperValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Check for <code>uppercase</code> character(s).</p>
      * @description
@@ -27,13 +27,13 @@ Object.assign(sogv, function () {
      */
 
     var UpperValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+        sogv.BaseValidator.call(this, data, {}, {}, lang, internal);
 
         this.message = 'The %%attribute%% field must be upper.';
 
         this.name = 'UpperValidator';
     };
-    UpperValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    UpperValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     UpperValidator.prototype.constructor = UpperValidator;
 
     Object.defineProperty(UpperValidator.prototype, 'alias', {

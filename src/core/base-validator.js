@@ -4,7 +4,7 @@ Object.assign(sogv, (function () {
     /**
      * @abstract
      * @constructor
-     * @name sogv.AbstractValidator
+     * @name sogv.BaseValidator
      * @classdesc Abstract base class that implements functionality for validation.
      * @description Create a new validation extension.
      * @param {*} data The data which needs to be validated.
@@ -18,19 +18,18 @@ Object.assign(sogv, (function () {
     // PROPERTIES
 
     /**
-     * @name sogv.AbstractValidator#data
+     * @name sogv.BaseValidator#data
      * @type {*}
      * @description Data that needs to be validated.
      */
 
     /**
-     * @name sogv.AbstractValidator#lang
+     * @name sogv.BaseValidator#lang
      * @type {String}
      * @description Language of error messages.
      */
 
-    var AbstractValidator = function (data, options, optionRules, lang, internal) {
-
+    var BaseValidator = function (data, options, optionRules, lang, internal) {
         var __data = data;
 
         this.data = __data;
@@ -39,7 +38,7 @@ Object.assign(sogv, (function () {
         this.__options = options || {};
         this.__errorService = new sogv.ErrorHandler({"lang": lang, "internal": internal});
         this.__internal = (true === internal);
-        this.__moment = sogv.moment;
+        this.__moment = sogv.globalScope('moment');
         this.__name = null;
         this.__skip = false; // Skip validation (do not validate this value)
 
@@ -51,14 +50,14 @@ Object.assign(sogv, (function () {
             this.__validateOptions(optionRules);
         }
 
-        this.name = 'AbstractValidator';
-        this.base = 'AbstractValidator';
+        this.name = 'BaseValidator';
+        this.base = 'BaseValidator';
     };
 
-    Object.assign(AbstractValidator.prototype, {
+    Object.assign(BaseValidator.prototype, {
         /**
          * @function
-         * @name sogv.AbstractValidator#isValid
+         * @name sogv.BaseValidator#isValid
          * @description
          * <p>Check if data valid.</p>
          * @returns {Boolean} Validation status
@@ -81,7 +80,7 @@ Object.assign(sogv, (function () {
         /**
          * @private
          * @function
-         * @name sogv.AbstractValidator#__validate
+         * @name sogv.BaseValidator#__validate
          * @description
          * <p>Validate data.</p>
          */
@@ -92,7 +91,7 @@ Object.assign(sogv, (function () {
         /**
          * @private
          * @function
-         * @name sogv.AbstractValidator#isValid
+         * @name sogv.BaseValidator#isValid
          * @description
          * <p>Check if data valid.</p>
          * @returns {Boolean} Validation status
@@ -103,7 +102,7 @@ Object.assign(sogv, (function () {
 
         /**
          * @function
-         * @name sogv.AbstractValidator#errors
+         * @name sogv.BaseValidator#errors
          * @description
          * <p>Return error errors</p>
          * @returns {sogv.Error} Error messages
@@ -115,7 +114,7 @@ Object.assign(sogv, (function () {
         /**
          * @private
          * @function
-         * @name sogv.AbstractValidator#__setErrorMessage
+         * @name sogv.BaseValidator#__setErrorMessage
          * @param {String} message Error message text
          * @param {Object} parameters Error message parameters
          * @description
@@ -128,7 +127,7 @@ Object.assign(sogv, (function () {
         /**
          * @private
          * @function
-         * @name sogv.AbstractValidator#__beforeValidate
+         * @name sogv.BaseValidator#__beforeValidate
          * @description
          * <p>Execute before validation is running.</p>
          */
@@ -137,7 +136,7 @@ Object.assign(sogv, (function () {
         /**
          * @private
          * @function
-         * @name sogv.AbstractValidator#__afterValidate
+         * @name sogv.BaseValidator#__afterValidate
          * @description Execute after validation is complete
          */
         __afterValidate: function () {},
@@ -145,7 +144,7 @@ Object.assign(sogv, (function () {
         /**
          * @private
          * @function
-         * @name sogv.AbstractValidator#__validateOptions
+         * @name sogv.BaseValidator#__validateOptions
          * @description
          * <p>Validate options.</p>
          * @param {Object} rules Validation rules
@@ -168,7 +167,7 @@ Object.assign(sogv, (function () {
         /**
          * @private
          * @function
-         * @name sogv.AbstractValidator#__normalize
+         * @name sogv.BaseValidator#__normalize
          * @description
          * <p>Normalize string data.</p>
          */
@@ -181,7 +180,7 @@ Object.assign(sogv, (function () {
         /**
          * @private
          * @function
-         * @name sogv.AbstractValidator#__isEmptyData
+         * @name sogv.BaseValidator#__isEmptyData
          * @returns {Boolean} Status
          * @description
          * <p>Checking, if data empty.</p>
@@ -193,7 +192,7 @@ Object.assign(sogv, (function () {
         /**
          * @private
          * @function
-         * @name sogv.AbstractValidator#__formattedData
+         * @name sogv.BaseValidator#__formattedData
          * @description
          * <p>Formatted data depending of type.</p>
          * @returns {*}
@@ -218,8 +217,8 @@ Object.assign(sogv, (function () {
                 return JSON.stringify(data);
             }
 
-            if (true === this.__moment(data).isValid()) {
-                return this.__moment(data).format('LLL');
+            if (true === this.__moment(new Date(data)).isValid()) {
+                return this.__moment(new Date(data)).format('LLL');
             }
 
             return data;
@@ -228,7 +227,7 @@ Object.assign(sogv, (function () {
         /**
          * @private
          * @function
-         * @name sogv.AbstractValidator#__convertDataToValueType
+         * @name sogv.BaseValidator#__convertDataToValueType
          * @description
          * <p>Convert data to value type.</p>
          * @returns {*}
@@ -250,7 +249,7 @@ Object.assign(sogv, (function () {
         /**
          * @private
          * @function
-         * @name sogv.AbstractComparisonValidator#__prepareDataForComparing
+         * @name sogv.BaseComparisonValidator#__prepareDataForComparing
          * @description
          * <p>Prepare data for comparing.</p>
          * @returns {*}
@@ -279,6 +278,6 @@ Object.assign(sogv, (function () {
     });
 
     return {
-        AbstractValidator: AbstractValidator
+        BaseValidator: BaseValidator
     };
 }()));

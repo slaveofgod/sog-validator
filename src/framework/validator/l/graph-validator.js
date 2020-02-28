@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.GraphValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Check for any <code>printable</code> character(s) except space.</p>
      * @description
@@ -27,13 +27,13 @@ Object.assign(sogv, function () {
      */
 
     var GraphValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+        sogv.BaseValidator.call(this, data, {}, {}, lang, internal);
 
         this.message = 'The value field must be graph.';
 
         this.name = 'GraphValidator';
     };
-    GraphValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    GraphValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     GraphValidator.prototype.constructor = GraphValidator;
 
     Object.defineProperty(GraphValidator.prototype, 'alias', {

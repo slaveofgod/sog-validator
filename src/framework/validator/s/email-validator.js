@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.EmailValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a value is a valid <code>email address</code>.</p>
      * <p>The underlying value is cast to a string before being validated.</p>
@@ -75,7 +75,7 @@ Object.assign(sogv, function () {
      */
 
     var EmailValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             mode: optionRules.mode || 'type:{"type":"string"}|length:{"min":2,"max":20}',
             normalize: optionRules.normalize || 'type:{"type":"bool"}'
@@ -90,7 +90,7 @@ Object.assign(sogv, function () {
 
         this.name = 'EmailValidator';
     };
-    EmailValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    EmailValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     EmailValidator.prototype.constructor = EmailValidator;
 
     Object.defineProperty(EmailValidator.prototype, 'alias', {

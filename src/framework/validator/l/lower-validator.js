@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.LowerValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Check for <code>lowercase</code> character(s).</p>
      * @description
@@ -27,13 +27,13 @@ Object.assign(sogv, function () {
      */
 
     var LowerValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+        sogv.BaseValidator.call(this, data, {}, {}, lang, internal);
 
         this.message = 'The %%attribute%% field must be lower.';
 
         this.name = 'LowerValidator';
     };
-    LowerValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    LowerValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     LowerValidator.prototype.constructor = LowerValidator;
 
     Object.defineProperty(LowerValidator.prototype, 'alias', {

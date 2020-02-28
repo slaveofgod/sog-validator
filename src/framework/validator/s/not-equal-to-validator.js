@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.NotEqualToValidator
-     * @extends sogv.AbstractComparisonValidator
+     * @extends sogv.BaseComparisonValidator
      * @classdesc
      * <p>Validates that a value is not equal to another value, defined in the options.</p>
      * <p>This constraint compares using <code>!=</code>, so <code>3</code> and "<code>3</code>" are considered equal. <code>sogv.Use NotIdenticalTo</code> to compare with <code>!==</code>.</p>
@@ -70,7 +70,7 @@ Object.assign(sogv, function () {
      */
 
     var NotEqualToValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractComparisonValidator.call(this, data, options, {
+        sogv.BaseComparisonValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             value: optionRules.value || 'required'
         }, lang, internal);
@@ -79,7 +79,7 @@ Object.assign(sogv, function () {
 
         this.name = 'NotEqualToValidator';
     };
-    NotEqualToValidator.prototype = Object.create(sogv.AbstractComparisonValidator.prototype);
+    NotEqualToValidator.prototype = Object.create(sogv.BaseComparisonValidator.prototype);
     NotEqualToValidator.prototype.constructor = NotEqualToValidator;
 
     Object.defineProperty(NotEqualToValidator.prototype, 'alias', {

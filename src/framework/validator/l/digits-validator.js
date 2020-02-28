@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.DigitsValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>The field under validation must be <code>numeric</code> and must have an exact <code>length</code> of value.</p>
      * @description
@@ -35,7 +35,7 @@ Object.assign(sogv, function () {
      */
 
     var DigitsValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             length: optionRules.length || 'required|type:{"type":"integer"}'
         }, lang, internal);
@@ -45,7 +45,7 @@ Object.assign(sogv, function () {
 
         this.name = 'DigitsValidator';
     };
-    DigitsValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    DigitsValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     DigitsValidator.prototype.constructor = DigitsValidator;
 
     Object.defineProperty(DigitsValidator.prototype, 'alias', {

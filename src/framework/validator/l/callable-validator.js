@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.CallableValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Verify that the contents of a variable can be called as a <code>function</code>.</p>
      * @description
@@ -27,13 +27,13 @@ Object.assign(sogv, function () {
      */
 
     var CallableValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, {}, {}, lang, internal);
+        sogv.BaseValidator.call(this, data, {}, {}, lang, internal);
 
         this.message = 'The %%attribute%% field must be callable.';
 
         this.name = 'CallableValidator';
     };
-    CallableValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    CallableValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     CallableValidator.prototype.constructor = CallableValidator;
 
     Object.defineProperty(CallableValidator.prototype, 'alias', {

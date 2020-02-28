@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.IsNullValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>Validates that a value is exactly equal to <code>null</code>.</p>
      * @description
@@ -52,7 +52,7 @@ Object.assign(sogv, function () {
      */
 
     var IsNullValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}'
         }, lang, internal);
 
@@ -60,7 +60,7 @@ Object.assign(sogv, function () {
 
         this.name = 'IsNullValidator';
     };
-    IsNullValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    IsNullValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     IsNullValidator.prototype.constructor = IsNullValidator;
 
     Object.defineProperty(IsNullValidator.prototype, 'alias', {

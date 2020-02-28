@@ -4,7 +4,7 @@ Object.assign(sogv, function () {
     /**
      * @constructor
      * @name sogv.InValidator
-     * @extends sogv.AbstractValidator
+     * @extends sogv.BaseValidator
      * @classdesc
      * <p>The field under validation must be <code>included</code> in the given list of values.</p>
      * @description
@@ -42,7 +42,7 @@ Object.assign(sogv, function () {
      */
 
     var InValidator = function (data, options, optionRules, lang, internal) {
-        sogv.AbstractValidator.call(this, data, options, {
+        sogv.BaseValidator.call(this, data, options, {
             message: optionRules.message || 'type:{"type":"string"}|length:{"min":3,"max":255}',
             choices: optionRules.choices || 'required|type:{"type":"array"}',
         }, lang, internal);
@@ -53,7 +53,7 @@ Object.assign(sogv, function () {
 
         this.name = 'InValidator';
     };
-    InValidator.prototype = Object.create(sogv.AbstractValidator.prototype);
+    InValidator.prototype = Object.create(sogv.BaseValidator.prototype);
     InValidator.prototype.constructor = InValidator;
 
     Object.defineProperty(InValidator.prototype, 'alias', {
