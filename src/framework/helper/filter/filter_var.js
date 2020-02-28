@@ -132,6 +132,7 @@ sogv.filter_var = function(input, filter, options) {
     switch (filter) {
         case supportedFilters.FILTER_VALIDATE_BOOLEAN:
             return /^(?:1|true|yes|on)$/i.test(data) || (/^(?:0|false|no|off)$/i.test(data) ? false: failure);
+            break;
 
         case supportedFilters.FILTER_VALIDATE_INT:
             var numValue = +data;
@@ -154,6 +155,7 @@ sogv.filter_var = function(input, filter, options) {
             }
 
             return numValue;
+            break;
 
         case supportedFilters.FILTER_VALIDATE_REGEXP:
             if (is(options.regexp, "regex")) {
@@ -162,6 +164,7 @@ sogv.filter_var = function(input, filter, options) {
                 var matches = options.regexp(data)
                 return matches ? matches[0] : failure;
             }
+            break;
         // TODO: support passing regexes as strings "#regex#is"
         case supportedFilters.FILTER_VALIDATE_IP:
             var ipv4 = /^(25[0-5]|2[0-4]\d|[01]?\d?\d)\.(25[0-5]|2[0-4]\d|[01]?\d?\d)\.(25[0-5]|2[0-4]\d|[01]?\d?\d)\.(25[0-5]|2[0-4]\d|[01]?\d?\d)$/
@@ -202,6 +205,7 @@ sogv.filter_var = function(input, filter, options) {
             }
 
             return failure;
+            break;
 
         case supportedFilters.FILTER_CALLBACK:
             var fn = opts;
@@ -215,9 +219,11 @@ sogv.filter_var = function(input, filter, options) {
             }
 
             return failure;
+            break;
 
         case supportedFilters.FILTER_SANITIZE_NUMBER_INT:
             return ("" + input).replace(/[^\d+\-]/g, "");
+            break;
 
         case supportedFilters.FILTER_SANITIZE_NUMBER_FLOAT:
             return ('' + input).replace(/[^\deE.,+\-]/g, '').replace(/[eE.,]/g,
@@ -229,15 +235,18 @@ sogv.filter_var = function(input, filter, options) {
                         'E': (filter & supportedFilters.FILTER_FLAG_ALLOW_SCIENTIFIC) ? 'e': ''
                     } [m];
                 });
+            break;
 
         /*case supportedFilters.FILTER_SANITIZE_MAGIC_QUOTES:
             return this.addslashes(input); // ('' + input).replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0')*/
 
         case supportedFilters.FILTER_SANITIZE_URL:
             return ("" + data).replace(/[^a-zA-Z\d$\-_.+!*'(),{}|\\\^~\[\]`<>#%";\/?:@&=]/g, '');
+            break;
 
         case supportedFilters.FILTER_SANITIZE_EMAIL:
             return ("" + data).replace(/[^a-zA-Z\d!#$%&'*+\-\/=?\^_`{|}~@.\[\]]/g, '');
+            break;
 
         case supportedFilters.FILTER_DEFAULT:
         // is alias of FILTER_UNSAFE_RAW
@@ -271,7 +280,9 @@ sogv.filter_var = function(input, filter, options) {
             }
 
             return data;
+            break;
         default:
             return false;
+            break;
     }
 };

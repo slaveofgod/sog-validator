@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v1.5.1 revision 58f4f53
+ * SOG Validator Library v1.5.2 revision 0aaf91b
  * Copyright 2019-2020 Slave of God <iamtheslaveofgod@gmail.com>. All rights reserved.
  */
 ;(function (root, factory) {
@@ -12,7 +12,7 @@
     }
 }(this, function () {
 
-var sogv = {version:"1.5.1", revision:"58f4f53", config:{}, common:{}, validators:{}, globalScope:function(name) {
+var sogv = {version:"1.5.2", revision:"0aaf91b", config:{}, common:{}, validators:{}, globalScope:function(name) {
   var __global;
   if ("undefined" === typeof global) {
     __global = window;
@@ -726,6 +726,7 @@ sogv.filter_var = function(input, filter, options) {
   switch(filter) {
     case supportedFilters.FILTER_VALIDATE_BOOLEAN:
       return /^(?:1|true|yes|on)$/i.test(data) || (/^(?:0|false|no|off)$/i.test(data) ? false : failure);
+      break;
     case supportedFilters.FILTER_VALIDATE_INT:
       var numValue = +data;
       if (!/^(?:0|[+\-]?[1-9]\d*)$/.test(data)) {
@@ -745,11 +746,13 @@ sogv.filter_var = function(input, filter, options) {
         return failure;
       }
       return numValue;
+      break;
     case supportedFilters.FILTER_VALIDATE_REGEXP:
       if (is(options.regexp, "regex")) {
         var matches = options.regexp(data);
         return matches ? matches[0] : failure;
       }
+      break;
     case supportedFilters.FILTER_VALIDATE_IP:
       var ipv4 = /^(25[0-5]|2[0-4]\d|[01]?\d?\d)\.(25[0-5]|2[0-4]\d|[01]?\d?\d)\.(25[0-5]|2[0-4]\d|[01]?\d?\d)\.(25[0-5]|2[0-4]\d|[01]?\d?\d)$/;
       var ipv4privrange = /^(?:0?10|172\.0?(?:1[6-9]|2\d|3[01])|192\.168)\./;
@@ -778,6 +781,7 @@ sogv.filter_var = function(input, filter, options) {
         }
       }
       return failure;
+      break;
     case supportedFilters.FILTER_CALLBACK:
       var fn = opts;
       if (is(fn, "string")) {
@@ -787,16 +791,21 @@ sogv.filter_var = function(input, filter, options) {
         return fn(input);
       }
       return failure;
+      break;
     case supportedFilters.FILTER_SANITIZE_NUMBER_INT:
       return ("" + input).replace(/[^\d+\-]/g, "");
+      break;
     case supportedFilters.FILTER_SANITIZE_NUMBER_FLOAT:
       return ("" + input).replace(/[^\deE.,+\-]/g, "").replace(/[eE.,]/g, function(m) {
         return {".":filter & supportedFilters.FILTER_FLAG_ALLOW_FRACTION ? "." : "", ",":filter & supportedFilters.FILTER_FLAG_ALLOW_THOUSAND ? "," : "", "e":filter & supportedFilters.FILTER_FLAG_ALLOW_SCIENTIFIC ? "e" : "", "E":filter & supportedFilters.FILTER_FLAG_ALLOW_SCIENTIFIC ? "e" : ""}[m];
       });
+      break;
     case supportedFilters.FILTER_SANITIZE_URL:
       return ("" + data).replace(/[^a-zA-Z\d$\-_.+!*'(),{}|\\\^~\[\]`<>#%";\/?:@&=]/g, "");
+      break;
     case supportedFilters.FILTER_SANITIZE_EMAIL:
       return ("" + data).replace(/[^a-zA-Z\d!#$%&'*+\-\/=?\^_`{|}~@.\[\]]/g, "");
+      break;
     case supportedFilters.FILTER_DEFAULT:
     case supportedFilters.FILTER_UNSAFE_RAW:
       data = input + "";
@@ -817,8 +826,10 @@ sogv.filter_var = function(input, filter, options) {
         });
       }
       return data;
+      break;
     default:
       return false;
+      break;
   }
 };
 sogv.getenv = function(varname) {
