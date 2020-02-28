@@ -291,9 +291,6 @@ var run = function () {
 
         });
     });
-
-    // Build CLI file
-    fs.writeFileSync(path.join(path.dirname(outputPath), "./" + LIBRARY_NAME + ".cli.js"), fs.readFileSync("./umd-wrapper-cli.js.tmpl"));
 };
 
 // parse arguments

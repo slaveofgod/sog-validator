@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v1.5.0 revision 35e0af7 (DEBUG PROFILER)
+ * SOG Validator Library v1.5.1 revision 58f4f53 (DEBUG PROFILER)
  * Copyright 2019-2020 Slave of God <iamtheslaveofgod@gmail.com>. All rights reserved.
  */
 ;(function (root, factory) {
@@ -12,7 +12,7 @@
     }
 }(this, function () {
 
-var sogv = {version:"1.5.0", revision:"35e0af7", config:{}, common:{}, validators:{}, globalScope:function(name) {
+var sogv = {version:"1.5.1", revision:"58f4f53", config:{}, common:{}, validators:{}, globalScope:function(name) {
   var __global;
   if ("undefined" === typeof global) {
     __global = window;

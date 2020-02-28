@@ -125,7 +125,6 @@ The library can be loaded either as a standalone script.
 <script type="text/javascript" src="node_modules/moment-timezone/builds/moment-timezone-with-data.js"></script>
 <script type="text/javascript" src="build/output/sog-validator.min.js"></script>
 <script type="text/javascript">
-
     // Validation status only
     if (false === sogv.isValid('leo.lane38@example.com', 'required|email')) {
         // do something with invalid data
