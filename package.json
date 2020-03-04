@@ -1,6 +1,6 @@
 {
   "name": "sog-validator",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "author": {
     "name": "Slave of God",
     "email": "iamtheslaveofgod@gmail.com"
@@ -78,6 +78,7 @@
     "build:profiler": "cd build && node build.js -p -o output/sog-validator.prf.js",
     "build:min": "cd build && node build.js -l 0 -o output/sog-validator.min.js",
     "build:all": "npm run build && npm run build:debug && npm run build:profiler && npm run build:min",
+    "build:prod": "npm run build:all && npm run docs && npm run uglify && npm run tsd && npm run test",
     "docs": "jsdoc -c conf-api.json",
     "serve": "npm run build; ./node_modules/.bin/http-server build/output -a localhost -p 51000",
     "closure": "java -jar node_modules/google-closure-compiler/compiler.jar --compilation_level=SIMPLE --warning_level=VERBOSE --jscomp_off=checkTypes --externs build/externs.js --language_in=ECMASCRIPT5_STRICT --js build/output/sog-validator-latest.js --js_output_file build/output/sog-validator.min.js",

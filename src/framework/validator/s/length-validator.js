@@ -175,8 +175,12 @@ Object.assign(sogv, function () {
         }, lang, internal);
 
         this.allowEmptyString = ('undefined' === typeof this.__options.allowEmptyString || false === this.__options.allowEmptyString) ? false : true;
-        // this.charset = this.__options.charset || 'UTF-8';
-        // this.charsetMessage = this.__options.charsetMessage || 'This value does not match the expected %%charset%% charset.';
+        /**
+         * @todo Complete charset verification
+         *
+         * this.charset = this.__options.charset || 'UTF-8';
+         * this.charsetMessage = this.__options.charsetMessage || 'This value does not match the expected %%charset%% charset.';
+         */
         this.exactMessage = this.__options.exactMessage || 'This value should have exactly %%limit%% characters.';
         this.max = this.__options.max;
         this.maxMessage = this.__options.maxMessage || 'This value is too long. It should have %%limit%% characters or less.';
