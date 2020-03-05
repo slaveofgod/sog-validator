@@ -337,7 +337,7 @@ var sogv = {
      * @throws The validation error message.
      */
     isValidFormException: function (data, rules, lang, internal) {
-        var messages = this.isValidFormMessage();
+        var messages = this.isValidFormMessage(data, rules, lang, internal);
 
         if(null !== messages) {
             throw new Error('Invalid data for option[' + messages[0].key + ']: ' + messages[0].message);

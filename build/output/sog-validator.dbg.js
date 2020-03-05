@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v1.6.3 revision af96b85 (DEBUG PROFILER)
+ * SOG Validator Library v1.6.4 revision 87846ac (DEBUG PROFILER)
  * Copyright 2019-2020 Slave of God <iamtheslaveofgod@gmail.com>. All rights reserved.
  */
 ;(function (root, factory) {
@@ -12,7 +12,7 @@
     }
 }(this, function () {
 
-var sogv = {version:"1.6.3", revision:"af96b85", config:{}, common:{}, validators:{}, globalScope:function(name) {
+var sogv = {version:"1.6.4", revision:"87846ac", config:{}, common:{}, validators:{}, globalScope:function(name) {
   var __global;
   if ("undefined" === typeof global) {
     __global = window;
@@ -155,7 +155,7 @@ var sogv = {version:"1.6.3", revision:"af96b85", config:{}, common:{}, validator
   }
   return Object.keys(messages).length > 0 ? messages : null;
 }, isValidFormException:function(data, rules, lang, internal) {
-  var messages = this.isValidFormMessage();
+  var messages = this.isValidFormMessage(data, rules, lang, internal);
   if (null !== messages) {
     throw new Error("Invalid data for option[" + messages[0].key + "]: " + messages[0].message);
   }
