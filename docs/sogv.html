@@ -78,7 +78,15 @@
             
                 <li class="parent  " data-name="sogv.isValid"><a href="sogv.html#.isValid">isValid</a></li>
             
-                <li class="parent  " data-name="sogv.isValidWithErrorMessage"><a href="sogv.html#.isValidWithErrorMessage">isValidWithErrorMessage</a></li>
+                <li class="parent  " data-name="sogv.isValidException"><a href="sogv.html#.isValidException">isValidException</a></li>
+            
+                <li class="parent  " data-name="sogv.isValidFormException"><a href="sogv.html#.isValidFormException">isValidFormException</a></li>
+            
+                <li class="parent  " data-name="sogv.isValidFormMessage"><a href="sogv.html#.isValidFormMessage">isValidFormMessage</a></li>
+            
+                <li class="parent  " data-name="sogv.isValidMessage"><a href="sogv.html#.isValidMessage">isValidMessage</a></li>
+            
+                <li class="parent  status-deprecated" data-name="sogv.isValidWithErrorMessage"><a href="sogv.html#.isValidWithErrorMessage">isValidWithErrorMessage</a></li>
             
                 <li class="parent  " data-name="sogv.makeValidator"><a href="sogv.html#.makeValidator">makeValidator</a></li>
             
@@ -5861,10 +5869,627 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id=".isValidWithErrorMessage">
-            <a class="share-icon" href="#.isValidWithErrorMessage"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id=".isValidException">
+            <a class="share-icon" href="#.isValidException"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                sogv.isValidWithErrorMessage
+                sogv.isValidException
+            </span>
+            <span class="signature">(data, rules, lang, internal)</span>
+            
+            <span class="access-signature">static</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Check if data valid according to validation rules. If not then throw error exception.</p>
+<p>Check only single data.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                The data which needs to be validated.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>rules</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                Validation rules in string format.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>lang</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                The language used by the application. Default: "<code>en</code>".</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>internal</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                It means, that validation called from core.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    <h5>Throws:</h5>
+    
+            
+
+    <div class="param-desc">
+    
+        The validation error message.
+    
+    </div>
+
+
+        
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id=".isValidFormException">
+            <a class="share-icon" href="#.isValidFormException"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                sogv.isValidFormException
+            </span>
+            <span class="signature">(data, rules, lang, internal)</span>
+            
+            <span class="access-signature">static</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Check if data valid according to validation rules. If not then throw error exception.</p>
+<p>Check only multi data.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                The data which needs to be validated.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>rules</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                Validation rules in string format.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>lang</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                The language used by the application. Default: "<code>en</code>".</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>internal</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                It means, that validation called from core.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    <h5>Throws:</h5>
+    
+            
+
+    <div class="param-desc">
+    
+        The validation error message.
+    
+    </div>
+
+
+        
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id=".isValidFormMessage">
+            <a class="share-icon" href="#.isValidFormMessage"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                sogv.isValidFormMessage
+            </span>
+            <span class="signature">(data, rules, lang, internal)</span><span class="type-signature">Null | Object</span>
+            
+            <span class="access-signature">static</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Check if data valid according to validation rules</p>
+<p>Check only multi data.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                The data which needs to be validated.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>rules</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                Validation rules in string format.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>lang</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                The language used by the application. Default: "<code>en</code>".</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>internal</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                It means, that validation called from core.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Null
+                         | 
+                    
+                        Object
+                        
+                    
+            </td>
+            <td class="description last">If valid this function return null otherwise the list of error messages.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id=".isValidMessage">
+            <a class="share-icon" href="#.isValidMessage"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                sogv.isValidMessage
             </span>
             <span class="signature">(data, rules, lang, internal)</span><span class="type-signature">Null | String</span>
             
@@ -5883,6 +6508,230 @@
     
     <div class="description">
         <p>Check if data valid according to validation rules.</p>
+<p>Check only single data.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                The data which needs to be validated.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>rules</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                Validation rules in string format.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>lang</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                The language used by the application. Default: "<code>en</code>".</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>internal</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                It means, that validation called from core.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Null
+                         | 
+                    
+                        String
+                        
+                    
+            </td>
+            <td class="description last">If valid this function return null otherwise error message.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id=".isValidWithErrorMessage">
+            <a class="share-icon" href="#.isValidWithErrorMessage"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="status-deprecated">
+                sogv.isValidWithErrorMessage
+            </span>
+            <span class="signature">(data, rules, lang, internal)</span><span class="type-signature">Null | String</span>
+            
+                <span class="access-signature deprecated">Deprecated
+                </span>
+            
+            <span class="access-signature">static</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Use <code>sogv.isValidMessage</code> instead.</p>
+<p>Check if data valid according to validation rules.</p>
+<p>Check only single data.</p>
     </div>
     
 
@@ -6473,7 +7322,7 @@
 
         <footer class="content-size">
             <div class="footer">
-                Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Mar 04 2020 17:30:17 GMT+0200 (Eastern European Standard Time)
+                Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Mar 05 2020 13:30:54 GMT+0200 (Eastern European Standard Time)
             </div>
         </footer>
     </div>

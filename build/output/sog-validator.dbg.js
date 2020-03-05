@@ -1,5 +1,5 @@
 /*
- * SOG Validator Library v1.6.2 revision 9fe7392 (DEBUG PROFILER)
+ * SOG Validator Library v1.6.3 revision af96b85 (DEBUG PROFILER)
  * Copyright 2019-2020 Slave of God <iamtheslaveofgod@gmail.com>. All rights reserved.
  */
 ;(function (root, factory) {
@@ -12,7 +12,7 @@
     }
 }(this, function () {
 
-var sogv = {version:"1.6.2", revision:"9fe7392", config:{}, common:{}, validators:{}, globalScope:function(name) {
+var sogv = {version:"1.6.3", revision:"af96b85", config:{}, common:{}, validators:{}, globalScope:function(name) {
   var __global;
   if ("undefined" === typeof global) {
     __global = window;
@@ -132,9 +132,33 @@ var sogv = {version:"1.6.2", revision:"9fe7392", config:{}, common:{}, validator
   var validator = engine.makeSingle(data, rules);
   return validator.isValid();
 }, isValidWithErrorMessage:function(data, rules, lang, internal) {
+  return this.isValidMessage(data, rules, lang, internal);
+}, isValidMessage:function(data, rules, lang, internal) {
   var engine = new sogv.Application({internal:internal, lang:lang});
   var validator = engine.makeSingle(data, rules);
   return true === validator.isValid() ? null : validator.errors().first();
+}, isValidException:function(data, rules, lang, internal) {
+  var message = this.isValidMessage(data, rules, lang, internal);
+  if (null !== message) {
+    throw new Error(message);
+  }
+}, isValidFormMessage:function(data, rules, lang, internal) {
+  var messages = [];
+  var engine = new sogv.Application({lang:lang, internal:internal});
+  var form = engine.make(data, rules);
+  if (false === form.isValid()) {
+    Object.keys(rules).forEach(function(key) {
+      if (false === form.get(key).isValid()) {
+        messages.push({key:key, message:form.get(key).errors().first()});
+      }
+    });
+  }
+  return Object.keys(messages).length > 0 ? messages : null;
+}, isValidFormException:function(data, rules, lang, internal) {
+  var messages = this.isValidFormMessage();
+  if (null !== messages) {
+    throw new Error("Invalid data for option[" + messages[0].key + "]: " + messages[0].message);
+  }
 }, convertToType:function(data, strTypes) {
   var types = strTypes.split("|");
   if ("undefined" === typeof data) {

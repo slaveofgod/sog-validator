@@ -158,9 +158,12 @@ declare namespace sogv {
     function isValid(data: any, rules: string, lang: string, internal: boolean): boolean;
     /**
      * @function
+     * @deprecated
      * @name sogv.isValidWithErrorMessage
      * @description
+     * <p>Use <code>sogv.isValidMessage</code> instead.</p>
      * <p>Check if data valid according to validation rules.</p>
+     * <p>Check only single data.</p>
      * @param {*} data The data which needs to be validated.
      * @param {String} rules Validation rules in string format.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
@@ -168,6 +171,58 @@ declare namespace sogv {
      * @returns {Null|String} If valid this function return null otherwise error message.
      */
     function isValidWithErrorMessage(data: any, rules: string, lang: string, internal: boolean): null | string;
+    /**
+     * @function
+     * @name sogv.isValidMessage
+     * @description
+     * <p>Check if data valid according to validation rules.</p>
+     * <p>Check only single data.</p>
+     * @param {*} data The data which needs to be validated.
+     * @param {String} rules Validation rules in string format.
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
+     * @param {Boolean} internal It means, that validation called from core.
+     * @returns {Null|String} If valid this function return null otherwise error message.
+     */
+    function isValidMessage(data: any, rules: string, lang: string, internal: boolean): null | string;
+    /**
+     * @function
+     * @name sogv.isValidException
+     * @description
+     * <p>Check if data valid according to validation rules. If not then throw error exception.</p>
+     * <p>Check only single data.</p>
+     * @param {*} data The data which needs to be validated.
+     * @param {String} rules Validation rules in string format.
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
+     * @param {Boolean} internal It means, that validation called from core.
+     * @throws The validation error message.
+     */
+    function isValidException(data: any, rules: string, lang: string, internal: boolean): void;
+    /**
+     * @function
+     * @name sogv.isValidFormMessage
+     * @description
+     * <p>Check if data valid according to validation rules</p>
+     * <p>Check only multi data.</p>
+     * @param {Object} data The data which needs to be validated.
+     * @param {Object} rules Validation rules in string format.
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
+     * @param {Boolean} internal It means, that validation called from core.
+     * @returns {Null|Object} If valid this function return null otherwise the list of error messages.
+     */
+    function isValidFormMessage(data: any, rules: any, lang: string, internal: boolean): null | any;
+    /**
+     * @function
+     * @name sogv.isValidFormException
+     * @description
+     * <p>Check if data valid according to validation rules. If not then throw error exception.</p>
+     * <p>Check only multi data.</p>
+     * @param {Object} data The data which needs to be validated.
+     * @param {Object} rules Validation rules in string format.
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
+     * @param {Boolean} internal It means, that validation called from core.
+     * @throws The validation error message.
+     */
+    function isValidFormException(data: any, rules: any, lang: string, internal: boolean): void;
     /**
      * @function
      * @name sogv.convertToType

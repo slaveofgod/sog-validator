@@ -231,9 +231,12 @@ var sogv = {
 
     /**
      * @function
+     * @deprecated
      * @name sogv.isValidWithErrorMessage
      * @description
+     * <p>Use <code>sogv.isValidMessage</code> instead.</p>
      * <p>Check if data valid according to validation rules.</p>
+     * <p>Check only single data.</p>
      * @param {*} data The data which needs to be validated.
      * @param {String} rules Validation rules in string format.
      * @param {String} lang The language used by the application. Default: "<code>en</code>".
@@ -241,17 +244,104 @@ var sogv = {
      * @returns {Null|String} If valid this function return null otherwise error message.
      */
     isValidWithErrorMessage: function (data, rules, lang, internal) {
+        return this.isValidMessage(data, rules, lang, internal);
+    },
+
+    /**
+     * @function
+     * @name sogv.isValidMessage
+     * @description
+     * <p>Check if data valid according to validation rules.</p>
+     * <p>Check only single data.</p>
+     * @param {*} data The data which needs to be validated.
+     * @param {String} rules Validation rules in string format.
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
+     * @param {Boolean} internal It means, that validation called from core.
+     * @returns {Null|String} If valid this function return null otherwise error message.
+     */
+    isValidMessage: function (data, rules, lang, internal) {
         var engine = new sogv.Application({
             internal: internal,
             lang: lang
         });
 
-        var validator = engine.makeSingle(
-            data,
-            rules
-        );
+        var validator = engine.makeSingle(data, rules);
 
         return (true === validator.isValid()) ? null : validator.errors().first();
+    },
+
+    /**
+     * @function
+     * @name sogv.isValidException
+     * @description
+     * <p>Check if data valid according to validation rules. If not then throw error exception.</p>
+     * <p>Check only single data.</p>
+     * @param {*} data The data which needs to be validated.
+     * @param {String} rules Validation rules in string format.
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
+     * @param {Boolean} internal It means, that validation called from core.
+     * @throws The validation error message.
+     */
+    isValidException: function (data, rules, lang, internal) {
+        var message = this.isValidMessage(data, rules, lang, internal);
+        if (null !== message) {
+            throw new Error (message);
+        }
+    },
+
+    /**
+     * @function
+     * @name sogv.isValidFormMessage
+     * @description
+     * <p>Check if data valid according to validation rules</p>
+     * <p>Check only multi data.</p>
+     * @param {Object} data The data which needs to be validated.
+     * @param {Object} rules Validation rules in string format.
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
+     * @param {Boolean} internal It means, that validation called from core.
+     * @returns {Null|Object} If valid this function return null otherwise the list of error messages.
+     */
+    isValidFormMessage: function (data, rules, lang, internal) {
+        var messages = [];
+
+        var engine = new sogv.Application({
+            lang: lang,
+            internal: internal
+        });
+
+        var form = engine.make(data, rules);
+        if (false === form.isValid()) {
+            Object.keys(rules).forEach(function (key) {
+                if (false === form.get(key).isValid()) {
+                    messages.push({
+                        key: key,
+                        message: form.get(key).errors().first()
+                    });
+                }
+            });
+        }
+
+        return (Object.keys(messages).length > 0) ? messages : null;
+    },
+
+    /**
+     * @function
+     * @name sogv.isValidFormException
+     * @description
+     * <p>Check if data valid according to validation rules. If not then throw error exception.</p>
+     * <p>Check only multi data.</p>
+     * @param {Object} data The data which needs to be validated.
+     * @param {Object} rules Validation rules in string format.
+     * @param {String} lang The language used by the application. Default: "<code>en</code>".
+     * @param {Boolean} internal It means, that validation called from core.
+     * @throws The validation error message.
+     */
+    isValidFormException: function (data, rules, lang, internal) {
+        var messages = this.isValidFormMessage();
+
+        if(null !== messages) {
+            throw new Error('Invalid data for option[' + messages[0].key + ']: ' + messages[0].message);
+        }
     },
 
     /**
